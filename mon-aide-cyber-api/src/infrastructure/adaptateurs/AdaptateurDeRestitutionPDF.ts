@@ -8,6 +8,7 @@ import { PDFDocument } from 'pdf-lib';
 import { Restitution, trieLesIndicateurs } from '../../restitution/Restitution';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
+import { libellesDesThematiques } from './transcripteur/traductionThematiques';
 
 const forgeIdentifiant = (identifiant: string): string =>
   `${identifiant.substring(0, 3)} ${identifiant.substring(
@@ -38,10 +39,6 @@ const generationPdfExterne = (): GenerationPDFExterne => {
 };
 
 export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> {
-  constructor(traductionThematiques: Map<string, string>) {
-    super(traductionThematiques);
-  }
-
   public genereRestitution(restitution: Restitution): Promise<Buffer> {
     return this.genereLaRestitution(restitution);
   }
@@ -58,7 +55,7 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
         identifiant: identifiant,
         mesures: restitution.mesures.mesuresPrioritaires,
         indicateurs: indicateursRestitution,
-        traductions: this.traductionThematiques,
+        traductions: libellesDesThematiques(),
         mesServicesCyber: adaptateurEnvironnement
           .mesServicesCyber()
           .urlMesServicesCyber(),

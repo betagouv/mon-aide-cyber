@@ -132,9 +132,8 @@ describe('Adapatateur de Restitution HTML', () => {
       .construis();
     await entrepots.restitution().persiste(restitution);
 
-    const informations = await new AdaptateurDeRestitutionHTML(
-      new Map()
-    ).genereRestitution(restitution);
+    const informations =
+      await new AdaptateurDeRestitutionHTML().genereRestitution(restitution);
 
     expect(informations.informations).toMatchSnapshot();
   });

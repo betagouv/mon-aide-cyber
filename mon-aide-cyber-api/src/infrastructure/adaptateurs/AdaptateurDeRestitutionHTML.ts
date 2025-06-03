@@ -7,6 +7,7 @@ import {
 import { Restitution, trieLesIndicateurs } from '../../restitution/Restitution';
 import { Indicateurs, MesurePriorisee } from '../../diagnostic/Diagnostic';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
+import { libellesDesThematiques } from './transcripteur/traductionThematiques';
 
 export type RestitutionHTML = {
   autresMesures: string;
@@ -18,10 +19,6 @@ export type RestitutionHTML = {
 };
 
 export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<RestitutionHTML> {
-  constructor(traductionThematiques: Map<string, string>) {
-    super(traductionThematiques);
-  }
-
   public genereRestitution(restitution: Restitution): Promise<RestitutionHTML> {
     return this.genereLaRestitution(restitution);
   }
@@ -64,7 +61,7 @@ export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<Restitu
   ): Promise<ContenuHtml> {
     return this.genereHtml('indicateurs', {
       indicateurs,
-      traductions: this.traductionThematiques,
+      traductions: libellesDesThematiques(),
     });
   }
 
