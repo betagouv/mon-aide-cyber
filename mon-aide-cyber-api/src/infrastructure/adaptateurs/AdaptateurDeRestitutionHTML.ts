@@ -1,7 +1,7 @@
 import * as pug from 'pug';
 import {
-  AdaptateurDeRestitution,
   ContenuHtml,
+  AdaptateurDeRestitution,
   estMesurePrioritaire,
 } from '../../adaptateurs/AdaptateurDeRestitution';
 import { Restitution, trieLesIndicateurs } from '../../restitution/Restitution';
@@ -18,8 +18,10 @@ export type RestitutionHTML = {
   mesuresPrioritaires: string;
 };
 
-export class AdaptateurDeRestitutionHTML extends AdaptateurDeRestitution<RestitutionHTML> {
-  public genereRestitution(restitution: Restitution): Promise<RestitutionHTML> {
+export class AdaptateurDeRestitutionHTML
+  implements AdaptateurDeRestitution<RestitutionHTML>
+{
+  genereRestitution(restitution: Restitution): Promise<RestitutionHTML> {
     return this.genereLaRestitution(restitution);
   }
 

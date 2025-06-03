@@ -13,6 +13,6 @@ export type ContenuHtml = {
   piedPage: string;
 };
 
-export abstract class AdaptateurDeRestitution<T> {
-  public abstract genereRestitution(restitution: Restitution): Promise<T>;
+export interface AdaptateurDeRestitution<T> {
+  genereRestitution(restitution: Restitution): Promise<T>;
 }
