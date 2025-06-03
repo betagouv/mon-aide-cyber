@@ -20,6 +20,7 @@ type GenerationPDFExterne = {
   verifieConfiguration: () => void;
   endpointWebsocket: () => string;
 };
+
 const generationPdfExterne = (): GenerationPDFExterne => {
   const { GENERATION_PDF_URL_DU_SERVICE, GENERATION_PDF_TOKEN_DU_SERVICE } =
     process.env;
@@ -41,13 +42,10 @@ const generationPdfExterne = (): GenerationPDFExterne => {
 export class AdaptateurDeRestitutionPDF
   implements AdaptateurDeRestitution<Buffer>
 {
-  genereRestitution(restitution: Restitution): Promise<Buffer> {
-    return this.genereLaRestitution(restitution);
-  }
-
-  protected genereLaRestitution(restitution: Restitution): Promise<Buffer> {
+  async genereRestitution(restitution: Restitution): Promise<Buffer> {
     const indicateursRestitution = trieLesIndicateurs(restitution);
     const identifiant = forgeIdentifiant(restitution.identifiant);
+
     const pageDeGarde = this.genereHtml({
       pugCorps: 'restitution.page-de-garde',
       params: {
@@ -63,6 +61,7 @@ export class AdaptateurDeRestitutionPDF
           .urlMesServicesCyber(),
       },
     });
+
     const mesures = this.genereHtml({
       pugCorps: 'restitution.mesures',
       params: {
@@ -93,6 +92,7 @@ export class AdaptateurDeRestitutionPDF
         options
       );
     };
+
     return Promise.all([
       pug.compileFile(
         `src/infrastructure/restitution/pdf/modeles/${configuration.pugCorps}.pug`
@@ -101,11 +101,7 @@ export class AdaptateurDeRestitutionPDF
         include: fonctionInclusionDynamique,
       }),
     ])
-      .then(([corps]) => ({
-        corps,
-        entete: '',
-        piedPage: '',
-      }))
+      .then(([corps]) => ({ corps, entete: '', piedPage: '' }))
       .catch((erreur) => {
         console.log('Erreur génération HTML', erreur);
         throw new Error(erreur);
@@ -113,7 +109,7 @@ export class AdaptateurDeRestitutionPDF
   }
 }
 
-const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
+const fusionnePdfs = async (pdfs: Buffer[]): Promise<Buffer> => {
   const fusionne = (fusion: PDFDocument): Promise<PDFDocument> => {
     return pdfs.reduce(
       (pdfDocument, pdf) =>
@@ -129,12 +125,10 @@ const fusionnePdfs = (pdfs: Buffer[]): Promise<Buffer> => {
     );
   };
 
-  return PDFDocument.create()
-    .then((fusion) => {
-      return fusionne(fusion);
-    })
-    .then((fusion) => fusion.save())
-    .then((pdf) => Buffer.from(pdf));
+  const nouveauPdf = await PDFDocument.create();
+  const fusion = await fusionne(nouveauPdf);
+  const fichier = await fusion.save();
+  return Buffer.from(fichier);
 };
 
 const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
@@ -147,12 +141,9 @@ const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
     const contenu = pagesHtmlRemplies.reduce(
       (contenuPrecedent, contenuCourant) => {
         contenuPrecedent.corps += contenuCourant.corps;
-
         return contenuPrecedent;
       },
-      {
-        corps: '',
-      } as ContenuHtml
+      { corps: '' } as ContenuHtml
     );
 
     const contenuFinal: ContenuHtml = {
@@ -168,6 +159,7 @@ const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
           .urlMesServicesCyber(),
       }),
     };
+
     const resultat = navigateur.newPage().then((page) => {
       return page
         .setContent(contenuFinal.corps)
@@ -204,17 +196,13 @@ const formatPdfA4 = (configuration: {
   displayHeaderFooter: true,
   headerTemplate: configuration.entete,
   footerTemplate: configuration.piedDePage,
-  margin: {
-    bottom: '15mm',
-    left: '15mm',
-    right: '15mm',
-    top: '15mm',
-  },
+  margin: { bottom: '15mm', left: '15mm', right: '15mm', top: '15mm' },
 });
 
 const lanceNavigateur = (): Promise<Browser> => {
   const generationPDFExterne = generationPdfExterne();
   generationPDFExterne.verifieConfiguration();
+
   return puppeteer.connect({
     browserWSEndpoint: generationPDFExterne.endpointWebsocket(),
   });
