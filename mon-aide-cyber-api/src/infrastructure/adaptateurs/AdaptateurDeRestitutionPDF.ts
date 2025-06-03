@@ -5,7 +5,7 @@ import {
 import * as pug from 'pug';
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';
 import { PDFDocument } from 'pdf-lib';
-import { Restitution } from '../../restitution/Restitution';
+import { Restitution, trieLesIndicateurs } from '../../restitution/Restitution';
 import { FournisseurHorloge } from '../horloge/FournisseurHorloge';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
@@ -47,7 +47,7 @@ export class AdaptateurDeRestitutionPDF extends AdaptateurDeRestitution<Buffer> 
   }
 
   protected genereLaRestitution(restitution: Restitution): Promise<Buffer> {
-    const indicateursRestitution = this.trieLesIndicateurs(restitution);
+    const indicateursRestitution = trieLesIndicateurs(restitution);
     const identifiant = forgeIdentifiant(restitution.identifiant);
     const pageDeGarde = this.genereHtml({
       pugCorps: 'restitution.page-de-garde',
