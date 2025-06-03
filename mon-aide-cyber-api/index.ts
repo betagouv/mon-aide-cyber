@@ -35,12 +35,6 @@ const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
 );
 
 const adaptateurTranscripteurDonnees = adaptateurTranscripteur();
-const traductionThematiques =
-  new Map(
-    Object.entries(
-      adaptateurTranscripteurDonnees.transcripteur().thematiques
-    ).map(([clef, thematique]) => [clef, thematique.libelle])
-  ) || new Map();
 
 const entrepots = fabriqueEntrepots();
 const adaptateurRelations = new AdaptateurRelationsMAC();
@@ -56,8 +50,8 @@ const unAdaptateurRechercheEntreprise = adaptateurRechercheEntreprise(
 const serveurMAC = serveur.creeServeur({
   adaptateurRelations: adaptateurRelations,
   adaptateursRestitution: {
-    pdf: () => new AdaptateurDeRestitutionPDF(traductionThematiques),
-    html: () => new AdaptateurDeRestitutionHTML(traductionThematiques),
+    pdf: () => new AdaptateurDeRestitutionPDF(),
+    html: () => new AdaptateurDeRestitutionHTML(),
   },
   adaptateurReferentiel: new AdaptateurReferentielMAC(),
   adaptateurTranscripteurDonnees: adaptateurTranscripteurDonnees,

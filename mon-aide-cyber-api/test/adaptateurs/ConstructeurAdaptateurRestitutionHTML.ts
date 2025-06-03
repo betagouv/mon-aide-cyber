@@ -15,10 +15,6 @@ class ConstructeurAdaptateurRestitutionHTML {
     const corpsAutresMesures = this.corpsAutresMesures;
 
     return new (class extends AdaptateurDeRestitutionHTML {
-      constructor() {
-        super(new Map());
-      }
-
       protected genereInformations(
         restitution: Restitution
       ): Promise<ContenuHtml> {

@@ -14,7 +14,5 @@ export type ContenuHtml = {
 };
 
 export abstract class AdaptateurDeRestitution<T> {
-  constructor(protected readonly traductionThematiques: Map<string, string>) {}
-
   public abstract genereRestitution(restitution: Restitution): Promise<T>;
 }
