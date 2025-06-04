@@ -132,6 +132,8 @@ export const AccueilIntegrationUIKit = () => {
       <lab-anssi-titre-multimedia
         titre="Découvrez MonAideCyber en vidéo"
         multimedia={JSON.stringify({
+          imagedecouverture:
+            '/images/video-presentation-mac/apercu-video-mon-aide-cyber.jpg',
           source:
             'https://ressources-mac.cellar-c2.services.clever-cloud.com/Video_MAC.mp4',
         })}
