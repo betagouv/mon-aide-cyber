@@ -53,7 +53,7 @@ export const definitionUtilisateurInscritInitieDiagnostic: {
   },
 };
 
-type DefinitionEntiteAideeBeneficieDiagnostic = DefinitionTuple & {
+export type DefinitionEntiteAideeBeneficieDiagnostic = DefinitionTuple & {
   relation: 'destinataire';
   typeObjet: 'diagnostic';
   typeUtilisateur: 'entiteAidee';
@@ -68,17 +68,6 @@ export const definitionEntiteAideeBeneficieDiagnostic: {
     typeUtilisateur: 'entiteAidee',
   },
 };
-
-export const unTupleEntiteAideeBeneficieDiagnostic = (
-  identifiantDiagnostic: crypto.UUID,
-  identifiantEntite: string
-): Tuple =>
-  unTuple<DefinitionEntiteAideeBeneficieDiagnostic>(
-    definitionEntiteAideeBeneficieDiagnostic
-  )
-    .avecUtilisateur(identifiantEntite)
-    .avecObjet(identifiantDiagnostic)
-    .construis();
 
 export type DefinitionAttributionDemandeAideAAidant = DefinitionTuple & {
   relation: 'demandeAttribuee';

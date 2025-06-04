@@ -14,6 +14,12 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
   creeTuple(_tuple: Tuple): Promise<void> {
     throw new Error('Method not implemented.');
   }
+  creeTupleEntiteAideeBeneficieDiagnostic(
+    __identifiantDiagnostic: crypto.UUID,
+    __emailEntite: string
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   aidantInitieDiagnostic(_: crypto.UUID, __: crypto.UUID): Promise<void> {
     throw new Error('Erreur attendue');
   }

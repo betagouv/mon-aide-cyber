@@ -5,7 +5,6 @@ import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagno
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { entiteAideeBeneficieDiagnostic } from '../../src/diagnostic/consommateursEvenements';
 import { ServiceDeHashage } from '../../src/securite/ServiceDeHashage';
-import { ServiceDeHashageClair } from '../../src/infrastructure/adaptateurs/adaptateurServiceDeHashage';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 import { Evenement } from '../../src/contacts/RepertoireDeContacts';
 import { Tuple } from '../../src/relation/Tuple';
@@ -22,20 +21,23 @@ describe('Les consommateurs d’événements du diagnostic', () => {
   describe('Lorsque l’événement DIAGNOSTIC_LANCE est consommé', () => {
     it('Stocke l’email hashé de l’entité Aidée, dans une relation', async () => {
       const entrepotRelation = new EntrepotRelationMemoire();
-      const adaptateurRelations = new AdaptateurRelationsMAC(entrepotRelation);
+      const serviceDeChiffrement = new FauxServiceDeHashage(
+        new Map([['beta-gouv@beta.gouv.fr', 'hash-email-entite-aidee']])
+      );
+      const adaptateurRelations = new AdaptateurRelationsMAC(
+        entrepotRelation,
+        serviceDeChiffrement
+      );
+
       const relationsCreees: Tuple[] = [];
       adaptateurRelations.creeTuple = async (tuple: Tuple) => {
         relationsCreees.push(tuple);
         return;
       };
       const identifiantDiagnostic = crypto.randomUUID();
-      const serviceDeChiffrement = new FauxServiceDeHashage(
-        new Map([['beta-gouv@beta.gouv.fr', 'hash-email-entite-aidee']])
-      );
 
       await entiteAideeBeneficieDiagnostic(
         adaptateurRelations,
-        serviceDeChiffrement,
         new AdaptateurRepertoireDeContactsMemoire()
       ).consomme<DiagnosticLance>({
         corps: {
@@ -61,7 +63,6 @@ describe('Les consommateurs d’événements du diagnostic', () => {
 
       await entiteAideeBeneficieDiagnostic(
         new AdaptateurRelationsMAC(new EntrepotRelationMemoire()),
-        new ServiceDeHashageClair(),
         repertoireDeContactsMemoire
       ).consomme<DiagnosticLance>({
         corps: {

@@ -32,7 +32,6 @@ import { fabriqueEntrepots } from './fabriqueEntrepots';
 import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { utilisateurInscritInitieDiagnostic } from '../espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
 import { entiteAideeBeneficieDiagnostic } from '../diagnostic/consommateursEvenements';
-import { adaptateurServiceDeHashage } from '../infrastructure/adaptateurs/adaptateurServiceDeHashage';
 import { adaptateurRepertoireDeContacts } from './adaptateurRepertoireDeContacts';
 
 const fabriqueEntrepotJournalisation = () => {
@@ -71,7 +70,6 @@ export const fabriqueConsommateursEvenements = (
         ),
         entiteAideeBeneficieDiagnostic(
           adaptateurRelations,
-          adaptateurServiceDeHashage(),
           adaptateurRepertoireDeContacts()
         ),
       ],

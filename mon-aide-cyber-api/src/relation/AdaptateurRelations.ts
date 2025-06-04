@@ -10,6 +10,11 @@ export type Diagnostic = {
 export interface AdaptateurRelations {
   creeTuple(tuple: Tuple): Promise<void>;
 
+  creeTupleEntiteAideeBeneficieDiagnostic(
+    identifiantDiagnostic: crypto.UUID,
+    emailEntiteAidee: string
+  ): Promise<void>;
+
   diagnosticsFaitsParUtilisateurMAC(
     identifiantAidant: crypto.UUID
   ): Promise<string[]>;
