@@ -1,15 +1,34 @@
-import { Objet, Relation, Tuple, Utilisateur } from './Tuple';
+import { Objet, Relation, Tuple, unTuple, Utilisateur } from './Tuple';
 import crypto from 'crypto';
 import { AdaptateurRelations, Email } from './AdaptateurRelations';
 import { EntrepotRelation } from './EntrepotRelation';
 import { fabriqueEntrepotRelations } from './infrastructure/fabriqueEntrepotRelations';
-import { unTupleAttributionDemandeAideAAidant } from '../diagnostic/tuples';
+import {
+  DefinitionEntiteAideeBeneficieDiagnostic,
+  definitionEntiteAideeBeneficieDiagnostic,
+  unTupleAttributionDemandeAideAAidant,
+} from '../diagnostic/tuples';
+import { ServiceDeHashage } from '../securite/ServiceDeHashage';
+import { adaptateurServiceDeHashage } from '../infrastructure/adaptateurs/adaptateurServiceDeHashage';
 
 export class AdaptateurRelationsMAC implements AdaptateurRelations {
-  private tupleEntrepot: EntrepotRelation;
+  constructor(
+    private readonly tupleEntrepot: EntrepotRelation = fabriqueEntrepotRelations(),
+    private readonly serviceDeHash: ServiceDeHashage = adaptateurServiceDeHashage()
+  ) {}
 
-  constructor(tupleEntrepot: EntrepotRelation = fabriqueEntrepotRelations()) {
-    this.tupleEntrepot = tupleEntrepot;
+  async creeTupleEntiteAideeBeneficieDiagnostic(
+    identifiantDiagnostic: crypto.UUID,
+    emailEntiteAidee: string
+  ): Promise<void> {
+    const tuple = unTuple<DefinitionEntiteAideeBeneficieDiagnostic>(
+      definitionEntiteAideeBeneficieDiagnostic
+    )
+      .avecUtilisateur(this.serviceDeHash.hashe(emailEntiteAidee))
+      .avecObjet(identifiantDiagnostic)
+      .construis();
+
+    await this.creeTuple(tuple);
   }
 
   async creeTuple(tuple: Tuple): Promise<void> {

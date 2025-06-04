@@ -12,6 +12,13 @@ export class AdaptateurRelationsTest implements AdaptateurRelations {
     throw new Error('Method not implemented.');
   }
 
+  creeTupleEntiteAideeBeneficieDiagnostic(
+    __identifiantDiagnostic: crypto.UUID,
+    __emailEntite: string
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   aidantInitieDiagnostic(_: crypto.UUID, __: crypto.UUID): Promise<void> {
     return Promise.resolve();
   }
