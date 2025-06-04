@@ -34,7 +34,7 @@ const mesServicesCyber = () => ({
   urlMesServicesCyber: (): URL | string =>
     process.env.URL_MSC ? new URL(process.env.URL_MSC) : '',
   urlCyberDepart: (): URL | string =>
-    process.env.URL_MSC ? new URL(`${process.env.URL_MSC}/cyberdepart`) : '',
+    process.env.URL_MSC ? new URL('/cyberdepart', process.env.URL_MSC) : '',
 });
 
 type ConfigurationProConnect = {
