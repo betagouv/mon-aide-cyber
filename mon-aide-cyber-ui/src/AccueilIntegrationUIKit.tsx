@@ -106,7 +106,7 @@ export const AccueilIntegrationUIKit = () => {
   return (
     <main role="main" className="page-accueil">
       <lab-anssi-brique-hero
-        titre="MonAideCyber"
+        titre="Mon​Aide​Cyber"
         soustitre="Des Aidants cyber mobilisés pour aider les entités publiques et privées à prendre leur cyberdépart !"
         illustration={JSON.stringify({
           lien: '/images/illustration-dialogue-mac.svg',
