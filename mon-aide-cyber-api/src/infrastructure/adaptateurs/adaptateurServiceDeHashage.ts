@@ -3,7 +3,7 @@ import { ServiceDeHashageMac } from '../securite/ServiceDeHashageMac';
 
 export class ServiceDeHashageClair implements ServiceDeHashage {
   hashe(chaine: string): string {
-    return chaine;
+    return `HASH_EN_CLAIR:<${chaine}>`;
   }
 }
 
