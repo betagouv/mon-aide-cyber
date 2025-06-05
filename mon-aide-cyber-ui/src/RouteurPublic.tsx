@@ -10,7 +10,6 @@ import { CapteurEcranCreationEspaceAidant } from './domaine/espace-aidant/demand
 import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
 import { EcranAccessibilite } from './vues/EcranAccessibilite.tsx';
 import { EcranStatistiques } from './domaine/vitrine/ecran-statistiques/EcranStatistiques.tsx';
-import { EcranBeneficierDuDispositif } from './domaine/vitrine/ecran-beneficier-du-dispositif/EcranBeneficierDuDispositif.tsx';
 import { EcranAnnuaire } from './domaine/vitrine/ecran-annuaire/EcranAnnuaire.tsx';
 import { EcranConnexion } from './domaine/connexion/EcranConnexion.tsx';
 import { EcranAidant } from './domaine/vitrine/ecran-annuaire/ecran-aidant/EcranAidant.tsx';
@@ -54,7 +53,6 @@ export const RouteurPublic = () => {
             <Route index element={<EcranAnnuaire />} />
             <Route path="solliciter" element={<EcranAidant />} />
           </Route>
-          <Route path="etre-aide" element={<EcranBeneficierDuDispositif />} />
         </Route>
         <Route
           path="guide-des-aidants-cyber"
