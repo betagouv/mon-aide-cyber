@@ -24,6 +24,7 @@ import { EcranRealiserDesDiagnosticsANSSI } from './domaine/vitrine/ecran-realis
 import { EcranSecurite } from './domaine/vitrine/ecran-securite/EcranSecurite.tsx';
 import { EcranRepondreAUneDemande } from './domaine/gestion-demandes/repondre-a-une-demande/EcranRepondreAUneDemande.tsx';
 import { PageCrisp } from './domaine/crisp/PageCrisp.tsx';
+import { EcranInscription } from './domaine/connexion/ecran-inscription/EcranInscription.tsx';
 
 export const RouteurPublic = () => {
   return (
@@ -113,6 +114,12 @@ export const RouteurPublic = () => {
         element={<LayoutPublic afficheNavigation={false} />}
       >
         <Route index element={<EcranConnexion />} />
+      </Route>
+      <Route
+        path="/inscription"
+        element={<LayoutPublic afficheNavigation={false} />}
+      >
+        <Route index element={<EcranInscription />} />
       </Route>
       <Route
         path="/diagnostic-libre-acces"
