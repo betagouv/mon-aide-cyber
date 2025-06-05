@@ -11,7 +11,7 @@ export const EcranInscription = () => {
     <main role="main" className="ecran-inscription">
       <div className="formulaire-colonne-gauche">
         <div className="fr-container texte-centre">
-          <TypographieH2>Créez votre compte Mon​Aide​Cyber</TypographieH2>
+          <TypographieH2>Créez votre compte MonAideCyber</TypographieH2>
           <BoutonProConnect />
           <span>
             Vous avez déjà un compte ? <a href="/connexion">Se connecter</a>
