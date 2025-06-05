@@ -8,13 +8,13 @@ import {
   definitionEntiteAideeBeneficieDiagnostic,
   unTupleAttributionDemandeAideAAidant,
 } from '../diagnostic/tuples';
-import { ServiceDeHashage } from '../securite/ServiceDeHashage';
-import { adaptateurServiceDeHashage } from '../infrastructure/adaptateurs/adaptateurServiceDeHashage';
+import { ServiceDeChiffrement } from '../securite/ServiceDeChiffrement';
+import { adaptateurServiceChiffrement } from '../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 
 export class AdaptateurRelationsMAC implements AdaptateurRelations {
   constructor(
     private readonly tupleEntrepot: EntrepotRelation = fabriqueEntrepotRelations(),
-    private readonly serviceDeHash: ServiceDeHashage = adaptateurServiceDeHashage()
+    private readonly serviceDeChiffrement: ServiceDeChiffrement = adaptateurServiceChiffrement()
   ) {}
 
   async creeTupleEntiteAideeBeneficieDiagnostic(
@@ -24,7 +24,7 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
     const tuple = unTuple<DefinitionEntiteAideeBeneficieDiagnostic>(
       definitionEntiteAideeBeneficieDiagnostic
     )
-      .avecUtilisateur(this.serviceDeHash.hashe(emailEntiteAidee))
+      .avecUtilisateur(this.serviceDeChiffrement.chiffre(emailEntiteAidee))
       .avecObjet(identifiantDiagnostic)
       .construis();
 
