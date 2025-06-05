@@ -12,7 +12,6 @@ import { EcranAccessibilite } from './vues/EcranAccessibilite.tsx';
 import { EcranStatistiques } from './domaine/vitrine/ecran-statistiques/EcranStatistiques.tsx';
 import { EcranAnnuaire } from './domaine/vitrine/ecran-annuaire/EcranAnnuaire.tsx';
 import { EcranConnexion } from './domaine/connexion/EcranConnexion.tsx';
-import { EcranAidant } from './domaine/vitrine/ecran-annuaire/ecran-aidant/EcranAidant.tsx';
 import { EcranMotDePasseOublie } from './domaine/vitrine/mot-de-passe-oublie/EcranMotDePasseOublie.tsx';
 import { EcranReinitialiserMotDePasse } from './domaine/vitrine/reinitialiser-mot-de-passe/EcranReinitialiserMotDePasse.tsx';
 import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
@@ -51,7 +50,6 @@ export const RouteurPublic = () => {
         <Route path="beneficier-du-dispositif">
           <Route path="annuaire">
             <Route index element={<EcranAnnuaire />} />
-            <Route path="solliciter" element={<EcranAidant />} />
           </Route>
         </Route>
         <Route
