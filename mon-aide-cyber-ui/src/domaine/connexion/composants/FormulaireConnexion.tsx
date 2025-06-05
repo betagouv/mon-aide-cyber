@@ -1,8 +1,7 @@
 import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 import { FormulaireAuthentification } from '../../authentification/FormulaireAuthentification.tsx';
-import Button from '../../../composants/atomes/Button/Button.tsx';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   MoteurDeLiens,
   ROUTE_MON_ESPACE_VALIDER_CGU,
@@ -12,7 +11,6 @@ import { useEffect } from 'react';
 
 export const FormulaireConnexion = () => {
   const navigationMAC = useNavigationMAC();
-  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
   const erreursRetourPostLogin = searchParams?.get('erreurConnexion');
@@ -71,14 +69,10 @@ export const FormulaireConnexion = () => {
       <FormulaireAuthentification />
       <br />
       <div className="texte-centre">
-        <p>Vous n’êtes pas encore Aidant cyber ?</p>
-        <Button
-          type="button"
-          variant="link"
-          onClick={() => navigate('/realiser-des-diagnostics-anssi')}
-        >
-          S&apos;inscrire
-        </Button>
+        <p>
+          Vous n’avez pas encore de compte ?{' '}
+          <a href="/inscription">S‘inscrire</a>
+        </p>
       </div>
     </>
   );

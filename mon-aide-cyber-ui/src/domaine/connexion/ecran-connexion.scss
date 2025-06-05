@@ -14,18 +14,18 @@
 
   .formulaire-colonne-gauche {
     grid-area: formulaire;
-    padding: 3rem 2.5rem;
+    padding: 48px 40px;
 
     @include a-partir-de(md) {
-      padding: 5rem 4rem;
+      padding: 80px 64px;
     }
 
     @include a-partir-de(lg) {
-      padding: 5rem 6rem;
+      padding: 80px 96px;
     }
 
     @include a-partir-de(xl) {
-      padding: 5rem 13rem;
+      padding: 80px 208px;
     }
   }
 
