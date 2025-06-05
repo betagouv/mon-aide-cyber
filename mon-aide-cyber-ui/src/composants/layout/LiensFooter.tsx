@@ -26,6 +26,11 @@ export const LiensFooter = () => (
       </a>
     </li>
     <li className="fr-footer__bottom-item">
+      <a className="fr-footer__bottom-link" href="/diagnostic-libre-acces">
+        Diagnostic cyber en accès libre
+      </a>
+    </li>
+    <li className="fr-footer__bottom-item">
       <a className="fr-footer__bottom-link" href="/securite">
         Sécurité
       </a>
