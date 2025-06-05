@@ -160,7 +160,12 @@ const generePdfs = async (pagesHtml: ContenuHtml[]): Promise<Buffer[]> => {
       }),
     };
 
-    const resultat = navigateur.newPage().then((page) => {
+    const resultat = navigateur.newPage().then(async (page) => {
+      await page.setViewport({
+        width: 794,
+        height: 1122,
+        deviceScaleFactor: 2,
+      });
       return page
         .setContent(contenuFinal.corps)
         .then(async () =>
