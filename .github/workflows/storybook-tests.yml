@@ -13,7 +13,7 @@ jobs:
       - name: Installe les dépendances
         run: npm ci
       - name: Installe Playwright
-        run: npx playwright install --with-deps
+        run: npx playwright install chromium --with-deps
       - name: Construis Storybook
         run: npm run build:storybook --quiet -w mon-aide-cyber-ui
       - name: Démarre Storybook et execute les tests

@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import Button from '../../composants/atomes/Button/Button';
-import { expect, waitFor, within } from '@storybook/test';
+import { expect, waitFor, within } from 'storybook/test';
 
 const meta: Meta<typeof Button> = {
   component: Button,

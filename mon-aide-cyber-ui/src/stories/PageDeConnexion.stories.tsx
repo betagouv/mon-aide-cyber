@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { expect, userEvent, waitFor, within } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, waitFor, within } from 'storybook/test';
 import { ReponseAuthentification } from '../domaine/authentification/Authentification.ts';
 import { ComposantAffichageErreur } from '../composants/alertes/ComposantAffichageErreur.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -87,7 +87,7 @@ export const PageDeConnexion: Story = {
     ),
   ],
   name: 'Page de connexion',
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('Affiche la page de connexion', async () => {

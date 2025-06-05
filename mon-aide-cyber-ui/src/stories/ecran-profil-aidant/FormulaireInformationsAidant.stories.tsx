@@ -1,5 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { expect, waitFor, within } from '@storybook/test';
+import { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, waitFor, within } from 'storybook/test';
 import { ParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ContexteNavigationMAC } from '../../fournisseurs/ContexteNavigationMAC.tsx';
 import { ComposantAffichageErreur } from '../../composants/alertes/ComposantAffichageErreur.tsx';
@@ -18,8 +18,8 @@ type Story = StoryObj<typeof meta>;
 
 const macAPIMemoire = {
   execute: <T, U, V = void>(
-    _parametresAPI: ParametresAPI<V>,
-    _transcris: (contenu: Promise<U>) => Promise<T>
+    __parametresAPI: ParametresAPI<V>,
+    __transcris: (contenu: Promise<U>) => Promise<T>
   ) => {
     return Promise.resolve({
       nomPrenom: 'Jean Dupont',
@@ -60,13 +60,14 @@ export const StoryFormulaireInformationsAidant: Story = {
             setEtat: () => {
               return;
             },
-            ajouteEtat: (_liens: Liens) => {
+            ajouteEtat: (__liens: Liens) => {
               return;
             },
             // eslint-disable-next-line @typescript-eslint/no-empty-function
-            navigue: (_moteurDeLiens, _action, _exclusion) => {},
+            navigue: (__moteurDeLiens, __action, __exclusion) => {},
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             retourAccueil: () => {},
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             retireAction: () => {},
           }}
         >

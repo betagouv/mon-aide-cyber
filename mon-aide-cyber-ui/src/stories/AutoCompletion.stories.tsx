@@ -1,5 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { expect, userEvent, within } from '@storybook/test';
+import { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import { AutoCompletion } from '../composants/auto-completion/AutoCompletion.tsx';
 
 const meta = {
@@ -54,7 +54,7 @@ export const AutoCompletionTexte: Story = {
     surSelection: () => {},
   },
   name: 'Propose l’auto complétion pour des mots',
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step(
@@ -204,7 +204,7 @@ export const AutoCompletionObjet: Story = {
     surSelection: () => {},
   },
   name: 'Propose l’auto complétion pour des suggestions structurées',
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step(
