@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
-import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { expect, waitFor, within } from 'storybook/test';
 import {
   uneQuestionAChoixUnique,
   uneQuestionTiroirAChoixMultiple,
@@ -249,7 +249,7 @@ export const AfficheDiagnosticQuestionListeDeroulante: Story = {
     (story) =>
       decorateurComposantDiagnostic(story, identifiantQuestionListeDeroulante),
   ],
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement, userEvent }) => {
     const canvas = within(canvasElement);
     const champSaisie = await waitFor(() => canvas.getByRole('textbox'));
 
@@ -291,25 +291,34 @@ export const AfficheDiagnosticAvecReponseEntrainantQuestion: Story = {
         identifiantReponseEntrainantQuestion
       ),
   ],
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement, userEvent }) => {
     const canvas = within(canvasElement);
-
     const reponseEntrainantQuestion =
-      diagnosticAvecReponseEntrainantQuestion.referentiel.contexte.groupes[0]
-        .questions[0].reponsesPossibles[2];
-    expect(
-      await waitFor(() =>
-        canvas.findByText(
-          reponseEntrainantQuestion.questions?.[0].libelle || ''
-        )
-      )
-    ).toBeInTheDocument();
-    expect(await waitFor(() => canvas.getAllByRole('checkbox').length)).toBe(7);
+      diagnosticAvecReponseEntrainantQuestion.referentiel.contexte.groupes[0].questions[0].reponsesPossibles.find(
+        (r) => r.questions && r.questions?.length > 0
+      )!;
+    await waitFor(() =>
+      expect(
+        canvas.getByText(reponseEntrainantQuestion.libelle)
+      ).toBeInTheDocument()
+    );
+
+    await userEvent.click(
+      canvas.getByRole('radio', { name: reponseEntrainantQuestion.libelle })
+    );
+    const sleep = (time: number) => new Promise((r) => setTimeout(r, time));
+    await sleep(20);
+
+    await waitFor(() => {
+      const libelleAttendu = reponseEntrainantQuestion.questions?.[0].libelle;
+      expect(canvas.getByText(libelleAttendu || '')).toBeInTheDocument();
+      expect(canvas.getAllByRole('checkbox').length).toBe(7);
+    });
   },
 };
 
 export const AfficheDiagnosticAvecQuestionTiroirAChoixUnique: Story = {
-  name: 'Affiche la question avec réponses à choix unique sous forme de boutton radio',
+  name: 'Affiche la question avec réponses à choix unique sous forme de bouton radio',
   args: {
     idDiagnostic: identifiantDiagnosticAvecQuestionTiroirAChoixUnique,
     macAPI: macAPIMemoire,

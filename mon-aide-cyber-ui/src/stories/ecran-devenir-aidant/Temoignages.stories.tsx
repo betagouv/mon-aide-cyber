@@ -1,5 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { expect, userEvent, within } from '@storybook/test';
+import { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import {
   Temoignages,
   Verbatim,
@@ -58,7 +58,7 @@ export const TemoignagesAUneSeulePage: Story = {
   args: {
     verbatims: verbatimsATester.slice(0, 2),
   },
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('La première page des verbatims est affichée', async () => {
@@ -88,7 +88,7 @@ export const TemoignagesADeuxPages: Story = {
   args: {
     verbatims: verbatimsATester.slice(0, 4),
   },
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('La première page des verbatims est affichée', async () => {

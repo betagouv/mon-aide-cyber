@@ -1,10 +1,10 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import { FormulaireModificationMotDePasse } from '../../domaine/espace-aidant/mon-compte/ecran-mes-informations/composants/formulaire-modification-mot-de-passe/FormulaireModificationMotDePasse.tsx';
 import { ContexteNavigationMAC } from '../../fournisseurs/ContexteNavigationMAC.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ComposantAffichageErreur } from '../../composants/alertes/ComposantAffichageErreur.tsx';
 import { Liens } from '../../domaine/Lien.ts';
-import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { expect, waitFor, within } from 'storybook/test';
 import { ParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 
 const meta: Meta<typeof FormulaireModificationMotDePasse> = {
@@ -19,8 +19,9 @@ let valeursSaisies = {};
 const macAPIMemoire = {
   execute: <T, U, V = void>(
     parametresAPI: ParametresAPI<V>,
-    _transcris: (contenu: Promise<U>) => Promise<T>
+    __transcris: (contenu: Promise<U>) => Promise<T>
   ) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     valeursSaisies = parametresAPI.corps!;
     return Promise.resolve({
       nomPrenom: 'Jean Dupont',
@@ -71,13 +72,14 @@ export const StoryFormulaireModificationMotDePasse: Story = {
           setEtat: () => {
             return;
           },
-          ajouteEtat: (_liens: Liens) => {
+          ajouteEtat: (__liens: Liens) => {
             return;
           },
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          navigue: (_moteurDeLiens, _action, _exclusion) => {},
+          navigue: (__moteurDeLiens, __action, __exclusion) => {},
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           retourAccueil: () => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           retireAction: () => {},
         }}
       >
@@ -87,7 +89,7 @@ export const StoryFormulaireModificationMotDePasse: Story = {
       </ContexteNavigationMAC.Provider>
     ),
   ],
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step(

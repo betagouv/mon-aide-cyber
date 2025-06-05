@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import { unDiagnostic } from '../../test/constructeurs/constructeurDiagnostic.ts';
-import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { expect, waitFor, within } from 'storybook/test';
 import {
   uneQuestionAChoixMultiple,
   uneQuestionAChoixUnique,
@@ -357,7 +357,7 @@ await entrepotDiagnosticMemoire.persiste(
 const macAPIMemoire = {
   execute: async <T, U, V = void>(
     parametresAPI: ParametresAPI<V>,
-    _transcris: (contenu: Promise<U>) => Promise<T>
+    __transcris: (contenu: Promise<U>) => Promise<T>
   ) => {
     if (parametresAPI.methode === 'PATCH') {
       await entrepotDiagnosticMemoire.envoieReponse(
@@ -406,7 +406,7 @@ export const SelectionneReponseDiagnostic: Story = {
     (story) =>
       decorateurComposantDiagnostic(story, identifiantQuestionAChoixUnique),
   ],
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('Lorsque le diagnostic est récupéré depuis l’API', async () => {
@@ -465,7 +465,7 @@ export const SelectionneReponseDiagnosticDansUneListe: Story = {
     (story) =>
       decorateurComposantDiagnostic(story, identifiantQuestionListeDeroulante),
   ],
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('Lorsque le diagnostic est récupéré depuis l’API', async () => {
@@ -525,7 +525,7 @@ export const AfficheLesThematiques: Story = {
         identifiantDiagnosticAvecPlusieursThematiques
       ),
   ],
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('Lorsque le diagnostic est récupéré depuis l’API', async () => {
@@ -600,7 +600,7 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
   decorators: [
     (story) => decorateurComposantDiagnostic(story, identifiantQuestionATiroir),
   ],
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('Lorsque le diagnostic est récupéré depuis l’API', async () => {
@@ -624,30 +624,21 @@ export const SelectionneLesReponsesPourLesQuestionsATiroir: Story = {
       await userEvent.click(canvas.getByRole('checkbox', { name: /choix 3/i }));
       await userEvent.click(canvas.getByRole('checkbox', { name: /choix 4/i }));
 
-      expect(
-        canvas.getByRole('radio', { name: /plusieurs choix/i })
-      ).toBeChecked();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('checkbox', {
-            name: /choix 2/i,
-          })
-        )
-      ).toBeChecked();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('checkbox', {
-            name: /choix 3/i,
-          })
-        )
-      ).toBeChecked();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('checkbox', {
-            name: /choix 4/i,
-          })
-        )
-      ).not.toBeChecked();
+      await waitFor(() => {
+        expect(
+          canvas.getByRole('radio', { name: /plusieurs choix/i })
+        ).toBeChecked();
+        expect(
+          canvas.getByRole('checkbox', { name: /choix 2/i })
+        ).toBeChecked();
+        expect(
+          canvas.getByRole('checkbox', { name: /choix 3/i })
+        ).toBeChecked();
+        expect(
+          canvas.getByRole('checkbox', { name: /choix 4/i })
+        ).not.toBeChecked();
+      });
+
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
         unLienHATEOAS()
           .repondreDiagnostic(identifiantQuestionATiroir)
@@ -732,7 +723,7 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
         identifiantQuestionAPlusieursTiroirs
       ),
   ],
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('Lorsque le diagnostic est récupéré depuis l’API', async () => {
@@ -765,44 +756,27 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirs: Story = {
         canvas.getByRole('checkbox', { name: /tiroir 22/i })
       );
 
-      expect(
-        canvas.getByRole('radio', { name: /plusieurs tiroirs/i })
-      ).toBeChecked();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('checkbox', {
-            name: /choix 2/i,
-          })
-        )
-      ).toBeChecked();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('checkbox', {
-            name: /choix 3/i,
-          })
-        )
-      ).toBeChecked();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('checkbox', {
-            name: /choix 4/i,
-          })
-        )
-      ).toBeChecked();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('checkbox', {
-            name: /tiroir 21/i,
-          })
-        )
-      ).toBeChecked();
-      expect(
-        await waitFor(() =>
-          canvas.getByRole('checkbox', {
-            name: /tiroir 22/i,
-          })
-        )
-      ).toBeChecked();
+      await waitFor(() => {
+        expect(
+          canvas.getByRole('radio', { name: /plusieurs tiroirs/i })
+        ).toBeChecked();
+        expect(
+          canvas.getByRole('checkbox', { name: /choix 2/i })
+        ).toBeChecked();
+        expect(
+          canvas.getByRole('checkbox', { name: /choix 3/i })
+        ).toBeChecked();
+        expect(
+          canvas.getByRole('checkbox', { name: /choix 4/i })
+        ).toBeChecked();
+        expect(
+          canvas.getByRole('checkbox', { name: /tiroir 21/i })
+        ).toBeChecked();
+        expect(
+          canvas.getByRole('checkbox', { name: /tiroir 22/i })
+        ).toBeChecked();
+      });
+
       entrepotDiagnosticMemoire.verifieEnvoiReponse(
         unLienHATEOAS()
           .repondreDiagnostic(identifiantQuestionAPlusieursTiroirs)
@@ -854,7 +828,7 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
           identifiantQuestionATiroirAvecChoixUniqueEtChoixMultiple
         ),
     ],
-    play: async ({ canvasElement, step }) => {
+    play: async ({ canvasElement, step, userEvent }) => {
       const canvas = within(canvasElement);
 
       await step(
@@ -899,46 +873,26 @@ export const SelectionneLesReponsesPourLesQuestionsATiroirsAChoixMultipleEtAChoi
           canvas.getByRole('checkbox', { name: /choix 3/i })
         );
 
-        expect(
-          await waitFor(() =>
+        await waitFor(() => {
+          expect(
             canvas.getByRole('radio', { name: /plusieurs choix?/i })
-          )
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('checkbox', {
-              name: /choix 2/i,
-            })
-          )
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('checkbox', {
-              name: /choix 3/i,
-            })
-          )
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('checkbox', {
-              name: /choix 4/i,
-            })
-          )
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /rep unique 1/i,
-            })
-          )
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /rep unique 2/i,
-            })
-          )
-        ).not.toBeChecked();
+          ).toBeChecked();
+          expect(
+            canvas.getByRole('checkbox', { name: /choix 2/i })
+          ).toBeChecked();
+          expect(
+            canvas.getByRole('checkbox', { name: /choix 3/i })
+          ).toBeChecked();
+          expect(
+            canvas.getByRole('checkbox', { name: /choix 4/i })
+          ).toBeChecked();
+          expect(
+            canvas.getByRole('radio', { name: /rep unique 1/i })
+          ).toBeChecked();
+          expect(
+            canvas.getByRole('radio', { name: /rep unique 2/i })
+          ).not.toBeChecked();
+        });
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
           unLienHATEOAS()
             .repondreDiagnostic(
@@ -1063,7 +1017,7 @@ export const SelectionneLesReponsesPourLesQuestionsAPlusieursTiroirsAChoixUnique
           identifiantQuestionATiroirAvecPlusieursChoixUnique
         ),
     ],
-    play: async ({ canvasElement, step }) => {
+    play: async ({ canvasElement, step, userEvent }) => {
       const canvas = within(canvasElement);
 
       await step(
@@ -1239,7 +1193,7 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
           identifiantQuestionATiroirAvecReponseUnique
         ),
     ],
-    play: async ({ canvasElement, step }) => {
+    play: async ({ canvasElement, step, userEvent }) => {
       const canvas = within(canvasElement);
 
       await step(
@@ -1270,34 +1224,20 @@ export const SelectionneLaReponsePourLaQuestionsATiroirAvecReponseUnique: Story 
       );
 
       await step('Lorsque l’utilisateur modifie la réponse', async () => {
-        // Pour ce test uniquement, obligé d’appeler 2 fois car le teet n’attend pas la fin du traitement asynchrone
-        await userEvent.click(canvas.getByRole('radio', { name: /choix 3/i }));
         await userEvent.click(canvas.getByRole('radio', { name: /choix 3/i }));
 
-        await expect(
-          canvas.getByRole('radio', { name: /tiroir à choix unique ?/i })
-        ).toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /choix 1/i,
-            })
-          )
-        ).not.toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /choix 2/i,
-            })
-          )
-        ).not.toBeChecked();
-        expect(
-          await waitFor(() =>
-            canvas.getByRole('radio', {
-              name: /choix 3/i,
-            })
-          )
-        ).toBeChecked();
+        await waitFor(() => {
+          expect(
+            canvas.getByRole('radio', { name: /tiroir à choix unique ?/i })
+          ).toBeChecked();
+          expect(
+            canvas.getByRole('radio', { name: /choix 1/i })
+          ).not.toBeChecked();
+          expect(
+            canvas.getByRole('radio', { name: /choix 2/i })
+          ).not.toBeChecked();
+          expect(canvas.getByRole('radio', { name: /choix 3/i })).toBeChecked();
+        });
         entrepotDiagnosticMemoire.verifieEnvoiReponse(
           unLienHATEOAS()
             .repondreDiagnostic(identifiantQuestionATiroirAvecReponseUnique)
@@ -1339,7 +1279,7 @@ export const SelectionneLaReponsePourUneQuestionAChoixMultiple: Story = {
     (story) =>
       decorateurComposantDiagnostic(story, identifiantQuestionAChoixMultiple),
   ],
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('Lorsque le diagnostic est récupéré depuis l’API', async () => {

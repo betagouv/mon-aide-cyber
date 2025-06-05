@@ -1,5 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { expect, userEvent, within } from '@storybook/test';
+import { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import { DemandeDevenirAidant } from './DemandeDevenirAidant.tsx';
 
 const meta = {
@@ -18,7 +18,7 @@ export const DemandeDevenirAidantStory: Story = {
     referentielDepartements: [{ nom: 'Gironde', code: '33' }],
   },
   name: 'Formulaire de demande pour devenir Aidant',
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement, step, userEvent }) => {
     const canvas = within(canvasElement);
 
     await step('Affiche le formulaire', async () => {
