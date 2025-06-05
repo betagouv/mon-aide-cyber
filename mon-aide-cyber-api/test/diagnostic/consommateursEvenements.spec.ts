@@ -4,29 +4,21 @@ import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMA
 import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
 import { entiteAideeBeneficieDiagnostic } from '../../src/diagnostic/consommateursEvenements';
-import { ServiceDeHashage } from '../../src/securite/ServiceDeHashage';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 import { Evenement } from '../../src/contacts/RepertoireDeContacts';
 import { Tuple } from '../../src/relation/Tuple';
-
-class FauxServiceDeHashage implements ServiceDeHashage {
-  constructor(private tableDeHashage: Map<string, string>) {}
-
-  hashe(chaine: string): string {
-    return this.tableDeHashage.get(chaine) || '';
-  }
-}
+import { FauxServiceDeChiffrement } from '../infrastructure/securite/FauxServiceDeChiffrement';
 
 describe('Les consommateurs d’événements du diagnostic', () => {
   describe('Lorsque l’événement DIAGNOSTIC_LANCE est consommé', () => {
-    it('Stocke l’email hashé de l’entité Aidée, dans une relation', async () => {
+    it('Stocke l’email chiffré de l’entité Aidée, dans une relation', async () => {
       const entrepotRelation = new EntrepotRelationMemoire();
-      const serviceDeChiffrement = new FauxServiceDeHashage(
-        new Map([['beta-gouv@beta.gouv.fr', 'hash-email-entite-aidee']])
+      const fauxServiceDeChiffrement = new FauxServiceDeChiffrement(
+        new Map([['beta-gouv@beta.gouv.fr', 'abcde']])
       );
       const adaptateurRelations = new AdaptateurRelationsMAC(
         entrepotRelation,
-        serviceDeChiffrement
+        fauxServiceDeChiffrement
       );
 
       const relationsCreees: Tuple[] = [];
@@ -51,9 +43,7 @@ describe('Les consommateurs d’événements du diagnostic', () => {
       });
 
       expect(relationsCreees).toHaveLength(1);
-      expect(relationsCreees[0].utilisateur.identifiant).toBe(
-        'hash-email-entite-aidee'
-      );
+      expect(relationsCreees[0].utilisateur.identifiant).toBe('abcde');
     });
 
     it('Émet un événement dans le répertoire de contacts', async () => {
