@@ -137,7 +137,9 @@ const creeApp = (config: ConfigurationServeur) => {
   app.use('/contact', routeContact(config));
   app.use('/statistiques', routesStatistiques(config));
 
-  app.get('*', (_: Request, reponse: Response) => reponse.redirect('/'));
+  app.get('*', (_: Request, reponse: Response) =>
+    envoieIndexAvecNonce(reponse)
+  );
 
   app.use(
     gestionnaireErreurGeneralisee(config.gestionnaireErreurs.consignateur())
