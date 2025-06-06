@@ -3,6 +3,7 @@ import { ServiceDeChiffrement } from '../../../src/securite/ServiceDeChiffrement
 export class FauxServiceDeChiffrement implements ServiceDeChiffrement {
   private _aEteAppele = false;
   private appels: Map<string, boolean> = new Map();
+  private valeurLevantUneException: string | undefined = undefined;
 
   constructor(private tableDeChiffrement: Map<string, string>) {}
 
@@ -12,6 +13,9 @@ export class FauxServiceDeChiffrement implements ServiceDeChiffrement {
   }
 
   dechiffre(chaine: string): string {
+    if (chaine === this.valeurLevantUneException) {
+      throw new Error('Impossible de déchiffrer');
+    }
     let resultat = '';
     this.tableDeChiffrement.forEach((clef, valeur) => {
       if (clef === chaine) {
@@ -33,6 +37,10 @@ export class FauxServiceDeChiffrement implements ServiceDeChiffrement {
 
   aEteAppeleAvec(valeur: string): boolean {
     return !!this.appels.get(valeur);
+  }
+
+  lanceUneExceptionSurDechiffre(valeur: string) {
+    this.valeurLevantUneException = valeur;
   }
 
   nettoie() {
