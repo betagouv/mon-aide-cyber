@@ -5,20 +5,28 @@ export type ProprietesChoix = PropsWithChildren<
 > & {
   surSelection: () => void;
   name: string;
+  actif?: boolean;
 };
 
 export const Choix = ({
   children,
   name,
+  actif,
   ...proprietesRestantes
 }: ProprietesChoix) => {
   return (
-    <label className={proprietesRestantes.className}>
+    <label
+      className={`${proprietesRestantes.className} ${actif ? '' : 'inactif'}`}
+    >
       <div>
         <input
           name={name}
           type="radio"
-          onChange={() => proprietesRestantes.surSelection()}
+          disabled={!actif}
+          onClick={() => {
+            if (!actif) return;
+            proprietesRestantes.surSelection();
+          }}
         />
       </div>
       {children}

@@ -22,6 +22,7 @@ export const UtilisationDuService = () => {
     <div className="utilisation-du-service">
       <ChoixUtilisation
         key="choixUtilisation"
+        choixPossibles={['ActiviteProfessionnelle', 'InteretGeneral']}
         surClick={surClicChoixUtilisation}
       />
     </div>
