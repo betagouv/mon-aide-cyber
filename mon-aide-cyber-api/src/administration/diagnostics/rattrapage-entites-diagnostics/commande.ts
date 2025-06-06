@@ -3,10 +3,9 @@ import { chiffreLesIdentifiantsDesEntitesAidesDansLesRelations } from './rattrap
 import { knex } from 'knex';
 import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import knexfile from '../../../infrastructure/entrepots/postgres/knexfile';
-import { Objet, Relation, Tuple, Utilisateur } from '../../../relation/Tuple';
+import { Objet, Relation, Utilisateur } from '../../../relation/Tuple';
 import crypto from 'crypto';
-import { EntrepotRelationPostgres } from '../../../relation/infrastructure/EntrepotRelationPostgres';
-import { EntrepotRelation } from '../../../relation/EntrepotRelation';
+import { EntrepotRelationRattrapagePostgres } from './EntrepotRelationRattrapagePostgres';
 
 export type DonneesRelation = {
   objet: Objet;
@@ -23,19 +22,6 @@ export type EntiteAidee = {
   identifiant: string;
 };
 
-export interface EntrepotRelationRattrapage extends EntrepotRelation {
-  parIdentifiant(id: crypto.UUID): Promise<Tuple>;
-}
-
-class EntrepotRelationRattrapagePostgres
-  extends EntrepotRelationPostgres
-  implements EntrepotRelationRattrapage
-{
-  parIdentifiant(__id: crypto.UUID): Promise<Tuple> {
-    throw new Error('Method not implemented.');
-  }
-}
-
 const command = program.description(
   'Exécute le rattrapage des relations entre les diagnostics et les entités Aidées'
 );
@@ -48,7 +34,7 @@ command.action(async () => {
   const relationsEntiteAidees: EntiteAidee[] = await connexionKnex
     .from('relations')
     .whereRaw("(donnees->>'relation') = ?", 'destinataire')
-    .andWhereRaw("(donnees->'utilisateur'->>'type')", 'entiteAidee')
+    .andWhereRaw("(donnees->'utilisateur'->>'type') = ?", 'entiteAidee')
     .select('relations.*')
     .then((lignes: Ligne[]) =>
       lignes.map((l) => ({
