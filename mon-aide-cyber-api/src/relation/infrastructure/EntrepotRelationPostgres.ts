@@ -58,6 +58,7 @@ export class EntrepotRelationPostgres
   protected champsAMettreAJour(_: TupleDTO): Partial<TupleDTO> {
     throw new Error('non implémenté');
   }
+
   protected deDTOAEntite(dto: TupleDTO): Tuple {
     return {
       identifiant: dto.id,
@@ -66,6 +67,7 @@ export class EntrepotRelationPostgres
       utilisateur: dto.donnees.utilisateur,
     };
   }
+
   protected deEntiteADTO(entite: Tuple): TupleDTO {
     return {
       id: entite.identifiant,
@@ -79,6 +81,10 @@ export class EntrepotRelationPostgres
 
   protected nomTable(): string {
     return 'relations';
+  }
+
+  parIdentifiant(__id: crypto.UUID): Promise<Tuple> {
+    throw new Error('Method not implemented.');
   }
 
   trouveObjetsLiesAUtilisateur(identifiant: string): Promise<Tuple[]> {
