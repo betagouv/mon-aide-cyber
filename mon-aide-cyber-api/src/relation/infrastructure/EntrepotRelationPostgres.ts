@@ -83,11 +83,7 @@ export class EntrepotRelationPostgres
     return 'relations';
   }
 
-  parIdentifiant(__id: crypto.UUID): Promise<Tuple> {
-    throw new Error('Method not implemented.');
-  }
-
-  trouveObjetsLiesAUtilisateur(identifiant: string): Promise<Tuple[]> {
+  async trouveObjetsLiesAUtilisateur(identifiant: string): Promise<Tuple[]> {
     return this.knex
       .from(this.nomTable())
       .whereRaw("(donnees->'utilisateur'->>'identifiant') = ?", identifiant)
@@ -97,7 +93,7 @@ export class EntrepotRelationPostgres
       );
   }
 
-  relationExiste(
+  async relationExiste(
     relation: Relation,
     utilisateur: Utilisateur,
     objet: Objet
@@ -111,7 +107,7 @@ export class EntrepotRelationPostgres
       .then((lignes) => lignes.length > 0);
   }
 
-  typeRelationExiste(relation: Relation, objet: Objet): Promise<boolean> {
+  async typeRelationExiste(relation: Relation, objet: Objet): Promise<boolean> {
     return this.knex
       .from(this.nomTable())
       .whereRaw("(donnees->>'relation') = ?", relation)

@@ -1,5 +1,6 @@
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
-import { EntiteAidee, EntrepotRelationRattrapage } from './commande';
+import { EntiteAidee } from './commande';
+import { EntrepotRelationRattrapage } from './EntrepotRelationRattrapagePostgres';
 
 export const chiffreLesIdentifiantsDesEntitesAidesDansLesRelations = async (
   entrepotRelation: EntrepotRelationRattrapage,
