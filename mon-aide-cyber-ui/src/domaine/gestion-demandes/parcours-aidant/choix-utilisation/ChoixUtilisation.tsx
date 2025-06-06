@@ -1,16 +1,16 @@
 import { TypographieH3 } from '../../../../composants/communs/typographie/TypographieH3/TypographieH3.tsx';
-import illustrationInteretGeneralMAC from '../../../../../public/images/illustration-interet-general-mac.svg';
-import illustrationCadreProfessionnelMAC from '../../../../../public/images/illustration-cadre-professionnel-mac.svg';
 import { useEffect, useState } from 'react';
-import { Choix } from './choix/Choix.tsx';
 import useDefilementFluide from '../../../../hooks/useDefilementFluide.ts';
-import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
+import ChoixActiviteProfessionnelle from './choix/ChoixActiviteProfessionnelle.tsx';
+import ChoixInteretGeneral from './choix/ChoixInteretGeneral.tsx';
 
 export type Utilisation = 'InteretGeneral' | 'ActiviteProfessionnelle';
 
 export const ChoixUtilisation = ({
+  choixPossibles = ['InteretGeneral', 'ActiviteProfessionnelle'],
   surClick,
 }: {
+  choixPossibles: Utilisation[];
   surClick: (choix: Utilisation) => void;
 }) => {
   useDefilementFluide();
@@ -33,89 +33,16 @@ export const ChoixUtilisation = ({
       </div>
 
       <div className="formulaire-colonne-gauche">
-        <Choix
-          className="carte-choix-utilisation "
-          name="choix-utilisation-service"
-          surSelection={() => setChoix('ActiviteProfessionnelle')}
-        >
-          <img
-            src={illustrationCadreProfessionnelMAC}
-            alt="Illustration d’une personne travaillant dans le cadre professionnel."
-          />
-
-          <div>
-            <TypographieH5>
-              Je souhaite utiliser librement l’outil de diagnostic de l’ANSSI
-            </TypographieH5>
-          </div>
-          <div className="checklist">
-            <div className="item">
-              <div className="vert">
-                <i className="fr-icon-check-line"></i>
-              </div>
-              <div>
-                Je peux m’appuyer sur MonAideCyber à des fins lucratives
-              </div>
-            </div>
-            <div className="item">
-              <div className="rouge">
-                <i className="fr-icon-close-line"></i>
-              </div>
-              <div>Je ne suis pas référencé en tant qu’”Aidant cyber”</div>
-            </div>
-          </div>
-          <div className="mac-callout mac-callout-information">
-            <i className="fr-icon-user-fill" />
-            <div>Accessible à tous</div>
-          </div>
-        </Choix>
+        <ChoixActiviteProfessionnelle
+          actif={choixPossibles.includes('ActiviteProfessionnelle')}
+          surChoix={() => setChoix('ActiviteProfessionnelle')}
+        />
       </div>
       <div className="formulaire-colonne-droite">
-        <Choix
-          className="carte-choix-utilisation formulaire-colonne-droite"
-          name="choix-utilisation-service"
-          surSelection={() => setChoix('InteretGeneral')}
-        >
-          <img
-            src={illustrationInteretGeneralMAC}
-            alt="Illustration d’une personne oeuvrant pour l’intérêt général."
-          />
-          <div>
-            <TypographieH5>
-              Je souhaite utiliser l’outil de diagnostic de l’ANSSI et être
-              référencé Aidant cyber
-            </TypographieH5>
-          </div>
-          <div className="checklist">
-            <div className="item">
-              <div className="vert">
-                <i className="fr-icon-check-line"></i>
-              </div>
-              <div>Je suis référencé Aidant cyber</div>
-            </div>
-            <div className="item">
-              <div className="rouge">
-                <i className="fr-icon-close-line"></i>
-              </div>
-              <div>
-                Je ne peux pas utiliser MonAideCyber à des fins lucratives
-              </div>
-            </div>
-          </div>
-          <div className="mac-callout mac-callout-information">
-            <i className="fr-icon-user-fill" />
-            <div>
-              <p>Accessible :</p>
-              <ul>
-                <li>aux agents publics</li>
-                <li>
-                  aux salariés ou adhérents d'un relais associatif ou qui
-                  souhaitent le devenir
-                </li>
-              </ul>
-            </div>
-          </div>
-        </Choix>
+        <ChoixInteretGeneral
+          actif={choixPossibles.includes('InteretGeneral')}
+          surChoix={() => setChoix('InteretGeneral')}
+        />
       </div>
 
       <div className="validation">
