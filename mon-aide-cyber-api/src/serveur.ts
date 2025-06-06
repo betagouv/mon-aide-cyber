@@ -40,6 +40,7 @@ import { filtreIp } from './infrastructure/securite/Reseau';
 import { AdaptateurRechercheEntreprise } from './infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 
 import { AdaptateurCmsCrispMAC } from './adaptateurs/AdaptateurCmsCrispMAC';
+import { interdisLaMiseEnCache } from './infrastructure/middlewares/middlewares';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -128,6 +129,8 @@ const creeApp = (config: ConfigurationServeur) => {
   app.use(
     express.static(path.join(__dirname, './../../mon-aide-cyber-ui/dist'))
   );
+
+  app.use(interdisLaMiseEnCache());
 
   app.use('/api', routesAPI(config));
   app.use('/pro-connect', routesProConnect(config));
