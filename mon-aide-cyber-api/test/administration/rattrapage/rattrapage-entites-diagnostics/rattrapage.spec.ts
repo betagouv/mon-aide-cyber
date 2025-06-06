@@ -76,20 +76,21 @@ describe('Rattrapage des identifiants des entités Aidées', () => {
       'bbb'
     );
 
-    await chiffreLesIdentifiantsDesEntitesAidesDansLesRelations(
-      entrepotRelation,
-      serviceDeChiffrement,
-      [
-        {
-          id: tupleNonChiffre.identifiant,
-          identifiant: 'email-non-chiffre@entite-aidee.com',
-        },
-        {
-          id: tupleChiffre.identifiant,
-          identifiant: 'email-deja-chiffre@entite-aidee.com',
-        },
-      ]
-    );
+    const resultRattrapage =
+      await chiffreLesIdentifiantsDesEntitesAidesDansLesRelations(
+        entrepotRelation,
+        serviceDeChiffrement,
+        [
+          {
+            id: tupleNonChiffre.identifiant,
+            identifiant: 'email-non-chiffre@entite-aidee.com',
+          },
+          {
+            id: tupleChiffre.identifiant,
+            identifiant: 'email-deja-chiffre@entite-aidee.com',
+          },
+        ]
+      );
 
     expect(await entrepotRelation.toutesLesEntites()).toStrictEqual<Tuple[]>([
       {
@@ -111,5 +112,9 @@ describe('Rattrapage des identifiants des entités Aidées', () => {
         },
       },
     ]);
+    expect(resultRattrapage).toStrictEqual({
+      nombreTotalDeRelations: 2,
+      nombreDeRelationsMisesAJour: 1,
+    });
   });
 });

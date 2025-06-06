@@ -46,10 +46,19 @@ command.action(async () => {
   const serviceDeChiffrement = adaptateurServiceChiffrement();
 
   try {
-    await chiffreLesIdentifiantsDesEntitesAidesDansLesRelations(
-      entrepotRelation,
-      serviceDeChiffrement,
-      relationsEntiteAidees
+    const resultRattrapage =
+      await chiffreLesIdentifiantsDesEntitesAidesDansLesRelations(
+        entrepotRelation,
+        serviceDeChiffrement,
+        relationsEntiteAidees
+      );
+    console.log(
+      'Nombre total de relations',
+      resultRattrapage.nombreTotalDeRelations
+    );
+    console.log(
+      'Nombre de mises à jour faites',
+      resultRattrapage.nombreDeRelationsMisesAJour
     );
   } catch (error) {
     console.log('Une erreur a eu lieu durant le rattrapage', error);
