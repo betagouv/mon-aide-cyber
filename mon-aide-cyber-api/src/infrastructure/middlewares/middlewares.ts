@@ -18,3 +18,15 @@ const redirigeVersUrlBase: RequestHandler = (
 };
 
 export { redirigeVersUrlBase };
+export const interdisLaMiseEnCache =
+  (): RequestHandler =>
+  (_: Request, reponse: Response, suite: NextFunction) => {
+    reponse.setHeader(
+      'cache-control',
+      'no-store, no-cache, must-revalidate, proxy-revalidate'
+    );
+    reponse.setHeader('pragma', 'no-cache');
+    reponse.setHeader('expires', '0');
+    reponse.setHeader('surrogate-control', 'no-store');
+    suite();
+  };

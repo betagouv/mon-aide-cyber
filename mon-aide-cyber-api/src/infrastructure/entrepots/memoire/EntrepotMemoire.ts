@@ -245,11 +245,13 @@ export class EntrepotStatistiquesMemoire
   lis(): Promise<Statistiques> {
     const statistiques = Object.entries(Object.fromEntries(this.entites)).map(
       ([_, stats]) => stats
-    )[0];
+    );
     return Promise.resolve({
       identifiant: crypto.randomUUID(),
-      nombreDiagnostics: statistiques.nombreDiagnostics,
-      nombreAidants: statistiques.nombreAidants,
+      nombreDiagnostics:
+        statistiques.length > 0 ? statistiques[0].nombreDiagnostics : 0,
+      nombreAidants:
+        statistiques.length > 0 ? statistiques[0].nombreAidants : 0,
     });
   }
 }
