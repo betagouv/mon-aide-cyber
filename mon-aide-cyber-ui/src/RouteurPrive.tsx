@@ -19,6 +19,7 @@ import { EcranMonEspaceUtilisationDuService } from './domaine/parcours-utilisati
 import { EcranValiderProfilUtilisateurInscrit } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/EcranValiderProfilUtilisateurInscrit.tsx';
 import { EcranMonEspaceDemandeDevenirAidant } from './domaine/parcours-utilisation-service/parcours-mon-espace-demande-devenir-aidant/ecran-mon-espace-demande-devenir-aidant/EcranMonEspaceDemandeDevenirAidant.tsx';
 import { EcranDevenirAidant } from './domaine/espace-aidant/ecran-devenir-aidant/EcranDevenirAidant.tsx';
+import EcranMonEspaceInscription from './domaine/espace-aidant/parcours-inscription/ecran-inscription/EcranMonEspaceInscription.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -36,6 +37,9 @@ export const RouteurPrive = () => {
             path="mon-utilisation-du-service"
             element={<EcranMonEspaceUtilisationDuService />}
           />
+        </Route>
+        <Route element={<LayoutAidant afficheSideBar={false} />}>
+          <Route path="inscription" element={<EcranMonEspaceInscription />} />
         </Route>
         <Route element={<LayoutAidant afficheSideBar={false} />}>
           <Route
