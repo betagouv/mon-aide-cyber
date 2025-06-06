@@ -58,6 +58,7 @@ export class EntrepotRelationPostgres
   protected champsAMettreAJour(_: TupleDTO): Partial<TupleDTO> {
     throw new Error('non implémenté');
   }
+
   protected deDTOAEntite(dto: TupleDTO): Tuple {
     return {
       identifiant: dto.id,
@@ -66,6 +67,7 @@ export class EntrepotRelationPostgres
       utilisateur: dto.donnees.utilisateur,
     };
   }
+
   protected deEntiteADTO(entite: Tuple): TupleDTO {
     return {
       id: entite.identifiant,
@@ -81,7 +83,7 @@ export class EntrepotRelationPostgres
     return 'relations';
   }
 
-  trouveObjetsLiesAUtilisateur(identifiant: string): Promise<Tuple[]> {
+  async trouveObjetsLiesAUtilisateur(identifiant: string): Promise<Tuple[]> {
     return this.knex
       .from(this.nomTable())
       .whereRaw("(donnees->'utilisateur'->>'identifiant') = ?", identifiant)
@@ -91,7 +93,7 @@ export class EntrepotRelationPostgres
       );
   }
 
-  relationExiste(
+  async relationExiste(
     relation: Relation,
     utilisateur: Utilisateur,
     objet: Objet
@@ -105,7 +107,7 @@ export class EntrepotRelationPostgres
       .then((lignes) => lignes.length > 0);
   }
 
-  typeRelationExiste(relation: Relation, objet: Objet): Promise<boolean> {
+  async typeRelationExiste(relation: Relation, objet: Objet): Promise<boolean> {
     return this.knex
       .from(this.nomTable())
       .whereRaw("(donnees->>'relation') = ?", relation)

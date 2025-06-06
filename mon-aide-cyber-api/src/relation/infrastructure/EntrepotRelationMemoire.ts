@@ -22,6 +22,13 @@ export class EntrepotRelationMemoire
   extends EntrepotMemoire<Tuple>
   implements EntrepotRelation
 {
+  async parIdentifiant(id: crypto.UUID): Promise<Tuple> {
+    const entite = this.entites.get(id);
+    if (!entite) {
+      throw new Error('Tuple non trouvé');
+    }
+    return entite;
+  }
   supprimeLesRelations(relations: Relations): Promise<void> {
     const relationsASupprimer = Array.from(this.entites.values()).filter(
       (tuple) => {
@@ -78,5 +85,9 @@ export class EntrepotRelationMemoire
         return tuple.relation === relation && obj;
       }).length > 0
     );
+  }
+
+  async toutesLesEntites(): Promise<Tuple[]> {
+    return Array.from(this.entites.values());
   }
 }
