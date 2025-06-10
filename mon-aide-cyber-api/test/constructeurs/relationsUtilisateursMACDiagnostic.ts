@@ -11,11 +11,19 @@ import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-ma
 import { fakerFR } from '@faker-js/faker';
 import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import { utilisateurInscritInitieDiagnostic } from '../../src/espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
+import { uneRestitution } from './constructeurRestitution';
+import { DemandeAide } from '../../src/gestion-demandes/aide/DemandeAide';
 
 type IdentifiantsRelation = {
   identifiantUtilisateur: crypto.UUID;
   identifiantDiagnostic: crypto.UUID;
 };
+
+export type IdentifiantsRelationAide = {
+  identifiantEntiteAidee: string;
+  identifiantDiagnostic: crypto.UUID;
+};
+
 export const relieUnAidantAUnDiagnostic = async (
   entrepots: Entrepots,
   adaptateurRelations: AdaptateurRelations
@@ -67,5 +75,27 @@ export const relieUnUtilisateurInscritAUnDiagnostic = async (
   return {
     identifiantUtilisateur: utilisateurInscrit.identifiant,
     identifiantDiagnostic: diagnostic.identifiant,
+  };
+};
+
+export const relieUneEntiteAideeAUnDiagnostic = async (
+  demandeAide: DemandeAide,
+  entrepots: Entrepots,
+  adaptateurRelations: AdaptateurRelations
+): Promise<IdentifiantsRelationAide> => {
+  const diagnostic = unDiagnostic().construis();
+  const restitution = uneRestitution()
+    .avecIdentifiant(diagnostic.identifiant)
+    .construis();
+  await entrepots.diagnostic().persiste(diagnostic);
+  await entrepots.restitution().persiste(restitution);
+  await entrepots.demandesAides().persiste(demandeAide);
+  await adaptateurRelations.creeTupleEntiteAideeBeneficieDiagnostic(
+    diagnostic.identifiant,
+    demandeAide.email
+  );
+  return {
+    identifiantDiagnostic: diagnostic.identifiant,
+    identifiantEntiteAidee: demandeAide.email,
   };
 };

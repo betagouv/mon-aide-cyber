@@ -1,7 +1,4 @@
-import {
-  AdaptateurRelations,
-  Email,
-} from '../../src/relation/AdaptateurRelations';
+import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
 import crypto from 'crypto';
 import { Objet, Relation, Tuple, Utilisateur } from '../../src/relation/Tuple';
 
@@ -19,6 +16,10 @@ export class AdaptateurRelationsTest implements AdaptateurRelations {
     throw new Error('Method not implemented.');
   }
 
+  diagnosticDeLAide(__identifiantDiagnostic: crypto.UUID): Promise<Tuple> {
+    throw new Error('Method not implemented.');
+  }
+
   aidantInitieDiagnostic(_: crypto.UUID, __: crypto.UUID): Promise<void> {
     return Promise.resolve();
   }
@@ -27,10 +28,6 @@ export class AdaptateurRelationsTest implements AdaptateurRelations {
     identifiantAidant: crypto.UUID
   ): Promise<string[]> {
     return Promise.resolve(this.relations.get(identifiantAidant) || []);
-  }
-
-  diagnosticsDeLAide(_email: Email): Promise<string[]> {
-    return Promise.resolve([]);
   }
 
   relationExiste(

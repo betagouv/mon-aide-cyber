@@ -25,12 +25,19 @@ import {
   unUtilisateur,
 } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import {
+  IdentifiantsRelationAide,
   relieUnAidantAUnDiagnostic,
+  relieUneEntiteAideeAUnDiagnostic,
   relieUnUtilisateurInscritAUnDiagnostic,
 } from '../constructeurs/relationsUtilisateursMACDiagnostic';
 import { AdaptateurDeVerificationDeDemandeMAC } from '../../src/adaptateurs/AdaptateurDeVerificationDeDemandeMAC';
 import { EntrepotAideMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { AdaptateurDeVerificationDeDemandeDeTest } from '../adaptateurs/AdaptateurDeVerificationDeDemandeDeTest';
+import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
+import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
+import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
+import { FauxServiceDeChiffrement } from '../infrastructure/securite/FauxServiceDeChiffrement';
+import { uneDemandeAide } from '../gestion-demandes/aide/ConstructeurDemandeAide';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -551,7 +558,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       };
       testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
       const restitution = uneRestitution().construis();
-      testeurMAC.entrepots.restitution().persiste(restitution);
+      await testeurMAC.entrepots.restitution().persiste(restitution);
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -639,6 +646,73 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           typeObjet: 'diagnostic',
           typeUtilisateur: 'utilisateurInscrit',
         })
+      ).toBe(true);
+    });
+  });
+
+  describe('Quand une requête POST est reçue sur /{id}/restitution/demande-envoi-mail-restitution', () => {
+    const testeurMAC = testeurIntegration();
+    let donneesServeur: { app: Express };
+    let pdfGenere: Buffer;
+    let adaptateurEnvoiMail: AdaptateurEnvoiMailMemoire;
+
+    beforeEach(() => {
+      testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
+      testeurMAC.adaptateurDeVerificationDeCGU.reinitialise();
+    });
+
+    afterEach(() => {
+      testeurMAC.arrete();
+    });
+
+    const creeLaDemandeEtLanceLeServeur = async (
+      emailEntiteAidee: string
+    ): Promise<IdentifiantsRelationAide> => {
+      const demandeAide = uneDemandeAide()
+        .avecUnEmail(emailEntiteAidee)
+        .construis();
+      const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
+        new EntrepotRelationMemoire(),
+        new FauxServiceDeChiffrement(new Map([[emailEntiteAidee, 'abcdef']]))
+      );
+      testeurMAC.adaptateurRelations = adaptateurRelationsMAC;
+      const identifiants = await relieUneEntiteAideeAUnDiagnostic(
+        demandeAide,
+        testeurMAC.entrepots,
+        adaptateurRelationsMAC
+      );
+      donneesServeur = testeurMAC.initialise();
+      return identifiants;
+    };
+
+    beforeEach(async () => {
+      pdfGenere = Buffer.from('PDF Mesures généré');
+      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
+      adaptateurRestitutionPDF.genereRestitution = () => {
+        return Promise.resolve(pdfGenere);
+      };
+      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
+      adaptateurEnvoiMail =
+        testeurMAC.adaptateurEnvoieMessage as AdaptateurEnvoiMailMemoire;
+    });
+
+    it('Accepte la requête et transmet la restitution', async () => {
+      const identifiants = await creeLaDemandeEtLanceLeServeur(
+        'entite-aide@email.com'
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/diagnostic/${identifiants.identifiantDiagnostic}/restitution/demande-envoi-mail-restitution`
+      );
+
+      expect(reponse.statusCode).toBe(202);
+      expect(
+        adaptateurEnvoiMail.envoiRestitutionEntiteAideeEffectue(
+          pdfGenere,
+          'entite-aide@email.com'
+        )
       ).toBe(true);
     });
   });

@@ -17,6 +17,9 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private destinataires: string[] = [];
   private confirmation: ConfirmationDemandeAideAttribuee | undefined =
     undefined;
+  private _envoiRestitutionEntiteAideeEffectue:
+    | { pdf: Buffer; emailEntiteAidee: string }
+    | undefined = undefined;
 
   envoie(
     message: Email,
@@ -57,6 +60,17 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     aidant: AidantMisEnRelation
   ): Promise<void> {
     this.destinataires.push(aidant.email);
+    return Promise.resolve();
+  }
+
+  envoieRestitutionEntiteAidee(
+    pdfRestitution: Buffer,
+    emailEntiteAidee: string
+  ): Promise<void> {
+    this._envoiRestitutionEntiteAideeEffectue = {
+      pdf: pdfRestitution,
+      emailEntiteAidee,
+    };
     return Promise.resolve();
   }
 
@@ -132,6 +146,17 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     return (
       this.destinataires.includes(confirmation.emailAidant) &&
       confirmationCorrespond
+    );
+  }
+
+  envoiRestitutionEntiteAideeEffectue(
+    pdfEnvoye: Buffer,
+    emailEntiteAidee: string
+  ): boolean {
+    return (
+      this._envoiRestitutionEntiteAideeEffectue?.pdf === pdfEnvoye &&
+      this._envoiRestitutionEntiteAideeEffectue.emailEntiteAidee ===
+        emailEntiteAidee
     );
   }
 }

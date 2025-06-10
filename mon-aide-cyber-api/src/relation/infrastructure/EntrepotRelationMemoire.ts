@@ -4,6 +4,7 @@ import { Entrepot, EntrepotRelation, Relations } from '../EntrepotRelation';
 import crypto from 'crypto';
 import { Aggregat } from '../Aggregat';
 import { cloneDeep, isEqual } from 'lodash';
+import * as util from 'node:util';
 
 export class EntrepotMemoire<T extends Aggregat> implements Entrepot<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
@@ -22,6 +23,10 @@ export class EntrepotRelationMemoire
   extends EntrepotMemoire<Tuple>
   implements EntrepotRelation
 {
+  typeAggregat(): string {
+    return 'relation';
+  }
+
   async parIdentifiant(id: crypto.UUID): Promise<Tuple> {
     const entite = this.entites.get(id);
     if (!entite) {
@@ -29,6 +34,7 @@ export class EntrepotRelationMemoire
     }
     return entite;
   }
+
   supprimeLesRelations(relations: Relations): Promise<void> {
     const relationsASupprimer = Array.from(this.entites.values()).filter(
       (tuple) => {
@@ -51,25 +57,34 @@ export class EntrepotRelationMemoire
 
     return Promise.resolve();
   }
-  trouveObjetsLiesAUtilisateur(
+
+  async trouveObjetsLiesAUtilisateur(
     identifiantUtilisateur: string
   ): Promise<Tuple[]> {
     const tuples = Array.from(this.entites.values()).filter(
       (tuple) => tuple.utilisateur.identifiant === identifiantUtilisateur
     );
 
-    return Promise.resolve(tuples);
-  }
-  typeAggregat(): string {
-    return 'relation';
+    return tuples;
   }
 
-  relationExiste(
+  async trouveLesRelationsPourCetObjet(
+    relation: Relation,
+    objet: Objet
+  ): Promise<Tuple[]> {
+    return Array.from(this.entites.values()).filter(
+      (tuple) =>
+        util.isDeepStrictEqual(tuple.objet, objet) &&
+        tuple.relation === relation
+    );
+  }
+
+  async relationExiste(
     relation: Relation,
     utilisateur: Utilisateur,
     objet: Objet
   ): Promise<boolean> {
-    return Promise.resolve(
+    return (
       Array.from(this.entites.values()).filter((tuple) => {
         const user = isEqual(tuple.utilisateur, utilisateur);
         const obj = isEqual(tuple.objet, objet);
@@ -78,8 +93,8 @@ export class EntrepotRelationMemoire
     );
   }
 
-  typeRelationExiste(relation: string, objet: Objet): Promise<boolean> {
-    return Promise.resolve(
+  async typeRelationExiste(relation: string, objet: Objet): Promise<boolean> {
+    return (
       Array.from(this.entites.values()).filter((tuple) => {
         const obj = isEqual(tuple.objet, objet);
         return tuple.relation === relation && obj;

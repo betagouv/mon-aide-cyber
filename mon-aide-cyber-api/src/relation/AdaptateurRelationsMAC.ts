@@ -1,6 +1,6 @@
 import { Objet, Relation, Tuple, unTuple, Utilisateur } from './Tuple';
 import crypto from 'crypto';
-import { AdaptateurRelations, Email } from './AdaptateurRelations';
+import { AdaptateurRelations } from './AdaptateurRelations';
 import { EntrepotRelation } from './EntrepotRelation';
 import { fabriqueEntrepotRelations } from './infrastructure/fabriqueEntrepotRelations';
 import {
@@ -13,7 +13,7 @@ import { adaptateurServiceChiffrement } from '../infrastructure/adaptateurs/adap
 
 export class AdaptateurRelationsMAC implements AdaptateurRelations {
   constructor(
-    private readonly tupleEntrepot: EntrepotRelation = fabriqueEntrepotRelations(),
+    private readonly entrepotRelation: EntrepotRelation = fabriqueEntrepotRelations(),
     private readonly serviceDeChiffrement: ServiceDeChiffrement = adaptateurServiceChiffrement()
   ) {}
 
@@ -32,21 +32,41 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
   }
 
   async creeTuple(tuple: Tuple): Promise<void> {
-    await this.tupleEntrepot.persiste(tuple);
+    await this.entrepotRelation.persiste(tuple);
   }
 
-  diagnosticsFaitsParUtilisateurMAC(
+  async diagnosticsFaitsParUtilisateurMAC(
     identifiantUtilisateur: crypto.UUID
   ): Promise<string[]> {
-    return this.tupleEntrepot
+    return this.entrepotRelation
       .trouveObjetsLiesAUtilisateur(identifiantUtilisateur)
       .then((tuples) => tuples.map((tuple) => tuple.objet.identifiant));
   }
 
-  diagnosticsDeLAide(email: Email): Promise<string[]> {
-    return this.tupleEntrepot
-      .trouveObjetsLiesAUtilisateur(email)
-      .then((tuples) => tuples.map((tuple) => tuple.objet.identifiant));
+  async diagnosticDeLAide(identifiantDiagnostic: crypto.UUID): Promise<Tuple> {
+    const relationsDiagnostics =
+      await this.entrepotRelation.trouveLesRelationsPourCetObjet(
+        'destinataire',
+        {
+          identifiant: identifiantDiagnostic,
+          type: 'diagnostic',
+        }
+      );
+    const relationDiagnostic = relationsDiagnostics.find(
+      (tuple) => tuple.utilisateur.type === 'entiteAidee'
+    );
+    if (relationDiagnostic) {
+      return {
+        ...relationDiagnostic,
+        utilisateur: {
+          type: relationDiagnostic.utilisateur.type,
+          identifiant: this.serviceDeChiffrement.dechiffre(
+            relationDiagnostic.utilisateur.identifiant
+          ),
+        },
+      };
+    }
+    throw new Error();
   }
 
   relationExiste(
@@ -54,17 +74,17 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
     utilisateur: Utilisateur,
     objet: Objet
   ): Promise<boolean> {
-    return this.tupleEntrepot.relationExiste(relation, utilisateur, objet);
+    return this.entrepotRelation.relationExiste(relation, utilisateur, objet);
   }
 
   retireLesRelations(
     relations: { relation: string; utilisateur: Utilisateur; objet: Objet }[]
   ): Promise<void> {
-    return this.tupleEntrepot.supprimeLesRelations(relations);
+    return this.entrepotRelation.supprimeLesRelations(relations);
   }
 
   typeRelationExiste(relation: Relation, objet: Objet) {
-    return this.tupleEntrepot.typeRelationExiste(relation, objet);
+    return this.entrepotRelation.typeRelationExiste(relation, objet);
   }
 
   async attribueDemandeAAidant(
