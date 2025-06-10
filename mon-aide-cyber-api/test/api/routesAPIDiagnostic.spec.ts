@@ -37,6 +37,7 @@ import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { FauxServiceDeChiffrement } from '../infrastructure/securite/FauxServiceDeChiffrement';
+import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -103,8 +104,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
 
       expect(reponse.statusCode).toBe(404);
-      const newVar = await reponse.json();
-      expect(newVar).toStrictEqual({
+      expect(await reponse.json()).toStrictEqual({
         message: "Le diagnostic demandé n'existe pas.",
       });
     });
@@ -666,14 +666,22 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     const creeLaDemandeEtLanceLeServeur = async (
-      emailEntiteAidee: string
+      emailEntiteAidee: string,
+      erreur?: Error
     ): Promise<
       RelationDiagnosticDemandeAide & { identifiantUtilisateur: crypto.UUID }
     > => {
-      const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
-        new EntrepotRelationMemoire(),
-        new FauxServiceDeChiffrement(new Map([[emailEntiteAidee, 'abcdef']]))
-      );
+      const adaptateurRelationsMAC: AdaptateurRelations =
+        new AdaptateurRelationsMAC(
+          new EntrepotRelationMemoire(),
+          new FauxServiceDeChiffrement(new Map([[emailEntiteAidee, 'abcdef']]))
+        );
+
+      if (erreur) {
+        adaptateurRelationsMAC.diagnosticDeLAide = () => {
+          throw erreur;
+        };
+      }
       testeurMAC.adaptateurRelations = adaptateurRelationsMAC;
       donneesServeur = testeurMAC.initialise();
       const { identifiantDiagnostic, identifiantUtilisateur } =
@@ -757,6 +765,27 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           typeUtilisateur: 'aidant',
         })
       ).toBe(true);
+    });
+
+    it('Remonte une erreur HTTP 500 en cas d’erreur de traitement', async () => {
+      const { diagnostic, identifiantUtilisateur } =
+        await creeLaDemandeEtLanceLeServeur(
+          'entite-aide@email.com',
+          new Error('Une erreur est survenue')
+        );
+      connecteUtilisateur(identifiantUtilisateur);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/diagnostic/${diagnostic.identifiant}/restitution/demande-envoi-mail-restitution`
+      );
+
+      expect(reponse.statusCode).toBe(500);
+      expect(await reponse.json()).toStrictEqual({
+        codeErreur: 'ENVOI_RESTITUTION_PDF',
+        message: 'Erreur lors de l’envoi par mail de la restitution.',
+      });
     });
   });
 });

@@ -33,6 +33,7 @@ import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/
 import { unAdaptateurRechercheEntreprise } from '../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 import { AdaptateurCmsCrispMACMemoire } from '../adaptateurs/AdaptateurCmsCrispMACMemoire';
 import { AdaptateurCmsCrispMAC } from '../../src/adaptateurs/AdaptateurCmsCrispMAC';
+import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
 
 const PORT_DISPONIBLE = 0;
 
@@ -46,7 +47,7 @@ class TesteurIntegrationMAC {
     | undefined = undefined;
 
   constructor(
-    public adaptateurRelations = new AdaptateurRelationsMAC(
+    public adaptateurRelations: AdaptateurRelations = new AdaptateurRelationsMAC(
       new EntrepotRelationMemoire()
     ),
     public adaptateurReferentiel = new AdaptateurReferentielDeTest(),

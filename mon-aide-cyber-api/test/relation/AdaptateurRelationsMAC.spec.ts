@@ -83,4 +83,17 @@ describe('Adaptateur De Relation MAC', () => {
 
     expect(identifiantDiagnostics).toStrictEqual([diagnosticInitie]);
   });
+
+  it('remonte une erreur si le diagnostic de l’Aidé n’est pas trouvé', async () => {
+    const identifiantDiagnostic = crypto.randomUUID();
+    const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
+      new EntrepotRelationMemoire()
+    );
+
+    expect(
+      adaptateurRelationsMAC.diagnosticDeLAide(identifiantDiagnostic)
+    ).rejects.toThrow(
+      `Le diagnostic '${identifiantDiagnostic}' n’est relié à aucune entité Aidée.`
+    );
+  });
 });

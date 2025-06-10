@@ -66,7 +66,7 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
         },
       };
     }
-    throw new Error();
+    throw new ErreurDiagnosticAideNonTrouve(identifiantDiagnostic);
   }
 
   relationExiste(
@@ -104,5 +104,13 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
       type: 'demandeAide',
       identifiant: identifiantDemande,
     });
+  }
+}
+
+class ErreurDiagnosticAideNonTrouve extends Error {
+  constructor(identifiantDiagnostic: crypto.UUID) {
+    super(
+      `Le diagnostic '${identifiantDiagnostic}' n’est relié à aucune entité Aidée.`
+    );
   }
 }
