@@ -9,6 +9,8 @@ import { AggregatNonTrouve } from '../../src/relation/Aggregat';
 import {
   definitionAidantInitieDiagnostic,
   DefinitionAidantInitieDiagnostic,
+  definitionEntiteAideeBeneficieDiagnostic,
+  DefinitionEntiteAideeBeneficieDiagnostic,
 } from '../../src/diagnostic/tuples';
 import crypto from 'crypto';
 
@@ -202,5 +204,23 @@ describe('Entrepot Relation Postgres', () => {
         identifiantUtilisateur
       )
     ).toStrictEqual([tuple3]);
+  });
+
+  it('Trouve les relations exsitantes pour un objet donné', async () => {
+    const identifiantObjet = crypto.randomUUID();
+    const tuple = unTuple<DefinitionEntiteAideeBeneficieDiagnostic>(
+      definitionEntiteAideeBeneficieDiagnostic
+    )
+      .avecUtilisateur(crypto.randomUUID())
+      .avecObjet(identifiantObjet)
+      .construis();
+    await new EntrepotRelationPostgres().persiste(tuple);
+
+    expect(
+      await new EntrepotRelationPostgres().trouveLesRelationsPourCetObjet(
+        'destinataire',
+        { type: 'diagnostic', identifiant: identifiantObjet }
+      )
+    ).toStrictEqual<Tuple[]>([tuple]);
   });
 });
