@@ -95,10 +95,26 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   }
 
   async envoieRestitutionEntiteAidee(
-    __pdfRestitution: Buffer,
-    __emailEntiteAidee: string
+    pdfRestitution: Buffer,
+    emailEntiteAidee: string
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    const emailBrevo = unConstructeurEnvoiDeMailAvecTemplate()
+      .ayantPourTemplate(
+        adaptateurEnvironnement.brevo().templateRestitutionPDF()
+      )
+      .ayantPourDestinataires([[emailEntiteAidee, undefined]])
+      .ayantPourParametres({
+        mesServicesCyber: adaptateurEnvironnement
+          .mesServicesCyber()
+          .urlMesServicesCyber()
+          .toString(),
+      })
+      .ayantEnPieceJointe({
+        contenu: pdfRestitution.toString('base64'),
+        nom: 'Restitution.pdf',
+      })
+      .construis();
+    await this.envoieMailAvecTemplate(emailBrevo);
   }
 
   private async envoieMailAvecTemplate<T extends EnvoiMailBrevoAvecTemplate>(

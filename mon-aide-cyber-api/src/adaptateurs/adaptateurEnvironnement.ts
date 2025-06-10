@@ -24,6 +24,8 @@ const brevo = () => ({
     Number(process.env.BREVO_TEMPLATE_AIDANT_DEMANDE_AIDE_ATTRIBUEE) || 0,
   templateMiseEnRelation: () =>
     Number(process.env.BREVO_TEMPLATE_AIDANT_MISE_EN_RELATION),
+  templateRestitutionPDF: () =>
+    Number(process.env.BREVO_TEMPLATE_RESTITUTION_PDF),
 });
 
 const mac = () => ({

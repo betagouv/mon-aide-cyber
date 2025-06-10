@@ -61,6 +61,7 @@ export type EnvoiMailBrevoTexteBrut = {
   subject: string;
   to: DestinataireBrevo[];
   textContent: string;
+  attachment?: PieceJointeBrevo[];
 };
 
 export type EnvoiMailBrevoAvecTemplate = {
@@ -68,6 +69,7 @@ export type EnvoiMailBrevoAvecTemplate = {
   to: DestinataireBrevo[];
   cc?: DestinataireBrevo[];
   params?: Record<string, string>;
+  attachment?: PieceJointeBrevo[];
 };
 
 export type EmailBrevo = { name?: string; email: string };
