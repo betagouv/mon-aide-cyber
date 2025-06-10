@@ -70,6 +70,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     busCommande,
     entrepots,
     adaptateurEnvoiMessage: envoiMessage,
+    adaptateurRelations,
   } = configuration;
 
   routes.post(
@@ -186,12 +187,16 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           .genereRestitution(restitution);
       };
 
-      const creerReponse = (restitution: Buffer | RestitutionHTML) => {
+      const creerReponse = async (restitution: Buffer | RestitutionHTML) => {
         if (requete.headers.accept === 'application/pdf') {
           reponse.contentType('application/pdf').send(restitution);
         } else {
-          const reponseHATEOAS = constructeurActionsHATEOAS()
-            .demandeLaRestitution(id)
+          const reponseHATEOAS = (
+            await constructeurActionsHATEOAS().demandeLaRestitution(
+              id,
+              adaptateurRelations
+            )
+          )
             .pour({
               contexte: requete.estProConnect
                 ? 'se-deconnecter-avec-pro-connect'
@@ -210,7 +215,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .restitution()
         .lis(id)
         .then((restitution) => genereRestitution(restitution))
-        .then((pdf) => creerReponse(pdf))
+        .then(async (pdf) => await creerReponse(pdf))
         .catch((erreur) =>
           suite(ErreurMAC.cree('Demande la restitution', erreur))
         );

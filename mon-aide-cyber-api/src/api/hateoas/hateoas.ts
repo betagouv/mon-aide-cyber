@@ -7,6 +7,7 @@ import {
 import { demandeAide } from './etreAide';
 import { demandeDevenirAidant } from './devenirAidant';
 import { afficherTableauDeBord } from './mon-espace';
+import { AdaptateurRelations } from '../../relation/AdaptateurRelations';
 
 type Methode = 'DELETE' | 'GET' | 'POST' | 'PATCH';
 export type LiensHATEOAS = Record<string, Options>;
@@ -78,10 +79,16 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  public demandeLaRestitution(identifiant: string): ConstructeurActionsHATEOAS {
-    this.pour({ contexte: 'aidant:acceder-aux-informations-utilisateur' })
-      .restituerDiagnostic(identifiant)
-      .modifierDiagnostic(identifiant);
+  public async demandeLaRestitution(
+    identifiant: string,
+    adaptateurRelations: AdaptateurRelations
+  ): Promise<ConstructeurActionsHATEOAS> {
+    const constructeur = this.pour({
+      contexte: 'aidant:acceder-aux-informations-utilisateur',
+    }).modifierDiagnostic(identifiant);
+
+    await constructeur.restituerDiagnostic(identifiant, adaptateurRelations);
+
     return this;
   }
 
@@ -162,9 +169,10 @@ class ConstructeurActionsHATEOAS {
     return this;
   }
 
-  private restituerDiagnostic(
-    idDiagnostic: string
-  ): ConstructeurActionsHATEOAS {
+  private async restituerDiagnostic(
+    idDiagnostic: string,
+    adaptateurRelations: AdaptateurRelations
+  ): Promise<ConstructeurActionsHATEOAS> {
     this.actions.set('restitution-pdf', {
       url: `/api/diagnostic/${idDiagnostic}/restitution`,
       methode: 'GET',
@@ -175,6 +183,16 @@ class ConstructeurActionsHATEOAS {
       methode: 'GET',
       contentType: 'application/json',
     });
+    try {
+      await adaptateurRelations.diagnosticDeLAide(idDiagnostic as crypto.UUID);
+      this.actions.set('envoyer-restitution-entite-aidee', {
+        methode: 'POST',
+        url: `/api/diagnostic/${idDiagnostic}/restitution/demande-envoi-mail-restitution`,
+      });
+    } catch (e) {
+      return this;
+    }
+
     return this;
   }
 
