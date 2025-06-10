@@ -83,17 +83,17 @@ export const relieUnUtilisateurInscritAUnDiagnostic = async (
 
 export const relieUneEntiteAideeAUnDiagnostic = async (
   emailEntiteAidee: string,
+  identifiantDiagnostic: crypto.UUID,
   entrepots: Entrepots,
   adaptateurRelations: AdaptateurRelations
 ): Promise<RelationDiagnosticDemandeAide> => {
-  const diagnostic = unDiagnostic().construis();
+  const diagnostic = await entrepots.diagnostic().lis(identifiantDiagnostic);
   const restitution = uneRestitution()
     .avecIdentifiant(diagnostic.identifiant)
     .construis();
   const demandeAide = uneDemandeAide()
     .avecUnEmail(emailEntiteAidee)
     .construis();
-  await entrepots.diagnostic().persiste(diagnostic);
   await entrepots.restitution().persiste(restitution);
   await entrepots.demandesAides().persiste(demandeAide);
   await adaptateurRelations.creeTupleEntiteAideeBeneficieDiagnostic(
