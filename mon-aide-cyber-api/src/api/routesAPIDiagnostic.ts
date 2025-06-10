@@ -228,9 +228,10 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       const tuple = await configuration.adaptateurRelations.diagnosticDeLAide(
         id as crypto.UUID
       );
+      const restitution = await configuration.entrepots.restitution().lis(id);
       const pdfRestitution = await configuration.adaptateursRestitution
         .pdf()
-        .genereRestitution({} as Restitution);
+        .genereRestitution(restitution);
       await envoiMessage.envoieRestitutionEntiteAidee(
         pdfRestitution,
         tuple.utilisateur.identifiant

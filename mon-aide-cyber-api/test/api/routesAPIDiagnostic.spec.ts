@@ -17,7 +17,7 @@ import {
   ReponseDiagnostic,
   RepresentationRestitution,
 } from '../../src/api/routesAPIDiagnostic';
-import { Diagnostic } from '../../src/diagnostic/Diagnostic';
+import { Diagnostic, Restitution } from '../../src/diagnostic/Diagnostic';
 import { LiensHATEOAS } from '../../src/api/hateoas/hateoas';
 import {
   unAidant,
@@ -25,7 +25,7 @@ import {
   unUtilisateur,
 } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import {
-  IdentifiantsRelationAide,
+  RelationDiagnosticDemandeAide,
   relieUnAidantAUnDiagnostic,
   relieUneEntiteAideeAUnDiagnostic,
   relieUnUtilisateurInscritAUnDiagnostic,
@@ -37,7 +37,6 @@ import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { FauxServiceDeChiffrement } from '../infrastructure/securite/FauxServiceDeChiffrement';
-import { uneDemandeAide } from '../gestion-demandes/aide/ConstructeurDemandeAide';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -655,6 +654,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     let donneesServeur: { app: Express };
     let pdfGenere: Buffer;
     let adaptateurEnvoiMail: AdaptateurEnvoiMailMemoire;
+    let restitutionEnvoyee: Restitution | undefined = undefined;
 
     beforeEach(() => {
       testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
@@ -667,28 +667,25 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
 
     const creeLaDemandeEtLanceLeServeur = async (
       emailEntiteAidee: string
-    ): Promise<IdentifiantsRelationAide> => {
-      const demandeAide = uneDemandeAide()
-        .avecUnEmail(emailEntiteAidee)
-        .construis();
+    ): Promise<RelationDiagnosticDemandeAide> => {
       const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
         new EntrepotRelationMemoire(),
         new FauxServiceDeChiffrement(new Map([[emailEntiteAidee, 'abcdef']]))
       );
       testeurMAC.adaptateurRelations = adaptateurRelationsMAC;
-      const identifiants = await relieUneEntiteAideeAUnDiagnostic(
-        demandeAide,
+      donneesServeur = testeurMAC.initialise();
+      return await relieUneEntiteAideeAUnDiagnostic(
+        emailEntiteAidee,
         testeurMAC.entrepots,
         adaptateurRelationsMAC
       );
-      donneesServeur = testeurMAC.initialise();
-      return identifiants;
     };
 
     beforeEach(async () => {
       pdfGenere = Buffer.from('PDF Mesures généré');
       const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
-      adaptateurRestitutionPDF.genereRestitution = () => {
+      adaptateurRestitutionPDF.genereRestitution = (restitution) => {
+        restitutionEnvoyee = restitution;
         return Promise.resolve(pdfGenere);
       };
       testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
@@ -697,14 +694,14 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     it('Accepte la requête et transmet la restitution', async () => {
-      const identifiants = await creeLaDemandeEtLanceLeServeur(
+      const { diagnostic, restitution } = await creeLaDemandeEtLanceLeServeur(
         'entite-aide@email.com'
       );
 
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
-        `/api/diagnostic/${identifiants.identifiantDiagnostic}/restitution/demande-envoi-mail-restitution`
+        `/api/diagnostic/${diagnostic.identifiant}/restitution/demande-envoi-mail-restitution`
       );
 
       expect(reponse.statusCode).toBe(202);
@@ -714,6 +711,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
           'entite-aide@email.com'
         )
       ).toBe(true);
+      expect(restitutionEnvoyee).toStrictEqual(restitution);
     });
   });
 });
