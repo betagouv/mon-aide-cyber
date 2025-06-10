@@ -26,6 +26,7 @@ import {
   ErreurPostulerTokenInvalide,
   ErreurPostulerTokenSansDemande,
 } from '../aidant/routesAPIAidantRepondreAUneDemande';
+import { ErreurDemandeEnvoiMailRestitution } from '../routesAPIDiagnostic';
 
 const HTTP_MAUVAISE_REQUETE = 400;
 const HTTP_NON_AUTORISE = 401;
@@ -302,6 +303,20 @@ const erreursGerees: Map<
         message: '',
       });
       consignateur.consigne(erreur);
+    },
+  ],
+  [
+    'ErreurDemandeEnvoiMailRestitution',
+    (
+      erreur: ErreurMAC<ErreurDemandeEnvoiMailRestitution>,
+      __requete: Request,
+      __consignateur,
+      reponse
+    ) => {
+      construisReponse(reponse, HTTP_ERREUR_SERVEUR, {
+        codeErreur: 'ENVOI_RESTITUTION_PDF',
+        message: erreur.message,
+      });
     },
   ],
 ]);

@@ -224,26 +224,43 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
-      __suite: NextFunction
+      suite: NextFunction
     ) => {
-      const { id } = requete.params;
-      const tuple = await configuration.adaptateurRelations.diagnosticDeLAide(
-        id as crypto.UUID
-      );
-      const restitution = await configuration.entrepots.restitution().lis(id);
-      const pdfRestitution = await configuration.adaptateursRestitution
-        .pdf()
-        .genereRestitution(restitution);
-      await envoiMessage.envoieRestitutionEntiteAidee(
-        pdfRestitution,
-        tuple.utilisateur.identifiant
-      );
-      return reponse.status(202).send();
+      try {
+        const { id } = requete.params;
+        const tuple = await configuration.adaptateurRelations.diagnosticDeLAide(
+          id as crypto.UUID
+        );
+        const restitution = await configuration.entrepots.restitution().lis(id);
+        const pdfRestitution = await configuration.adaptateursRestitution
+          .pdf()
+          .genereRestitution(restitution);
+        await envoiMessage.envoieRestitutionEntiteAidee(
+          pdfRestitution,
+          tuple.utilisateur.identifiant
+        );
+        return reponse.status(202).send();
+      } catch (error: unknown | Error) {
+        return suite(
+          ErreurMAC.cree(
+            'Envoi la restitution à l’entité Aidée',
+            new ErreurDemandeEnvoiMailRestitution(error as Error)
+          )
+        );
+      }
     }
   );
 
   return routes;
 };
+
+export class ErreurDemandeEnvoiMailRestitution extends Error {
+  constructor(erreur: Error) {
+    super('Erreur lors de l’envoi par mail de la restitution.', {
+      cause: erreur,
+    });
+  }
+}
 
 export type RepresentationRestitution = ReponseHATEOAS & {
   autresMesures: string;
