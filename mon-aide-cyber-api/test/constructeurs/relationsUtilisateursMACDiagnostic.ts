@@ -13,15 +13,18 @@ import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagno
 import { utilisateurInscritInitieDiagnostic } from '../../src/espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
 import { uneRestitution } from './constructeurRestitution';
 import { DemandeAide } from '../../src/gestion-demandes/aide/DemandeAide';
+import { Diagnostic, Restitution } from '../../src/diagnostic/Diagnostic';
+import { uneDemandeAide } from '../gestion-demandes/aide/ConstructeurDemandeAide';
 
 type IdentifiantsRelation = {
   identifiantUtilisateur: crypto.UUID;
   identifiantDiagnostic: crypto.UUID;
 };
 
-export type IdentifiantsRelationAide = {
-  identifiantEntiteAidee: string;
-  identifiantDiagnostic: crypto.UUID;
+export type RelationDiagnosticDemandeAide = {
+  diagnostic: Diagnostic;
+  restitution: Restitution;
+  demandeAide: DemandeAide;
 };
 
 export const relieUnAidantAUnDiagnostic = async (
@@ -79,13 +82,16 @@ export const relieUnUtilisateurInscritAUnDiagnostic = async (
 };
 
 export const relieUneEntiteAideeAUnDiagnostic = async (
-  demandeAide: DemandeAide,
+  emailEntiteAidee: string,
   entrepots: Entrepots,
   adaptateurRelations: AdaptateurRelations
-): Promise<IdentifiantsRelationAide> => {
+): Promise<RelationDiagnosticDemandeAide> => {
   const diagnostic = unDiagnostic().construis();
   const restitution = uneRestitution()
     .avecIdentifiant(diagnostic.identifiant)
+    .construis();
+  const demandeAide = uneDemandeAide()
+    .avecUnEmail(emailEntiteAidee)
     .construis();
   await entrepots.diagnostic().persiste(diagnostic);
   await entrepots.restitution().persiste(restitution);
@@ -95,7 +101,8 @@ export const relieUneEntiteAideeAUnDiagnostic = async (
     demandeAide.email
   );
   return {
-    identifiantDiagnostic: diagnostic.identifiant,
-    identifiantEntiteAidee: demandeAide.email,
+    diagnostic,
+    restitution,
+    demandeAide,
   };
 };
