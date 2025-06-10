@@ -96,7 +96,7 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevoTexteBr
     return this;
   }
 
-  protected construisCorps() {
+  protected construisCorps(): EnvoiMailBrevoTexteBrut {
     return {
       sender: this.expediteur,
       to: this.destinataires,
@@ -117,6 +117,7 @@ class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMail
   private destinataires: EmailBrevo[] = [];
   private destinatairesEnCopie: EmailBrevo[] = [];
   private parametres: Parametres | undefined = undefined;
+  private piecesJointes: PieceJointeBrevo[] = [];
 
   constructor() {
     super('POST');
@@ -156,6 +157,16 @@ class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMail
     return this;
   }
 
+  ayantEnPieceJointe(
+    pieceJointe: PieceJointe
+  ): ConstructeurBrevoEnvoiMailAvecTemplate {
+    this.piecesJointes?.push({
+      content: pieceJointe.contenu,
+      name: pieceJointe.nom,
+    });
+    return this;
+  }
+
   protected construisCorps(): EnvoiMailBrevoAvecTemplate {
     return {
       templateId: this.identifiantTemplate,
@@ -164,6 +175,7 @@ class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMail
         cc: this.destinatairesEnCopie,
       }),
       ...(this.parametres && { params: this.parametres }),
+      ...(this.piecesJointes.length > 0 && { attachment: this.piecesJointes }),
     };
   }
 }
