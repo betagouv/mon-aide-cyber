@@ -48,6 +48,11 @@ export interface AdaptateurEnvoiMail {
     informations: InformationEntitePourMiseEnRelation,
     aidant: AidantMisEnRelation
   ): Promise<void>;
+
+  envoieRestitutionEntiteAidee(
+    pdfRestitution: Buffer,
+    emailEntiteAidee: string
+  ): Promise<void>;
 }
 
 export type Expediteur = 'MONAIDECYBER' | 'INFO';

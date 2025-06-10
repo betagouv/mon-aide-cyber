@@ -19,7 +19,7 @@ export interface AdaptateurRelations {
     identifiantAidant: crypto.UUID
   ): Promise<string[]>;
 
-  diagnosticsDeLAide(email: Email): Promise<string[]>;
+  diagnosticDeLAide(identifiantDiagnostic: crypto.UUID): Promise<Tuple>;
 
   relationExiste(
     relation: Relation,

@@ -78,9 +78,15 @@ export class EntrepotRelationPostgres
       },
     };
   }
-
   protected nomTable(): string {
     return 'relations';
+  }
+
+  trouveLesRelationsPourCetObjet(
+    __relation: Relation,
+    __objet: Objet
+  ): Promise<Tuple[]> {
+    throw new Error('Method not implemented.');
   }
 
   async trouveObjetsLiesAUtilisateur(identifiant: string): Promise<Tuple[]> {

@@ -48,7 +48,6 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     const emailBrevo = constructeurEmailBrevo.construis();
     await this.envoieMailAvecTemplate(emailBrevo);
   }
-
   async envoieConfirmationDemandeAideAttribuee(
     confirmation: ConfirmationDemandeAideAttribuee
   ): Promise<void> {
@@ -93,6 +92,13 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       })
       .construis();
     await this.envoieMailAvecTemplate(emailBrevo);
+  }
+
+  async envoieRestitutionEntiteAidee(
+    __pdfRestitution: Buffer,
+    __emailEntiteAidee: string
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 
   private async envoieMailAvecTemplate<T extends EnvoiMailBrevoAvecTemplate>(

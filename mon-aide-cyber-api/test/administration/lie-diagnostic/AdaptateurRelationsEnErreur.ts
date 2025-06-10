@@ -1,7 +1,4 @@
-import {
-  AdaptateurRelations,
-  Email,
-} from '../../../src/relation/AdaptateurRelations';
+import { AdaptateurRelations } from '../../../src/relation/AdaptateurRelations';
 import crypto from 'crypto';
 import {
   Objet,
@@ -26,8 +23,11 @@ export class AdaptateurRelationsEnErreur implements AdaptateurRelations {
   diagnosticsFaitsParUtilisateurMAC(_: crypto.UUID): Promise<string[]> {
     return Promise.resolve([]);
   }
-  diagnosticsDeLAide(_email: Email): Promise<string[]> {
-    return Promise.resolve([]);
+
+  async diagnosticDeLAide(
+    __identifiantDiagnostic: crypto.UUID
+  ): Promise<Tuple> {
+    throw new Error('Method not implemented.');
   }
   relationExiste(
     _relation: Relation,

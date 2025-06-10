@@ -25,4 +25,9 @@ export interface EntrepotRelation extends Entrepot<Tuple> {
   typeRelationExiste(relation: Relation, objet: Objet): Promise<boolean>;
 
   supprimeLesRelations(relations: Relations): Promise<void>;
+
+  trouveLesRelationsPourCetObjet(
+    relation: Relation,
+    objet: Objet
+  ): Promise<Tuple[]>;
 }

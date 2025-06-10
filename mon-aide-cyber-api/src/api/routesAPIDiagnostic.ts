@@ -69,6 +69,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     adaptateurAseptisation: aseptisation,
     busCommande,
     entrepots,
+    adaptateurEnvoiMessage: envoiMessage,
   } = configuration;
 
   routes.post(
@@ -213,6 +214,28 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
         .catch((erreur) =>
           suite(ErreurMAC.cree('Demande la restitution', erreur))
         );
+    }
+  );
+
+  routes.post(
+    '/:id/restitution/demande-envoi-mail-restitution',
+    async (
+      requete: RequeteUtilisateur,
+      reponse: Response,
+      __suite: NextFunction
+    ) => {
+      const { id } = requete.params;
+      const tuple = await configuration.adaptateurRelations.diagnosticDeLAide(
+        id as crypto.UUID
+      );
+      const pdfRestitution = await configuration.adaptateursRestitution
+        .pdf()
+        .genereRestitution({} as Restitution);
+      await envoiMessage.envoieRestitutionEntiteAidee(
+        pdfRestitution,
+        tuple.utilisateur.identifiant
+      );
+      return reponse.status(202).send();
     }
   );
 
