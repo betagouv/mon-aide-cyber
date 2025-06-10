@@ -219,6 +219,8 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
   routes.post(
     '/:id/restitution/demande-envoi-mail-restitution',
+    session.verifie('Envoi la restitution à l’entité Aidée'),
+    verifieRelations(relations, entrepots),
     async (
       requete: RequeteUtilisateur,
       reponse: Response,

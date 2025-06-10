@@ -667,18 +667,27 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
 
     const creeLaDemandeEtLanceLeServeur = async (
       emailEntiteAidee: string
-    ): Promise<RelationDiagnosticDemandeAide> => {
+    ): Promise<
+      RelationDiagnosticDemandeAide & { identifiantUtilisateur: crypto.UUID }
+    > => {
       const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
         new EntrepotRelationMemoire(),
         new FauxServiceDeChiffrement(new Map([[emailEntiteAidee, 'abcdef']]))
       );
       testeurMAC.adaptateurRelations = adaptateurRelationsMAC;
       donneesServeur = testeurMAC.initialise();
-      return await relieUneEntiteAideeAUnDiagnostic(
+      const { identifiantDiagnostic, identifiantUtilisateur } =
+        await relieUnAidantAUnDiagnostic(
+          testeurMAC.entrepots,
+          adaptateurRelationsMAC
+        );
+      const relation = await relieUneEntiteAideeAUnDiagnostic(
         emailEntiteAidee,
+        identifiantDiagnostic,
         testeurMAC.entrepots,
         adaptateurRelationsMAC
       );
+      return { ...relation, identifiantUtilisateur };
     };
 
     beforeEach(async () => {
@@ -712,6 +721,42 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         )
       ).toBe(true);
       expect(restitutionEnvoyee).toStrictEqual(restitution);
+    });
+
+    it('La route est protégée', async () => {
+      const { diagnostic } = await creeLaDemandeEtLanceLeServeur(
+        'entite-aide@email.com'
+      );
+
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/diagnostic/${diagnostic.identifiant}/restitution/demande-envoi-mail-restitution`
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDeSession.verifiePassage()
+      ).toBe(true);
+    });
+
+    it('Vérifie que l’Aidant peut accéder à la restitution', async () => {
+      const { diagnostic, identifiantUtilisateur } =
+        await creeLaDemandeEtLanceLeServeur('entite-aide@email.com');
+      connecteUtilisateur(identifiantUtilisateur);
+
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/diagnostic/${diagnostic.identifiant}/restitution/demande-envoi-mail-restitution`
+      );
+
+      expect(
+        testeurMAC.adaptateurDeVerificationDesAcces.verifieRelationExiste({
+          relation: 'initiateur',
+          typeObjet: 'diagnostic',
+          typeUtilisateur: 'aidant',
+        })
+      ).toBe(true);
     });
   });
 });
