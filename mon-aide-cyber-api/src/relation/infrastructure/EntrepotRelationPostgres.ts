@@ -83,10 +83,17 @@ export class EntrepotRelationPostgres
   }
 
   trouveLesRelationsPourCetObjet(
-    __relation: Relation,
-    __objet: Objet
+    relation: Relation,
+    objet: Objet
   ): Promise<Tuple[]> {
-    throw new Error('Method not implemented.');
+    return this.knex
+      .from(this.nomTable())
+      .whereRaw("(donnees->>'relation') = ?", relation)
+      .whereRaw("(donnees->'objet')@> :objet", { objet })
+      .select(`${this.nomTable()}.*`)
+      .then((lignes: TupleDTO[]) =>
+        lignes.map((ligne) => this.deDTOAEntite(ligne))
+      );
   }
 
   async trouveObjetsLiesAUtilisateur(identifiant: string): Promise<Tuple[]> {
