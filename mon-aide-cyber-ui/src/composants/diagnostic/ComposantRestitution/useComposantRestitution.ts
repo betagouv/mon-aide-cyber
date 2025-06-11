@@ -8,7 +8,11 @@ import { rubriqueConsultee } from '../../../domaine/diagnostic/reducteurRestitut
 import { UUID } from '../../../types/Types';
 import { useRecupereLaRestitution } from './useRecupereLaRestitution';
 import { useNavigueVersModifierDiagnostic } from '../../../fournisseurs/ContexteNavigationMAC.tsx';
-import { useTelechargerRestitution } from './useTelechargerRestitution.ts';
+import {
+  requeteEnvoyerRestitutionEntiteAidee,
+  requeteTelechargementRestitution,
+  useRestitution,
+} from './useRestitution.ts';
 
 export const useComposantRestitution = (
   idDiagnostic: UUID,
@@ -24,8 +28,15 @@ export const useComposantRestitution = (
     estLibreAcces
   );
 
-  const { telechargerRestitution, chargeLeFichier: boutonDesactive } =
-    useTelechargerRestitution(idDiagnostic);
+  const {
+    demanderRestitution,
+    enAttenteRestitution: boutonDemanderRestitutionDesactive,
+  } = useRestitution<Blob>(requeteTelechargementRestitution(idDiagnostic));
+
+  const {
+    demanderRestitution: envoyerDiagnosticAEntiteAidee,
+    enAttenteRestitution: boutonEnvoyerDiagnosticAEntiteAideeDesactive,
+  } = useRestitution<void>(requeteEnvoyerRestitutionEntiteAidee(idDiagnostic));
 
   useEffect(() => {
     if (etatRestitution.restitution) {
@@ -92,8 +103,10 @@ export const useComposantRestitution = (
   return {
     etatRestitution,
     navigueVersTableauDeBord,
-    telechargerRestitution,
+    demanderRestitution,
+    boutonDemanderRestitutionDesactive,
+    envoyerDiagnosticAEntiteAidee,
+    boutonEnvoyerDiagnosticAEntiteAideeDesactive,
     modifierLeDiagnostic,
-    boutonDesactive,
   };
 };

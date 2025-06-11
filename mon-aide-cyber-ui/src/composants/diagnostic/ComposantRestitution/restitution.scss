@@ -1,0 +1,10 @@
+@import "../../../assets/styles/icones";
+
+.restitution {
+  .envoi-mail {
+    padding-left: 1rem;
+    background: $icone-envoi-mail no-repeat left center;
+    margin-left: -.125rem;
+    margin-right: .5rem;
+  }
+}

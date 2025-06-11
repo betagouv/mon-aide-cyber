@@ -63,7 +63,7 @@ export const useRecupereLaRestitution = (
   useEffect(() => {
     if (!restitution) return;
 
-    navigationMAC.ajouteEtat(restitution.liens);
+    navigationMAC.setEtat(restitution.liens);
     envoie(restitutionChargee(restitution));
   }, [restitution]);
 

@@ -1,6 +1,9 @@
 import { useModale, useNavigationMAC } from '../../../fournisseurs/hooks.ts';
 import { useNavigueVersModifierDiagnostic } from '../../../fournisseurs/ContexteNavigationMAC.tsx';
-import { useTelechargerRestitution } from './useTelechargerRestitution.ts';
+import {
+  requeteTelechargementRestitution,
+  useRestitution,
+} from './useRestitution.ts';
 import { useCallback } from 'react';
 import Button from '../../atomes/Button/Button.tsx';
 import { UUID } from '../../../types/Types.ts';
@@ -23,8 +26,9 @@ export const HeaderRestitution = ({
   );
   const navigationMAC = useNavigationMAC();
 
-  const { telechargerRestitution, chargeLeFichier } =
-    useTelechargerRestitution(idDiagnostic);
+  const { demanderRestitution, enAttenteRestitution } = useRestitution(
+    requeteTelechargementRestitution(idDiagnostic)
+  );
 
   const modifierLeDiagnostic = useCallback(() => {
     navigue(navigationMAC.etat['modifier-diagnostic']);
@@ -105,8 +109,8 @@ export const HeaderRestitution = ({
                   <Button
                     type="button"
                     variant="text"
-                    onClick={() => telechargerRestitution()}
-                    disabled={chargeLeFichier}
+                    onClick={() => demanderRestitution()}
+                    disabled={enAttenteRestitution}
                   >
                     <i className="fr-icon-download-line" />
                     <span>Télécharger</span>
