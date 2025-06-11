@@ -3,11 +3,12 @@ import { ParametresAPI } from './ConstructeurParametresAPI.ts';
 export type MACAPIType = {
   execute: <REPONSE, REPONSEAPI, CORPS = void>(
     parametresAPI: ParametresAPI<CORPS>,
-    transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>
+    transcris: (contenu: Promise<REPONSEAPI>) => Promise<REPONSE>,
+    appel?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
   ) => Promise<REPONSE>;
 };
 
-export const macAPI = () => {
+export const macAPI = (): MACAPIType => {
   const execute = async <REPONSE, CORPS = void>(
     parametresAPI: ParametresAPI<CORPS>,
     transcris: (contenu: Promise<any>) => Promise<REPONSE>,

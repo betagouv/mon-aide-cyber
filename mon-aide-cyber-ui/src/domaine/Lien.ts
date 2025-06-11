@@ -34,6 +34,7 @@ export type Action =
   | 'rechercher-entreprise'
   | 'restitution-json'
   | 'restitution-pdf'
+  | 'envoyer-restitution-entite-aidee'
   | 'se-connecter'
   | 'se-connecter-avec-pro-connect'
   | 'se-deconnecter'
