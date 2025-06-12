@@ -37,6 +37,10 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
   afterEach(() => testeurMAC.arrete());
 
   describe('Quand une requête GET est reçue', () => {
+    afterEach(() => {
+      adaptateurDeVerificationDeSession.reinitialise();
+    });
+
     it('Dans le cas d’un utilisateur non connecté, fournit la liste des départements ainsi que le lien pour accéder à la ressource pour envoyer la demande pour devenir Aidant', async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -102,6 +106,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
     });
 
     afterEach(() => testeurMAC.arrete());
+
     it('Réponds OK à la requête', async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -144,6 +149,45 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
             .rechercheDemandeEnCoursParMail('jean.dupont@mail.com')
         )?.mail
       ).toStrictEqual('jean.dupont@mail.com');
+    });
+
+    it('Dans le cas d’un utilisateur connecté, prends en compte la validation des CGU', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const utilisateur = await unCompteUtilisateurInscritConnecteViaProConnect(
+        {
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          constructeurUtilisateur: unUtilisateurInscrit()
+            .avecUnEmail('jean.dupont@email.com')
+            .avecUnNomPrenom('Jean Dupont')
+            .sansValidationDeCGU(),
+          adaptateurDeVerificationDeSession,
+        }
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant',
+        uneRequeteDemandeDevenirAidant()
+          .depuisUnCompteUtilisateurInscrit(utilisateur)
+          .dansUneEntite('Asso', 'SIRET', 'Association')
+          .construis()
+      );
+
+      expect(reponse.statusCode).toStrictEqual(200);
+      expect(
+        await testeurMAC.entrepots
+          .demandesDevenirAidant()
+          .rechercheDemandeEnCoursParMail('jean.dupont@email.com')
+      ).toBeDefined();
+      expect(
+        (
+          await testeurMAC.entrepots
+            .utilisateursMAC()
+            .rechercheParIdentifiant(utilisateur.identifiant)
+        ).dateValidationCGU
+      ).toStrictEqual(FournisseurHorloge.maintenant());
     });
 
     describe('Valide les paramètres de la requête', () => {

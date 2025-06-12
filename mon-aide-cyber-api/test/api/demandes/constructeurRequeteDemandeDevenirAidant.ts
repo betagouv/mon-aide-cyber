@@ -1,6 +1,7 @@
 import { Constructeur } from '../../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
 import { departements } from '../../../src/gestion-demandes/departements';
+import { UtilisateurInscrit } from '../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
 type RequeteDemandeDevenirAidant = {
   nom: string;
@@ -69,6 +70,18 @@ class ConstructeurRequeteDemandeDevenirAidant
   enAttenteAdhesionAssociation(): ConstructeurRequeteDemandeDevenirAidant {
     this.signatureCharte = true;
     this.entite = { type: 'Association' };
+    return this;
+  }
+
+  depuisUnCompteUtilisateurInscrit(
+    utilisateur: UtilisateurInscrit
+  ): ConstructeurRequeteDemandeDevenirAidant {
+    const [prenom, ...nom] = utilisateur.nomPrenom.split(' ');
+    this.cguValidees = true;
+    this.signatureCharte = true;
+    this.mail = utilisateur.email;
+    this.prenom = prenom;
+    this.nom = nom.join(' ');
     return this;
   }
 
