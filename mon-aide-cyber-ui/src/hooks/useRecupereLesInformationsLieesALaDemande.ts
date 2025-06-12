@@ -4,7 +4,9 @@ import { ReponseDemandeInitiee } from '../domaine/gestion-demandes/devenir-aidan
 import { constructeurParametresAPI } from '../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useMACAPI } from '../fournisseurs/api/useMACAPI.ts';
 
-export function useRecupereDepartements() {
+export const useRecupereLesInformationsLieesALaDemande = ():
+  | ReponseDemandeInitiee
+  | undefined => {
   const macAPI = useMACAPI();
 
   const {
@@ -12,7 +14,7 @@ export function useRecupereDepartements() {
     ressource: actionDemandeDevenirAidant,
   } = useMoteurDeLiens('demande-devenir-aidant');
 
-  const { data } = useQuery({
+  const { data } = useQuery<ReponseDemandeInitiee>({
     enabled: peutDemandeDevenirAidant,
     queryKey: ['recuperer-departements'],
     queryFn: () => {
@@ -26,5 +28,5 @@ export function useRecupereDepartements() {
     },
   });
 
-  return data?.departements;
-}
+  return data;
+};

@@ -32,7 +32,7 @@ import { TypographieH4 } from '../../../composants/communs/typographie/Typograph
 import { LienMailtoMAC } from '../../../composants/atomes/LienMailtoMAC.tsx';
 import { useNavigate } from 'react-router-dom';
 import illustrationSuivi from '../../../../public/images/illustration-suivi.svg';
-import { useRecupereDepartements } from '../../../hooks/useRecupereDepartements.ts';
+import { useRecupereLesInformationsLieesALaDemande } from '../../../hooks/useRecupereLesInformationsLieesALaDemande.ts';
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export const EcranDemandeDevenirAidant = () => {
@@ -52,7 +52,8 @@ export const EcranDemandeDevenirAidant = () => {
   useRecupereContexteNavigation(
     'demande-devenir-aidant:demande-devenir-aidant'
   );
-  const referentielDepartements = useRecupereDepartements();
+  const informationsLieesALaDemande =
+    useRecupereLesInformationsLieesALaDemande();
 
   const {
     mutate,
@@ -175,7 +176,7 @@ export const EcranDemandeDevenirAidant = () => {
             </div>
           </FormulaireDevenirAidant.AvantPropos>
           <FormulaireDevenirAidant.Formulaire
-            referentielDepartements={referentielDepartements}
+            informationsLieesALaDemande={informationsLieesALaDemande}
             surSoumission={(formulaire) => {
               const { typeAidant, entite: entiteDuFormulaire } =
                 etatEtapeCourante.demande!.type;

@@ -1,12 +1,12 @@
 import { FormulaireDevenirAidant } from '../../domaine/gestion-demandes/devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
 import Button from '../../composants/atomes/Button/Button.tsx';
-import { Departement } from '../../domaine/gestion-demandes/departement.ts';
 import { useState } from 'react';
+import { ReponseDemandeInitiee } from '../../domaine/gestion-demandes/devenir-aidant/DevenirAidant.ts';
 
 export const DemandeDevenirAidant = ({
-  referentielDepartements,
+  informationsLieesALaDemande,
 }: {
-  referentielDepartements: Departement[];
+  informationsLieesALaDemande: ReponseDemandeInitiee | undefined;
 }) => {
   const [estValide, setEstValide] = useState(false);
   return (
@@ -16,7 +16,7 @@ export const DemandeDevenirAidant = ({
           Avant propos
         </FormulaireDevenirAidant.AvantPropos>
         <FormulaireDevenirAidant.Formulaire
-          referentielDepartements={referentielDepartements}
+          informationsLieesALaDemande={informationsLieesALaDemande}
           surSoumission={() => null}
           devientValide={(estFormulaireValide) =>
             setEstValide(estFormulaireValide)
