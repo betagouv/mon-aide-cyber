@@ -12,30 +12,39 @@ import crypto from 'crypto';
 import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServiceDeChiffrement';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import {
+  unAidant,
+  unCompteUtilisateurInscritConnecteViaProConnect,
+  unUtilisateurInscrit,
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Aidant } from '../../../src/espace-aidant/Aidant';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { uneDemandeDevenirAidant } from '../../constructeurs/constructeurDemandesDevenirAidant';
+import { ReponseDemandeDevenirAidant } from '../../../src/api/demandes/routeAPIDemandeDevenirAidant';
+import { AdaptateurDeVerificationDeSessionDeTest } from '../../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
+  let adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
 
   beforeEach(() => {
+    adaptateurDeVerificationDeSession =
+      testeurMAC.adaptateurDeVerificationDeSession as AdaptateurDeVerificationDeSessionDeTest;
     donneesServeur = testeurMAC.initialise();
   });
 
   afterEach(() => testeurMAC.arrete());
 
   describe('Quand une requête GET est reçue', () => {
-    it('Fournis la liste des départements et leurs codes', async () => {
+    it('Dans le cas d’un utilisateur non connecté, fournit la liste des départements ainsi que le lien pour accéder à la ressource pour envoyer la demande pour devenir Aidant', async () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
         '/api/demandes/devenir-aidant'
       );
 
-      expect(await reponse.json()).toStrictEqual({
+      expect(await reponse.json()).toStrictEqual<ReponseDemandeDevenirAidant>({
         departements: departements.map(({ nom, code }) => ({
           nom,
           code,
@@ -45,6 +54,41 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
             url: '/api/demandes/devenir-aidant',
             methode: 'POST',
           },
+        },
+      });
+    });
+
+    it('Dans le cas d’un utilisateur connecté, fournit ses informations', async () => {
+      await unCompteUtilisateurInscritConnecteViaProConnect({
+        entrepotUtilisateurInscrit: testeurMAC.entrepots.utilisateursInscrits(),
+        constructeurUtilisateur: unUtilisateurInscrit()
+          .avecUnEmail('jean.dupont@email.com')
+          .avecUnNomPrenom('Jean Dupont')
+          .sansValidationDeCGU(),
+        adaptateurDeVerificationDeSession,
+      });
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/api/demandes/devenir-aidant'
+      );
+
+      expect(await reponse.json()).toStrictEqual<ReponseDemandeDevenirAidant>({
+        departements: departements.map(({ nom, code }) => ({
+          nom,
+          code,
+        })),
+        liens: {
+          'envoyer-demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'POST',
+          },
+        },
+        donneesUtilisateur: {
+          nom: 'Dupont',
+          prenom: 'Jean',
+          email: 'jean.dupont@email.com',
         },
       });
     });
