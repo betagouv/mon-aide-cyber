@@ -22,6 +22,10 @@ import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvi
 import { uneDemandeDevenirAidant } from '../../constructeurs/constructeurDemandesDevenirAidant';
 import { ReponseDemandeDevenirAidant } from '../../../src/api/demandes/routeAPIDemandeDevenirAidant';
 import { AdaptateurDeVerificationDeSessionDeTest } from '../../adaptateurs/AdaptateurDeVerificationDeSessionDeTest';
+import {
+  ReponseHATEOAS,
+  ReponseHATEOASEnErreur,
+} from '../../../src/api/hateoas/hateoas';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -119,6 +123,32 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       );
 
       expect(reponse.statusCode).toStrictEqual(200);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
+        liens: {
+          'demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'GET',
+          },
+          'demande-etre-aide': {
+            url: '/api/demandes/etre-aide',
+            methode: 'GET',
+          },
+          'demander-aide': { url: '/api/demandes/etre-aide', methode: 'POST' },
+          'envoyer-demande-devenir-aidant': {
+            url: '/api/demandes/devenir-aidant',
+            methode: 'POST',
+          },
+          'rechercher-entreprise': {
+            url: '/api/recherche-entreprise',
+            methode: 'GET',
+          },
+          'se-connecter': { url: '/api/token', methode: 'POST' },
+          'se-connecter-avec-pro-connect': {
+            url: '/pro-connect/connexion',
+            methode: 'GET',
+          },
+        },
+      });
       expect(
         (await testeurMAC.entrepots.demandesDevenirAidant().tous())[0]
           .departement
@@ -176,6 +206,35 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       );
 
       expect(reponse.statusCode).toStrictEqual(200);
+      expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
+        liens: {
+          'se-deconnecter': {
+            methode: 'GET',
+            typeAppel: 'DIRECT',
+            url: '/pro-connect/deconnexion',
+          },
+          'afficher-tableau-de-bord': {
+            methode: 'GET',
+            url: '/api/mon-espace/tableau-de-bord',
+          },
+          'demande-devenir-aidant': {
+            methode: 'GET',
+            url: '/api/demandes/devenir-aidant',
+          },
+          'envoyer-demande-devenir-aidant': {
+            methode: 'POST',
+            url: '/api/demandes/devenir-aidant',
+          },
+          'lancer-diagnostic': {
+            methode: 'POST',
+            url: '/api/diagnostic',
+          },
+          'rechercher-entreprise': {
+            methode: 'GET',
+            url: '/api/recherche-entreprise',
+          },
+        },
+      });
       expect(
         await testeurMAC.entrepots
           .demandesDevenirAidant()
@@ -195,10 +254,15 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       let donneesServeur: { app: Express };
 
       beforeEach(() => {
+        adaptateurDeVerificationDeSession =
+          testeurMAC.adaptateurDeVerificationDeSession as AdaptateurDeVerificationDeSessionDeTest;
         donneesServeur = testeurMAC.initialise();
       });
 
-      afterEach(() => testeurMAC.arrete());
+      afterEach(() => {
+        adaptateurDeVerificationDeSession.reinitialise();
+        testeurMAC.arrete();
+      });
 
       it("Retourne le code 422 en cas d'invalidité", async () => {
         const corpsDeRequeteInvalide = {};
@@ -211,6 +275,94 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         );
 
         expect(reponse.statusCode).toStrictEqual(422);
+        expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+          message: expect.any(String),
+          liens: {
+            'demande-devenir-aidant': {
+              methode: 'GET',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'demande-etre-aide': {
+              methode: 'GET',
+              url: '/api/demandes/etre-aide',
+            },
+            'demander-aide': {
+              methode: 'POST',
+              url: '/api/demandes/etre-aide',
+            },
+            'envoyer-demande-devenir-aidant': {
+              methode: 'POST',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'rechercher-entreprise': {
+              methode: 'GET',
+              url: '/api/recherche-entreprise',
+            },
+            'se-connecter': {
+              methode: 'POST',
+              url: '/api/token',
+            },
+            'se-connecter-avec-pro-connect': {
+              methode: 'GET',
+              url: '/pro-connect/connexion',
+            },
+          },
+        });
+        expect(
+          await testeurMAC.entrepots.demandesDevenirAidant().tous()
+        ).toHaveLength(0);
+      });
+
+      it('Dans le cas d’un utilisateur connecté, retourne les liens HATEOAS', async () => {
+        await unCompteUtilisateurInscritConnecteViaProConnect({
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          constructeurUtilisateur: unUtilisateurInscrit()
+            .avecUnEmail('jean.dupont@email.com')
+            .avecUnNomPrenom('Jean Dupont')
+            .sansValidationDeCGU(),
+          adaptateurDeVerificationDeSession,
+        });
+        const corpsDeRequeteInvalide = {};
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          '/api/demandes/devenir-aidant',
+          corpsDeRequeteInvalide
+        );
+
+        expect(reponse.statusCode).toStrictEqual(422);
+        expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
+          message: expect.any(String),
+          liens: {
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/mon-espace/tableau-de-bord',
+            },
+            'demande-devenir-aidant': {
+              methode: 'GET',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'envoyer-demande-devenir-aidant': {
+              methode: 'POST',
+              url: '/api/demandes/devenir-aidant',
+            },
+            'lancer-diagnostic': {
+              methode: 'POST',
+              url: '/api/diagnostic',
+            },
+            'rechercher-entreprise': {
+              methode: 'GET',
+              url: '/api/recherche-entreprise',
+            },
+            'se-deconnecter': {
+              methode: 'GET',
+              typeAppel: 'DIRECT',
+              url: '/pro-connect/deconnexion',
+            },
+          },
+        });
         expect(
           await testeurMAC.entrepots.demandesDevenirAidant().tous()
         ).toHaveLength(0);
