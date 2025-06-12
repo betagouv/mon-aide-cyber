@@ -7,6 +7,7 @@ export type InformationsContexte = {
 };
 export interface AdaptateurDeVerificationDeSession {
   verifie(contexte: Contexte): RequestHandler;
+  recupereUtilisateurConnecte(contexte: Contexte): RequestHandler;
 }
 
 export class ErreurAccesRefuse extends Error {

@@ -56,4 +56,18 @@ export class AdaptateurDeVerificationDeSessionHttp
       suite();
     };
   }
+
+  recupereUtilisateurConnecte(contexte: Contexte): RequestHandler {
+    return (
+      requete: RequeteUtilisateur,
+      reponse: Response,
+      suite: NextFunction
+    ) => {
+      try {
+        return this.verifie(contexte)(requete, reponse, suite);
+      } catch (__e) {
+        return suite();
+      }
+    };
+  }
 }

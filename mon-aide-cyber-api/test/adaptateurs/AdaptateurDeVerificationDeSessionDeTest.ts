@@ -15,18 +15,28 @@ export class AdaptateurDeVerificationDeSessionDeTest
 
   verifie(__contexte: Contexte): RequestHandler {
     return (
-      _requete: RequeteUtilisateur,
-      _reponse: Response,
+      requete: RequeteUtilisateur,
+      __reponse: Response,
       suite: NextFunction
     ) => {
       this.estPassee = true;
       if (this._utilisateurConnecte) {
-        _requete.identifiantUtilisateurCourant = this._utilisateurConnecte;
+        requete.identifiantUtilisateurCourant = this._utilisateurConnecte;
       }
       if (this._estProConnect) {
-        _requete.estProConnect = this._estProConnect;
+        requete.estProConnect = this._estProConnect;
       }
-      suite();
+      return suite();
+    };
+  }
+
+  recupereUtilisateurConnecte(__contexte: Contexte): RequestHandler {
+    return (
+      requete: RequeteUtilisateur,
+      reponse: Response,
+      suite: NextFunction
+    ) => {
+      return this.verifie(__contexte)(requete, reponse, suite);
     };
   }
 

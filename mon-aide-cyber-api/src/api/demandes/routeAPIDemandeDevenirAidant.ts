@@ -13,7 +13,7 @@ import {
   nomsEtCodesDesDepartements,
   rechercheParNomDepartement,
 } from '../../gestion-demandes/departements';
-import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
+import { constructeurActionsHATEOAS, ReponseHATEOAS } from '../hateoas/hateoas';
 import { validateursDeCreationDeMotDePasse } from '../validateurs/motDePasse';
 import { Entrepots } from '../../domaine/Entrepots';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
@@ -27,6 +27,8 @@ import {
   DemandeDevenirAidant,
   StatutDemande,
 } from '../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import { RequeteUtilisateur } from '../routesAPI';
+import { uneRechercheUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 
 export const validateurDemande = (
   entrepots: Entrepots,
@@ -143,19 +145,59 @@ const valideCGU = () => {
   ];
 };
 
+export type ReponseDemandeDevenirAidant = ReponseHATEOAS & {
+  departements: { nom: string; code: string }[];
+  donneesUtilisateur?: {
+    nom: string;
+    prenom: string;
+    email: string;
+  };
+};
+
+const estRequeteUtilisateur = (
+  requete: Request | RequeteUtilisateur
+): requete is RequeteUtilisateur => {
+  return (
+    (requete as RequeteUtilisateur).identifiantUtilisateurCourant !== undefined
+  );
+};
 export const routesAPIDemandesDevenirAidant = (
   configuration: ConfigurationServeur
 ) => {
   const routes: Router = express.Router();
 
-  const { entrepots, serviceDeChiffrement } = configuration;
+  const { entrepots, serviceDeChiffrement, adaptateurDeVerificationDeSession } =
+    configuration;
 
-  routes.get('/', async (_requete: Request, reponse: Response) => {
-    return reponse.status(200).json({
-      departements: nomsEtCodesDesDepartements(),
-      ...constructeurActionsHATEOAS().demandeDevenirAidant().construis(),
-    });
-  });
+  routes.get(
+    '/',
+    adaptateurDeVerificationDeSession.recupereUtilisateurConnecte(
+      'Demande devenir Aidant'
+    ),
+    async (
+      requete: Request | RequeteUtilisateur,
+      reponse: Response<ReponseDemandeDevenirAidant>
+    ) => {
+      const reponseDemande: ReponseDemandeDevenirAidant = {
+        departements: nomsEtCodesDesDepartements(),
+        ...constructeurActionsHATEOAS().demandeDevenirAidant().construis(),
+      };
+      if (estRequeteUtilisateur(requete)) {
+        const utilisateur = await uneRechercheUtilisateursMAC(
+          entrepots.utilisateursMAC()
+        ).rechercheParIdentifiant(requete.identifiantUtilisateurCourant!);
+        if (utilisateur) {
+          const [prenom, ...nom] = utilisateur.nomComplet.split(' ');
+          reponseDemande.donneesUtilisateur = {
+            nom: nom.join(' '),
+            prenom: prenom,
+            email: utilisateur.email,
+          };
+        }
+      }
+      return reponse.status(200).json(reponseDemande);
+    }
+  );
 
   routes.post(
     '/',
