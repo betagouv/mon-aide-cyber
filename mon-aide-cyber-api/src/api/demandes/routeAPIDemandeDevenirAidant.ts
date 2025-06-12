@@ -29,6 +29,8 @@ import {
 } from '../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { RequeteUtilisateur } from '../routesAPI';
 import { uneRechercheUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import { unServiceUtilisateurInscrit } from '../../espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
+import { unServiceAidant } from '../../espace-aidant/ServiceAidantMAC';
 
 export const validateurDemande = (
   entrepots: Entrepots,
@@ -166,8 +168,12 @@ export const routesAPIDemandesDevenirAidant = (
 ) => {
   const routes: Router = express.Router();
 
-  const { entrepots, serviceDeChiffrement, adaptateurDeVerificationDeSession } =
-    configuration;
+  const {
+    entrepots,
+    serviceDeChiffrement,
+    adaptateurDeVerificationDeSession,
+    repertoireDeContacts,
+  } = configuration;
 
   routes.get(
     '/',
@@ -201,6 +207,9 @@ export const routesAPIDemandesDevenirAidant = (
 
   routes.post(
     '/',
+    adaptateurDeVerificationDeSession.recupereUtilisateurConnecte(
+      'Demande devenir Aidant'
+    ),
     express.json(),
     body('nom').trim().notEmpty().withMessage('Veuillez renseigner votre nom'),
     body('prenom')
@@ -216,7 +225,11 @@ export const routesAPIDemandesDevenirAidant = (
       .custom((value: boolean) => value)
       .withMessage('Veuillez valider les CGU'),
     validateurNouveauParcoursDemandeDevenirAidant(),
-    async (requete: Request, reponse: Response, suite: NextFunction) => {
+    async (
+      requete: Request | RequeteUtilisateur,
+      reponse: Response,
+      suite: NextFunction
+    ) => {
       const genereEntite = () => ({
         entite: {
           type: requete.body.entite.type,
@@ -226,6 +239,16 @@ export const routesAPIDemandesDevenirAidant = (
           }),
         },
       });
+
+      const valideLesCGUDeLUtilisateurConnecte = async () => {
+        if (estRequeteUtilisateur(requete)) {
+          await unServiceUtilisateurInscrit(
+            entrepots.utilisateursInscrits(),
+            unServiceAidant(entrepots.aidants()),
+            repertoireDeContacts
+          ).valideLesCGU(requete.identifiantUtilisateurCourant!);
+        }
+      };
 
       try {
         const resultatsValidation: Result<FieldValidationError> =
@@ -249,6 +272,9 @@ export const routesAPIDemandesDevenirAidant = (
         };
 
         await configuration.busCommande.publie(commande);
+
+        await valideLesCGUDeLUtilisateurConnecte();
+
         return reponse.status(200).send();
       } catch (error) {
         return suite(error);
