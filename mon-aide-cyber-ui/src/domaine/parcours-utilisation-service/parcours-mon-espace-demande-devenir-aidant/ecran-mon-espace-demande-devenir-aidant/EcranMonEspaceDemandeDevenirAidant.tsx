@@ -31,7 +31,10 @@ import { Toast } from '../../../../composants/communs/Toasts/Toast.tsx';
 import illustrationSuivi from '../../../../../public/images/illustration-suivi.svg';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
 import { LienMailtoMAC } from '../../../../composants/atomes/LienMailtoMAC.tsx';
-import { useRecupereDepartements } from '../../../../hooks/useRecupereDepartements.ts';
+import { useRecupereLesInformationsLieesALaDemande } from '../../../../hooks/useRecupereLesInformationsLieesALaDemande.ts';
+import { ReponseHATEOAS } from '../../../Lien.ts';
+
+type ReponseDemandeDevenirAidant = ReponseHATEOAS;
 
 export const EcranMonEspaceDemandeDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
@@ -48,7 +51,8 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
   useRecupereContexteNavigation(
     'demande-devenir-aidant:demande-devenir-aidant'
   );
-  const referentielDepartements = useRecupereDepartements();
+  const informationsLieesALaDemande =
+    useRecupereLesInformationsLieesALaDemande();
 
   const {
     mutate,
@@ -66,7 +70,11 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
           'Une erreur est survenue lors de la demande devenir aidant'
         );
 
-      return macAPI.execute<void, void, CorpsDemandeDevenirAidant>(
+      return macAPI.execute<
+        ReponseDemandeDevenirAidant,
+        ReponseDemandeDevenirAidant,
+        CorpsDemandeDevenirAidant
+      >(
         constructeurParametresAPI<CorpsDemandeDevenirAidant>()
           .url(actionSoumettre.url)
           .methode(actionSoumettre.methode!)
@@ -75,7 +83,8 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
         (corps) => corps
       );
     },
-    onSuccess: () => {
+    onSuccess: (reponse) => {
+      navigationMAC.setEtat(reponse.liens);
       envoie(demandeDevenirAidantCreee());
       window.scrollTo({ top: 0 });
     },
@@ -171,7 +180,7 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
             </div>
           </FormulaireDevenirAidant.AvantPropos>
           <FormulaireDevenirAidant.Formulaire
-            referentielDepartements={referentielDepartements}
+            informationsLieesALaDemande={informationsLieesALaDemande}
             surSoumission={(formulaire) => {
               const { typeAidant, entite: entiteDuFormulaire } =
                 etatEtapeCourante.demande!.type;

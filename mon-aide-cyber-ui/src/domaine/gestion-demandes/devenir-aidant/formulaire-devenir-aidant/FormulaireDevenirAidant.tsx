@@ -18,9 +18,10 @@ import {
 } from './reducteurDevenirAidant.ts';
 import { Input } from '../../../../composants/atomes/Input/Input.tsx';
 import { ChampValidationCGUs } from '../../../../composants/formulaires/ChampValidationCGUs.tsx';
+import { ReponseDemandeInitiee } from '../DevenirAidant.ts';
 
 type ProprietesFormulaireDevenirAidant = PropsWithChildren<{
-  referentielDepartements?: Departement[];
+  informationsLieesALaDemande?: ReponseDemandeInitiee;
   surSoumission: ({
     nom,
     prenom,
@@ -54,14 +55,14 @@ const FormulaireDevenirAidantAvantPropos = ({
 };
 
 const FormulaireDevenirAidantFormulaire = ({
-  referentielDepartements,
+  informationsLieesALaDemande,
   surSoumission,
   devientValide,
   children,
 }: PropsWithChildren<ProprietesFormulaireDevenirAidant>) => {
   const [etatDemande, envoie] = useReducer(
     reducteurDevenirAidant,
-    initialiseFormulaire()
+    initialiseFormulaire(informationsLieesALaDemande?.donneesUtilisateur)
   );
 
   const soumetFormulaire = (e: FormEvent<HTMLFormElement>) => {
@@ -122,6 +123,8 @@ const FormulaireDevenirAidantFormulaire = ({
                 type="text"
                 id="prenom"
                 name="prenom"
+                value={informationsLieesALaDemande?.donneesUtilisateur?.prenom}
+                disabled={!!informationsLieesALaDemande?.donneesUtilisateur}
                 placeholder="Exemple : Martin"
                 onChange={(e) => surSaisiePrenom(e.target.value)}
               />
@@ -143,6 +146,8 @@ const FormulaireDevenirAidantFormulaire = ({
                 type="text"
                 id="nom"
                 name="nom"
+                value={informationsLieesALaDemande?.donneesUtilisateur?.nom}
+                disabled={!!informationsLieesALaDemande?.donneesUtilisateur}
                 placeholder="Exemple : Dubois"
                 onChange={(e) => surSaisieNom(e.target.value)}
               />
@@ -163,6 +168,8 @@ const FormulaireDevenirAidantFormulaire = ({
                 type="text"
                 id="mail"
                 name="mail"
+                value={informationsLieesALaDemande?.donneesUtilisateur?.email}
+                disabled={!!informationsLieesALaDemande?.donneesUtilisateur}
                 placeholder="Exemple : jean.dupont@mail.com"
                 onChange={(e) => surSaisieMail(e.target.value)}
               />
@@ -185,7 +192,9 @@ const FormulaireDevenirAidantFormulaire = ({
 
               <AutoCompletion<Departement>
                 nom="departement"
-                suggestionsInitiales={referentielDepartements || []}
+                suggestionsInitiales={
+                  informationsLieesALaDemande?.departements || []
+                }
                 mappeur={(departement) =>
                   estDepartement(departement)
                     ? `${departement.code} - ${departement.nom}`

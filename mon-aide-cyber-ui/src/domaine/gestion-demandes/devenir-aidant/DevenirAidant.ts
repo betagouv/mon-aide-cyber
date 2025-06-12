@@ -3,8 +3,10 @@ import { Departement } from '../departement.ts';
 import { TypeAidant } from '../parcours-aidant/reducteurEtapes.ts';
 
 export type ReponseDemandeInitiee = ReponseHATEOAS & PreRequisDemande;
+export type DonneesUtilisateur = { nom: string; prenom: string; email: string };
 export type PreRequisDemande = {
   departements: Departement[];
+  donneesUtilisateur?: DonneesUtilisateur;
 };
 
 export type Entite = {

@@ -3,6 +3,7 @@ import {
   ErreurFormulaire,
 } from '../../../../composants/alertes/Erreurs.tsx';
 import { Departement, estDepartement } from '../../departement.ts';
+import { DonneesUtilisateur } from '../DevenirAidant.ts';
 
 export type ErreursSaisieDemande = {
   cguValidees?: ErreurFormulaire;
@@ -70,10 +71,8 @@ const construisErreurCGUValidees = (cguValidees: boolean) => {
 };
 
 const estVide = (chaine: string): boolean => chaine.trim() === '';
-const contientUnChiffre = (chaine: string): boolean =>
-  chaine.match(/[0-9]+/) !== null;
-const estPrenomValide = (prenom: string): boolean =>
-  !estVide(prenom) && !contientUnChiffre(prenom);
+
+const estPrenomValide = (prenom: string): boolean => !estVide(prenom);
 const estNomValide = estPrenomValide;
 
 const supprimeObjetErreursSiFormulaireValide = (etatCourant: EtatDemande) => {
@@ -186,10 +185,12 @@ export const reducteurDevenirAidant = (etat: EtatDemande, action: Action) => {
   }
 };
 
-export const initialiseFormulaire = (): EtatDemande => ({
-  prenom: '',
-  nom: '',
-  mail: '',
+export const initialiseFormulaire = (
+  donneesUtilisateur: DonneesUtilisateur | undefined
+): EtatDemande => ({
+  prenom: donneesUtilisateur ? donneesUtilisateur.prenom : '',
+  nom: donneesUtilisateur ? donneesUtilisateur.nom : '',
+  mail: donneesUtilisateur ? donneesUtilisateur.email : '',
   departement: '',
   pretPourEnvoi: false,
   cguValidees: false,

@@ -11,7 +11,7 @@ import {
 } from '../../../../src/domaine/gestion-demandes/devenir-aidant/formulaire-devenir-aidant/reducteurDevenirAidant';
 
 describe('Formulaire devenir Aidant', () => {
-  const etatInitial = initialiseFormulaire();
+  const etatInitial = initialiseFormulaire(undefined);
 
   describe('Lorsque une demande devenir Aidant est faite', () => {
     describe('En ce qui concerne la saisie du prénom', () => {

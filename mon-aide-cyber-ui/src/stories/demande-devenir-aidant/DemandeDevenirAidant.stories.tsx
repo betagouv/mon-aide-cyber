@@ -15,7 +15,10 @@ type Story = StoryObj<typeof meta>;
 
 export const DemandeDevenirAidantStory: Story = {
   args: {
-    referentielDepartements: [{ nom: 'Gironde', code: '33' }],
+    informationsLieesALaDemande: {
+      departements: [{ nom: 'Gironde', code: '33' }],
+      liens: {},
+    },
   },
   name: 'Formulaire de demande pour devenir Aidant',
   play: async ({ canvasElement, step, userEvent }) => {
