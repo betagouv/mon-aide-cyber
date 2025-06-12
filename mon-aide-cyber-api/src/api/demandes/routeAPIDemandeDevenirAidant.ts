@@ -13,7 +13,11 @@ import {
   nomsEtCodesDesDepartements,
   rechercheParNomDepartement,
 } from '../../gestion-demandes/departements';
-import { constructeurActionsHATEOAS, ReponseHATEOAS } from '../hateoas/hateoas';
+import {
+  constructeurActionsHATEOAS,
+  ReponseHATEOAS,
+  ReponseHATEOASEnErreur,
+} from '../hateoas/hateoas';
 import { validateursDeCreationDeMotDePasse } from '../validateurs/motDePasse';
 import { Entrepots } from '../../domaine/Entrepots';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
@@ -227,7 +231,7 @@ export const routesAPIDemandesDevenirAidant = (
     validateurNouveauParcoursDemandeDevenirAidant(),
     async (
       requete: Request | RequeteUtilisateur,
-      reponse: Response,
+      reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>,
       suite: NextFunction
     ) => {
       const genereEntite = () => ({
@@ -251,6 +255,17 @@ export const routesAPIDemandesDevenirAidant = (
       };
 
       try {
+        let liens: ReponseHATEOAS | undefined = undefined;
+        if (estRequeteUtilisateur(requete)) {
+          liens = constructeurActionsHATEOAS()
+            .pour({
+              contexte: 'utilisateur-inscrit:pro-connect-acceder-au-profil',
+            })
+            .construis();
+        } else {
+          liens = constructeurActionsHATEOAS().actionsPubliques().construis();
+        }
+
         const resultatsValidation: Result<FieldValidationError> =
           validationResult(requete) as Result<FieldValidationError>;
         if (!resultatsValidation.isEmpty()) {
@@ -259,6 +274,7 @@ export const routesAPIDemandesDevenirAidant = (
               .array()
               .map((resultatValidation) => resultatValidation.msg)
               .join(', '),
+            ...liens,
           });
         }
 
@@ -275,7 +291,7 @@ export const routesAPIDemandesDevenirAidant = (
 
         await valideLesCGUDeLUtilisateurConnecte();
 
-        return reponse.status(200).send();
+        return reponse.status(200).json(liens);
       } catch (error) {
         return suite(error);
       }
