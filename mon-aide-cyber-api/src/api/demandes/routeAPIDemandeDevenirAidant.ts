@@ -30,6 +30,7 @@ import { estDateNouveauParcoursDemandeDevenirAidant } from '../../gestion-demand
 import {
   DemandeDevenirAidant,
   StatutDemande,
+  TypeEntite,
 } from '../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { RequeteUtilisateur } from '../routesAPI';
 import { uneRechercheUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
@@ -161,13 +162,19 @@ export type ReponseDemandeDevenirAidant = ReponseHATEOAS & {
   };
 };
 
-const estRequeteUtilisateur = (
-  requete: Request | RequeteUtilisateur
-): requete is RequeteUtilisateur => {
-  return (
-    (requete as RequeteUtilisateur).identifiantUtilisateurCourant !== undefined
-  );
+type CorpsDemandeDevenirAidant = {
+  nom: string;
+  prenom: string;
+  mail: string;
+  departement: string;
+  cguValidees: boolean;
+  entite: {
+    nom: string;
+    siret: string;
+    type: TypeEntite;
+  };
 };
+
 export const routesAPIDemandesDevenirAidant = (
   configuration: ConfigurationServeur
 ) => {
@@ -188,7 +195,6 @@ export const routesAPIDemandesDevenirAidant = (
       reponse: Response<ReponseDemandeDevenirAidant>,
       suite: NextFunction
     ) => {
-
       const utilisateur = await uneRechercheUtilisateursMAC(
         entrepots.utilisateursMAC()
       ).rechercheParIdentifiant(requete.identifiantUtilisateurCourant!);
@@ -209,7 +215,7 @@ export const routesAPIDemandesDevenirAidant = (
           nom: nom.join(' '),
           prenom: prenom,
           email: utilisateur.email,
-        }
+        },
       };
       return reponse.status(200).json(reponseDemande);
     }
@@ -217,9 +223,7 @@ export const routesAPIDemandesDevenirAidant = (
 
   routes.post(
     '/',
-    adaptateurDeVerificationDeSession.recupereUtilisateurConnecte(
-      'Demande devenir Aidant'
-    ),
+    adaptateurDeVerificationDeSession.verifie('Demande devenir Aidant'),
     express.json(),
     body('nom').trim().notEmpty().withMessage('Veuillez renseigner votre nom'),
     body('prenom')
@@ -236,7 +240,7 @@ export const routesAPIDemandesDevenirAidant = (
       .withMessage('Veuillez valider les CGU'),
     validateurNouveauParcoursDemandeDevenirAidant(),
     async (
-      requete: Request | RequeteUtilisateur,
+      requete: RequeteUtilisateur<CorpsDemandeDevenirAidant>,
       reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>,
       suite: NextFunction
     ) => {
@@ -251,29 +255,22 @@ export const routesAPIDemandesDevenirAidant = (
       });
 
       const valideLesCGUDeLUtilisateurConnecte = async () => {
-        if (estRequeteUtilisateur(requete)) {
-          await unServiceUtilisateurInscrit(
-            entrepots.utilisateursInscrits(),
-            unServiceAidant(entrepots.aidants()),
-            repertoireDeContacts
-          ).valideLesCGU(requete.identifiantUtilisateurCourant!);
-        }
+        await unServiceUtilisateurInscrit(
+          entrepots.utilisateursInscrits(),
+          unServiceAidant(entrepots.aidants()),
+          repertoireDeContacts
+        ).valideLesCGU(requete.identifiantUtilisateurCourant!);
       };
 
       try {
-        let liens: ReponseHATEOAS | undefined = undefined;
-        if (estRequeteUtilisateur(requete)) {
-          liens = constructeurActionsHATEOAS()
-            .pour({
-              contexte: 'utilisateur-inscrit:pro-connect-acceder-au-profil',
-            })
-            .construis();
-        } else {
-          liens = constructeurActionsHATEOAS().actionsPubliques().construis();
-        }
-
         const resultatsValidation: Result<FieldValidationError> =
           validationResult(requete) as Result<FieldValidationError>;
+
+        const liens: ReponseHATEOAS = constructeurActionsHATEOAS()
+          .pour({
+            contexte: 'utilisateur-inscrit:pro-connect-acceder-au-profil',
+          })
+          .construis();
         if (!resultatsValidation.isEmpty()) {
           return reponse.status(422).json({
             message: resultatsValidation

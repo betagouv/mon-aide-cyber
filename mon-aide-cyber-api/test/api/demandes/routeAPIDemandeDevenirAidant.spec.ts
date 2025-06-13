@@ -13,6 +13,7 @@ import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServ
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import {
+  ConstructeurUtilisateurInscrit,
   unAidant,
   unCompteUtilisateurInscritConnecteViaProConnect,
   unUtilisateurConnecteViaProConnectInconnuDeMAC,
@@ -27,6 +28,7 @@ import {
   ReponseHATEOAS,
   ReponseHATEOASEnErreur,
 } from '../../../src/api/hateoas/hateoas';
+import { UtilisateurInscrit } from '../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
 describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () => {
   const testeurMAC = testeurIntegration();
@@ -103,6 +105,16 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
   describe('Quand une requête POST est reçue /api/demandes/devenir-aidant', () => {
     let donneesServeur: { app: Express };
 
+    const creeEtConnecteUnUtilisateurInscrit = async (
+      constructeurUtilisateur: ConstructeurUtilisateurInscrit
+    ): Promise<UtilisateurInscrit> => {
+      return await unCompteUtilisateurInscritConnecteViaProConnect({
+        entrepotUtilisateurInscrit: testeurMAC.entrepots.utilisateursInscrits(),
+        constructeurUtilisateur,
+        adaptateurDeVerificationDeSession,
+      });
+    };
+
     beforeEach(() => {
       donneesServeur = testeurMAC.initialise();
     });
@@ -110,6 +122,8 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
     afterEach(() => testeurMAC.arrete());
 
     it('Réponds OK à la requête', async () => {
+      await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
@@ -123,27 +137,30 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       expect(reponse.statusCode).toStrictEqual(200);
       expect(await reponse.json()).toStrictEqual<ReponseHATEOAS>({
         liens: {
+          'afficher-tableau-de-bord': {
+            methode: 'GET',
+            url: '/api/mon-espace/tableau-de-bord',
+          },
           'demande-devenir-aidant': {
+            methode: 'GET',
             url: '/api/demandes/devenir-aidant',
-            methode: 'GET',
           },
-          'demande-etre-aide': {
-            url: '/api/demandes/etre-aide',
-            methode: 'GET',
-          },
-          'demander-aide': { url: '/api/demandes/etre-aide', methode: 'POST' },
           'envoyer-demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
             methode: 'POST',
+            url: '/api/demandes/devenir-aidant',
+          },
+          'lancer-diagnostic': {
+            methode: 'POST',
+            url: '/api/diagnostic',
           },
           'rechercher-entreprise': {
+            methode: 'GET',
             url: '/api/recherche-entreprise',
-            methode: 'GET',
           },
-          'se-connecter': { url: '/api/token', methode: 'POST' },
-          'se-connecter-avec-pro-connect': {
-            url: '/pro-connect/connexion',
+          'se-deconnecter': {
             methode: 'GET',
+            typeAppel: 'DIRECT',
+            url: '/pro-connect/deconnexion',
           },
         },
       });
@@ -158,12 +175,19 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
     });
 
     it('Réponds OK à la requête lorsque le mail contient des majuscules', async () => {
+      const utilisateur = await creeEtConnecteUnUtilisateurInscrit(
+        unUtilisateurInscrit()
+          .avecUnEmail('JeaN.DupOnT@mail.com')
+          .avecUnNomPrenom('Jean Dupont')
+          .sansValidationDeCGU()
+      );
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
         '/api/demandes/devenir-aidant',
         uneRequeteDemandeDevenirAidant()
-          .avecUnMail('JeaN.DupOnT@mail.com')
+          .depuisUnCompteUtilisateurInscrit(utilisateur)
           .dansLeDepartement('Hautes-Alpes')
           .ayantSigneLaCharte()
           .construis()
@@ -179,18 +203,13 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       ).toStrictEqual('jean.dupont@mail.com');
     });
 
-    it('Dans le cas d’un utilisateur connecté, prends en compte la validation des CGU', async () => {
+    it('Prends en compte la validation des CGU', async () => {
       FournisseurHorlogeDeTest.initialise(new Date());
-      const utilisateur = await unCompteUtilisateurInscritConnecteViaProConnect(
-        {
-          entrepotUtilisateurInscrit:
-            testeurMAC.entrepots.utilisateursInscrits(),
-          constructeurUtilisateur: unUtilisateurInscrit()
-            .avecUnEmail('jean.dupont@email.com')
-            .avecUnNomPrenom('Jean Dupont')
-            .sansValidationDeCGU(),
-          adaptateurDeVerificationDeSession,
-        }
+      const utilisateur = await creeEtConnecteUnUtilisateurInscrit(
+        unUtilisateurInscrit()
+          .avecUnEmail('jean.dupont@email.com')
+          .avecUnNomPrenom('Jean Dupont')
+          .sansValidationDeCGU()
       );
 
       const reponse = await executeRequete(
@@ -263,6 +282,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
 
       it("Retourne le code 422 en cas d'invalidité", async () => {
+        await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
         const corpsDeRequeteInvalide = {};
 
         const reponse = await executeRequete(
@@ -276,33 +296,30 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
         expect(await reponse.json()).toStrictEqual<ReponseHATEOASEnErreur>({
           message: expect.any(String),
           liens: {
+            'afficher-tableau-de-bord': {
+              methode: 'GET',
+              url: '/api/mon-espace/tableau-de-bord',
+            },
             'demande-devenir-aidant': {
               methode: 'GET',
               url: '/api/demandes/devenir-aidant',
-            },
-            'demande-etre-aide': {
-              methode: 'GET',
-              url: '/api/demandes/etre-aide',
-            },
-            'demander-aide': {
-              methode: 'POST',
-              url: '/api/demandes/etre-aide',
             },
             'envoyer-demande-devenir-aidant': {
               methode: 'POST',
               url: '/api/demandes/devenir-aidant',
             },
+            'lancer-diagnostic': {
+              methode: 'POST',
+              url: '/api/diagnostic',
+            },
             'rechercher-entreprise': {
               methode: 'GET',
               url: '/api/recherche-entreprise',
             },
-            'se-connecter': {
-              methode: 'POST',
-              url: '/api/token',
-            },
-            'se-connecter-avec-pro-connect': {
+            'se-deconnecter': {
               methode: 'GET',
-              url: '/pro-connect/connexion',
+              typeAppel: 'DIRECT',
+              url: '/pro-connect/deconnexion',
             },
           },
         });
@@ -367,6 +384,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
 
       it("Précise l'erreur dans un message, si une erreur est rencontrée", async () => {
+        await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
         const corpsDeRequeteAvecMailInvalide = uneRequeteDemandeDevenirAidant()
           .avecUnMail('mail-invalide')
           .construis();
@@ -384,6 +402,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
 
       it('Précise toutes les erreurs dans un message, si plusieurs erreurs sont rencontrées', async () => {
+        await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
         const corpsDeRequeteAvecMailEtNomInvalides =
           uneRequeteDemandeDevenirAidant()
             .avecUnMail('mail-invalide')
@@ -403,6 +422,8 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
 
       it('Retourne le code 422 en cas de mauvais département', async () => {
+        await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
+
         const reponse = await executeRequete(
           donneesServeur.app,
           'POST',
@@ -684,7 +705,25 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
     afterEach(() => testeurMAC.arrete());
 
     describe('Quand une requête POST est reçue /api/demandes/devenir-aidant', () => {
+      beforeEach(() => {
+        testeurMAC.adaptateurDeVerificationDeSession.reinitialise();
+      });
+
+      const creeEtConnecteUnUtilisateurInscrit = async (
+        constructeurUtilisateur: ConstructeurUtilisateurInscrit
+      ): Promise<UtilisateurInscrit> => {
+        return await unCompteUtilisateurInscritConnecteViaProConnect({
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          constructeurUtilisateur,
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
+        });
+      };
+
       it('Crée la demande', async () => {
+        await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
+
         const corpsDeRequete = uneRequeteDemandeDevenirAidant()
           .ayantSigneLaCharte()
           .dansUneEntite('Beta-Gouv', '1234567890', 'ServicePublic')
@@ -705,6 +744,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
 
       it('Retourne le code 422 si la charte n’est pas signée', async () => {
+        await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
         const corpsDeRequete = uneRequeteDemandeDevenirAidant()
           .sansCharteAidant()
           .construis();
@@ -723,6 +763,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
 
       it('Retourne le code 422 si les informations de l’entité fournie sont incorrectes', async () => {
+        await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
         const corpsDeRequete = uneRequeteDemandeDevenirAidant()
           .dansUneEntite('', '', '')
           .ayantSigneLaCharte()
@@ -742,6 +783,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       });
 
       it("Retourne OK si le futur Aidant est en attente d'adhésion à une association", async () => {
+        await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
         const corpsDeRequete = uneRequeteDemandeDevenirAidant()
           .enAttenteAdhesionAssociation()
           .construis();
