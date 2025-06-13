@@ -61,6 +61,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
 
   describe('Quand une requête GET est reçue sur /{id}', () => {
     it('Retourne le référentiel du diagnostic', async () => {
+      connecteUtilisateur(crypto.randomUUID());
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
           unReferentiel()
@@ -97,6 +98,8 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     it("Renvoie une erreur HTTP 404 diagnostic non trouvé si le diagnostic n'existe pas", async () => {
+      connecteUtilisateur(crypto.randomUUID());
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -122,6 +125,8 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     });
 
     it('Vérifie que les CGU et la charte ont été signées', async () => {
+      connecteUtilisateur(crypto.randomUUID());
+
       await executeRequete(
         donneesServeur.app,
         'GET',
@@ -181,6 +186,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   });
 
   describe('Quand une requête POST est reçue', () => {
+    beforeEach(() => {
+      connecteUtilisateur(crypto.randomUUID());
+    });
+
     it('Lance un nouveau diagnostic', async () => {
       const referentiel = unReferentiel().construis();
       testeurMAC.adaptateurReferentiel.ajoute(referentiel);
@@ -274,6 +283,9 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
         testeurMAC.adaptateurDeVerificationDeDemande =
           new AdaptateurDeVerificationDeDemandeMAC(entrepotAide);
         donneesServeur = testeurMAC.initialise();
+        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+          crypto.randomUUID()
+        );
       });
 
       afterEach(() => {
@@ -309,6 +321,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   });
 
   describe('Quand une requête PATCH est reçue sur /{id}', () => {
+    beforeEach(() => {
+      connecteUtilisateur(crypto.randomUUID());
+    });
+
     it('On peut donner une réponse à une question', async () => {
       const diagnostic = unDiagnostic()
         .avecUnReferentiel(
@@ -449,6 +465,12 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   });
 
   describe('Quand une requête GET est reçue sur /{id}/restitution', () => {
+    beforeEach(() => {
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        crypto.randomUUID()
+      );
+    });
+
     it('Retourne la restitution', async () => {
       const adaptateurDeRestitutionHTML = unAdaptateurDeRestitutionHTML()
         .avecIndicateurs('indicateurs')
@@ -708,6 +730,9 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
       adaptateurEnvoiMail =
         testeurMAC.adaptateurEnvoieMessage as AdaptateurEnvoiMailMemoire;
+      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+        crypto.randomUUID()
+      );
     });
 
     it('Accepte la requête et transmet la restitution', async () => {
