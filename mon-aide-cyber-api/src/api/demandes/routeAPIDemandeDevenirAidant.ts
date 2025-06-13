@@ -35,6 +35,7 @@ import { RequeteUtilisateur } from '../routesAPI';
 import { uneRechercheUtilisateursMAC } from '../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { unServiceUtilisateurInscrit } from '../../espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
 import { unServiceAidant } from '../../espace-aidant/ServiceAidantMAC';
+import { ErreurUtilisateurNonTrouve } from '../routesAPIUtilisateur';
 
 export const validateurDemande = (
   entrepots: Entrepots,
@@ -181,30 +182,35 @@ export const routesAPIDemandesDevenirAidant = (
 
   routes.get(
     '/',
-    adaptateurDeVerificationDeSession.recupereUtilisateurConnecte(
-      'Demande devenir Aidant'
-    ),
+    adaptateurDeVerificationDeSession.verifie('Demande devenir Aidant'),
     async (
-      requete: Request | RequeteUtilisateur,
-      reponse: Response<ReponseDemandeDevenirAidant>
+      requete: RequeteUtilisateur,
+      reponse: Response<ReponseDemandeDevenirAidant>,
+      suite: NextFunction
     ) => {
+
+      const utilisateur = await uneRechercheUtilisateursMAC(
+        entrepots.utilisateursMAC()
+      ).rechercheParIdentifiant(requete.identifiantUtilisateurCourant!);
+      if (!utilisateur) {
+        return suite(
+          ErreurMAC.cree(
+            'Demande devenir Aidant',
+            new ErreurUtilisateurNonTrouve()
+          )
+        );
+      }
+
+      const [prenom, ...nom] = utilisateur.nomComplet.split(' ');
       const reponseDemande: ReponseDemandeDevenirAidant = {
         departements: nomsEtCodesDesDepartements(),
         ...constructeurActionsHATEOAS().demandeDevenirAidant().construis(),
-      };
-      if (estRequeteUtilisateur(requete)) {
-        const utilisateur = await uneRechercheUtilisateursMAC(
-          entrepots.utilisateursMAC()
-        ).rechercheParIdentifiant(requete.identifiantUtilisateurCourant!);
-        if (utilisateur) {
-          const [prenom, ...nom] = utilisateur.nomComplet.split(' ');
-          reponseDemande.donneesUtilisateur = {
-            nom: nom.join(' '),
-            prenom: prenom,
-            email: utilisateur.email,
-          };
+        donneesUtilisateur: {
+          nom: nom.join(' '),
+          prenom: prenom,
+          email: utilisateur.email,
         }
-      }
+      };
       return reponse.status(200).json(reponseDemande);
     }
   );

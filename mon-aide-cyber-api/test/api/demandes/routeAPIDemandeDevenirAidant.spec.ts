@@ -15,6 +15,7 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import {
   unAidant,
   unCompteUtilisateurInscritConnecteViaProConnect,
+  unUtilisateurConnecteViaProConnectInconnuDeMAC,
   unUtilisateurInscrit,
 } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Aidant } from '../../../src/espace-aidant/Aidant';
@@ -45,28 +46,7 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       adaptateurDeVerificationDeSession.reinitialise();
     });
 
-    it('Dans le cas d’un utilisateur non connecté, fournit la liste des départements ainsi que le lien pour accéder à la ressource pour envoyer la demande pour devenir Aidant', async () => {
-      const reponse = await executeRequete(
-        donneesServeur.app,
-        'GET',
-        '/api/demandes/devenir-aidant'
-      );
-
-      expect(await reponse.json()).toStrictEqual<ReponseDemandeDevenirAidant>({
-        departements: departements.map(({ nom, code }) => ({
-          nom,
-          code,
-        })),
-        liens: {
-          'envoyer-demande-devenir-aidant': {
-            url: '/api/demandes/devenir-aidant',
-            methode: 'POST',
-          },
-        },
-      });
-    });
-
-    it('Dans le cas d’un utilisateur connecté, fournit ses informations', async () => {
+    it('Fournit les informations nécessaires à la demande', async () => {
       await unCompteUtilisateurInscritConnecteViaProConnect({
         entrepotUtilisateurInscrit: testeurMAC.entrepots.utilisateursInscrits(),
         constructeurUtilisateur: unUtilisateurInscrit()
@@ -99,6 +79,24 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           email: 'jean.dupont@email.com',
         },
       });
+    });
+
+    it("Retourne une erreur 404 si l'utilisateur n'est pas trouvé", async () => {
+      await unUtilisateurConnecteViaProConnectInconnuDeMAC({
+        constructeurUtilisateur: unUtilisateurInscrit()
+          .avecUnEmail('jean.dupont@email.com')
+          .avecUnNomPrenom('Jean Dupont')
+          .sansValidationDeCGU(),
+        adaptateurDeVerificationDeSession,
+      });
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        '/api/demandes/devenir-aidant'
+      );
+
+      expect(reponse.statusCode).toBe(404);
     });
   });
 
