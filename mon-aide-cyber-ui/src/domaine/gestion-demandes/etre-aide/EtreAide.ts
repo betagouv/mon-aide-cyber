@@ -1,13 +1,6 @@
 import { UUID } from '../../../types/Types.ts';
 
 export type Email = string;
-export type CorpsDemandeSolliciterAidant = {
-  cguValidees: boolean;
-  email: string;
-  departement: string;
-  raisonSociale?: string;
-  aidantSollicite: UUID;
-};
 export const partageEmail = () => {
   const encode = (email: string, clefQueryString: string) => {
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa#unicode_strings

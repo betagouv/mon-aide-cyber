@@ -18,9 +18,6 @@ import { LayoutDiagnostic } from './composants/layout/LayoutDiagnostic.tsx';
 import { EcranDiagnosticLibreAcces } from './composants/diagnostic/EcranDiagnosticAidant.tsx';
 import { ComposantRestitutionLibreAcces } from './composants/diagnostic/ComposantRestitution/ComposantRestitution.tsx';
 import { EcranDemandeAutodiagnostic } from './domaine/auto-diagnostic/EcranDemandeAutodiagnostic.tsx';
-import { EcranDemandeDevenirAidant } from './domaine/gestion-demandes/parcours-aidant/EcranDemandeDevenirAidant.tsx';
-import { EcranUtilisationDuService } from './domaine/parcours-utilisation-service/parcours-utilisateur-inscrit/ecran-utilisation-du-service/vitrine/EcranUtilisationDuService.tsx';
-import { EcranRealiserDesDiagnosticsANSSI } from './domaine/vitrine/ecran-realiser-des-diagnostics-anssi/EcranRealiserDesDiagnosticsANSSI.tsx';
 import { EcranSecurite } from './domaine/vitrine/ecran-securite/EcranSecurite.tsx';
 import { EcranRepondreAUneDemande } from './domaine/gestion-demandes/repondre-a-une-demande/EcranRepondreAUneDemande.tsx';
 import { PageCrisp } from './domaine/crisp/PageCrisp.tsx';
@@ -82,19 +79,20 @@ export const RouteurPublic = () => {
         />
         <Route
           path="realiser-des-diagnostics-anssi"
-          element={<EcranRealiserDesDiagnosticsANSSI />}
+          element={<EcranConnexion />}
         />
         <Route path="mentions-legales" element={<MentionsLegales />} />
-        <Route
-          path="mon-utilisation-du-service"
-          element={<EcranUtilisationDuService />}
-        />
       </Route>
-      <Route
-        path="/demandes/devenir-aidant"
-        element={<LayoutPublic afficheNavigation={false} enteteSimple={true} />}
-      >
-        <Route index element={<EcranDemandeDevenirAidant />} />
+
+      <Route element={<LayoutCreationEspaceAidant />}>
+        <Route
+          path="demandes/devenir-aidant/finalise"
+          element={
+            <ComposantIntercepteur
+              composant={CapteurEcranCreationEspaceAidant}
+            />
+          }
+        />
       </Route>
 
       <Route
@@ -149,17 +147,6 @@ export const RouteurPublic = () => {
         <Route
           path="reinitialiser-mot-de-passe"
           element={<EcranReinitialiserMotDePasse />}
-        />
-      </Route>
-
-      <Route element={<LayoutCreationEspaceAidant />}>
-        <Route
-          path="demandes/devenir-aidant/finalise"
-          element={
-            <ComposantIntercepteur
-              composant={CapteurEcranCreationEspaceAidant}
-            />
-          }
         />
       </Route>
     </Routes>
