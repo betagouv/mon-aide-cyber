@@ -10,6 +10,7 @@ import { constructeurActionsHATEOAS } from '../hateoas/hateoas';
 import { NextFunction } from 'express-serve-static-core';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import {
+  ErreurDemandeAide,
   ErreurDemandeAideEntrepriseInconnue,
   ErreurUtilisateurMACInconnu,
   SagaDemandeAide,
@@ -31,12 +32,6 @@ type CorpsRequeteDemandeAide = {
   identifiantAidant?: crypto.UUID;
   siret: string;
 };
-
-class ErreurDemandeAide extends Error {
-  constructor(public readonly message: string) {
-    super(message);
-  }
-}
 
 export const routesAPIDemandeEtreAide = (
   configuration: ConfigurationServeur
@@ -124,20 +119,25 @@ export const routesAPIDemandeEtreAide = (
           .catch(
             (
               erreur:
-                | string
+                | Error
                 | ErreurUtilisateurMACInconnu
                 | ErreurDemandeAideEntrepriseInconnue
+                | ErreurDemandeAide
             ) => {
               if (
                 erreur instanceof ErreurUtilisateurMACInconnu ||
-                erreur instanceof ErreurDemandeAideEntrepriseInconnue
+                erreur instanceof ErreurDemandeAideEntrepriseInconnue ||
+                erreur instanceof ErreurDemandeAide
               ) {
-                suite(ErreurMAC.cree("Demande d'aide", erreur));
+                return suite(ErreurMAC.cree("Demande d'aide", erreur));
               }
-              suite(
+              return suite(
                 ErreurMAC.cree(
                   "Demande d'aide",
-                  new ErreurDemandeAide(erreur as string)
+                  new ErreurDemandeAide(
+                    'Votre demande d’aide n’a pu aboutir',
+                    erreur as Error
+                  )
                 )
               );
             }

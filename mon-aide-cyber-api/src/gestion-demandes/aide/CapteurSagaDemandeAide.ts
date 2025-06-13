@@ -33,6 +33,12 @@ export class ErreurDemandeAideEntrepriseInconnue extends Error {
   }
 }
 
+export class ErreurDemandeAide extends Error {
+  constructor(message: string, erreur: Error) {
+    super(message, { cause: erreur });
+  }
+}
+
 export type SagaDemandeAide = Saga & {
   cguValidees: boolean;
   email: string;
@@ -166,8 +172,11 @@ export class CapteurSagaDemandeAide
             },
           });
         });
-    } catch (erreur) {
-      return Promise.reject("Votre demande d'aide n'a pu aboutir");
+    } catch (erreur: unknown | Error) {
+      throw new ErreurDemandeAide(
+        "Votre demande d'aide n'a pu aboutir",
+        erreur as Error
+      );
     }
   }
 }
