@@ -185,7 +185,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   }
 }
 
-class ConstructeurUtilisateurInscrit
+export class ConstructeurUtilisateurInscrit
   implements Constructeur<UtilisateurInscrit>
 {
   private dateSignatureCGU: Date | undefined = fakerFR.date.anytime();
