@@ -379,7 +379,19 @@ export const unCompteAidantConnecteViaProConnect = async (
   );
   return aidant;
 };
-
+type ParametreUtilisateurInconnuProConnect = {
+  constructeurUtilisateur: ConstructeurUtilisateurInscrit;
+  adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
+};
+export const unUtilisateurConnecteViaProConnectInconnuDeMAC = async (
+  parametres: ParametreUtilisateurInconnuProConnect
+): Promise<UtilisateurInscrit> => {
+  const utilisateur = parametres.constructeurUtilisateur.construis();
+  parametres.adaptateurDeVerificationDeSession.utilisateurProConnect(
+    utilisateur.identifiant
+  );
+  return utilisateur;
+};
 export const unCompteAidantConnecte = async (configuration: {
   entrepotUtilisateur: EntrepotUtilisateur;
   entrepotAidant: EntrepotAidant;
