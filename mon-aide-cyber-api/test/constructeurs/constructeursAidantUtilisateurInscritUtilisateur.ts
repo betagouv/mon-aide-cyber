@@ -311,13 +311,13 @@ type ParametresLiaisonAidant = {
 export const unCompteAidantRelieAUnCompteUtilisateur = async (
   parametres: ParametresLiaisonAidant
 ): Promise<{ utilisateur: Utilisateur; aidant: Aidant }> => {
-  const utilisateur = parametres.constructeurUtilisateur.construis();
-  await parametres.entrepotUtilisateur.persiste(utilisateur);
-  const aidant = parametres.constructeurAidant
-    .avecUnIdentifiant(utilisateur.identifiant)
-    .avecUnNomPrenom(utilisateur.nomPrenom)
-    .avecUnEmail(utilisateur.identifiantConnexion)
+  const aidant = parametres.constructeurAidant.construis();
+  const utilisateur = parametres.constructeurUtilisateur
+    .avecUnIdentifiant(aidant.identifiant)
+    .avecUnNomPrenom(aidant.nomPrenom)
+    .avecUnIdentifiantDeConnexion(aidant.email)
     .construis();
+  await parametres.entrepotUtilisateur.persiste(utilisateur);
   await parametres.entrepotAidant.persiste(aidant);
   return { utilisateur, aidant };
 };
@@ -326,6 +326,7 @@ type ParametresLiaisonUtilisateurInscrit = {
   constructeurUtilisateur: ConstructeurUtilisateur;
   entrepotUtilisateurInscrit: EntrepotUtilisateurInscrit;
   entrepotUtilisateur: EntrepotUtilisateur;
+  adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
 };
 
 export const unUtilisateurInscrit = () => new ConstructeurUtilisateurInscrit();
@@ -343,6 +344,9 @@ export const unCompteUtilisateurInscritRelieAUnCompteUtilisateur = async (
     .avecUnEmail(utilisateur.identifiantConnexion)
     .construis();
   await parametres.entrepotUtilisateurInscrit.persiste(utilisateurInscrit);
+  parametres.adaptateurDeVerificationDeSession.utilisateurConnecte(
+    utilisateur.identifiant
+  );
   return { utilisateur, utilisateurInscrit };
 };
 type ParametreUtilisateurInscritProConnect = {
@@ -359,4 +363,49 @@ export const unCompteUtilisateurInscritConnecteViaProConnect = async (
     utilisateur.identifiant
   );
   return utilisateur;
+};
+type ParametreAidantProConnect = {
+  entrepotAidant: EntrepotAidant;
+  constructeurAidant: ConstructeurAidant;
+  adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
+};
+export const unCompteAidantConnecteViaProConnect = async (
+  parametres: ParametreAidantProConnect
+): Promise<UtilisateurInscrit> => {
+  const aidant = parametres.constructeurAidant.construis();
+  await parametres.entrepotAidant.persiste(aidant);
+  parametres.adaptateurDeVerificationDeSession.utilisateurProConnect(
+    aidant.identifiant
+  );
+  return aidant;
+};
+
+export const unCompteAidantConnecte = async (configuration: {
+  entrepotUtilisateur: EntrepotUtilisateur;
+  entrepotAidant: EntrepotAidant;
+  constructeurAidant: ConstructeurAidant;
+  adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
+}) => {
+  const { utilisateur, aidant } = await unCompteAidantRelieAUnCompteUtilisateur(
+    {
+      entrepotUtilisateur: configuration.entrepotUtilisateur,
+      entrepotAidant: configuration.entrepotAidant,
+      constructeurUtilisateur: unUtilisateur(),
+      constructeurAidant: configuration.constructeurAidant,
+    }
+  );
+  configuration.adaptateurDeVerificationDeSession.utilisateurConnecte(
+    utilisateur.identifiant
+  );
+  await configuration.entrepotUtilisateur.persiste(utilisateur);
+  return aidant;
+};
+
+export const unAidantConnecteInconnu = async (configuration: {
+  adaptateurDeVerificationDeSession: AdaptateurDeVerificationDeSessionDeTest;
+}) => {
+  const utilisateur = unAidant().construis();
+  configuration.adaptateurDeVerificationDeSession.utilisateurConnecte(
+    utilisateur.identifiant
+  );
 };

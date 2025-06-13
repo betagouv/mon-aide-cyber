@@ -1,7 +1,11 @@
-import { AdaptateurDeVerificationDeSession } from '../../src/adaptateurs/AdaptateurDeVerificationDeSession';
+import {
+  AdaptateurDeVerificationDeSession,
+  ErreurAccesRefuse,
+  InformationsContexte,
+} from '../../src/adaptateurs/AdaptateurDeVerificationDeSession';
 import { NextFunction } from 'express-serve-static-core';
 import { RequestHandler, Response } from 'express';
-import { Contexte } from '../../src/domaine/erreurMAC';
+import { Contexte, ErreurMAC } from '../../src/domaine/erreurMAC';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
 import crypto from 'crypto';
 
@@ -13,13 +17,22 @@ export class AdaptateurDeVerificationDeSessionDeTest
 
   constructor(private estPassee = false) {}
 
-  verifie(__contexte: Contexte): RequestHandler {
+  verifie(contexte: Contexte): RequestHandler {
     return (
       requete: RequeteUtilisateur,
       __reponse: Response,
       suite: NextFunction
     ) => {
       this.estPassee = true;
+      if (!this._utilisateurConnecte) {
+        throw ErreurMAC.cree(
+          contexte,
+          new ErreurAccesRefuse(
+            'Session invalide.',
+            requete.query as InformationsContexte
+          )
+        );
+      }
       if (this._utilisateurConnecte) {
         requete.identifiantUtilisateurCourant = this._utilisateurConnecte;
       }
@@ -36,7 +49,11 @@ export class AdaptateurDeVerificationDeSessionDeTest
       reponse: Response,
       suite: NextFunction
     ) => {
-      return this.verifie(__contexte)(requete, reponse, suite);
+      try {
+        return this.verifie(__contexte)(requete, reponse, suite);
+      } catch (__e) {
+        return suite();
+      }
     };
   }
 

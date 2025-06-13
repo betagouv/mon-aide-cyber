@@ -9,6 +9,9 @@ describe("Consignateur de gestion d'erreurr", () => {
 
   beforeEach(() => {
     donneesServeur = testeurMAC.initialise();
+    testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
+      crypto.randomUUID()
+    );
   });
 
   afterEach(() => {

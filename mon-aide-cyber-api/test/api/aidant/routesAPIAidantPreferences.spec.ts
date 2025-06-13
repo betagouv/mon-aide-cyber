@@ -2,15 +2,21 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from '../executeurRequete';
-import { departements } from '../../../src/gestion-demandes/departements';
+import {
+  ain,
+  aisne,
+  allier,
+  departements,
+} from '../../../src/gestion-demandes/departements';
 import { secteursActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
 import { ReponsePreferencesAidantAPI } from '../../../src/api/aidant/routesAPIAidantPreferences';
 import { typesEntites } from '../../../src/espace-aidant/Aidant';
 
 import {
   unAidant,
-  unCompteAidantRelieAUnCompteUtilisateur,
-  unUtilisateur,
+  unAidantConnecteInconnu,
+  unCompteAidantConnecte,
+  unCompteAidantConnecteViaProConnect,
 } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Le serveur MAC sur les routes /api/aidant', () => {
@@ -29,15 +35,13 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
 
   describe('Quand une requête GET est reçue sur /preferences', () => {
     it('Retourne les préférences de l’Aidant', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
         constructeurAidant: unAidant(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -75,15 +79,12 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Retourne l’action de déconnexion de l’Aidant propre à ProConnect', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+      await unCompteAidantConnecteViaProConnect({
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
         constructeurAidant: unAidant(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -99,19 +100,17 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Retourne les secteurs d’activité que l’Aidant a conservé', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
         constructeurAidant: unAidant().ayantPourSecteursActivite([
           { nom: 'Administration' },
           { nom: 'Commerce' },
           { nom: 'Transports' },
         ]),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -127,22 +126,17 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Retourne les départements dans lesquels l’Aidant peut intervenir', async () => {
-      const ain = departements[0];
-      const aisne = departements[1];
-      const allier = departements[2];
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
         constructeurAidant: unAidant().ayantPourDepartements([
           ain,
           aisne,
           allier,
         ]),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -158,10 +152,9 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Retourne les types d’entités dans lesquels l’Aidant peut intervenir', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
         constructeurAidant: unAidant().ayantPourTypesEntite([
           {
             nom: 'Organisations publiques',
@@ -173,10 +166,9 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
             libelle: 'Associations (ex. association loi 1901, GIP)',
           },
         ]),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -192,6 +184,13 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Vérifie que les CGU sont signées', async () => {
+      await unCompteAidantConnecte({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        constructeurAidant: unAidant(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
       await executeRequete(
         donneesServeur.app,
         'GET',
@@ -204,6 +203,11 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Retourne une erreur HTTP 404 si l’Aidant n’est pas connu', async () => {
+      await unAidantConnecteInconnu({
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -219,18 +223,16 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
 
   describe('Quand une requête PATCH est reçue sur /preferences', () => {
     it('vérifie la session de l’Aidant', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
         constructeurAidant: unAidant().ayantPourSecteursActivite([
           { nom: 'Administration' },
           { nom: 'Commerce' },
         ]),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -250,6 +252,14 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Vérifie les CGU', async () => {
+      await unCompteAidantConnecte({
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+        constructeurAidant: unAidant(),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+      });
+
       await executeRequete(
         donneesServeur.app,
         'PATCH',
@@ -267,6 +277,11 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
     });
 
     it('Retourne une erreur HTTP 404 si l’Aidant n’est pas connu', async () => {
+      await unAidantConnecteInconnu({
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'PATCH',
@@ -286,15 +301,13 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
 
     describe('Lors de la phase de validation', () => {
       it("Valide les secteurs d'activité passés dans la requête", async () => {
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
           constructeurAidant: unAidant(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -314,15 +327,13 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       });
 
       it('Valide les départements passés dans la requête', async () => {
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
           constructeurAidant: unAidant(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -342,15 +353,13 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
       });
 
       it('Valide les types d’entités passés dans la requête', async () => {
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
           constructeurAidant: unAidant(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,

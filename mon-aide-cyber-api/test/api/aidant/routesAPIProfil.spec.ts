@@ -5,6 +5,8 @@ import { executeRequete } from '../executeurRequete';
 import { Profil } from '../../../src/api/representateurs/profil/Profil';
 import {
   unAidant,
+  unAidantConnecteInconnu,
+  unCompteAidantConnecte,
   unCompteAidantRelieAUnCompteUtilisateur,
   unCompteUtilisateurInscritConnecteViaProConnect,
   unCompteUtilisateurInscritRelieAUnCompteUtilisateur,
@@ -37,18 +39,13 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
       beforeEach(async () => {
         donneesServeur = testeurMAC.initialise();
-        const { utilisateur, aidant } =
-          await unCompteAidantRelieAUnCompteUtilisateur({
-            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-            entrepotAidant: testeurMAC.entrepots.aidants(),
-            constructeurUtilisateur: unUtilisateur(),
-            constructeurAidant: unAidant(),
-          });
-        aidantConnecte = aidant;
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
-        await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+        aidantConnecte = await unCompteAidantConnecte({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurAidant: unAidant(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
+        });
       });
 
       it("Retourne les informations le l'Aidant", async () => {
@@ -98,19 +95,13 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       });
 
       it("Retourne les possibilités de nom d'affichage de l'Aidant", async () => {
-        const { utilisateur, aidant } =
-          await unCompteAidantRelieAUnCompteUtilisateur({
-            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-            entrepotAidant: testeurMAC.entrepots.aidants(),
-            constructeurUtilisateur:
-              unUtilisateur().avecUnNomPrenom('Jean Dupont'),
-            constructeurAidant: unAidant(),
-          });
-        aidantConnecte = aidant;
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
-        await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+        await unCompteAidantConnecte({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurAidant: unAidant().avecUnNomPrenom('Jean Dupont'),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
+        });
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -210,17 +201,16 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       });
 
       it('Peut modifier le mot de passe', async () => {
-        const { utilisateur, utilisateurInscrit } =
+        const { utilisateurInscrit } =
           await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
             entrepotUtilisateurInscrit:
               testeurMAC.entrepots.utilisateursInscrits(),
             constructeurUtilisateur: unUtilisateur(),
             constructeurUtilisateurInscrit: unUtilisateurInscrit(),
             entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+            adaptateurDeVerificationDeSession:
+              testeurMAC.adaptateurDeVerificationDeSession,
           });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -268,6 +258,11 @@ describe('le serveur MAC sur les routes /api/profil', () => {
     });
 
     it("ne peut pas accéder au profil si l'aidant n'existe pas", async () => {
+      await unAidantConnecteInconnu({
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -342,6 +337,11 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
   describe('Quand une requête PATCH est reçue sur /', () => {
     it('Retourne une erreur HTTP 404 si l’Aidant n’est pas connu', async () => {
+      await unAidantConnecteInconnu({
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'PATCH',

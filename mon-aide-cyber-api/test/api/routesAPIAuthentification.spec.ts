@@ -52,12 +52,12 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         });
 
         it('Génère un token', async () => {
-          const constructeurUtilisateur = unUtilisateur()
-            .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
-            .avecUnMotDePasse('mon_Mot-D3p4sse')
-            .avecUnNomPrenom('Martin Dupont');
+          const constructeurUtilisateur =
+            unUtilisateur().avecUnMotDePasse('mon_Mot-D3p4sse');
           await unCompteAidantRelieAUnCompteUtilisateur({
-            constructeurAidant: unAidant(),
+            constructeurAidant: unAidant()
+              .avecUnEmail('martin.dupont@email.com')
+              .avecUnNomPrenom('Martin Dupont'),
             constructeurUtilisateur,
             entrepotAidant: testeurMAC.entrepots.aidants(),
             entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
@@ -105,14 +105,13 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
         });
 
         it('Redirige vers /mon-espace/mon-utilisation-du-service', async () => {
-          const constructeurUtilisateur = unUtilisateur()
-            .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
-            .avecUnMotDePasse('mon_Mot-D3p4sse')
-            .avecUnNomPrenom('Martin Dupont');
+          const constructeurUtilisateur =
+            unUtilisateur().avecUnMotDePasse('mon_Mot-D3p4sse');
           await unCompteAidantRelieAUnCompteUtilisateur({
-            constructeurAidant: unAidant().cguValideesLe(
-              new Date(Date.parse('2024-12-12T20:00:00'))
-            ),
+            constructeurAidant: unAidant()
+              .avecUnNomPrenom('Martin Dupont')
+              .avecUnEmail('martin.dupont@email.com')
+              .cguValideesLe(new Date(Date.parse('2024-12-12T20:00:00'))),
             constructeurUtilisateur,
             entrepotAidant: testeurMAC.entrepots.aidants(),
             entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
@@ -171,6 +170,8 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
             entrepotUtilisateurInscrit:
               testeurMAC.entrepots.utilisateursInscrits(),
             entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+            adaptateurDeVerificationDeSession:
+              testeurMAC.adaptateurDeVerificationDeSession,
           });
 
           const reponse = await executeRequete(
@@ -241,12 +242,12 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
       });
 
       it("L'identifiant de connexion est expurgé", async () => {
-        const constructeurUtilisateur = unUtilisateur()
-          .avecUnIdentifiantDeConnexion('martin.dupont@email.com')
-          .avecUnMotDePasse('mon_Mot-D3p4sse')
-          .avecUnNomPrenom('Martin Dupont');
+        const constructeurUtilisateur =
+          unUtilisateur().avecUnMotDePasse('mon_Mot-D3p4sse');
         await unCompteAidantRelieAUnCompteUtilisateur({
-          constructeurAidant: unAidant(),
+          constructeurAidant: unAidant()
+            .avecUnNomPrenom('Martin Dupont')
+            .avecUnEmail('martin.dupont@email.com'),
           constructeurUtilisateur,
           entrepotAidant: testeurMAC.entrepots.aidants(),
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
@@ -290,12 +291,13 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
       });
 
       it('Demande la validation du profil si il s’agit d’un Aidant sans date de validation des CGU', async () => {
-        const constructeurUtilisateur = unUtilisateur()
-          .avecUnIdentifiantDeConnexion('jean.dujardin@email.com')
-          .avecUnMotDePasse('mon_Mot-D3p4sse')
-          .avecUnNomPrenom('Jean Dujardin');
+        const constructeurUtilisateur =
+          unUtilisateur().avecUnMotDePasse('mon_Mot-D3p4sse');
         await unCompteAidantRelieAUnCompteUtilisateur({
-          constructeurAidant: unAidant().sansCGUSignees(),
+          constructeurAidant: unAidant()
+            .avecUnEmail('jean.dujardin@email.com')
+            .avecUnNomPrenom('Jean Dujardin')
+            .sansCGUSignees(),
           constructeurUtilisateur,
           entrepotAidant: testeurMAC.entrepots.aidants(),
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
@@ -339,14 +341,13 @@ describe("Le serveur MAC, sur les routes d'authentification", () => {
       });
 
       it('Demande la validation du profil si les CGU sont antérieures à la date du nouveau parcours', async () => {
-        const constructeurUtilisateur = unUtilisateur()
-          .avecUnIdentifiantDeConnexion('jean.dujardin@email.com')
-          .avecUnMotDePasse('mon_Mot-D3p4sse')
-          .avecUnNomPrenom('Jean Dujardin');
+        const constructeurUtilisateur =
+          unUtilisateur().avecUnMotDePasse('mon_Mot-D3p4sse');
         await unCompteAidantRelieAUnCompteUtilisateur({
-          constructeurAidant: unAidant().cguValideesLe(
-            new Date(Date.parse('2024-12-24T14:32:12'))
-          ),
+          constructeurAidant: unAidant()
+            .avecUnEmail('jean.dujardin@email.com')
+            .avecUnNomPrenom('Jean Dujardin')
+            .cguValideesLe(new Date(Date.parse('2024-12-24T14:32:12'))),
           constructeurUtilisateur,
           entrepotAidant: testeurMAC.entrepots.aidants(),
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),

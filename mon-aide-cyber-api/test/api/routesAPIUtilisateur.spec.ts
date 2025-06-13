@@ -7,7 +7,9 @@ import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/Adaptate
 
 import {
   unAidant,
-  unCompteAidantRelieAUnCompteUtilisateur,
+  unAidantConnecteInconnu,
+  unCompteAidantConnecte,
+  unCompteAidantConnecteViaProConnect,
   unCompteUtilisateurInscritConnecteViaProConnect,
   unCompteUtilisateurInscritRelieAUnCompteUtilisateur,
   unUtilisateur,
@@ -50,17 +52,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
     describe('Dans le cas d’un Aidant', () => {
       it("Retourne l'utilisateur connecté", async () => {
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        const aidant = await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           constructeurAidant: unAidant().avecUnEmail('jean.aidant@societe.fr'),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur().avecUnIdentifiantDeConnexion(
-            'jean.aidant@societe.fr'
-          ),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -71,7 +69,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         expect(reponse.statusCode).toBe(200);
         expect(adaptateurDeVerificationDeSession.verifiePassage()).toBe(true);
         expect(await reponse.json()).toStrictEqual({
-          nomPrenom: utilisateur.nomPrenom,
+          nomPrenom: aidant.nomPrenom,
           email: 'jean.aidant@societe.fr',
           liens: {
             'lancer-diagnostic': {
@@ -161,15 +159,12 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Retourne l’information si l’utilisateur s’est connecté via ProConnect', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+      await unCompteAidantConnecteViaProConnect({
         constructeurAidant: unAidant(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -187,15 +182,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Retourne l’action valider profil si l’utilisateur ne les a pas signées', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         constructeurAidant: unAidant().sansCGUSignees(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -227,15 +220,12 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Retourne l’action valider profil si l’utilisateur proconnect ne les a pas signées', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+      await unCompteAidantConnecteViaProConnect({
         constructeurAidant: unAidant().sansCGUSignees(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -267,15 +257,12 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Retourne l’action valider signature CGU si l’utilisateur, un Gendarme connecté via proconnect, ne les a pas signées', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+      await unCompteAidantConnecteViaProConnect({
         constructeurAidant: unAidant().sansCGUSignees().avecUnProfilGendarme(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -299,17 +286,11 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Retourne l’action valider signature CGU si l’utilisateur Inscrit proconnect ne les a pas signées', async () => {
-      const utilisateur = await unCompteUtilisateurInscritConnecteViaProConnect(
-        {
-          entrepotUtilisateurInscrit:
-            testeurMAC.entrepots.utilisateursInscrits(),
-          constructeurUtilisateur: unUtilisateurInscrit().sansValidationDeCGU(),
-          adaptateurDeVerificationDeSession,
-        }
-      );
-      adaptateurDeVerificationDeSession.utilisateurProConnect(
-        utilisateur.identifiant
-      );
+      await unCompteUtilisateurInscritConnecteViaProConnect({
+        entrepotUtilisateurInscrit: testeurMAC.entrepots.utilisateursInscrits(),
+        constructeurUtilisateur: unUtilisateurInscrit().sansValidationDeCGU(),
+        adaptateurDeVerificationDeSession,
+      });
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -345,7 +326,11 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it("retourne une erreur HTTP 404 si l'utilisateur n'est pas connu", async () => {
-      adaptateurDeVerificationDeSession.reinitialise();
+      await unAidantConnecteInconnu({
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
@@ -412,17 +397,15 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
 
       it('Retourne les actions pour valider les profils Aidant et Utilisateur Inscrit', async () => {
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           constructeurAidant: unAidant().cguValideesLe(
             new Date(Date.parse('2024-12-13T10:24:31'))
           ),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -508,7 +491,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
     it('Retourne une réponse ACCEPTED', async () => {
       const utilisateur = unUtilisateur().construis();
-      testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
+      await testeurMAC.entrepots.utilisateurs().persiste(utilisateur);
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -703,15 +686,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     describe('Dans le cas d’un Aidant', () => {
       it('Ajoute la date de signature des CGU', async () => {
         FournisseurHorlogeDeTest.initialise(new Date());
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        const aidant = await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           constructeurAidant: unAidant().sansCGUSignees(),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -725,22 +706,20 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         expect(reponse.statusCode).toBe(200);
         const aidantModifie = await testeurMAC.entrepots
           .aidants()
-          .lis(utilisateur.identifiant);
+          .lis(aidant.identifiant);
         expect(aidantModifie.dateSignatureCGU).toStrictEqual(
           FournisseurHorloge.maintenant()
         );
       });
 
       it("Accepte la requête et renvoie les actions possibles pour l'Aidant", async () => {
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           constructeurAidant: unAidant().sansCGUSignees(),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -779,15 +758,12 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
 
       it("Accepte la requête et renvoie les actions possibles pour l'Aidant connecté via ProConnect", async () => {
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
-          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        await unCompteAidantConnecteViaProConnect({
           constructeurAidant: unAidant().sansCGUSignees(),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurProConnect(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -807,15 +783,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
       it('Vérifie la présence de la date de signature des CGU', async () => {
         FournisseurHorlogeDeTest.initialise(new Date());
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           constructeurAidant: unAidant().sansCGUSignees(),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -842,18 +816,15 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     describe('Dans le cas d’un Utilisateur Inscrit', () => {
       it('Ajoute la date de signature des CGU', async () => {
         FournisseurHorlogeDeTest.initialise(new Date());
-        const { utilisateur } =
-          await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
-            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-            constructeurUtilisateurInscrit:
+        const utilisateur =
+          await unCompteUtilisateurInscritConnecteViaProConnect({
+            constructeurUtilisateur:
               unUtilisateurInscrit().sansValidationDeCGU(),
             entrepotUtilisateurInscrit:
               testeurMAC.entrepots.utilisateursInscrits(),
-            constructeurUtilisateur: unUtilisateur(),
+            adaptateurDeVerificationDeSession:
+              testeurMAC.adaptateurDeVerificationDeSession,
           });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -874,18 +845,16 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       });
 
       it("Accepte la requête et renvoie les actions possibles pour l'Utilisateur Inscrit", async () => {
-        const { utilisateur } =
-          await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
-            entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-            constructeurUtilisateurInscrit:
-              unUtilisateurInscrit().sansValidationDeCGU(),
-            entrepotUtilisateurInscrit:
-              testeurMAC.entrepots.utilisateursInscrits(),
-            constructeurUtilisateur: unUtilisateur(),
-          });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
+        await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurUtilisateurInscrit:
+            unUtilisateurInscrit().sansValidationDeCGU(),
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          constructeurUtilisateur: unUtilisateur(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
+        });
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -974,17 +943,15 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Accepte la requête et retourne les actions possibles', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         constructeurAidant: unAidant().cguValideesLe(
           new Date(Date.parse('2024-04-12T12:34:54'))
         ),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -1031,18 +998,15 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Met à jour l’Aidant', async () => {
-      const { utilisateur, aidant } =
-        await unCompteAidantRelieAUnCompteUtilisateur({
-          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-          constructeurAidant: unAidant().cguValideesLe(
-            new Date(Date.parse('2024-04-12T12:34:54'))
-          ),
-          entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
-        });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
+      const aidant = await unCompteAidantConnecte({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().cguValideesLe(
+          new Date(Date.parse('2024-04-12T12:34:54'))
+        ),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
 
       await executeRequete(
         donneesServeur.app,
@@ -1084,15 +1048,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
     it('Vérifie la présence des CGU validées', async () => {
       FournisseurHorlogeDeTest.initialise(new Date());
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         constructeurAidant: unAidant().sansCGUSignees(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -1131,15 +1093,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
     it('Vérifie la présence de la signature de la charte Aidant', async () => {
       FournisseurHorlogeDeTest.initialise(new Date());
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         constructeurAidant: unAidant().sansCGUSignees(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -1173,15 +1133,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       "S'assure de la validité de l'entité [Pour %s - %s en %s] fournie (",
       async (nomEntite, siretEntite, typeEntite, codeHttpRetour) => {
         FournisseurHorlogeDeTest.initialise(new Date());
-        const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+        await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
           constructeurAidant: unAidant().sansCGUSignees(),
           entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurUtilisateur: unUtilisateur(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
         });
-        testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-          utilisateur.identifiant
-        );
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -1204,15 +1162,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
     it("Vérifie la cohérence du message d'erreur", async () => {
       FournisseurHorlogeDeTest.initialise(new Date());
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         constructeurAidant: unAidant().sansCGUSignees(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -1275,15 +1231,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Accepte la requête et retourne les actions possibles', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      await unCompteAidantConnecte({
         entrepotAidant: testeurMAC.entrepots.aidants(),
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         constructeurAidant: unAidant().sansCGUSignees(),
-        constructeurUtilisateur: unUtilisateur().sansCGUSignees(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -1331,17 +1285,15 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
     });
 
     it('Transforme un Aidant en Utilisateur Inscrit', async () => {
-      const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
+      const aidant = await unCompteAidantConnecte({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         constructeurAidant: unAidant().cguValideesLe(
           new Date(Date.parse('2024-04-12T12:34:54'))
         ),
         entrepotAidant: testeurMAC.entrepots.aidants(),
-        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
       });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
 
       await executeRequete(
         donneesServeur.app,
@@ -1354,7 +1306,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
       const utilisateurInscrit = await testeurMAC.entrepots
         .utilisateursInscrits()
-        .lis(utilisateur.identifiant);
+        .lis(aidant.identifiant);
 
       expect(utilisateurInscrit).toStrictEqual<UtilisateurInscrit>({
         identifiant: expect.any(String),
@@ -1366,18 +1318,15 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
     it('Vérifie la présence des CGU validées', async () => {
       FournisseurHorlogeDeTest.initialise(new Date());
-      const { utilisateur } =
-        await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
-          entrepotUtilisateurInscrit:
-            testeurMAC.entrepots.utilisateursInscrits(),
-          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-          constructeurUtilisateurInscrit:
-            unUtilisateurInscrit().sansValidationDeCGU(),
-          constructeurUtilisateur: unUtilisateur(),
-        });
-      testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
-        utilisateur.identifiant
-      );
+      await unCompteUtilisateurInscritRelieAUnCompteUtilisateur({
+        entrepotUtilisateurInscrit: testeurMAC.entrepots.utilisateursInscrits(),
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurUtilisateurInscrit:
+          unUtilisateurInscrit().sansValidationDeCGU(),
+        constructeurUtilisateur: unUtilisateur(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
 
       const reponse = await executeRequete(
         donneesServeur.app,
