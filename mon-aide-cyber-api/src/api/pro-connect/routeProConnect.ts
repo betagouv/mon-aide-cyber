@@ -164,20 +164,10 @@ export const routesProConnect = (configuration: ConfigurationServeur) => {
           ...(siret && { siret: siret }),
         });
 
-        const featureFlagAiguillage = process.env.AIGUILLAGE_INSCRIPTION;
-
-        if (featureFlagAiguillage === 'true') {
-          return redirige(
-            idToken,
-            espaceUtilisateurInscritCree.identifiant,
-            '/mon-espace/inscription'
-          );
-        }
-
         return redirige(
           idToken,
           espaceUtilisateurInscritCree.identifiant,
-          '/mon-espace/valide-signature-cgu'
+          '/mon-espace/inscription'
         );
       } catch (e: unknown | Error) {
         return suite(

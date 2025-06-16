@@ -403,7 +403,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
           );
 
           expect(reponse.headers['location']).toStrictEqual(
-            '/mon-espace/valide-signature-cgu'
+            '/mon-espace/inscription'
           );
           expect(
             await testeurMAC.entrepots.utilisateursInscrits().tous()
@@ -424,7 +424,7 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
           );
 
           expect(reponse.headers['location']).toStrictEqual(
-            '/mon-espace/valide-signature-cgu'
+            '/mon-espace/inscription'
           );
           expect(
             (await testeurMAC.entrepots.utilisateursInscrits().tous())[0].email
