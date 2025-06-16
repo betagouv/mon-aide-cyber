@@ -16,8 +16,7 @@ import {
   requeteTelechargementRestitution,
   useRestitution,
 } from './useRestitution.ts';
-import { Toast } from '../../communs/Toasts/Toast.tsx';
-import { ReactElement, useState } from 'react';
+import { useToast } from '../../../fournisseurs/ToastProvider/FournisseurDeToast.tsx';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -31,7 +30,7 @@ export const ComposantRestitution = ({
   const { etatRestitution, navigueVersTableauDeBord, modifierLeDiagnostic } =
     useComposantRestitution(idDiagnostic, type === 'libre-acces');
 
-  const [toast, setToast] = useState<ReactElement | undefined>(undefined);
+  const toaster = useToast();
 
   const { accedeALaRessource: peutRetournerAuTableauDeBord } =
     useMoteurDeLiens('lancer-diagnostic');
@@ -57,7 +56,7 @@ export const ComposantRestitution = ({
     enAttenteRestitution: boutonEnvoyerDiagnosticAEntiteAideeDesactive,
   } = useRestitution<void>(
     requeteEnvoyerRestitutionEntiteAidee(idDiagnostic, (reponse) => {
-      setToast(<Toast message={reponse} type="SUCCES" />);
+      toaster.success(reponse);
     })
   );
 
@@ -72,7 +71,6 @@ export const ComposantRestitution = ({
         <HeaderEspaceAidant />
       )}
       <main role="main" className="restitution">
-        {toast}
         {type !== 'libre-acces' ? (
           <div className="mode-fonce fr-pt-md-4w fr-pb-md-8w">
             <div className="fr-container">

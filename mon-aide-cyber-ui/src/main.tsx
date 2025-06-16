@@ -13,6 +13,7 @@ import { RouteurPublic } from './RouteurPublic.tsx';
 import { FournisseurUtilisateur } from './fournisseurs/ContexteUtilisateur.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { VisualiseurDeNavigationHATEOAS } from './domaine/hateoas/VisualiseurDeNavigationHATEOAS.tsx';
+import { FournisseurDeToast } from './fournisseurs/ToastProvider/FournisseurDeToast.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,13 +34,15 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <FournisseurNavigationMAC>
             <FournisseurUtilisateur>
               <ErrorBoundary FallbackComponent={ComposantAffichageErreur}>
-                <PortailModale>
-                  <RouteurPublic />
-                  <RouteurPrive />
-                  {afficheLeDebugHATEOAS ? (
-                    <VisualiseurDeNavigationHATEOAS />
-                  ) : null}
-                </PortailModale>
+                <FournisseurDeToast>
+                  <PortailModale>
+                    <RouteurPublic />
+                    <RouteurPrive />
+                    {afficheLeDebugHATEOAS ? (
+                      <VisualiseurDeNavigationHATEOAS />
+                    ) : null}
+                  </PortailModale>
+                </FournisseurDeToast>
               </ErrorBoundary>
             </FournisseurUtilisateur>
           </FournisseurNavigationMAC>
