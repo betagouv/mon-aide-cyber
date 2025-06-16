@@ -27,7 +27,13 @@ export const HeaderRestitution = ({
   const navigationMAC = useNavigationMAC();
 
   const { demanderRestitution, enAttenteRestitution } = useRestitution(
-    requeteTelechargementRestitution(idDiagnostic)
+    requeteTelechargementRestitution(idDiagnostic, (blob) => {
+      const fichier = URL.createObjectURL(blob);
+      const lien = document.createElement('a');
+      lien.href = fichier;
+      lien.download = `restitution-${idDiagnostic}.pdf`;
+      lien.click();
+    })
   );
 
   const modifierLeDiagnostic = useCallback(() => {

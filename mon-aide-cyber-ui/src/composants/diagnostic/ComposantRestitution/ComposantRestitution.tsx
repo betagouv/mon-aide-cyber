@@ -11,6 +11,13 @@ import { useMoteurDeLiens } from '../../../hooks/useMoteurDeLiens.ts';
 import { HeaderRestitution } from './HeaderRestitution.tsx';
 import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
 import './restitution.scss';
+import {
+  requeteEnvoyerRestitutionEntiteAidee,
+  requeteTelechargementRestitution,
+  useRestitution,
+} from './useRestitution.ts';
+import { Toast } from '../../communs/Toasts/Toast.tsx';
+import { ReactElement, useState } from 'react';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -21,21 +28,38 @@ export const ComposantRestitution = ({
   idDiagnostic,
   type,
 }: ProprietesComposantRestitution) => {
-  const {
-    etatRestitution,
-    navigueVersTableauDeBord,
-    demanderRestitution,
-    boutonDemanderRestitutionDesactive,
-    envoyerDiagnosticAEntiteAidee,
-    boutonEnvoyerDiagnosticAEntiteAideeDesactive,
-    modifierLeDiagnostic,
-  } = useComposantRestitution(idDiagnostic, type === 'libre-acces');
+  const { etatRestitution, navigueVersTableauDeBord, modifierLeDiagnostic } =
+    useComposantRestitution(idDiagnostic, type === 'libre-acces');
+
+  const [toast, setToast] = useState<ReactElement | undefined>(undefined);
 
   const { accedeALaRessource: peutRetournerAuTableauDeBord } =
     useMoteurDeLiens('lancer-diagnostic');
 
   const { accedeALaRessource: peutEnvoyerLaRestitutionAEntiteAidee } =
     useMoteurDeLiens('envoyer-restitution-entite-aidee');
+
+  const {
+    demanderRestitution,
+    enAttenteRestitution: boutonDemanderRestitutionDesactive,
+  } = useRestitution<Blob>(
+    requeteTelechargementRestitution(idDiagnostic, (blob) => {
+      const fichier = URL.createObjectURL(blob);
+      const lien = document.createElement('a');
+      lien.href = fichier;
+      lien.download = `restitution-${idDiagnostic}.pdf`;
+      lien.click();
+    })
+  );
+
+  const {
+    demanderRestitution: envoyerDiagnosticAEntiteAidee,
+    enAttenteRestitution: boutonEnvoyerDiagnosticAEntiteAideeDesactive,
+  } = useRestitution<void>(
+    requeteEnvoyerRestitutionEntiteAidee(idDiagnostic, (reponse) => {
+      setToast(<Toast message={reponse} type="SUCCES" />);
+    })
+  );
 
   return (
     <>
@@ -48,6 +72,7 @@ export const ComposantRestitution = ({
         <HeaderEspaceAidant />
       )}
       <main role="main" className="restitution">
+        {toast}
         {type !== 'libre-acces' ? (
           <div className="mode-fonce fr-pt-md-4w fr-pb-md-8w">
             <div className="fr-container">
