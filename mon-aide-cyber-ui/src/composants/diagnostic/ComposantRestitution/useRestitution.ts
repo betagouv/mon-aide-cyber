@@ -45,16 +45,20 @@ export const useRestitution = <T>(
           .construis();
         return configurationRequete.execute(macAPI, parametresAPI);
       },
-      onSuccess: (blob) => {
-        configurationRequete.surSuccesExecution?.(blob);
+      onSuccess: (reponse) => {
+        configurationRequete.surSuccesExecution?.(reponse);
       },
     });
 
-  return { demanderRestitution: demanderRestitution, enAttenteRestitution };
+  return {
+    demanderRestitution: demanderRestitution,
+    enAttenteRestitution,
+  };
 };
 
 export const requeteTelechargementRestitution = (
-  idDiagnostic: crypto.UUID
+  idDiagnostic: crypto.UUID,
+  succes: (reponse: Blob) => void
 ): ConfigurationRequeteRestitution<Blob> => ({
   identifiantDiagnostic: idDiagnostic,
   nom: 'telecharger-restitution',
@@ -63,22 +67,20 @@ export const requeteTelechargementRestitution = (
     return macAPI.execute<Blob, Blob>(parametresAPI, (blob) => blob);
   },
   surSuccesExecution: (blob: Blob): void => {
-    const fichier = URL.createObjectURL(blob);
-    const lien = document.createElement('a');
-    lien.href = fichier;
-    lien.download = `restitution-${idDiagnostic}.pdf`;
-    lien.click();
+    succes(blob);
   },
 });
 
 export const requeteEnvoyerRestitutionEntiteAidee = (
-  idDiagnostic: UUID
+  idDiagnostic: UUID,
+  succes: (reponse: string) => void
 ): ConfigurationRequeteRestitution<void> => ({
   identifiantDiagnostic: idDiagnostic,
   action: 'envoyer-restitution-entite-aidee',
   execute: (macAPI: MACAPIType, parametresAPI: ParametresAPI): Promise<void> =>
-    macAPI.execute<void, void>(parametresAPI, async () => {
-      return;
-    }),
+    macAPI.execute<void, void>(parametresAPI, () => Promise.resolve()),
   nom: 'envoyer-restitution',
+  surSuccesExecution: () => {
+    succes('La restitution a bien été envoyée à l’aidé par mail');
+  },
 });
