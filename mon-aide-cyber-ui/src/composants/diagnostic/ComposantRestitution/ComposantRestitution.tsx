@@ -10,9 +10,6 @@ import Button from '../../atomes/Button/Button.tsx';
 import { useMoteurDeLiens } from '../../../hooks/useMoteurDeLiens.ts';
 import { HeaderRestitution } from './HeaderRestitution.tsx';
 import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
-import { ReactElement, useEffect, useState } from 'react';
-import { useNavigationMAC } from '../../../fournisseurs/hooks.ts';
-import { MoteurDeLiens } from '../../../domaine/MoteurDeLiens.ts';
 import './restitution.scss';
 
 type ProprietesComposantRestitution = {
@@ -24,7 +21,6 @@ export const ComposantRestitution = ({
   idDiagnostic,
   type,
 }: ProprietesComposantRestitution) => {
-  const navigationMAC = useNavigationMAC();
   const {
     etatRestitution,
     navigueVersTableauDeBord,
@@ -35,50 +31,11 @@ export const ComposantRestitution = ({
     modifierLeDiagnostic,
   } = useComposantRestitution(idDiagnostic, type === 'libre-acces');
 
-  const [boutonRestitution, setBoutonRestitution] = useState<
-    ReactElement | undefined
-  >(undefined);
-
   const { accedeALaRessource: peutRetournerAuTableauDeBord } =
     useMoteurDeLiens('lancer-diagnostic');
 
-  useEffect(() => {
-    const telechargerLaRestitution = new MoteurDeLiens(
-      navigationMAC.etat
-    ).trouveEtRenvoie('restitution-pdf');
-
-    if (telechargerLaRestitution) {
-      setBoutonRestitution(
-        <Button
-          type="button"
-          variant="primary"
-          className={`fr-btn--icon-left  fr-icon-download-line bouton-mac bouton-mac-primaire-inverse`}
-          onClick={() => demanderRestitution()}
-          disabled={boutonDemanderRestitutionDesactive}
-        >
-          Télécharger
-        </Button>
-      );
-    }
-
-    const envoyerLaRestitution = new MoteurDeLiens(
-      navigationMAC.etat
-    ).trouveEtRenvoie('envoyer-restitution-entite-aidee');
-    if (envoyerLaRestitution) {
-      setBoutonRestitution(
-        <Button
-          type="button"
-          variant="primary"
-          className={`bouton-mac bouton-mac-primaire-inverse`}
-          onClick={() => envoyerDiagnosticAEntiteAidee()}
-          disabled={boutonEnvoyerDiagnosticAEntiteAideeDesactive}
-        >
-          <i className="envoi-mail"></i>
-          <span>Envoyer la restitution à l’Aidé</span>
-        </Button>
-      );
-    }
-  }, [navigationMAC]);
+  const { accedeALaRessource: peutEnvoyerLaRestitutionAEntiteAidee } =
+    useMoteurDeLiens('envoyer-restitution-entite-aidee');
 
   return (
     <>
@@ -123,7 +80,30 @@ export const ComposantRestitution = ({
                     Modifier le diagnostic
                   </button>
                 </div>
-                <div className="fr-pl-2w">{boutonRestitution}</div>
+                <div className="fr-pl-2w">
+                  {peutEnvoyerLaRestitutionAEntiteAidee ? (
+                    <Button
+                      type="button"
+                      variant="primary"
+                      className={`bouton-mac bouton-mac-primaire-inverse`}
+                      onClick={() => envoyerDiagnosticAEntiteAidee()}
+                      disabled={boutonEnvoyerDiagnosticAEntiteAideeDesactive}
+                    >
+                      <i className="envoi-mail"></i>
+                      <span>Envoyer la restitution à l’Aidé</span>
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="primary"
+                      className={`fr-btn--icon-left  fr-icon-download-line bouton-mac bouton-mac-primaire-inverse`}
+                      onClick={() => demanderRestitution()}
+                      disabled={boutonDemanderRestitutionDesactive}
+                    >
+                      Télécharger
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
