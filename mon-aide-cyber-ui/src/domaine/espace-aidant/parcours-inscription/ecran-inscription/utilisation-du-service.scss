@@ -1,4 +1,4 @@
-@import '../../../../../assets/styles/points-de-rupture';
+@import '../../../../assets/styles/points-de-rupture';
 
 .utilisation-du-service {
   display: grid;
@@ -43,6 +43,7 @@
   .formulaire-colonne-gauche {
     grid-area: formulaire-gauche;
   }
+
   .formulaire-colonne-droite {
     grid-area: formulaire-droite;
   }
@@ -74,6 +75,7 @@
       padding-top: 1.5rem;
       padding-bottom: 1.5rem;
     }
+
     .mac-callout {
       padding: 1rem;
 
@@ -180,6 +182,7 @@
 
         &:has(input[type="radio"]:checked) {
           border: 2px solid var(--couleurs-mac-violet-fonce);
+
           .selecteur-type-aidant-saisie-entite {
             display: flex;
             flex-direction: column;
