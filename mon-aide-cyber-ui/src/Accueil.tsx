@@ -114,7 +114,7 @@ export const Accueil = () => {
         })}
         actiongauche={JSON.stringify({
           titre: 'Devenir Aidant cyber',
-          lien: '/realiser-des-diagnostics-anssi',
+          lien: '/inscription',
         })}
         actiondroite={JSON.stringify({
           titre: 'Bénéficier d‘un diagnostic cyber',
@@ -144,7 +144,7 @@ export const Accueil = () => {
         etapesmarelle={JSON.stringify(etapesMarelle)}
         action={JSON.stringify({
           titre: 'Devenir Aidant cyber',
-          lien: '/realiser-des-diagnostics-anssi#formulaire-formation',
+          lien: '/inscription',
         })}
       ></lab-anssi-marelle>
 
