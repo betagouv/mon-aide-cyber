@@ -1,4 +1,5 @@
 import ChoixUtilisationDuService from './composants/ChoixUtilisationDuService.tsx';
+import './utilisation-du-service.scss';
 
 const EcranMonEspaceInscription = () => {
   return (
