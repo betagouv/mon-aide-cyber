@@ -1,0 +1,19 @@
+.toast {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 1s ease-out;
+
+  display: flex;
+  padding: 1rem 1.5rem;
+  align-items: center;
+}
+
+.apparait {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.disparait {
+  opacity: 0;
+  transform: translateX(100%);
+}
