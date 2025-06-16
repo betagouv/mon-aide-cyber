@@ -1,6 +1,6 @@
 import { Accueil } from './Accueil.tsx';
 import './assets/styles/index.scss';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { ComposantIntercepteur } from './composants/intercepteurs/ComposantIntercepteur.tsx';
 import { EcranCharteAidant } from './vues/EcranCharteAidant.tsx';
 import { ComposantCGU } from './vues/ComposantCGU.tsx';
@@ -79,7 +79,7 @@ export const RouteurPublic = () => {
         />
         <Route
           path="realiser-des-diagnostics-anssi"
-          element={<EcranConnexion />}
+          element={<Navigate to="/inscription" />}
         />
         <Route path="mentions-legales" element={<MentionsLegales />} />
       </Route>
