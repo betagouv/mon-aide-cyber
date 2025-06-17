@@ -31,7 +31,10 @@ import { demandeInitieDiagnosticLibreAcces } from '../diagnostic-libre-acces/con
 import { fabriqueEntrepots } from './fabriqueEntrepots';
 import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { utilisateurInscritInitieDiagnostic } from '../espace-utilisateur-inscrit/tableau-de-bord/consommateursEvenements';
-import { entiteAideeBeneficieDiagnostic } from '../diagnostic/consommateursEvenements';
+import {
+  entiteAideeBeneficieDiagnostic,
+  restitutionEnvoyee,
+} from '../diagnostic/consommateursEvenements';
 import { adaptateurRepertoireDeContacts } from './adaptateurRepertoireDeContacts';
 
 const fabriqueEntrepotJournalisation = () => {
@@ -53,6 +56,10 @@ export const fabriqueConsommateursEvenements = (
 ): Map<TypeEvenement, ConsommateurEvenement[]> => {
   return new Map<TypeEvenement, ConsommateurEvenement[]>([
     ['RESTITUTION_LANCEE', [restitutionLancee(entrepotJournalisation)]],
+    [
+      'RESTITUTION_ENVOYEE',
+      [restitutionEnvoyee(adaptateurRepertoireDeContacts())],
+    ],
     [
       'DIAGNOSTIC_LANCE',
       [

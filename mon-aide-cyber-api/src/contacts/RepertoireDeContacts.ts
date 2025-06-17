@@ -5,7 +5,9 @@ export interface RepertoireDeContacts {
   emetsEvenement(evenement: Evenement): Promise<void>;
 }
 
+export type TypeEvenement = 'DIAGNOSTIC_DEMARRE' | 'RESTITUTION_ENVOYEE';
+
 export type Evenement = {
   email: string;
-  type: 'DIAGNOSTIC_DEMARRE';
+  type: TypeEvenement;
 };
