@@ -1,18 +1,18 @@
 import { HTMLAttributes } from 'react';
 
-export type ProprietesToast = {
+export type ProprietesAlerte = {
   message: string;
   type: 'SUCCES' | 'ERREUR' | 'ATTENTION' | 'INFO';
 } & HTMLAttributes<HTMLDivElement>;
 
-export const Toast = ({
+export const Alerte = ({
   message,
   type,
   ...proprietesRestantes
-}: ProprietesToast) => {
+}: ProprietesAlerte) => {
   const { className } = proprietesRestantes;
 
-  const toastParType = {
+  const alerteParType = {
     SUCCES: {
       className: 'succes',
       icone: 'fr-icon-success-fill',
@@ -32,19 +32,19 @@ export const Toast = ({
   };
 
   if (!type) return null;
-  const toastAAfficher = toastParType[type];
+  const alerteAAfficher = alerteParType[type];
 
   const classesAConcatener = [
     className ? `${className}` : null,
     'mac-callout',
-    toastAAfficher.className,
+    alerteAAfficher.className,
   ];
   const classNameEntier = classesAConcatener.join(' ');
 
   return (
     <div {...proprietesRestantes} className={classNameEntier}>
       <div>
-        <i className={toastAAfficher.icone} aria-hidden="true"></i>
+        <i className={alerteAAfficher.icone} aria-hidden="true"></i>
       </div>
       <div>{message}</div>
     </div>

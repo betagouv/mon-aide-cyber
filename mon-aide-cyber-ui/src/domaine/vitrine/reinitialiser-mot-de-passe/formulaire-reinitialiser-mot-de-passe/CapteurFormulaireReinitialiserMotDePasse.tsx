@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { MoteurDeLiens } from '../../../MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useNavigate } from 'react-router-dom';
-import { Toast } from '../../../../composants/communs/Toasts/Toast.tsx';
+import { Alerte } from '../../../../composants/communs/messages/Alerte.tsx';
 
 export type CorpsReinitialiserMotDePasse = {
   token: string;
@@ -69,7 +69,7 @@ export const CapteurFormulaireReinitialiserMotDePasse = ({
 
   return (
     <FormulaireReinitialiserMotDePasse surSoumission={mutate}>
-      {isError ? <Toast message={error.message} type="ERREUR" /> : null}
+      {isError ? <Alerte message={error.message} type="ERREUR" /> : null}
     </FormulaireReinitialiserMotDePasse>
   );
 };

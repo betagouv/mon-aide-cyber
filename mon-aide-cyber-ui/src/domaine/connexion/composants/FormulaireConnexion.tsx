@@ -1,4 +1,4 @@
-import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
+import { Alerte } from '../../../composants/communs/messages/Alerte.tsx';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 import { FormulaireAuthentification } from '../../authentification/FormulaireAuthentification.tsx';
 import { useSearchParams } from 'react-router-dom';
@@ -37,7 +37,7 @@ export const FormulaireConnexion = () => {
 
       {erreursRetourPostLogin ? (
         <div>
-          <Toast message={erreursRetourPostLogin} type="ERREUR" />
+          <Alerte message={erreursRetourPostLogin} type="ERREUR" />
         </div>
       ) : null}
 

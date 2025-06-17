@@ -27,7 +27,7 @@ import { SignatureCGU } from '../../../gestion-demandes/parcours-aidant/Signatur
 import { FormulaireDevenirAidant } from '../../../gestion-demandes/devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import Button from '../../../../composants/atomes/Button/Button.tsx';
-import { Toast } from '../../../../composants/communs/Toasts/Toast.tsx';
+import { Alerte } from '../../../../composants/communs/messages/Alerte.tsx';
 import illustrationSuivi from '../../../../../public/images/illustration-suivi.svg';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
 import { LienMailtoMAC } from '../../../../composants/atomes/LienMailtoMAC.tsx';
@@ -223,7 +223,7 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
           </FormulaireDevenirAidant.Formulaire>
 
           {mutationEnErreur ? (
-            <Toast message={erreur.message} type="ERREUR" />
+            <Alerte message={erreur.message} type="ERREUR" />
           ) : null}
         </FormulaireDevenirAidant>
       </div>,

@@ -4,7 +4,7 @@ import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereCont
 import { useMutation } from '@tanstack/react-query';
 import { MoteurDeLiens } from '../../../MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { Toast } from '../../../../composants/communs/Toasts/Toast.tsx';
+import { Alerte } from '../../../../composants/communs/messages/Alerte.tsx';
 import { FormulaireMotDePasseOublie } from './FormulaireMotDePasseOublie.tsx';
 
 export type CorpsMotDePasseOublie = {
@@ -49,7 +49,7 @@ export const CapteurFormulaireMotDePasseOublie = () => {
 
   if (isPending)
     return (
-      <Toast
+      <Alerte
         className="w-100"
         type="INFO"
         message="Traitement de votre demande en cours"
@@ -57,7 +57,7 @@ export const CapteurFormulaireMotDePasseOublie = () => {
     );
 
   if (isError)
-    return <Toast className="w-100" type="ERREUR" message={error.message} />;
+    return <Alerte className="w-100" type="ERREUR" message={error.message} />;
 
   if (isSuccess)
     return (

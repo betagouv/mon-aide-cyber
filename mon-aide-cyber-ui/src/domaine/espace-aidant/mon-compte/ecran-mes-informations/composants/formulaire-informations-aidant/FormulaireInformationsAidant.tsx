@@ -7,7 +7,7 @@ import {
 import { useFormulaireInformationsAidant } from './useFormulaireInformationsAidant';
 import Button from '../../../../../../composants/atomes/Button/Button';
 import { ChampCaseACocher } from '../../../../../../composants/communs/ChampCaseACocher/ChampCaseACocher';
-import { Toast } from '../../../../../../composants/communs/Toasts/Toast';
+import { Alerte } from '../../../../../../composants/communs/messages/Alerte.tsx';
 import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI.ts';
 import { useMoteurDeLiens } from '../../../../../../hooks/useMoteurDeLiens.ts';
 import { FormatAffichageAnnuaire } from './FormatAffichageAnnuaire.tsx';
@@ -32,7 +32,7 @@ export const FormulaireInformationsAidant = ({
   const enregistreProfilAidant = () => {
     enregistreProfil(() => {
       setMessageEnregistrementProfilAidant(
-        <Toast
+        <Alerte
           className="w-fit"
           message="Vos informations ont bien été enregistrées"
           type="INFO"
@@ -43,7 +43,7 @@ export const FormulaireInformationsAidant = ({
       }, 10000);
       () => {
         setMessageEnregistrementProfilAidant(
-          <Toast
+          <Alerte
             className="w-fit"
             message="Une erreur est survenue lors de l'enregistrement de vos informations"
             type="ERREUR"

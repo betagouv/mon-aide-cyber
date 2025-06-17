@@ -3,7 +3,7 @@ import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useMutation } from '@tanstack/react-query';
 import { MoteurDeLiens } from '../../MoteurDeLiens.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
-import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
+import { Alerte } from '../../../composants/communs/messages/Alerte.tsx';
 import {
   FormulaireDemandeAutodiagnostic,
   TypeFormulaireSaisieEmail,
@@ -53,7 +53,7 @@ export const CapteurFormulaireDemandeAutodiagnostic = () => {
 
   if (isPending)
     return (
-      <Toast
+      <Alerte
         className="w-100"
         type="INFO"
         message="Traitement de votre demande en cours"
@@ -61,7 +61,7 @@ export const CapteurFormulaireDemandeAutodiagnostic = () => {
     );
 
   if (isError)
-    return <Toast className="w-100" type="ERREUR" message={error.message} />;
+    return <Alerte className="w-100" type="ERREUR" message={error.message} />;
 
   return <FormulaireDemandeAutodiagnostic surSoumission={mutate} />;
 };
