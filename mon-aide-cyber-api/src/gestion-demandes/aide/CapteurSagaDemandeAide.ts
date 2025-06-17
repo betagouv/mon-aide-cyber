@@ -47,6 +47,7 @@ export type SagaDemandeAide = Saga & {
   relationUtilisateur?: string;
   identifiantAidant?: crypto.UUID;
   siret: string;
+  origine?: string;
 };
 
 export type DemandeAideCree<
@@ -57,6 +58,7 @@ export type DemandeAideCree<
   identifiantAide: crypto.UUID;
   departement: string;
   miseEnRelation: T;
+  origine: string;
 }>;
 
 const rechercheUtilisateurMAC = async (
@@ -161,6 +163,8 @@ export class CapteurSagaDemandeAide
             typeEntite: entreprise.typeEntite,
           });
 
+          const origine = saga.origine ?? 'inconnue';
+
           await this.busEvenement.publie<DemandeAideCree<typeof resultat>>({
             identifiant: aide.identifiant,
             type: 'AIDE_CREE',
@@ -169,6 +173,7 @@ export class CapteurSagaDemandeAide
               identifiantAide: aide.identifiant,
               departement: saga.departement.code,
               miseEnRelation: resultat,
+              origine,
             },
           });
         });

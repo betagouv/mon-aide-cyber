@@ -118,6 +118,7 @@ export const routesAPIDemandeEtreAide = (
             identifiantAidant: corpsRequete.identifiantAidant,
           }),
           siret: corpsRequete.siret,
+          ...(corpsRequete.origine && { origine: corpsRequete.origine }),
         };
         return configuration.busCommande
           .publie(saga)
