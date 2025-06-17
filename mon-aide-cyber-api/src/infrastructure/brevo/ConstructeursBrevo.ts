@@ -10,6 +10,7 @@ import {
   RequeteBrevo,
 } from '../adaptateurs/adaptateursRequeteBrevo';
 import { PieceJointe } from '../../adaptateurs/AdaptateurEnvoiMail';
+import { TypeEvenement } from '../../contacts/RepertoireDeContacts';
 
 abstract class ConstructeurBrevo<T> {
   constructor(private readonly methode: 'POST' | 'GET') {}
@@ -221,7 +222,7 @@ class ConstructeurBrevoRechercheContact extends ConstructeurBrevo<RechercheConta
 
 class ConstructeurBrevoCreationEvenement extends ConstructeurBrevo<CreationEvenement> {
   private email: Email = '';
-  private type = 'DIAGNOSTIC_DEMARRE' as const;
+  private type: TypeEvenement = 'DIAGNOSTIC_DEMARRE' as const;
 
   constructor() {
     super('POST');
@@ -232,9 +233,7 @@ class ConstructeurBrevoCreationEvenement extends ConstructeurBrevo<CreationEvene
     return this;
   }
 
-  ayantPourType(
-    type: 'DIAGNOSTIC_DEMARRE'
-  ): ConstructeurBrevoCreationEvenement {
+  ayantPourType(type: TypeEvenement): ConstructeurBrevoCreationEvenement {
     this.type = type;
     return this;
   }

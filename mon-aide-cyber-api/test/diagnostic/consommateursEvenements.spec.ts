@@ -3,11 +3,15 @@ import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/Entre
 import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMAC';
 import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import { entiteAideeBeneficieDiagnostic } from '../../src/diagnostic/consommateursEvenements';
+import {
+  entiteAideeBeneficieDiagnostic,
+  restitutionEnvoyee,
+} from '../../src/diagnostic/consommateursEvenements';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 import { Evenement } from '../../src/contacts/RepertoireDeContacts';
 import { Tuple } from '../../src/relation/Tuple';
 import { FauxServiceDeChiffrement } from '../infrastructure/securite/FauxServiceDeChiffrement';
+import { RestitutionEnvoyee } from '../../src/api/routesAPIDiagnostic';
 
 describe('Les consommateurs d’événements du diagnostic', () => {
   describe('Lorsque l’événement DIAGNOSTIC_LANCE est consommé', () => {
@@ -68,6 +72,29 @@ describe('Les consommateurs d’événements du diagnostic', () => {
       expect(repertoireDeContactsMemoire.evenements).toContainEqual<Evenement>({
         email: 'beta-gouv@beta.gouv.fr',
         type: 'DIAGNOSTIC_DEMARRE',
+      });
+    });
+  });
+
+  describe('Lorsque l’événement RESTITUTION_ENVOYE est consommé', () => {
+    it('Émet un événement dans le répertoire de contacts', async () => {
+      const repertoireDeContactsMemoire =
+        new AdaptateurRepertoireDeContactsMemoire();
+
+      await restitutionEnvoyee(
+        repertoireDeContactsMemoire
+      ).consomme<RestitutionEnvoyee>({
+        corps: {
+          emailEntiteAidee: 'beta-gouv@beta.gouv.fr',
+        },
+        identifiant: crypto.randomUUID(),
+        type: 'RESTITUTION_ENVOYEE',
+        date: FournisseurHorloge.maintenant(),
+      });
+
+      expect(repertoireDeContactsMemoire.evenements).toContainEqual<Evenement>({
+        email: 'beta-gouv@beta.gouv.fr',
+        type: 'RESTITUTION_ENVOYEE',
       });
     });
   });
