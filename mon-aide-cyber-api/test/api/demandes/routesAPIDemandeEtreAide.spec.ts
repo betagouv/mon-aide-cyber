@@ -500,6 +500,37 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             },
           });
         });
+
+        it("Transmet l'origine à l'événement", async () => {
+          await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/etre-aide',
+            {
+              cguValidees: true,
+              email: 'jean.dupont@aide.com',
+              departement: 'Bas-Rhin',
+              raisonSociale: 'NOM ENTITÉ',
+              siret: '12345678901234',
+              origine: 'origine',
+            }
+          );
+
+          expect(testeurMAC.busEvenement.evenementRecu?.corps).toStrictEqual({
+            identifiantAide: expect.any(String),
+            departement: '67',
+            miseEnRelation: {
+              type: 'PAR_CRITERES',
+              resultat: {
+                nombreAidants: 0,
+                typeEntite: expect.any(String),
+                secteursActivite: expect.any(Array),
+                departement: '67',
+              },
+            },
+            origine: 'origine',
+          });
+        });
       });
     });
 

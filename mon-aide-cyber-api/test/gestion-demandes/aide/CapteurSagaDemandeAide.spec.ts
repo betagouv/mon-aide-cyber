@@ -265,6 +265,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         type: 'AIDE_CREE',
         date: maintenant,
         corps: {
+          origine: 'inconnue',
           identifiantAide: aideRecu.identifiant,
           departement: '33',
           miseEnRelation: {
@@ -278,6 +279,66 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           },
         },
       });
+    });
+
+    it("Ajoute l'origine dans l'événement 'AIDE_CREE'", async () => {
+      const maintenant = new Date();
+      FournisseurHorlogeDeTest.initialise(maintenant);
+      const entrepots = new EntrepotsMemoire();
+      const busEvenement = new BusEvenementDeTest();
+
+      await fabriqueCapteur({ entrepots, busEvenement }).execute({
+        type: 'SagaDemandeAide',
+        cguValidees: true,
+        email: 'jean-dupont@email.com',
+        departement: gironde,
+        siret: '12345',
+        origine: 'mtm_campaign',
+      });
+
+      const aideRecu = (
+        await (entrepots.demandesAides() as EntrepotAideMemoire).tous()
+      )[0];
+      expect(busEvenement.evenementRecu).toStrictEqual<
+        DemandeAideCree<ResultatMiseEnRelation<ParCriteres>>
+      >({
+        identifiant: expect.any(String),
+        type: 'AIDE_CREE',
+        date: maintenant,
+        corps: {
+          identifiantAide: aideRecu.identifiant,
+          departement: '33',
+          origine: 'mtm_campaign',
+          miseEnRelation: {
+            type: 'PAR_CRITERES',
+            resultat: {
+              nombreAidants: 0,
+              typeEntite: '',
+              secteursActivite: [],
+              departement: '',
+            },
+          },
+        },
+      });
+    });
+
+    it("Ajoute origine 'inconnue' dans l'événement 'AIDE_CREE' lorsque l'origine n'est pas fournie", async () => {
+      const maintenant = new Date();
+      FournisseurHorlogeDeTest.initialise(maintenant);
+      const entrepots = new EntrepotsMemoire();
+      const busEvenement = new BusEvenementDeTest();
+
+      await fabriqueCapteur({ entrepots, busEvenement }).execute({
+        type: 'SagaDemandeAide',
+        cguValidees: true,
+        email: 'jean-dupont@email.com',
+        departement: gironde,
+        siret: '12345',
+      });
+
+      expect(
+        (busEvenement.evenementRecu?.corps as { origine: string }).origine
+      ).toBe('inconnue');
     });
 
     describe('Lorsque la validation des CGU a échoué', () => {
@@ -445,6 +506,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           type: 'AIDE_CREE',
           date: maintenant,
           corps: {
+            origine: 'inconnue',
             identifiantAide: aideRecu.identifiant,
             departement: '33',
             miseEnRelation: {
@@ -525,6 +587,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
           corps: {
             identifiantAide: aideRecu.identifiant,
             departement: '33',
+            origine: 'inconnue',
             miseEnRelation: {
               type: 'DIRECTE_UTILISATEUR_INSCRIT',
               resultat: {
@@ -672,6 +735,7 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
         corps: {
           identifiantAide: aideRecu.identifiant,
           departement: '33',
+          origine: 'inconnue',
           miseEnRelation: {
             type: 'PAR_CRITERES',
             resultat: {
