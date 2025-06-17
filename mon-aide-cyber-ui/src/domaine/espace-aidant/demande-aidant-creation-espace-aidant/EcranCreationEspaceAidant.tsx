@@ -17,7 +17,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
-import { Toast } from '../../../composants/communs/Toasts/Toast.tsx';
+import { Alerte } from '../../../composants/communs/messages/Alerte.tsx';
 
 export type CorpsCreationEspaceAidant = {
   cguSignees?: boolean;
@@ -128,7 +128,7 @@ export const EcranCreationEspaceAidant = ({
           </div>
           {isError ? (
             <div className="texte-centre">
-              <Toast className="w-100" type="ERREUR" message={error.message} />
+              <Alerte className="w-100" type="ERREUR" message={error.message} />
             </div>
           ) : null}
         </div>

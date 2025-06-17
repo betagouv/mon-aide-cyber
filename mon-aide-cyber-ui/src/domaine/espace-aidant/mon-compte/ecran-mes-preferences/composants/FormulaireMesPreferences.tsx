@@ -6,7 +6,7 @@ import {
   cocheToutesLesPreferences,
   decocheToutesLesPreferences,
 } from './reducteurPreferences';
-import { Toast } from '../../../../../composants/communs/Toasts/Toast.tsx';
+import { Alerte } from '../../../../../composants/communs/messages/Alerte.tsx';
 import { ChampCaseACocher } from '../../../../../composants/communs/ChampCaseACocher/ChampCaseACocher.tsx';
 import { useFormulaireMesPreferences } from './FormulaireMesPreferences/useFormulaireMesPreferences.ts';
 
@@ -40,7 +40,7 @@ export const FormulaireMesPreferences = () => {
       },
       () => {
         setMessageEnregistrementTypesEntite(
-          <Toast
+          <Alerte
             className="w-fit"
             message="Vos types d'entité ont bien été enregistrés !"
             type="INFO"
@@ -52,7 +52,7 @@ export const FormulaireMesPreferences = () => {
       },
       () => {
         setMessageEnregistrementTypesEntite(
-          <Toast
+          <Alerte
             className="w-fit"
             message="Une erreur est survenue lors de l'enregistrement de vos types d'entité"
             type="ERREUR"
@@ -80,7 +80,7 @@ export const FormulaireMesPreferences = () => {
       },
       () => {
         setMessageEnregistrementSecteursActivite(
-          <Toast
+          <Alerte
             className="w-fit"
             message="Vos secteurs d'activité ont bien été enregistrés !"
             type="INFO"
@@ -92,7 +92,7 @@ export const FormulaireMesPreferences = () => {
       },
       () => {
         setMessageEnregistrementTypesEntite(
-          <Toast
+          <Alerte
             className="w-fit"
             message="Une erreur est survenue lors de l'enregistrement de vos secteurs d'activité"
             type="ERREUR"
@@ -118,7 +118,7 @@ export const FormulaireMesPreferences = () => {
       },
       () => {
         setMessageEnregistrementSecteursGeographique(
-          <Toast
+          <Alerte
             className="w-fit"
             message="Vos secteurs géographiques ont bien été enregistrés !"
             type="INFO"
@@ -129,7 +129,7 @@ export const FormulaireMesPreferences = () => {
         }, 10000);
         () => {
           setMessageEnregistrementTypesEntite(
-            <Toast
+            <Alerte
               className="w-fit"
               message="Une erreur est survenue lors de l'enregistrement de vos secteurs géographiques"
               type="ERREUR"
