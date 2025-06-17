@@ -55,9 +55,11 @@ export const ComposantRestitution = ({
     demanderRestitution: envoyerDiagnosticAEntiteAidee,
     enAttenteRestitution: boutonEnvoyerDiagnosticAEntiteAideeDesactive,
   } = useRestitution<void>(
-    requeteEnvoyerRestitutionEntiteAidee(idDiagnostic, (reponse) => {
-      toaster.success(reponse);
-    })
+    requeteEnvoyerRestitutionEntiteAidee(
+      idDiagnostic,
+      (reponse) => toaster.success(reponse),
+      (reponse) => toaster.erreur(reponse)
+    )
   );
 
   return (

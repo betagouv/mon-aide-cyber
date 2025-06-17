@@ -51,6 +51,7 @@ export const FournisseurDeToast = ({ children }: { children: ReactNode }) => {
 
 interface Toaster {
   success: (message: string, options?: Partial<Toast>) => void;
+  erreur: (message: string, options?: Partial<Toast>) => void;
 }
 
 export const useToast = (): Toaster => {
@@ -64,6 +65,8 @@ export const useToast = (): Toaster => {
   return {
     success: (message: string, options?: Partial<Toast>) =>
       afficheToast({ type: 'SUCCES', message, affiche: true, ...options }),
+    erreur: (message: string, options?: Partial<Toast>) =>
+      afficheToast({ type: 'ERREUR', message, affiche: true, ...options }),
   };
 };
 

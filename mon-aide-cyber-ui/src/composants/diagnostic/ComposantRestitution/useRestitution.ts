@@ -16,6 +16,7 @@ type ConfigurationRequeteRestitution<T> = {
   action: Action;
   execute: (macAPI: MACAPIType, parametresAPI: ParametresAPI) => Promise<T>;
   surSuccesExecution?: (reponse: T) => void;
+  surErreurExecution?: (reponse: string) => void;
 };
 
 export const useRestitution = <T>(
@@ -48,6 +49,9 @@ export const useRestitution = <T>(
       onSuccess: (reponse) => {
         configurationRequete.surSuccesExecution?.(reponse);
       },
+      onError: (reponse) => {
+        configurationRequete.surErreurExecution?.(reponse.message);
+      },
     });
 
   return {
@@ -73,7 +77,8 @@ export const requeteTelechargementRestitution = (
 
 export const requeteEnvoyerRestitutionEntiteAidee = (
   idDiagnostic: UUID,
-  succes: (reponse: string) => void
+  succes: (reponse: string) => void,
+  erreur: (reponse: string) => void
 ): ConfigurationRequeteRestitution<void> => ({
   identifiantDiagnostic: idDiagnostic,
   action: 'envoyer-restitution-entite-aidee',
@@ -82,5 +87,8 @@ export const requeteEnvoyerRestitutionEntiteAidee = (
   nom: 'envoyer-restitution',
   surSuccesExecution: () => {
     succes('La restitution a bien été envoyée à l’aidé par mail');
+  },
+  surErreurExecution: (message: string) => {
+    erreur(message);
   },
 });
