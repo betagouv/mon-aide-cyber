@@ -16,6 +16,7 @@ import { uneRestitution } from '../constructeurs/constructeurRestitution';
 import {
   ReponseDiagnostic,
   RepresentationRestitution,
+  RestitutionEnvoyee,
 } from '../../src/api/routesAPIDiagnostic';
 import { Diagnostic, Restitution } from '../../src/diagnostic/Diagnostic';
 import { LiensHATEOAS } from '../../src/api/hateoas/hateoas';
@@ -38,6 +39,8 @@ import { AdaptateurRelationsMAC } from '../../src/relation/AdaptateurRelationsMA
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { FauxServiceDeChiffrement } from '../infrastructure/securite/FauxServiceDeChiffrement';
 import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
+import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
+import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 
 describe('Le serveur MAC sur les routes /api/diagnostic', () => {
   const testeurMAC = testeurIntegration();
@@ -810,6 +813,28 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       expect(await reponse.json()).toStrictEqual({
         codeErreur: 'ENVOI_RESTITUTION_PDF',
         message: 'Erreur lors de l’envoi par mail de la restitution.',
+      });
+    });
+
+    it('Publie l’événement RESTITUTION_ENVOYEE', async () => {
+      const { diagnostic, identifiantUtilisateur } =
+        await creeLaDemandeEtLanceLeServeur('entite-aide@email.com');
+      FournisseurHorlogeDeTest.initialise(new Date());
+      connecteUtilisateur(identifiantUtilisateur);
+
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/diagnostic/${diagnostic.identifiant}/restitution/demande-envoi-mail-restitution`
+      );
+
+      expect(
+        testeurMAC.busEvenement.evenementRecu
+      ).toStrictEqual<RestitutionEnvoyee>({
+        identifiant: expect.any(String),
+        type: 'RESTITUTION_ENVOYEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: { emailEntiteAidee: 'entite-aide@email.com' },
       });
     });
   });
