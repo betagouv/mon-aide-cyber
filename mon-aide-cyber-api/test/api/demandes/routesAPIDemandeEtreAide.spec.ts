@@ -454,6 +454,52 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             },
           });
         });
+
+        it('L’origine de la demande est optionnelle', async () => {
+          FournisseurHorlogeDeTest.initialise(
+            new Date(Date.parse('2024-02-29T14:04:17+01:00'))
+          );
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/etre-aide',
+            {
+              cguValidees: true,
+              email: 'jean.dupont@aide.com',
+              departement: 'Finistère',
+              siret: '12345678901234',
+            }
+          );
+
+          expect(reponse.statusCode).toBe(202);
+        });
+
+        it('L’origine de la demande, lorsque fournie ne peut pas être vide', async () => {
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/etre-aide',
+            {
+              cguValidees: true,
+              email: 'jean.dupont@aide.com',
+              departement: 'Bas-Rhin',
+              raisonSociale: 'NOM ENTITÉ',
+              siret: '12345678901234',
+              origine: '   ',
+            }
+          );
+
+          expect(reponse.statusCode).toBe(422);
+          expect(await reponse.json()).toStrictEqual({
+            message: 'Veuillez renseigner l’origine de la demande',
+            liens: {
+              'demander-aide': {
+                url: '/api/demandes/etre-aide',
+                methode: 'POST',
+              },
+            },
+          });
+        });
       });
     });
 
