@@ -31,6 +31,7 @@ type CorpsRequeteDemandeAide = {
   relationUtilisateur?: string;
   identifiantAidant?: crypto.UUID;
   siret: string;
+  origine?: string;
 };
 
 export const routesAPIDemandeEtreAide = (
@@ -84,6 +85,11 @@ export const routesAPIDemandeEtreAide = (
       .optional()
       .isUUID()
       .withMessage('Veuillez renseigner un identifiant Aidant valide.'),
+    body('origine')
+      .optional()
+      .trim()
+      .notEmpty()
+      .withMessage('Veuillez renseigner l’origine de la demande'),
     async (
       requete: RequetePublique<CorpsRequeteDemandeAide>,
       reponse: Response,
