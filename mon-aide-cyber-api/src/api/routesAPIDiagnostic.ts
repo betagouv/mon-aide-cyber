@@ -27,6 +27,8 @@ import { AdaptateurDeVerificationDesAcces } from '../adaptateurs/AdaptateurDeVer
 import { Entrepots } from '../domaine/Entrepots';
 import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { body } from 'express-validator';
+import { Evenement } from '../domaine/BusEvenement';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 export type ReponseDiagnostic = ReponseHATEOAS & RepresentationDiagnostic;
 
@@ -71,6 +73,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     entrepots,
     adaptateurEnvoiMessage: envoiMessage,
     adaptateurRelations,
+    busEvenement,
   } = configuration;
 
   routes.post(
@@ -244,6 +247,14 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           pdfRestitution,
           tuple.utilisateur.identifiant
         );
+        await busEvenement.publie<RestitutionEnvoyee>({
+          identifiant: crypto.randomUUID(),
+          type: 'RESTITUTION_ENVOYEE',
+          corps: {
+            emailEntiteAidee: tuple.utilisateur.identifiant,
+          },
+          date: FournisseurHorloge.maintenant(),
+        });
         return reponse.status(202).send();
       } catch (error: unknown | Error) {
         return suite(
@@ -275,3 +286,7 @@ export type RepresentationRestitution = ReponseHATEOAS & {
   mesuresPrioritaires: string;
   ressources: string;
 };
+
+export type RestitutionEnvoyee = Evenement<{
+  emailEntiteAidee: string;
+}>;
