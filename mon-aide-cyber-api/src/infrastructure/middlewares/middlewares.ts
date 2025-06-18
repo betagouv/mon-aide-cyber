@@ -1,7 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
-const redirigeVersUrlBase: RequestHandler = (
+export const redirigeVersUrlBase: RequestHandler = (
   requete: Request,
   reponse: Response,
   suite: NextFunction
@@ -17,7 +17,6 @@ const redirigeVersUrlBase: RequestHandler = (
   );
 };
 
-export { redirigeVersUrlBase };
 export const interdisLaMiseEnCache =
   (): RequestHandler =>
   (_: Request, reponse: Response, suite: NextFunction) => {
