@@ -16,6 +16,7 @@ import {
   reinitialisationMotDePasseErronee,
   reinitialisationMotDePasseFaite,
   reponseAjoutee,
+  reponseTallyRecue,
   restitutionLancee,
   utilisateurInscritCree,
 } from '../journalisation/evenements';
@@ -137,5 +138,6 @@ export const fabriqueConsommateursEvenements = (
       'AIDANT_MIGRE_EN_UTILISATEUR_INSCRIT',
       [aidantMigreEnUtilisateurInscrit(entrepotJournalisation)],
     ],
+    ['REPONSE_TALLY_RECUE', [reponseTallyRecue(entrepotJournalisation)]],
   ]);
 };
