@@ -72,6 +72,8 @@ export const utilisateurInscritCree = consommateurEvenement();
 
 export const aidantMigreEnUtilisateurInscrit = consommateurEvenement();
 
+export const reponseTallyRecue = consommateurEvenement();
+
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E
 ): Publication => {
