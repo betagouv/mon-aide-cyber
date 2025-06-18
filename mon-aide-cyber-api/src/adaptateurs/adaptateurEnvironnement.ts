@@ -116,6 +116,20 @@ const crisp = (): ConfigurationCrisp | undefined => {
   };
 };
 
+type SignaturesHTTP = {
+  tally: () => {
+    suiviDiagnostic: string;
+  };
+};
+const signatures = (): SignaturesHTTP => {
+  return {
+    tally: () => ({
+      suiviDiagnostic:
+        process.env.SIGNATURE_TALLY_FORMULAIRE_SUIVI_DIAGNOSTIC || '',
+    }),
+  };
+};
+
 const ipAutorisees = (): false | string[] =>
   process.env.RESEAU_ADRESSES_IP_AUTORISEES?.split(',') ?? false;
 
@@ -134,6 +148,7 @@ const adaptateurEnvironnement = {
   ipAutorisees,
   brevo,
   crisp,
+  signatures,
 };
 
 export { sentry, adaptateurEnvironnement };
