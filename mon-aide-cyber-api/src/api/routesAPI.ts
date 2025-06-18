@@ -14,6 +14,7 @@ import { routesAPIAnnuaireAidants } from './annuaire-aidants/routeAPIAnnuaireAid
 import { routesAPIDiagnosticLibreAcces } from './diagnostic-libre-acces/routesAPIDiagnosticLibreAcces';
 import { routesAPIRechercheEntreprise } from './recherche-entreprise/routesAPIRechercheEntreprise';
 import { routesAPIArticles } from './articles/routeAPIArticles';
+import { routesAPIWebhooks } from './webhooks/routesAPIWebhooks';
 
 export interface RequeteUtilisateur<
   CORPS = void,
@@ -54,6 +55,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
     routesAPIRechercheEntreprise(configuration)
   );
   routes.use('/articles', routesAPIArticles(configuration));
+  routes.use('/webhooks', routesAPIWebhooks(configuration));
 
   return routes;
 };
