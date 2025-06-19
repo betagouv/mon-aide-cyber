@@ -29,6 +29,7 @@ import { AdaptateurAseptisationMAC } from './src/adaptateurs/AdaptateurAseptisat
 import { adaptateurRepertoireDeContacts } from './src/adaptateurs/adaptateurRepertoireDeContacts';
 import { adaptateurRechercheEntreprise } from './src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { unAdaptateurCmsCrisp } from './src/adaptateurs/AdaptateurCmsCrispMAC';
+import { AdaptateurSignatureRequeteHTTP } from './src/adaptateurs/AdaptateurSignatureRequeteHTTP';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -100,6 +101,7 @@ const serveurMAC = serveur.creeServeur({
   estEnMaintenance: adaptateurEnvironnement.modeMaintenance().estActif(),
   adaptateurRechercheEntreprise: unAdaptateurRechercheEntreprise,
   adaptateurCmsCrisp: unAdaptateurCmsCrisp(),
+  adaptateurSignatureRequete: new AdaptateurSignatureRequeteHTTP(),
   redirigeVersUrlBase: redirigeVersUrlBase,
 });
 
