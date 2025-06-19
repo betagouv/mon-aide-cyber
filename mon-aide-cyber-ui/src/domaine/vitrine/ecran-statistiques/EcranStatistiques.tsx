@@ -69,7 +69,7 @@ export const EcranStatistiques = () => {
       <section className="fond-clair-mac">
         <div className="fr-container fr-pt-8w">
           <div className="carte ">
-            <TypographieH3>Lest statistiques MonAideCyber</TypographieH3>
+            <TypographieH3>Les statistiques MonAideCyber</TypographieH3>
             <iframe src={statistiques?.metabase || ''}></iframe>
           </div>
         </div>
