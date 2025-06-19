@@ -6,7 +6,7 @@ import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorl
 import * as core from 'express-serve-static-core';
 
 type CorpsReponseTallyRecue = {
-  dateReponse: Date;
+  dateReponse: string;
   nomFormulaire: string;
   reponses: { libelle: string; valeur: string }[];
 };
@@ -23,7 +23,7 @@ export type ReponseTally = {
 
 const mappeReponse = (reponseTally: ReponseTally): CorpsReponseTallyRecue => {
   return {
-    dateReponse: FournisseurHorloge.enDate(reponseTally.createdAt),
+    dateReponse: reponseTally.createdAt,
     nomFormulaire: reponseTally.data.formName,
     reponses: reponseTally.data.fields.map((f) => ({
       libelle: f.label,
