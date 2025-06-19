@@ -11,7 +11,6 @@ import {
   EntrepotProfilAidantMemoire,
   EntrepotRestitutionMemoire,
   EntrepotStatistiquesAidantMemoire,
-  EntrepotStatistiquesMemoire,
   EntrepotStatistiquesUtilisateursInscritsMemoire,
   EntrepotUtilisateurInscritMemoire,
   EntrepotUtilisateurMACMemoire,
@@ -19,7 +18,6 @@ import {
 } from './EntrepotMemoire';
 import { EntrepotDiagnostic } from '../../../diagnostic/Diagnostic';
 import { EntrepotRestitution } from '../../../restitution/Restitution';
-import { EntrepotStatistiques } from '../../../statistiques/statistiques';
 import { EntrepotAnnuaireAidants } from '../../../annuaire-aidants/annuaireAidants';
 import { EntrepotUtilisateur } from '../../../authentification/Utilisateur';
 import { EntrepotAidant } from '../../../espace-aidant/Aidant';
@@ -46,8 +44,6 @@ export class EntrepotsMemoire implements Entrepots {
   private entrepotAides: EntrepotDemandeAide = new EntrepotAideMemoire();
   private entrepotDemandeDevenirAidant =
     new EntrepotDemandeDevenirAidantMemoire();
-  private entrepotStatistiques: EntrepotStatistiques =
-    new EntrepotStatistiquesMemoire();
   private entrepotAnnuaireAidants: EntrepotAnnuaireAidants =
     new EntrepotAnnuaireAidantsMemoire(this.entrepotAidants);
   private entrepotUtilisateurs: EntrepotUtilisateur =
@@ -91,10 +87,6 @@ export class EntrepotsMemoire implements Entrepots {
 
   demandesDevenirAidant() {
     return this.entrepotDemandeDevenirAidant;
-  }
-
-  statistiques() {
-    return this.entrepotStatistiques;
   }
 
   annuaireAidants() {

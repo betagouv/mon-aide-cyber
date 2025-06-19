@@ -18,10 +18,6 @@ import {
   StatutDemande,
 } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import {
-  EntrepotStatistiques,
-  Statistiques,
-} from '../../../statistiques/statistiques';
-import {
   Aidant as AnnuaireAidant,
   EntrepotAnnuaireAidants,
 } from '../../../annuaire-aidants/annuaireAidants';
@@ -235,24 +231,6 @@ export class EntrepotDemandeDevenirAidantMemoire
 
   typeAggregat(): string {
     return 'DemandeDevenirAidant';
-  }
-}
-
-export class EntrepotStatistiquesMemoire
-  extends EntrepotMemoire<Statistiques>
-  implements EntrepotStatistiques
-{
-  lis(): Promise<Statistiques> {
-    const statistiques = Object.entries(Object.fromEntries(this.entites)).map(
-      ([_, stats]) => stats
-    );
-    return Promise.resolve({
-      identifiant: crypto.randomUUID(),
-      nombreDiagnostics:
-        statistiques.length > 0 ? statistiques[0].nombreDiagnostics : 0,
-      nombreAidants:
-        statistiques.length > 0 ? statistiques[0].nombreAidants : 0,
-    });
   }
 }
 
