@@ -76,7 +76,9 @@ describe('Routes Webhooks', () => {
         testeurMAC.busEvenement.evenementRecu
       ).toStrictEqual<ReponseTallyRecue>({
         corps: {
-          dateReponse: FournisseurHorloge.enDate('2025-06-20T10:00:00'),
+          dateReponse: new Date(
+            Date.parse('2025-06-20T10:00:00')
+          ).toISOString(),
           nomFormulaire: 'formulaire exemple',
           reponses: [
             {
