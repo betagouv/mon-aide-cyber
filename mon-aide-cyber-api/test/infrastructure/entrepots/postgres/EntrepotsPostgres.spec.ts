@@ -3,17 +3,12 @@ import {
   nettoieLaBaseDeDonneesAidants,
   nettoieLaBaseDeDonneesDiagnostics,
   nettoieLaBaseDeDonneesRelations,
-  nettoieLaBaseDeDonneesStatistiques,
   nettoieLaBaseDeDonneesUtilisateurs,
   nettoieLaBaseDeDonneesUtilisateursInscrits,
 } from '../../../utilitaires/nettoyeurBDD';
 import { EntrepotAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAidantPostgres';
 import { ServiceDeChiffrementClair } from '../../securite/ServiceDeChiffrementClair';
-import { EntrepotStatistiquesPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesPostgres';
-import { Statistiques } from '../../../../src/statistiques/statistiques';
 import { EntrepotRelationPostgres } from '../../../../src/relation/infrastructure/EntrepotRelationPostgres';
-import { Tuple } from '../../../../src/relation/Tuple';
-import { UUID } from 'crypto';
 import {
   unDiagnostic,
   unDiagnosticAvecSecteurActivite,
@@ -90,67 +85,6 @@ import { StatistiquesAidant as AidantExtraction } from '../../../../src/statisti
 import { EntrepotStatistiquesUtilisateursInscritsPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesUtilisateursInscritsPostgres';
 
 describe('Entrepots Postgres', () => {
-  describe('Entrepot Statistiques Postgres', () => {
-    const entrepotAidant = new EntrepotAidantPostgres(
-      new ServiceDeChiffrementClair()
-    );
-    const entrepotUtilisateurInscrit = new EntrepotUtilisateurInscritPostgres(
-      new ServiceDeChiffrementClair()
-    );
-    const entrepotDiagnosticPostgres = new EntrepotDiagnosticPostgres();
-    const entrepotRelationPostgres = new EntrepotRelationPostgres();
-
-    beforeEach(async () => await nettoieLaBaseDeDonneesStatistiques());
-
-    const unTupleDiagnostic = (identifiant: UUID): Tuple => ({
-      identifiant,
-      relation: 'initiateur',
-      objet: { type: 'diagnostic', identifiant: identifiant },
-      utilisateur: { type: 'aidant', identifiant: '' },
-    });
-
-    it('Retourne les statistiques', async () => {
-      const premierDiagnosticEnGironde = unDiagnosticEnGironde().construis();
-      const deuxiemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
-      const troisiemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
-      const unDiagnosticSansDepartement = unDiagnostic().construis();
-      const quatriemeDiagnosticEnGironde = unDiagnosticEnGironde().construis();
-      await entrepotAidant.persiste(unAidant().construis());
-      await entrepotAidant.persiste(unAidant().construis());
-      await entrepotUtilisateurInscrit.persiste(
-        unUtilisateurInscrit().construis()
-      );
-      await entrepotDiagnosticPostgres.persiste(premierDiagnosticEnGironde);
-      await entrepotDiagnosticPostgres.persiste(deuxiemeDiagnosticEnGironde);
-      await entrepotDiagnosticPostgres.persiste(troisiemeDiagnosticEnGironde);
-      await entrepotDiagnosticPostgres.persiste(quatriemeDiagnosticEnGironde);
-      await entrepotDiagnosticPostgres.persiste(unDiagnosticSansDepartement);
-      await entrepotRelationPostgres.persiste(
-        unTupleDiagnostic(premierDiagnosticEnGironde.identifiant)
-      );
-      await entrepotRelationPostgres.persiste(
-        unTupleDiagnostic(deuxiemeDiagnosticEnGironde.identifiant)
-      );
-      await entrepotRelationPostgres.persiste(
-        unTupleDiagnostic(troisiemeDiagnosticEnGironde.identifiant)
-      );
-      await entrepotRelationPostgres.persiste(
-        unTupleDiagnostic(quatriemeDiagnosticEnGironde.identifiant)
-      );
-      await entrepotRelationPostgres.persiste(
-        unTupleDiagnostic(unDiagnosticSansDepartement.identifiant)
-      );
-
-      const statistiques = await new EntrepotStatistiquesPostgres().lis();
-
-      expect(statistiques).toStrictEqual<Statistiques>({
-        identifiant: expect.any(String),
-        nombreDiagnostics: 4,
-        nombreAidants: 2,
-      });
-    });
-  });
-
   describe('Entrepot Diagnostic Postgres', () => {
     const entrepotDiagnosticPostgres = new EntrepotDiagnosticPostgres();
 

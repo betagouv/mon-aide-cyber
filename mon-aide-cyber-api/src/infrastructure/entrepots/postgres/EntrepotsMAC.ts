@@ -8,8 +8,6 @@ import { EntrepotRestitutionPostgres } from './EntrepotRestitutionPostgres';
 import { EntrepotAideConcret } from './EntrepotAideConcret';
 import { EntrepotDemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { EntrepotDemandeDevenirAidantPostgres } from './EntrepotDemandeDevenirAidantPostgres';
-import { EntrepotStatistiques } from '../../../statistiques/statistiques';
-import { EntrepotStatistiquesPostgres } from './EntrepotStatistiquesPostgres';
 import { EntrepotAnnuaireAidants } from '../../../annuaire-aidants/annuaireAidants';
 import { EntrepotAnnuaireAidantsPostgres } from './EntrepotAnnuaireAidantsPostgres';
 import { EntrepotUtilisateur } from '../../../authentification/Utilisateur';
@@ -49,8 +47,6 @@ export class EntrepotsMAC implements Entrepots {
   );
   private entrepotDemandeDevenirAidant: EntrepotDemandeDevenirAidant =
     new EntrepotDemandeDevenirAidantPostgres(adaptateurServiceChiffrement());
-  private entrepotStatistiques: EntrepotStatistiques =
-    new EntrepotStatistiquesPostgres();
   private entrepotAnnuaireAidants: EntrepotAnnuaireAidants =
     new EntrepotAnnuaireAidantsPostgres(adaptateurServiceChiffrement());
   private entrepotUtilisateurs: EntrepotUtilisateur =
@@ -87,9 +83,6 @@ export class EntrepotsMAC implements Entrepots {
 
   demandesDevenirAidant(): EntrepotDemandeDevenirAidant {
     return this.entrepotDemandeDevenirAidant;
-  }
-  statistiques(): EntrepotStatistiques {
-    return this.entrepotStatistiques;
   }
 
   annuaireAidants(): EntrepotAnnuaireAidants {

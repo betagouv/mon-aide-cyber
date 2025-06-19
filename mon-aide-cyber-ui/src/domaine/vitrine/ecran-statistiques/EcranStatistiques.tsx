@@ -14,9 +14,6 @@ import TuileActionKitDeCommunication from '../../../composants/communs/tuiles/Tu
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export type Statistiques = {
-  nombreDiagnostics: number;
-  nombreAidantsFormes: number;
-  nombreSessionFamiliarisation: number;
   metabase: string;
 };
 export type ReponseStatistiques = Statistiques;
@@ -69,52 +66,10 @@ export const EcranStatistiques = () => {
   return (
     <main role="main" className="ecran-statistiques">
       <HeroStatistiques />
-      <section className="contenu-page-statique fond-clair-mac">
-        <div
-          className="contenu-section"
-          style={{ display: 'flex', flexDirection: 'column', gap: '5rem' }}
-        >
-          {!enCoursDeChargement ? (
-            <div className="statistiques trois-colonnes">
-              <article className="statistique">
-                <div>
-                  <TypographieH2 className="valeur">
-                    {statistiques?.nombreDiagnostics}
-                  </TypographieH2>
-                </div>
-                <div className="description">
-                  <span>diagnostics effectués</span>
-                </div>
-              </article>
-              <article className="statistique">
-                <div>
-                  <TypographieH2 className="valeur">
-                    {statistiques?.nombreAidantsFormes}
-                  </TypographieH2>
-                </div>
-                <div className="description">
-                  <span>Aidants Cyber référencés</span>
-                </div>
-              </article>
-              <article className="statistique">
-                <div>
-                  <TypographieH2 className="valeur">30%</TypographieH2>
-                </div>
-
-                <div className="description">
-                  <span>
-                    des mesures prioritaires mises en œuvre sous 3 mois
-                  </span>
-                </div>
-              </article>
-            </div>
-          ) : (
-            <>Chargement...</>
-          )}
-          <div className="carte">
-            <TypographieH3>
-              Répartition des diagnostics par territoire
-            </TypographieH3>
+      <section className="fond-clair-mac">
+        <div className="fr-container fr-pt-8w">
+          <div className="carte ">
+            <TypographieH3>Lest statistiques MonAideCyber</TypographieH3>
             <iframe src={statistiques?.metabase || ''}></iframe>
           </div>
         </div>
