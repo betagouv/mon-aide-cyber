@@ -3,6 +3,7 @@ import express, { Request, Response, Router } from 'express';
 import { Evenement } from '../../domaine/BusEvenement';
 import bodyParser from 'body-parser';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
+import * as core from 'express-serve-static-core';
 
 type CorpsReponseTallyRecue = {
   dateReponse: Date;
@@ -34,13 +35,17 @@ const mappeReponse = (reponseTally: ReponseTally): CorpsReponseTallyRecue => {
 const routesAPITally = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
-  const { busEvenement } = configuration;
+  const { busEvenement, adaptateurSignatureRequete } = configuration;
 
   routes.post(
     '/',
     bodyParser.json(),
-    (requete: Request<ReponseTally>, reponse: Response) => {
-      busEvenement.publie<ReponseTallyRecue>({
+    adaptateurSignatureRequete.verifie(),
+    async (
+      requete: Request<core.ParamsDictionary & ReponseTally>,
+      reponse: Response
+    ) => {
+      await busEvenement.publie<ReponseTallyRecue>({
         corps: mappeReponse(requete.body),
         date: FournisseurHorloge.maintenant(),
         identifiant: crypto.randomUUID(),

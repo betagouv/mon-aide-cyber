@@ -90,5 +90,20 @@ describe('Routes Webhooks', () => {
         date: FournisseurHorloge.maintenant(),
       });
     });
+
+    it('La route est protégée', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/webhooks/tally`,
+        unConstructeurDeReponseTally()
+          .creeLe(new Date(Date.parse('2025-06-20T10:00:00')))
+          .avecUnNom('formulaire exemple')
+          .ajouteUneReponse({ label: 'Nom', value: 'DUPONT' })
+          .construis()
+      );
+
+      expect(testeurMAC.adaptateurSignatureRequete.verifiePassage()).toBe(true);
+    });
   });
 });

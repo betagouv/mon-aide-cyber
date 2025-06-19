@@ -34,6 +34,7 @@ import { unAdaptateurRechercheEntreprise } from '../constructeurs/constructeurAd
 import { AdaptateurCmsCrispMACMemoire } from '../adaptateurs/AdaptateurCmsCrispMACMemoire';
 import { AdaptateurCmsCrispMAC } from '../../src/adaptateurs/AdaptateurCmsCrispMAC';
 import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
+import { AdaptateurSignatureRequeteDeTest } from '../adaptateurs/AdaptateurSignatureRequeteDeTest';
 
 const PORT_DISPONIBLE = 0;
 
@@ -79,7 +80,8 @@ class TesteurIntegrationMAC {
     public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
     public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
     public adaptateurDeRechercheEntreprise = unAdaptateurRechercheEntreprise().construis(),
-    public adaptateurCmsCrisp: AdaptateurCmsCrispMAC = new AdaptateurCmsCrispMACMemoire()
+    public adaptateurCmsCrisp: AdaptateurCmsCrispMAC = new AdaptateurCmsCrispMACMemoire(),
+    public adaptateurSignatureRequete: AdaptateurSignatureRequeteDeTest = new AdaptateurSignatureRequeteDeTest()
   ) {}
 
   initialise() {
@@ -124,6 +126,7 @@ class TesteurIntegrationMAC {
       adaptateurProConnect: this.adaptateurProConnect,
       adaptateurRechercheEntreprise: this.adaptateurDeRechercheEntreprise,
       adaptateurCmsCrisp: this.adaptateurCmsCrisp,
+      adaptateurSignatureRequete: this.adaptateurSignatureRequete,
       estEnMaintenance: false,
       redirigeVersUrlBase: (
         _requete: Request,
