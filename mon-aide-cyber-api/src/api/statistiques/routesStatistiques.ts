@@ -5,6 +5,7 @@ import { ServiceStatistiques } from '../../statistiques/statistiques';
 export type ReponseStatistiques = {
   metabase: string;
   nombreAidants: number;
+  nombreDiagnostics: number;
 };
 
 export const routesStatistiques = (configuration: ConfigurationServeur) => {
@@ -19,6 +20,7 @@ export const routesStatistiques = (configuration: ConfigurationServeur) => {
         reponse.json({
           metabase: statistiques.metabase,
           nombreAidants: statistiques.nombreAidants,
+          nombreDiagnostics: statistiques.nombreDiagnostics,
         })
       );
     }

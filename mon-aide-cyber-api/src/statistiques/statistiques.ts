@@ -3,6 +3,7 @@ import { AdaptateurMetabase } from '../adaptateurs/AdaptateurMetabase';
 export type RepresentationStatistiques = {
   metabase: string;
   nombreAidants: number;
+  nombreDiagnostics: number;
 };
 
 export class ServiceStatistiques {
@@ -12,6 +13,7 @@ export class ServiceStatistiques {
     return this.metabase.statistiques().then((reponse) => ({
       metabase: reponse.dashboardRepartitionDiagnosticsParTerritoire,
       nombreAidants: reponse.nombreAidants,
+      nombreDiagnostics: reponse.nombreDiagnostics,
     }));
   }
 }
