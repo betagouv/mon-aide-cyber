@@ -25,6 +25,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
       testeurMAC.adaptateurMetabase.retourStatistiques({
         repartitionDiagnostics: 'metabase',
         nombreAidants: 1500,
+        nombreDiagnostics: 2443,
       });
 
       const reponse = await executeRequete(
@@ -36,6 +37,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
       expect(await reponse.json()).toStrictEqual<ReponseStatistiques>({
         metabase: 'metabase',
         nombreAidants: 1500,
+        nombreDiagnostics: 2443,
       });
     });
   });

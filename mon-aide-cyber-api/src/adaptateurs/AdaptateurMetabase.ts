@@ -1,4 +1,5 @@
 export type ReponseMetabase = {
+  nombreDiagnostics: number;
   dashboardRepartitionDiagnosticsParTerritoire: string;
   nombreAidants: number;
 };
