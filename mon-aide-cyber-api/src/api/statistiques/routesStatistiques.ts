@@ -4,6 +4,7 @@ import { ServiceStatistiques } from '../../statistiques/statistiques';
 
 export type ReponseStatistiques = {
   metabase: string;
+  nombreAidants: number;
 };
 
 export const routesStatistiques = (configuration: ConfigurationServeur) => {
@@ -17,6 +18,7 @@ export const routesStatistiques = (configuration: ConfigurationServeur) => {
       return stats.then((statistiques) =>
         reponse.json({
           metabase: statistiques.metabase,
+          nombreAidants: statistiques.nombreAidants,
         })
       );
     }

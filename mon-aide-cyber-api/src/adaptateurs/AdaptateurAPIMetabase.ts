@@ -10,6 +10,7 @@ export class AdaptateurAPIMetabase implements AdaptateurMetabase {
       this.genereLienDashboardRepartitionDesDiagnostics();
     return {
       dashboardRepartitionDiagnosticsParTerritoire,
+      nombreAidants: 0,
     };
   }
 
