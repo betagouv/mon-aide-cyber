@@ -128,32 +128,20 @@ export const ChoixTypeAidant = ({
                   <div className="mac-callout mac-callout-information">
                     <i className="mac-icone-information" />
                     <p className="fr-text--sm m-0">
-                      Si vous ne trouvez pas votre organisme, essayez avec les
-                      n° SIRET/SIREN, ou bien contactez l’équipe :{' '}
-                      <LienMailtoMAC />
-                    </p>
-                  </div>
-                </div>
-              }
-            />
-            <hr className="separation-formulaire" />
-            <SelecteurTypeAidant
-              libelle="Pas encore adhérent d’une association mais prêt à le devenir."
-              surChoix={() => setChoix('FuturAdherent')}
-              coche={choix === 'FuturAdherent'}
-              contenuZoneDepliee={
-                <div className="zone-choix-entite">
-                  <div className="selecteur-type-aidant-saisie-entite">
-                    <p className="fr-text--sm m-0">
-                      Retrouvez la liste des relais associatifs recensés sur la
-                      page :{' '}
-                      <a href="/relais-associatifs" target="_blank">
-                        {import.meta.env['VITE_URL_MAC']}
-                        /relais-associatifs
-                      </a>
-                      <br />
-                      Vous pouvez aussi proposer un partenariat. <br />
-                      Envoyez un mail à : <LienMailtoMAC />
+                      <ul>
+                        <li>
+                          Si vous ne trouvez pas votre organisme, essayez avec
+                          les n° SIRET/SIREN, ou bien contactez l’équipe :{' '}
+                          <LienMailtoMAC />
+                        </li>
+                        <li>
+                          Vous souhaitez devenir membre d’un relais associatif ?{' '}
+                          <br />
+                          <a href="/relais-associatifs" target="_blank">
+                            Accéder à nos associations partenaires
+                          </a>
+                        </li>
+                      </ul>
                     </p>
                   </div>
                 </div>
