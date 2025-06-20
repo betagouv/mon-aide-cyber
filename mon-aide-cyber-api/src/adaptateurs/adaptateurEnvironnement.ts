@@ -133,6 +133,14 @@ const signatures = (): SignaturesHTTP => {
 const ipAutorisees = (): false | string[] =>
   process.env.RESEAU_ADRESSES_IP_AUTORISEES?.split(',') ?? false;
 
+const metabase = (): { repartitionDesDiagnosticsParTerritoire: number } => {
+  return {
+    repartitionDesDiagnosticsParTerritoire: Number(
+      process.env.METABASE_DASHBOARD_REPARTITION_DIAGNOSTICS_PAR_TERRITOIRE
+    ),
+  };
+};
+
 const adaptateurEnvironnement = {
   messagerie,
   mac,
@@ -149,6 +157,7 @@ const adaptateurEnvironnement = {
   brevo,
   crisp,
   signatures,
+  metabase,
 };
 
 export { sentry, adaptateurEnvironnement };

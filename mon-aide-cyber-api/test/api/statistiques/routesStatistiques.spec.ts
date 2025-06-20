@@ -22,7 +22,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
 
   describe('Quand une requête GET est reçue sur /statistiques', () => {
     it('Appelle metabase pour retourner les statistiques', async () => {
-      testeurMAC.adaptateurMetabase.retourReponse('metabase');
+      testeurMAC.adaptateurMetabase.retourStatistiques('metabase');
 
       const reponse = await executeRequete(
         donneesServeur.app,
