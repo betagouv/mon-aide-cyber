@@ -134,6 +134,7 @@ const ipAutorisees = (): false | string[] =>
   process.env.RESEAU_ADRESSES_IP_AUTORISEES?.split(',') ?? false;
 
 const metabase = (): {
+  identifiantQuestionNombreDiagnostics: number;
   url: string;
   clefApi: string;
   identifiantQuestionNombreAidants: number;
@@ -147,6 +148,9 @@ const metabase = (): {
     ),
     identifiantQuestionNombreAidants: Number(
       process.env.METABASE_IDENTIFIANT_QUESTION_NOMBRE_AIDANTS
+    ),
+    identifiantQuestionNombreDiagnostics: Number(
+      process.env.METABASE_IDENTIFIANT_QUESTION_NOMBRE_DIAGNOSTICS
     ),
   };
 };

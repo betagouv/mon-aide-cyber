@@ -31,16 +31,17 @@ export class AdaptateurAPIMetabase implements AdaptateurMetabase {
     const dashboardRepartitionDiagnosticsParTerritoire =
       this.genereLienDashboardRepartitionDesDiagnostics();
 
-    const [nombreAidants] = await Promise.all(
-      [adaptateurEnvironnement.metabase().identifiantQuestionNombreAidants].map(
-        (id) => this.recupereResultat(id)
-      )
+    const [nombreAidants, nombreDiagnostics] = await Promise.all(
+      [
+        adaptateurEnvironnement.metabase().identifiantQuestionNombreAidants,
+        adaptateurEnvironnement.metabase().identifiantQuestionNombreDiagnostics,
+      ].map((id) => this.recupereResultat(id))
     );
 
     return {
       dashboardRepartitionDiagnosticsParTerritoire,
       nombreAidants,
-      nombreDiagnostics: 0,
+      nombreDiagnostics,
     };
   }
 
