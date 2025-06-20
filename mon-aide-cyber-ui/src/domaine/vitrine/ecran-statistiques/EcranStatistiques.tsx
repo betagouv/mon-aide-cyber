@@ -12,6 +12,7 @@ import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 export type Statistiques = {
   metabase: string;
   nombreAidants: number;
+  nombreDiagnostics: number;
 };
 export type ReponseStatistiques = Statistiques;
 
@@ -73,7 +74,17 @@ export const EcranStatistiques = () => {
               />
               <div className="statistique">
                 <div className="valeur">{statistiques?.nombreAidants}</div>
-                <div className="description">Nombre d’Aidants</div>
+                <div className="description">Aidants cyber</div>
+              </div>
+            </div>
+            <div className="carte-statistique">
+              <img
+                src="/images/icones/icone-statistiques-nombre-diagnostics.svg"
+                alt=""
+              />
+              <div className="statistique">
+                <div className="valeur">{statistiques?.nombreDiagnostics}</div>
+                <div className="description">Diagnostics cyber réalisés</div>
               </div>
             </div>
           </div>
