@@ -84,7 +84,17 @@ export const EcranStatistiques = () => {
               />
               <div className="statistique">
                 <div className="valeur">{statistiques?.nombreDiagnostics}</div>
-                <div className="description">Diagnostics cyber réalisés</div>
+                <div className="description">diagnostics cyber réalisés</div>
+              </div>
+            </div>
+            <div className="carte-statistique">
+              <img
+                src="/images/icones/icone-statistiques-mesures-appliquees.svg"
+                alt=""
+              />
+              <div className="statistique">
+                <div className="valeur">30%</div>
+                <div className="description">des mesures mises en œuvre</div>
               </div>
             </div>
           </div>
