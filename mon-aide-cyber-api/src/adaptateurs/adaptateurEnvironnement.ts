@@ -133,10 +133,20 @@ const signatures = (): SignaturesHTTP => {
 const ipAutorisees = (): false | string[] =>
   process.env.RESEAU_ADRESSES_IP_AUTORISEES?.split(',') ?? false;
 
-const metabase = (): { repartitionDesDiagnosticsParTerritoire: number } => {
+const metabase = (): {
+  url: string;
+  clefApi: string;
+  identifiantQuestionNombreAidants: number;
+  repartitionDesDiagnosticsParTerritoire: number;
+} => {
   return {
+    url: process.env.METABASE_URL || '',
+    clefApi: process.env.METABASE_CLEF_API || '',
     repartitionDesDiagnosticsParTerritoire: Number(
       process.env.METABASE_DASHBOARD_REPARTITION_DIAGNOSTICS_PAR_TERRITOIRE
+    ),
+    identifiantQuestionNombreAidants: Number(
+      process.env.METABASE_IDENTIFIANT_QUESTION_NOMBRE_AIDANTS
     ),
   };
 };

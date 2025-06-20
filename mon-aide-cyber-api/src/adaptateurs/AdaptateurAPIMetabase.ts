@@ -2,15 +2,44 @@ import { AdaptateurMetabase, ReponseMetabase } from './AdaptateurMetabase';
 import jwt from 'jsonwebtoken';
 import { adaptateurEnvironnement } from './adaptateurEnvironnement';
 
+type ReponseQuestionAPIMetabase = {
+  data: {
+    rows: string[][];
+  };
+};
+
 export class AdaptateurAPIMetabase implements AdaptateurMetabase {
   constructor(private readonly clefSecrete: string) {}
+
+  private readonly url: string = adaptateurEnvironnement.metabase().url;
+
+  async recupereResultat(idQuestion: number): Promise<number> {
+    const reponse = await fetch(`${this.url}/api/card/${idQuestion}/query`, {
+      method: 'POST',
+      headers: {
+        'x-api-key': adaptateurEnvironnement.metabase().clefApi,
+        accept: 'application/json',
+        'content-type': 'application/json',
+      },
+    });
+
+    const corpsReponse: ReponseQuestionAPIMetabase = await reponse.json();
+    return parseInt(corpsReponse.data.rows[0][0], 10);
+  }
 
   async statistiques(): Promise<ReponseMetabase> {
     const dashboardRepartitionDiagnosticsParTerritoire =
       this.genereLienDashboardRepartitionDesDiagnostics();
+
+    const [nombreAidants] = await Promise.all(
+      [adaptateurEnvironnement.metabase().identifiantQuestionNombreAidants].map(
+        (id) => this.recupereResultat(id)
+      )
+    );
+
     return {
       dashboardRepartitionDiagnosticsParTerritoire,
-      nombreAidants: 0,
+      nombreAidants,
     };
   }
 
@@ -25,6 +54,6 @@ export class AdaptateurAPIMetabase implements AdaptateurMetabase {
       },
       this.clefSecrete
     );
-    return `${process.env.METABASE_URL}/embed/dashboard/${token}#bordered=true&titled=true`;
+    return `${this.url}/embed/dashboard/${token}#bordered=true&titled=true`;
   }
 }
