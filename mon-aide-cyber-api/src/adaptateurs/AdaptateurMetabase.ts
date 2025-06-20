@@ -1,6 +1,6 @@
 export type ReponseMetabase = {
-  corps: string;
+  dashboardRepartitionDiagnosticsParTerritoire: string;
 };
 export interface AdaptateurMetabase {
-  appelle(): Promise<ReponseMetabase>;
+  statistiques(): Promise<ReponseMetabase>;
 }

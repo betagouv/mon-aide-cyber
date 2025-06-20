@@ -6,11 +6,13 @@ import {
 export class AdaptateurMetabaseMemoire implements AdaptateurMetabase {
   private reponse = '';
 
-  appelle(): Promise<ReponseMetabase> {
-    return Promise.resolve({ corps: this.reponse });
+  statistiques(): Promise<ReponseMetabase> {
+    return Promise.resolve({
+      dashboardRepartitionDiagnosticsParTerritoire: this.reponse,
+    });
   }
 
-  retourReponse(reponse: string) {
+  retourStatistiques(reponse: string) {
     this.reponse = reponse;
   }
 }

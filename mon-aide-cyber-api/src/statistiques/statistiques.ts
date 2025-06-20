@@ -8,8 +8,8 @@ export class ServiceStatistiques {
   constructor(private readonly metabase: AdaptateurMetabase) {}
 
   async statistiques(): Promise<RepresentationStatistiques> {
-    return this.metabase.appelle().then((reponse) => ({
-      metabase: reponse.corps,
+    return this.metabase.statistiques().then((reponse) => ({
+      metabase: reponse.dashboardRepartitionDiagnosticsParTerritoire,
     }));
   }
 }
