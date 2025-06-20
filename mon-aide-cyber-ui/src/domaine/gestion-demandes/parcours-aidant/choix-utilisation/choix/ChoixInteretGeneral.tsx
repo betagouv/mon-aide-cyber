@@ -42,15 +42,21 @@ const ChoixInteretGeneral = ({
       </div>
       <div className="mac-callout mac-callout-information">
         <i className="fr-icon-user-fill" />
-        <div>
-          <p>Accessible :</p>
-          <ul>
-            <li>aux agents publics</li>
-            <li>
-              aux salariés ou adhérents d'un relais associatif ou qui souhaitent
-              le devenir
-            </li>
-          </ul>
+        <div className="w-100">
+          <p>
+            Accessible : <br />
+            <ul>
+              <li>aux agents publics</li>
+              <li>aux salariés ou adhérents d‘un relais associatif</li>
+            </ul>
+          </p>
+          <div className="separateur-texte"></div>
+          <p className="texte-petit">
+            Vous souhaitez devenir membre d‘un relais associatif ? <br />
+            <a href="/relais-associatifs" target="_blank">
+              Accéder à nos associations partenaires
+            </a>
+          </p>
         </div>
       </div>
     </Choix>

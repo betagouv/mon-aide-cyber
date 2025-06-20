@@ -56,7 +56,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 2rem 2rem 2.5rem 2rem;
+    padding: 32px 48px 48px 48px;
 
     .mac-radio-group {
       padding-top: 0 !important;
@@ -86,6 +86,12 @@
 
       div > p {
         margin: 0;
+        color: #161616;
+
+        &.texte-petit {
+          font-size: 14px;
+          line-height: 24px;
+        }
       }
     }
 

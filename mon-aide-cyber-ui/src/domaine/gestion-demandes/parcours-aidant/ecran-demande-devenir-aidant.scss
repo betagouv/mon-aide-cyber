@@ -18,7 +18,7 @@
     grid-template-areas:  'entete entete'
                           'formulaire-gauche formulaire-droite'
                           'validation validation';
-      grid-template-rows: auto;
+    grid-template-rows: auto;
   }
 
   @include a-partir-de(xl) {
@@ -44,6 +44,7 @@
   .formulaire-colonne-gauche {
     grid-area: formulaire-gauche;
   }
+
   .formulaire-colonne-droite {
     grid-area: formulaire-droite;
   }
@@ -75,6 +76,7 @@
       padding-top: 1.5rem;
       padding-bottom: 1.5rem;
     }
+
     .mac-callout {
       padding: 1rem;
 
@@ -85,6 +87,12 @@
 
       div > p {
         margin: 0;
+        color: #161616;
+
+        &.texte-petit {
+          font-size: 14px;
+          line-height: 24px;
+        }
       }
     }
   }
