@@ -22,7 +22,10 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
 
   describe('Quand une requête GET est reçue sur /statistiques', () => {
     it('Appelle metabase pour retourner les statistiques', async () => {
-      testeurMAC.adaptateurMetabase.retourStatistiques('metabase');
+      testeurMAC.adaptateurMetabase.retourStatistiques({
+        repartitionDiagnostics: 'metabase',
+        nombreAidants: 1500,
+      });
 
       const reponse = await executeRequete(
         donneesServeur.app,
@@ -30,8 +33,10 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
         `/statistiques`
       );
 
-      const corprDeReponse: ReponseStatistiques = await reponse.json();
-      expect(corprDeReponse.metabase).toStrictEqual('metabase');
+      expect(await reponse.json()).toStrictEqual<ReponseStatistiques>({
+        metabase: 'metabase',
+        nombreAidants: 1500,
+      });
     });
   });
 });
