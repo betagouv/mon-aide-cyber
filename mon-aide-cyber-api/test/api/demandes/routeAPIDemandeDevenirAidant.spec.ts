@@ -764,10 +764,10 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
 
       it('Retourne le code 422 si les informations de l’entité fournie sont incorrectes', async () => {
         await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
-        const corpsDeRequete = uneRequeteDemandeDevenirAidant()
-          .dansUneEntite('', '', '')
-          .ayantSigneLaCharte()
-          .construis();
+        const corpsDeRequete = {
+          ...uneRequeteDemandeDevenirAidant().ayantSigneLaCharte().construis(),
+          entite: { type: '', nom: '', siret: '' },
+        };
 
         const reponse = await executeRequete(
           donneesServeur.app,
@@ -780,28 +780,6 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
           'Veuillez renseigner un nom pour votre entité, Veuillez renseigner un SIRET pour votre entité, Veuillez fournir l’une des valeurs suivantes pour le type d’entité ’ServicePublic’, ’ServiceEtat’, ’Association’'
         );
         expect(reponse.statusCode).toStrictEqual(422);
-      });
-
-      it("Retourne OK si le futur Aidant est en attente d'adhésion à une association", async () => {
-        await creeEtConnecteUnUtilisateurInscrit(unUtilisateurInscrit());
-        const corpsDeRequete = uneRequeteDemandeDevenirAidant()
-          .enAttenteAdhesionAssociation()
-          .construis();
-
-        const reponse = await executeRequete(
-          donneesServeur.app,
-          'POST',
-          '/api/demandes/devenir-aidant',
-          corpsDeRequete
-        );
-
-        expect(reponse.statusCode).toStrictEqual(200);
-        const demandes = await testeurMAC.entrepots
-          .demandesDevenirAidant()
-          .tous();
-        expect(demandes[0].entite).toStrictEqual({
-          type: corpsDeRequete.entite?.type,
-        });
       });
     });
 

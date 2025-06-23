@@ -25,6 +25,7 @@ import {
   DemandeDevenirAidant,
   DemandesDevenirAidant,
 } from '../../../src/gestion-demandes/devenir-aidant/ServiceDemandeDevenirAidant';
+import { DemandeDevenirAidant as DomaineDemandeDevenirAidant } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { uneDemandeAide } from '../../gestion-demandes/aide/ConstructeurDemandeAide';
 import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { uneStatistiqueAidant } from '../../constructeurs/constructeurStatistiqueAidant';
@@ -149,12 +150,13 @@ describe('Extraction', () => {
       const demande = uneDemandeDevenirAidant()
         .avecEntiteMorale('ServicePublic')
         .construis();
-      const demandeAvantArbitrage = uneDemandeDevenirAidant()
-        .avantArbitrage()
-        .construis();
+      const { entite, ...demandeAvantArbitrage } =
+        uneDemandeDevenirAidant().construis();
       const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
       await entrepotDemande.persiste(demande);
-      await entrepotDemande.persiste(demandeAvantArbitrage);
+      await entrepotDemande.persiste(
+        demandeAvantArbitrage as DomaineDemandeDevenirAidant
+      );
 
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
@@ -247,9 +249,13 @@ describe('Extraction', () => {
     });
 
     it('Fournit l’information si le futur Aidant est en attente d’adhésion à une association', async () => {
-      const demande = uneDemandeDevenirAidant().enAttenteAdhesion().construis();
+      const { entite, ...demandeEnAttenteAdhesion } =
+        uneDemandeDevenirAidant().construis();
       const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
-      await entrepotDemande.persiste(demande);
+      await entrepotDemande.persiste({
+        ...demandeEnAttenteAdhesion,
+        entite: { type: 'Association' },
+      } as DomaineDemandeDevenirAidant);
 
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
@@ -275,12 +281,13 @@ describe('Extraction', () => {
       const demande = uneDemandeDevenirAidant()
         .avecEntiteMorale('ServiceEtat')
         .construis();
-      const demandeAvantArbitrage = uneDemandeDevenirAidant()
-        .avantArbitrage()
-        .construis();
+      const { entite, ...demandeAvantArbitrage } =
+        uneDemandeDevenirAidant().construis();
       const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
       await entrepotDemande.persiste(demande);
-      await entrepotDemande.persiste(demandeAvantArbitrage);
+      await entrepotDemande.persiste(
+        demandeAvantArbitrage as DomaineDemandeDevenirAidant
+      );
 
       const rapport = await uneExtraction({
         entrepotDemandes: entrepotDemande,
@@ -319,9 +326,12 @@ describe('Extraction', () => {
     });
 
     it('Le rapport contient entête et intitulé', async () => {
-      const demande = uneDemandeDevenirAidant().avantArbitrage().construis();
+      const { entite, ...demandeAvantArbitrage } =
+        uneDemandeDevenirAidant().construis();
       const entrepotDemande = new EntrepotDemandeDevenirAidantMemoire();
-      await entrepotDemande.persiste(demande);
+      await entrepotDemande.persiste(
+        demandeAvantArbitrage as DomaineDemandeDevenirAidant
+      );
 
       const rapportJSON = new RapportJSON();
       await uneExtraction({

@@ -70,12 +70,13 @@ describe('Validation des comptes Aidants', () => {
   });
 
   it('N’envoie pas le mail de création de l’espace Aidant si la demande est incomplète', async () => {
-    const demande = uneDemandeDevenirAidant()
-      .avantArbitrage()
+    const { entite, ...demandeAvantArbitrage } = uneDemandeDevenirAidant()
       .pour('Jean', 'Dupont')
       .ayantPourMail('jean.dupont@email.com')
       .construis();
-    await entrepots.demandesDevenirAidant().persiste(demande);
+    await entrepots
+      .demandesDevenirAidant()
+      .persiste(demandeAvantArbitrage as DemandeDevenirAidant);
     const csv = unConstructeurFichierAidantCSV()
       .avecLesAidants([
         unConstructeurAidantCSV()
@@ -93,7 +94,7 @@ describe('Validation des comptes Aidants', () => {
         {
           nom: 'Jean Dupont',
           email: 'jean.dupont@email.com',
-          identificationDemande: demande.identifiant,
+          identificationDemande: demandeAvantArbitrage.identifiant,
         },
       ],
       demandesEnErreur: [],

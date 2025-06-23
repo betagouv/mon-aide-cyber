@@ -11,6 +11,7 @@ import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
 import { BusCommande } from '../../../src/domaine/commande';
 import {
   DemandeDevenirAidant,
+  EntiteDemande,
   StatutDemande,
 } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import {
@@ -182,8 +183,11 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
     });
 
     it("Remonte une erreur si toutes les informations de l'entité de l'Aidant ne sont pas fournies", async () => {
-      const demande = unConstructeurDeDemandeDevenirAidant().construis();
-      await entrepots.demandesDevenirAidant().persiste(demande);
+      const { entite, ...demande } =
+        unConstructeurDeDemandeDevenirAidant().construis();
+      await entrepots
+        .demandesDevenirAidant()
+        .persiste(demande as DemandeDevenirAidant);
 
       const execution = new CapteurSagaDemandeAidantCreeEspaceAidant(
         entrepots,
@@ -199,37 +203,13 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       );
     });
 
-    it('Accepte la création d’un espace pour une demande en attente d’adhésion', async () => {
-      const demande = unConstructeurDeDemandeDevenirAidant()
-        .pourUneDemandeEnAttenteAdhesion()
-        .construis();
-      await entrepots.demandesDevenirAidant().persiste(demande);
-
-      await new CapteurSagaDemandeAidantCreeEspaceAidant(
-        entrepots,
-        busCommande,
-        busEvenementDeTest
-      ).execute({
-        idDemande: demande.identifiant,
-        type: 'SagaDemandeAidantEspaceAidant',
-      });
-
-      expect(
-        (await entrepots.demandesDevenirAidant().lis(demande.identifiant))
-          .statut
-      ).toStrictEqual(StatutDemande.TRAITEE);
-      const aidant = (await entrepots.aidants().tous())[0];
-      expect(aidant.entite).toStrictEqual<EntiteAidant>({
-        type: demande.entite!.type,
-      });
-    });
-
     describe('Vérifie la validité de l’entité', () => {
-      it('N’accepte pas la création d’un espace Aidant pour une demande dont l’entité n’est pas une Association et pour laquelle il manque le nom et le siret', async () => {
+      it('N’accepte pas la création d’un espace Aidant pour une demande pour laquelle il manque le nom et le siret de l’entité', async () => {
         const demande = unConstructeurDeDemandeDevenirAidant().construis();
-        await entrepots
-          .demandesDevenirAidant()
-          .persiste({ ...demande, entite: { type: 'ServicePublic' } });
+        await entrepots.demandesDevenirAidant().persiste({
+          ...demande,
+          entite: { type: 'ServicePublic' } as EntiteDemande,
+        });
 
         const execution = new CapteurSagaDemandeAidantCreeEspaceAidant(
           entrepots,

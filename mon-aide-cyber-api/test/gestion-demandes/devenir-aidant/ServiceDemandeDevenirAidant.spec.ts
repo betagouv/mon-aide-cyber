@@ -6,12 +6,14 @@ import {
 import { EntrepotDemandeDevenirAidantMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { uneDemandeDevenirAidant } from '../../constructeurs/constructeurDemandesDevenirAidant';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { DemandeDevenirAidant } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 describe('Service demande devenir Aidant', () => {
   it('Retourne les demandes en attente', async () => {
-    const premiereDemande = uneDemandeDevenirAidant().construis();
+    const { entite, ...premiereDemande } =
+      uneDemandeDevenirAidant().construis();
     const entrepot = new EntrepotDemandeDevenirAidantMemoire();
-    await entrepot.persiste(premiereDemande);
+    await entrepot.persiste(premiereDemande as DemandeDevenirAidant);
     await entrepot.persiste(uneDemandeDevenirAidant().traitee().construis());
 
     const demandes =

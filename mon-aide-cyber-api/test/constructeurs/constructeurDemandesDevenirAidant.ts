@@ -20,7 +20,11 @@ class ConstructeurDemandeDevenirAidant
   private nom: string = fakerFR.person.lastName();
   private prenom: string = fakerFR.person.firstName();
   private statut: StatutDemande = StatutDemande.EN_COURS;
-  private entite?: EntiteDemande | undefined = undefined;
+  private entite: EntiteDemande = {
+    type: 'Association',
+    nom: fakerFR.company.name(),
+    siret: fakerFR.string.numeric(10),
+  };
 
   traitee(): ConstructeurDemandeDevenirAidant {
     this.statut = StatutDemande.TRAITEE;
@@ -36,15 +40,14 @@ class ConstructeurDemandeDevenirAidant
     return this;
   }
 
-  enAttenteAdhesion(): ConstructeurDemandeDevenirAidant {
-    this.entite = {
-      type: 'Association',
-    };
+  pour(nom: string, prenom: string): ConstructeurDemandeDevenirAidant {
+    this.nom = nom;
+    this.prenom = prenom;
     return this;
   }
 
-  avantArbitrage(): ConstructeurDemandeDevenirAidant {
-    this.entite = undefined;
+  ayantPourMail(email: string): ConstructeurDemandeDevenirAidant {
+    this.mail = email;
     return this;
   }
 
@@ -59,17 +62,6 @@ class ConstructeurDemandeDevenirAidant
       statut: this.statut,
       ...(this.entite && { entite: this.entite }),
     };
-  }
-
-  pour(nom: string, prenom: string): ConstructeurDemandeDevenirAidant {
-    this.nom = nom;
-    this.prenom = prenom;
-    return this;
-  }
-
-  ayantPourMail(email: string): ConstructeurDemandeDevenirAidant {
-    this.mail = email;
-    return this;
   }
 }
 

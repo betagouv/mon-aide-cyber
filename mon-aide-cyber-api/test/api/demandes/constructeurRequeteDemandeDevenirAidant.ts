@@ -2,6 +2,7 @@ import { Constructeur } from '../../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
 import { departements } from '../../../src/gestion-demandes/departements';
 import { UtilisateurInscrit } from '../../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
+import { TypeEntite } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 type RequeteDemandeDevenirAidant = {
   nom: string;
@@ -10,7 +11,7 @@ type RequeteDemandeDevenirAidant = {
   departement: string;
   cguValidees: boolean;
   signatureCharte?: boolean;
-  entite?: { type: string; nom?: string; siret?: string };
+  entite: { type: TypeEntite; nom: string; siret: string };
 };
 
 class ConstructeurRequeteDemandeDevenirAidant
@@ -24,8 +25,11 @@ class ConstructeurRequeteDemandeDevenirAidant
     departements[fakerFR.number.int({ min: 0, max: departements.length - 1 })]
       .nom;
   private signatureCharte: boolean | undefined = undefined;
-  private entite: { type: string; nom?: string; siret?: string } | undefined =
-    undefined;
+  private entite: { type: TypeEntite; nom: string; siret: string } = {
+    type: 'Association',
+    nom: fakerFR.company.name(),
+    siret: fakerFR.number.int(10).toString(),
+  };
 
   dansLeDepartement(
     departement: string
@@ -52,7 +56,7 @@ class ConstructeurRequeteDemandeDevenirAidant
   dansUneEntite = (
     nom: string,
     siret: string,
-    type: string
+    type: TypeEntite
   ): ConstructeurRequeteDemandeDevenirAidant => {
     this.entite = {
       nom,
@@ -64,12 +68,6 @@ class ConstructeurRequeteDemandeDevenirAidant
 
   ayantSigneLaCharte(): ConstructeurRequeteDemandeDevenirAidant {
     this.signatureCharte = true;
-    return this;
-  }
-
-  enAttenteAdhesionAssociation(): ConstructeurRequeteDemandeDevenirAidant {
-    this.signatureCharte = true;
-    this.entite = { type: 'Association' };
     return this;
   }
 
@@ -95,7 +93,7 @@ class ConstructeurRequeteDemandeDevenirAidant
       ...(this.signatureCharte !== undefined && {
         signatureCharte: this.signatureCharte,
       }),
-      ...(this.entite !== undefined && { entite: this.entite }),
+      entite: this.entite,
     };
   }
 }
