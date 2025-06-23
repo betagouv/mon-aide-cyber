@@ -121,11 +121,9 @@ const validateurNouveauParcoursDemandeDevenirAidant = () => {
           .custom((value: boolean) => value)
           .withMessage('Veuillez signer la Charte Aidant.'),
         body('entite.nom')
-          .optional()
           .notEmpty()
           .withMessage('Veuillez renseigner un nom pour votre entité'),
         body('entite.siret')
-          .optional()
           .notEmpty()
           .withMessage('Veuillez renseigner un SIRET pour votre entité'),
         body('entite.type').optional().typeEntite(),
@@ -244,16 +242,6 @@ export const routesAPIDemandesDevenirAidant = (
       reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>,
       suite: NextFunction
     ) => {
-      const genereEntite = () => ({
-        entite: {
-          type: requete.body.entite.type,
-          ...(requete.body.entite.nom && { nom: requete.body.entite.nom }),
-          ...(requete.body.entite.siret && {
-            siret: requete.body.entite.siret,
-          }),
-        },
-      });
-
       const valideLesCGUDeLUtilisateurConnecte = async () => {
         await unServiceUtilisateurInscrit(
           entrepots.utilisateursInscrits(),
@@ -287,7 +275,11 @@ export const routesAPIDemandesDevenirAidant = (
           mail: requete.body.mail.toLowerCase(),
           nom: requete.body.nom,
           prenom: requete.body.prenom,
-          ...(requete.body.entite && genereEntite()),
+          entite: {
+            type: requete.body.entite.type,
+            nom: requete.body.entite.nom,
+            siret: requete.body.entite.siret,
+          },
         };
 
         await configuration.busCommande.publie(commande);

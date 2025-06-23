@@ -77,17 +77,11 @@ export class EntrepotDemandeDevenirAidantPostgres
         prenom: this.chiffrement.chiffre(entite.prenom),
         mail: this.chiffrement.chiffre(entite.mail),
         nomDepartement: this.chiffrement.chiffre(entite.departement.nom),
-        ...(entite.entite && {
-          entite: {
-            type: this.chiffrement.chiffre(entite.entite.type),
-            ...(entite.entite.nom && {
-              nom: this.chiffrement.chiffre(entite.entite.nom),
-            }),
-            ...(entite.entite.siret && {
-              siret: this.chiffrement.chiffre(entite.entite.siret),
-            }),
-          },
-        }),
+        entite: {
+          type: this.chiffrement.chiffre(entite.entite.type),
+          nom: this.chiffrement.chiffre(entite.entite.nom),
+          siret: this.chiffrement.chiffre(entite.entite.siret),
+        },
       },
       statut: entite.statut,
     };
@@ -112,19 +106,19 @@ export class EntrepotDemandeDevenirAidantPostgres
       mail: this.chiffrement.dechiffre(dto.donnees.mail),
       departement: departementDechiffre,
       statut: dto.statut,
-      ...(dto.donnees.entite && {
+      ...((dto.donnees.entite && {
         entite: {
           type: this.chiffrement.dechiffre(
             dto.donnees.entite.type
           ) as TypeEntite,
-          ...(dto.donnees.entite.nom && {
+          ...((dto.donnees.entite.nom && {
             nom: this.chiffrement.dechiffre(dto.donnees.entite.nom),
-          }),
-          ...(dto.donnees.entite.siret && {
+          }) || { nom: '' }),
+          ...((dto.donnees.entite.siret && {
             siret: this.chiffrement.dechiffre(dto.donnees.entite.siret),
-          }),
+          }) || { siret: '' }),
         },
-      }),
+      }) || { entite: { type: 'Association', nom: '', siret: '' } }),
     };
   }
 }

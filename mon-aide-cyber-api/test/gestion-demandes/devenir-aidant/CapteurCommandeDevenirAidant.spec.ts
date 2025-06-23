@@ -7,6 +7,7 @@ import {
 } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import {
   CapteurCommandeDevenirAidant,
+  CommandeDevenirAidant,
   DemandeDevenirAidantCreee,
   DemandeDevenirAidantModifiee,
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
@@ -24,6 +25,29 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+
+const uneCommandeDevenirAidant = (commande?: {
+  departement?: Departement;
+  mail?: string;
+  nom?: string;
+  prenom?: string;
+  entite?: {
+    nom?: string;
+    siret?: string;
+    type?: 'ServicePublic' | 'Association';
+  };
+}): CommandeDevenirAidant => ({
+  departement: commande?.departement ?? ardennes,
+  mail: commande?.mail ?? 'email',
+  nom: commande?.nom ?? 'nom',
+  prenom: commande?.prenom ?? 'prenom',
+  entite: {
+    nom: commande?.entite?.nom ?? 'Beta-Gouv',
+    siret: commande?.entite?.siret ?? '1234567890',
+    type: commande?.entite?.type ?? 'ServicePublic',
+  },
+  type: 'CommandeDevenirAidant',
+});
 
 describe('Capteur de commande demande devenir aidant', () => {
   const annuaireCot = () => ({
@@ -43,13 +67,12 @@ describe('Capteur de commande demande devenir aidant', () => {
       new AdaptateurEnvoiMailMemoire(),
       annuaireCot,
       unServiceAidant(entrepots.aidants())
-    ).execute({
-      departement: departements[1],
-      mail: 'email',
-      nom: 'nom',
-      prenom: 'prenom',
-      type: 'CommandeDevenirAidant',
-    });
+    ).execute(
+      uneCommandeDevenirAidant({
+        departement: departements[1],
+        entite: { type: 'ServicePublic', nom: 'DINUM', siret: '1234567890' },
+      })
+    );
 
     expect(demandeDevenirAidant).toStrictEqual<DemandeDevenirAidant>({
       departement: { nom: 'Aisne', code: '02', codeRegion: '32' },
@@ -59,6 +82,11 @@ describe('Capteur de commande demande devenir aidant', () => {
       identifiant: expect.any(String),
       date: new Date(Date.parse('2024-08-01T14:45:17+01:00')),
       statut: StatutDemande.EN_COURS,
+      entite: {
+        type: 'ServicePublic',
+        nom: 'DINUM',
+        siret: '1234567890',
+      },
     });
   });
 
@@ -75,13 +103,12 @@ describe('Capteur de commande demande devenir aidant', () => {
       new AdaptateurEnvoiMailMemoire(),
       annuaireCot,
       unServiceAidant(entrepots.aidants())
-    ).execute({
-      departement: departements[1],
-      mail: 'email',
-      nom: 'nom',
-      prenom: 'prenom',
-      type: 'CommandeDevenirAidant',
-    });
+    ).execute(
+      uneCommandeDevenirAidant({
+        departement: departements[1],
+        entite: { type: 'ServicePublic', nom: 'DINUM', siret: '1234567890' },
+      })
+    );
 
     expect(
       busEvenementDeTest.evenementRecu
@@ -93,6 +120,7 @@ describe('Capteur de commande demande devenir aidant', () => {
         date: FournisseurHorloge.maintenant(),
         identifiantDemande: demandeDevenirAidant.identifiant,
         departement: demandeDevenirAidant.departement.nom,
+        type: 'ServicePublic',
       },
     });
   });
@@ -115,13 +143,12 @@ describe('Capteur de commande demande devenir aidant', () => {
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
         unServiceAidant(entrepots.aidants())
-      ).execute({
-        departement: departements[0],
-        mail: 'email',
-        nom: 'nom',
-        prenom: 'prenom',
-        type: 'CommandeDevenirAidant',
-      })
+      ).execute(
+        uneCommandeDevenirAidant({
+          departement: departements[0],
+          entite: { type: 'ServicePublic', nom: 'DINUM', siret: '1234567890' },
+        })
+      )
     ).rejects.toThrowError('Une demande existe déjà');
   });
 
@@ -142,13 +169,13 @@ describe('Capteur de commande demande devenir aidant', () => {
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
         unServiceAidant(entrepots.aidants())
-      ).execute({
-        departement: departements[0],
-        mail: aidant.email,
-        nom: 'nom',
-        prenom: 'prenom',
-        type: 'CommandeDevenirAidant',
-      })
+      ).execute(
+        uneCommandeDevenirAidant({
+          departement: departements[0],
+          mail: aidant.email,
+          entite: { type: 'ServicePublic', nom: 'DINUM', siret: '1234567890' },
+        })
+      )
     ).rejects.toThrowError('Cette adresse électronique est déja utilisée');
   });
 
@@ -169,13 +196,7 @@ describe('Capteur de commande demande devenir aidant', () => {
         adaptateurEnvoiMail,
         annuaireCot,
         unServiceAidant(entrepots.aidants())
-      ).execute({
-        departement: departements[1],
-        mail: 'email',
-        nom: 'nom',
-        prenom: 'prenom',
-        type: 'CommandeDevenirAidant',
-      });
+      ).execute(uneCommandeDevenirAidant());
 
       expect(
         adaptateurEnvoiMail.aEteEnvoyeA('email', 'Bonjour le monde!')
@@ -195,13 +216,7 @@ describe('Capteur de commande demande devenir aidant', () => {
             'hauts-de-france@ssi.gouv.fr',
         }),
         unServiceAidant(entrepots.aidants())
-      ).execute({
-        departement: departements[1],
-        mail: 'email',
-        nom: 'nom',
-        prenom: 'prenom',
-        type: 'CommandeDevenirAidant',
-      });
+      ).execute(uneCommandeDevenirAidant());
 
       expect(
         adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
@@ -223,13 +238,7 @@ describe('Capteur de commande demande devenir aidant', () => {
         adaptateurEnvoiMail,
         annuaireCot,
         unServiceAidant(entrepots.aidants())
-      ).execute({
-        departement: departements[1],
-        mail: 'email',
-        nom: 'nom',
-        prenom: 'prenom',
-        type: 'CommandeDevenirAidant',
-      });
+      ).execute(uneCommandeDevenirAidant());
 
       expect(
         adaptateurEnvoiMail.aEteEnvoyeEnCopieInvisibleA(
@@ -253,13 +262,7 @@ describe('Capteur de commande demande devenir aidant', () => {
           adaptateurEnvoiMail,
           annuaireCot,
           unServiceAidant(entrepots.aidants())
-        ).execute({
-          departement: departements[1],
-          mail: 'email',
-          nom: 'nom',
-          prenom: 'prenom',
-          type: 'CommandeDevenirAidant',
-        })
+        ).execute(uneCommandeDevenirAidant())
       ).rejects.toThrowError('Le mail de mise en relation n’a pu être remis.');
     });
   });
@@ -280,18 +283,7 @@ describe('Capteur de commande demande devenir aidant', () => {
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
         unServiceAidant(entrepots.aidants())
-      ).execute({
-        departement: ardennes,
-        mail: 'email',
-        nom: 'nom',
-        prenom: 'prenom',
-        entite: {
-          nom: 'Beta-Gouv',
-          siret: '1234567890',
-          type: 'ServicePublic',
-        },
-        type: 'CommandeDevenirAidant',
-      });
+      ).execute(uneCommandeDevenirAidant());
 
       expect(demandeDevenirAidant).toStrictEqual<DemandeDevenirAidant>({
         departement: ardennes,
@@ -330,6 +322,8 @@ describe('Capteur de commande demande devenir aidant', () => {
           prenom: 'prenom',
           entite: {
             type: 'Association',
+            nom: 'OKIWI',
+            siret: '0987654321',
           },
           type: 'CommandeDevenirAidant',
         });
@@ -344,6 +338,8 @@ describe('Capteur de commande demande devenir aidant', () => {
           statut: StatutDemande.EN_COURS,
           entite: {
             type: 'Association',
+            nom: 'OKIWI',
+            siret: '0987654321',
           },
         });
       });
@@ -351,22 +347,14 @@ describe('Capteur de commande demande devenir aidant', () => {
       it("Envoie le mail récapitulatif à l'Aidant", async () => {
         const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
         const entrepots = new EntrepotsMemoire();
+        const { entite, ...demande } = unConstructeurDeDemandeDevenirAidant()
+          .avecUnMail('email-existant@mail.com')
+          .construis();
         await entrepots
           .demandesDevenirAidant()
-          .persiste(
-            unConstructeurDeDemandeDevenirAidant()
-              .avecUnMail('email-existant@mail.com')
-              .pourUneDemandeEnAttenteAdhesion()
-              .construis()
-          );
+          .persiste(demande as DemandeDevenirAidant);
 
-        await new CapteurCommandeDevenirAidant(
-          entrepots,
-          new BusEvenementDeTest(),
-          adaptateurEnvoiMail,
-          annuaireCot,
-          unServiceAidant(entrepots.aidants())
-        ).execute({
+        const commande: CommandeDevenirAidant = {
           departement: departements[1],
           mail: 'email-existant@mail.com',
           nom: 'nom',
@@ -375,7 +363,14 @@ describe('Capteur de commande demande devenir aidant', () => {
           entite: {
             type: 'Association',
           },
-        });
+        } as CommandeDevenirAidant;
+        await new CapteurCommandeDevenirAidant(
+          entrepots,
+          new BusEvenementDeTest(),
+          adaptateurEnvoiMail,
+          annuaireCot,
+          unServiceAidant(entrepots.aidants())
+        ).execute(commande);
 
         expect(
           adaptateurEnvoiMail.aEteEnvoyeA(
@@ -446,18 +441,12 @@ describe('Capteur de commande demande devenir aidant', () => {
           new AdaptateurEnvoiMailMemoire(),
           annuaireCot,
           unServiceAidant(entrepots.aidants())
-        ).execute({
-          departement: ardennes,
-          mail: 'email-existant@mail.com',
-          nom: 'nom',
-          prenom: 'prenom',
-          entite: {
-            nom: 'Beta-Gouv',
-            siret: '1234567890',
-            type: 'ServicePublic',
-          },
-          type: 'CommandeDevenirAidant',
-        });
+        ).execute(
+          uneCommandeDevenirAidant({
+            departement: ardennes,
+            mail: 'email-existant@mail.com',
+          })
+        );
 
         const demandes = await entrepots.demandesDevenirAidant().tous();
         expect(demandes).toHaveLength(1);
@@ -494,18 +483,12 @@ describe('Capteur de commande demande devenir aidant', () => {
           adaptateurEnvoiMail,
           annuaireCot,
           unServiceAidant(entrepots.aidants())
-        ).execute({
-          departement: departements[1],
-          mail: 'email-existant@mail.com',
-          nom: 'nom',
-          prenom: 'prenom',
-          type: 'CommandeDevenirAidant',
-          entite: {
-            nom: 'Beta-Gouv',
-            siret: '1234567890',
-            type: 'ServicePublic',
-          },
-        });
+        ).execute(
+          uneCommandeDevenirAidant({
+            departement: departements[1],
+            mail: 'email-existant@mail.com',
+          })
+        );
 
         expect(
           adaptateurEnvoiMail.aEteEnvoyeA(
@@ -532,18 +515,12 @@ describe('Capteur de commande demande devenir aidant', () => {
           new AdaptateurEnvoiMailMemoire(),
           annuaireCot,
           unServiceAidant(entrepots.aidants())
-        ).execute({
-          departement: departements[1],
-          mail: 'email-existant@mail.com',
-          nom: 'nom',
-          prenom: 'prenom',
-          type: 'CommandeDevenirAidant',
-          entite: {
-            nom: 'Beta-Gouv',
-            siret: '1234567890',
-            type: 'ServicePublic',
-          },
-        });
+        ).execute(
+          uneCommandeDevenirAidant({
+            departement: departements[1],
+            mail: 'email-existant@mail.com',
+          })
+        );
 
         expect(
           busEvenementDeTest.evenementRecu
@@ -578,18 +555,12 @@ describe('Capteur de commande demande devenir aidant', () => {
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
         unServiceAidant(entrepots.aidants())
-      ).execute({
-        departement: departements[1],
-        mail: 'email-existant@mail.com',
-        nom: 'nom',
-        prenom: 'prenom',
-        type: 'CommandeDevenirAidant',
-        entite: {
-          nom: 'Beta-Gouv',
-          siret: '1234567890',
-          type: 'ServicePublic',
-        },
-      });
+      ).execute(
+        uneCommandeDevenirAidant({
+          departement: departements[1],
+          mail: 'email-existant@mail.com',
+        })
+      );
 
       expect(
         busEvenementDeTest.consommateursTestes.get(

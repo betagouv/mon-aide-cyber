@@ -4,7 +4,6 @@ import { unConstructeurDeDemandeDevenirAidant } from '../../../gestion-demandes/
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
 import {
   DemandeDevenirAidant,
-  EntiteDemande,
   StatutDemande,
 } from '../../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import {
@@ -14,6 +13,7 @@ import {
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
 import knexfile from '../../../../src/infrastructure/entrepots/postgres/knexfile';
 import knex from 'knex';
+import { FournisseurHorlogeDeTest } from '../../horloge/FournisseurHorlogeDeTest';
 
 describe('Entrepot Demande Devenir Aidant', () => {
   beforeEach(async () => {
@@ -29,6 +29,9 @@ describe('Entrepot Demande Devenir Aidant', () => {
         [demandeDevenirAidant.prenom, 'bbb'],
         [demandeDevenirAidant.mail, 'ccc'],
         [demandeDevenirAidant.departement.nom, 'ddd'],
+        [demandeDevenirAidant.entite.nom, 'eee'],
+        [demandeDevenirAidant.entite.siret, 'fff'],
+        [demandeDevenirAidant.entite.type, 'ggg'],
       ])
     );
 
@@ -43,40 +46,6 @@ describe('Entrepot Demande Devenir Aidant', () => {
     expect(demandeDevenirAidantRecu).toStrictEqual<DemandeDevenirAidant>(
       demandeDevenirAidant
     );
-  });
-
-  it("Persiste l'entité de l'Aidant dans la demande", async () => {
-    const demandeDevenirAidant = unConstructeurDeDemandeDevenirAidant()
-      .avecUneEntite('Association')
-      .construis();
-    const serviceDeChiffrement = new FauxServiceDeChiffrement(
-      new Map([
-        [demandeDevenirAidant.nom, 'aaa'],
-        [demandeDevenirAidant.prenom, 'bbb'],
-        [demandeDevenirAidant.mail, 'ccc'],
-        [demandeDevenirAidant.departement.nom, 'ddd'],
-        [demandeDevenirAidant.entite!.nom!, 'eee'],
-        [demandeDevenirAidant.entite!.siret!, 'ffff'],
-        [demandeDevenirAidant.entite!.type, 'ggggg'],
-      ])
-    );
-
-    await new EntrepotDemandeDevenirAidantPostgres(
-      serviceDeChiffrement
-    ).persiste(demandeDevenirAidant);
-
-    const demandeDevenirAidantRecu =
-      await new EntrepotDemandeDevenirAidantPostgres(serviceDeChiffrement).lis(
-        demandeDevenirAidant.identifiant
-      );
-    expect(demandeDevenirAidantRecu.entite).toStrictEqual<EntiteDemande>({
-      nom: demandeDevenirAidant.entite!.nom!,
-      siret: demandeDevenirAidant.entite!.siret!,
-      type: demandeDevenirAidant.entite!.type,
-    });
-    expect(serviceDeChiffrement.aEteAppeleAvec('eee')).toBe(true);
-    expect(serviceDeChiffrement.aEteAppeleAvec('ffff')).toBe(true);
-    expect(serviceDeChiffrement.aEteAppeleAvec('ggggg')).toBe(true);
   });
 
   it("Lève une erreur lorsque le département persisté n'est pas trouvé", async () => {
@@ -144,6 +113,9 @@ describe('Entrepot Demande Devenir Aidant', () => {
         [demandeDevenirAidant.prenom, 'bbb'],
         [demandeDevenirAidant.mail, 'ccc'],
         [demandeDevenirAidant.departement.nom, 'ddd'],
+        [demandeDevenirAidant.entite.nom, 'eee'],
+        [demandeDevenirAidant.entite.siret, 'fff'],
+        [demandeDevenirAidant.entite.type, 'ggg'],
       ])
     );
     await new EntrepotDemandeDevenirAidantPostgres(
@@ -162,6 +134,7 @@ describe('Entrepot Demande Devenir Aidant', () => {
       mail: demandeDevenirAidant.mail,
       departement: demandeDevenirAidant.departement,
       statut: StatutDemande.EN_COURS,
+      entite: demandeDevenirAidant.entite,
     });
   });
 
@@ -197,6 +170,9 @@ describe('Entrepot Demande Devenir Aidant', () => {
         [demandeDevenirAidant.prenom, 'bbb'],
         [demandeDevenirAidant.mail, 'ccc'],
         [demandeDevenirAidant.departement.nom, 'ddd'],
+        [demandeDevenirAidant.entite.nom, 'eee'],
+        [demandeDevenirAidant.entite.siret, 'fff'],
+        [demandeDevenirAidant.entite.type, 'ggg'],
       ])
     );
     await new EntrepotDemandeDevenirAidantPostgres(
@@ -218,6 +194,109 @@ describe('Entrepot Demande Devenir Aidant', () => {
       mail: demandeDevenirAidant.mail,
       departement: demandeDevenirAidant.departement,
       statut: StatutDemande.TRAITEE,
+      entite: demandeDevenirAidant.entite,
+    });
+  });
+
+  it('Retourne les anciennes demandes sans entité, demandes concernant des attentes d’adhésion à des associations', async () => {
+    FournisseurHorlogeDeTest.initialise(new Date());
+    const identifiantDemande = crypto.randomUUID();
+    const connexionKnex = knex(knexfile);
+    await connexionKnex
+      .insert({
+        id: identifiantDemande,
+        donnees: {
+          nom: 'aaa',
+          prenom: 'bbb',
+          nomDepartement: 'ddd',
+          mail: 'ccc',
+          date: FournisseurHorloge.maintenant().toISOString(),
+        },
+        statut: StatutDemande.EN_COURS,
+      })
+      .into('demandes-devenir-aidant');
+    const demandeDevenirAidant = unConstructeurDeDemandeDevenirAidant()
+      .enDate(FournisseurHorloge.maintenant())
+      .avecPourIdentifiant(identifiantDemande)
+      .construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [demandeDevenirAidant.nom, 'aaa'],
+        [demandeDevenirAidant.prenom, 'bbb'],
+        [demandeDevenirAidant.mail, 'ccc'],
+        [demandeDevenirAidant.departement.nom, 'ddd'],
+      ])
+    );
+
+    const demandeRecue = await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).lis(demandeDevenirAidant.identifiant);
+
+    expect(demandeRecue).toStrictEqual<DemandeDevenirAidant>({
+      identifiant: demandeDevenirAidant.identifiant,
+      date: demandeDevenirAidant.date,
+      nom: demandeDevenirAidant.nom,
+      prenom: demandeDevenirAidant.prenom,
+      mail: demandeDevenirAidant.mail,
+      departement: demandeDevenirAidant.departement,
+      statut: StatutDemande.EN_COURS,
+      entite: {
+        type: 'Association',
+        nom: '',
+        siret: '',
+      },
+    });
+  });
+
+  it('Retourne les anciennes demandes dont seules le type d’entité était fourni, demandes concernant des attentes d’adhésion à des associations', async () => {
+    FournisseurHorlogeDeTest.initialise(new Date());
+    const identifiantDemande = crypto.randomUUID();
+    const connexionKnex = knex(knexfile);
+    await connexionKnex
+      .insert({
+        id: identifiantDemande,
+        donnees: {
+          nom: 'aaa',
+          prenom: 'bbb',
+          nomDepartement: 'ddd',
+          mail: 'ccc',
+          entite: { type: 'eee' },
+          date: FournisseurHorloge.maintenant().toISOString(),
+        },
+        statut: StatutDemande.EN_COURS,
+      })
+      .into('demandes-devenir-aidant');
+    const demandeDevenirAidant = unConstructeurDeDemandeDevenirAidant()
+      .enDate(FournisseurHorloge.maintenant())
+      .avecPourIdentifiant(identifiantDemande)
+      .construis();
+    const serviceDeChiffrement = new FauxServiceDeChiffrement(
+      new Map([
+        [demandeDevenirAidant.nom, 'aaa'],
+        [demandeDevenirAidant.prenom, 'bbb'],
+        [demandeDevenirAidant.mail, 'ccc'],
+        [demandeDevenirAidant.departement.nom, 'ddd'],
+        [demandeDevenirAidant.entite.type, 'eee'],
+      ])
+    );
+
+    const demandeRecue = await new EntrepotDemandeDevenirAidantPostgres(
+      serviceDeChiffrement
+    ).lis(demandeDevenirAidant.identifiant);
+
+    expect(demandeRecue).toStrictEqual<DemandeDevenirAidant>({
+      identifiant: demandeDevenirAidant.identifiant,
+      date: demandeDevenirAidant.date,
+      nom: demandeDevenirAidant.nom,
+      prenom: demandeDevenirAidant.prenom,
+      mail: demandeDevenirAidant.mail,
+      departement: demandeDevenirAidant.departement,
+      statut: StatutDemande.EN_COURS,
+      entite: {
+        type: 'Association',
+        nom: '',
+        siret: '',
+      },
     });
   });
 });

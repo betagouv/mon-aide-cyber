@@ -25,7 +25,7 @@ export type CommandeDevenirAidant = Omit<Commande, 'type'> & {
   mail: string;
   prenom: string;
   nom: string;
-  entite?: EntiteDemande;
+  entite: EntiteDemande;
 };
 
 class ErreurDemandeDevenirAidant extends Error {

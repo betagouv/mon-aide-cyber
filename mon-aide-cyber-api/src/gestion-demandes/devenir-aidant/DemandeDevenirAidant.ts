@@ -14,7 +14,7 @@ export type DemandeDevenirAidant = Aggregat & {
   mail: string;
   departement: Departement;
   statut: StatutDemande;
-  entite?: EntiteDemande;
+  entite: EntiteDemande;
 };
 export interface EntrepotDemandeDevenirAidant
   extends EntrepotEcriture<DemandeDevenirAidant> {
@@ -29,12 +29,15 @@ export type TypeEntite = 'ServicePublic' | 'ServiceEtat' | 'Association';
 
 export type EntiteDemande = {
   type: TypeEntite;
-  nom?: string;
-  siret?: string;
+  nom: string;
+  siret: string;
 };
 export const futurAidantEnAttenteAdhesionAssociation = (
   demandeDevenirAidant: DemandeDevenirAidant
 ) =>
-  demandeDevenirAidant.entite?.type === 'Association' &&
-  !demandeDevenirAidant.entite.nom &&
-  !demandeDevenirAidant.entite.siret;
+  demandeDevenirAidant.entite &&
+  demandeDevenirAidant.entite.type === 'Association' &&
+  (!demandeDevenirAidant.entite.nom ||
+    demandeDevenirAidant.entite.nom.trim() === '') &&
+  (!demandeDevenirAidant.entite.siret ||
+    demandeDevenirAidant.entite.siret.trim() === '');
