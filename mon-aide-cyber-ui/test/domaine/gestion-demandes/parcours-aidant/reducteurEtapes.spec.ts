@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
   choixTypeAidantFait,
-  choixUtilisationFaite,
   demandeDevenirAidantCreee,
   EtatEtapesDemande,
   initialiseReducteur,
@@ -57,32 +56,6 @@ class ConstructeurChoixTypeAidant
 const unChoixTypeAidant = () => new ConstructeurChoixTypeAidant();
 
 describe('Reducteur d’étapes pour le parcours Aidant', () => {
-  describe('Choix utilisation', () => {
-    it('Oeuvre pour l’intérêt général', () => {
-      const etat = reducteurEtapes(
-        initialiseReducteur(),
-        choixUtilisationFaite('InteretGeneral')
-      );
-
-      expect(etat).toStrictEqual({
-        etapeCourante: 'choixTypeAidant',
-        demande: undefined,
-      });
-    });
-
-    it('Oeuvre pour sa propre structure', () => {
-      const etat = reducteurEtapes(
-        initialiseReducteur(),
-        choixUtilisationFaite('ActiviteProfessionnelle')
-      );
-
-      expect(etat).toStrictEqual({
-        etapeCourante: 'signatureCGUs',
-        demande: undefined,
-      });
-    });
-  });
-
   describe("Choix du type d'Aidant", () => {
     it("Pour un représentant de l'Etat pour la Mairie de BORDEAUX", () => {
       const typeAidant = unChoixTypeAidant()

@@ -1,4 +1,3 @@
-import { Utilisation } from './choix-utilisation/ChoixUtilisation.tsx';
 import { Entreprise } from './Entreprise';
 
 export type TypeAidant =
@@ -28,12 +27,10 @@ type DemandeDevenirAidant = {
 
 export type EtatEtapesDemande = {
   etapeCourante: Etape;
-  erreur?: Error;
   demande: DemandeDevenirAidant | undefined;
 };
 
 enum TypeActionEtapesDemande {
-  CHOIX_UTILISATION_FAITE = 'CHOIX_UTILISATION_FAITE',
   CHOIX_TYPE_AIDANT_FAIT = 'CHOIX_TYPE_AIDANT_FAIT',
   CHARTE_AIDANT_SIGNEE = 'CHARTE_AIDANT_SIGNEE',
   CGU_VALIDEES = 'CGU_VALIDEES',
@@ -42,10 +39,6 @@ enum TypeActionEtapesDemande {
 }
 
 type ActionEtapesDemande =
-  | {
-      type: TypeActionEtapesDemande.CHOIX_UTILISATION_FAITE;
-      choix: Utilisation;
-    }
   | {
       type: TypeActionEtapesDemande.CHOIX_TYPE_AIDANT_FAIT;
       typeAidantEtSonEntite: TypeAidantEtSonEntite;
@@ -75,14 +68,6 @@ export const reducteurEtapes = (
       return {
         ...etat,
         etapeCourante: etapesPrecedente.get(etat.etapeCourante)!,
-      };
-    case TypeActionEtapesDemande.CHOIX_UTILISATION_FAITE:
-      return {
-        ...etat,
-        etapeCourante:
-          action.choix === 'InteretGeneral'
-            ? 'choixTypeAidant'
-            : 'signatureCGUs',
       };
     case TypeActionEtapesDemande.CHOIX_TYPE_AIDANT_FAIT:
       return {
@@ -125,13 +110,6 @@ export const reducteurEtapes = (
       };
   }
 };
-
-export const choixUtilisationFaite = (
-  choix: Utilisation
-): ActionEtapesDemande => ({
-  type: TypeActionEtapesDemande.CHOIX_UTILISATION_FAITE,
-  choix,
-});
 
 export const choixTypeAidantFait = (
   typeAidantEtSonEntite: TypeAidantEtSonEntite
