@@ -20,6 +20,14 @@ import { Input } from '../../../../composants/atomes/Input/Input.tsx';
 import { ChampValidationCGUs } from '../../../../composants/formulaires/ChampValidationCGUs.tsx';
 import { ReponseDemandeInitiee } from '../DevenirAidant.ts';
 
+export type ChampsFormulaireDevenirAidant = {
+  nom: string;
+  prenom: string;
+  mail: string;
+  departement: string;
+  cguValidees: boolean;
+};
+
 type ProprietesFormulaireDevenirAidant = PropsWithChildren<{
   informationsLieesALaDemande?: ReponseDemandeInitiee;
   surSoumission: ({
@@ -28,13 +36,7 @@ type ProprietesFormulaireDevenirAidant = PropsWithChildren<{
     mail,
     departement,
     cguValidees,
-  }: {
-    nom: string;
-    prenom: string;
-    mail: string;
-    departement: string;
-    cguValidees: boolean;
-  }) => void;
+  }: ChampsFormulaireDevenirAidant) => void;
   devientValide: (estValide: boolean) => void;
 }>;
 

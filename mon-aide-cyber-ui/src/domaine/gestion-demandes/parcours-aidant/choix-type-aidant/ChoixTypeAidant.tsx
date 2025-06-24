@@ -1,34 +1,45 @@
 import { useEffect, useState } from 'react';
 import Button from '../../../../composants/atomes/Button/Button.tsx';
-import { TypeAidant, TypeAidantEtSonEntite } from '../reducteurEtapes.ts';
 import { Entreprise } from '../Entreprise';
 import { SelecteurTypeAidant } from './SelecteurTypeAidant.tsx';
 import { RechercheEntreprise } from './RechercheEntreprise.tsx';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import { LienMailtoMAC } from '../../../../composants/atomes/LienMailtoMAC.tsx';
 import illustrationInteretGeneralMAC from '../../../../../public/images/illustration-interet-general-mac.svg';
+import { TypeAidant } from '../../devenir-aidant/DevenirAidant.ts';
+
+type InformationsTypeAidant = {
+  typeAidant: TypeAidant | undefined;
+  entite: Entreprise | undefined;
+};
 
 export const ChoixTypeAidant = ({
-  surClick,
+  surChoixTypeAidant,
   precedent,
   typeAidant,
 }: {
-  surClick: (reponseChoisie: TypeAidantEtSonEntite) => void;
+  surChoixTypeAidant: (reponseChoisie: InformationsTypeAidant) => void;
   precedent: () => void;
-  typeAidant: TypeAidantEtSonEntite | undefined;
+  typeAidant: InformationsTypeAidant | undefined;
 }) => {
   const [choix, setChoix] = useState<TypeAidant | undefined>(
     typeAidant?.typeAidant
   );
-  const [entite, setEntite] = useState<Entreprise | undefined | null>(
+  const [entite, setEntite] = useState<Entreprise | undefined>(
     typeAidant?.entite
   );
 
   useEffect(() => {
-    setEntite(null);
+    setEntite(undefined);
   }, [choix]);
 
-  const peutValiderEtape = (!!choix && !!entite) || choix === 'FuturAdherent';
+  const valideChoixTypeAidant = () => {
+    if (!choix && !entite) return;
+
+    surChoixTypeAidant({ typeAidant: choix, entite: entite });
+  };
+
+  const choixTypeAidantFait = !!choix && !!entite;
 
   return (
     <div className="fr-container fr-grid-row fr-grid-row--center zone-choix-type-aidant">
@@ -160,15 +171,11 @@ export const ChoixTypeAidant = ({
               <span>Précédent</span>
             </Button>
             <Button
-              disabled={!peutValiderEtape}
+              disabled={!choixTypeAidantFait}
               variant="primary"
               type="button"
               className="fr-btn bouton-mac bouton-mac-primaire"
-              onClick={() => {
-                if (choix) {
-                  surClick({ typeAidant: choix, entite: entite || undefined });
-                }
-              }}
+              onClick={valideChoixTypeAidant}
             >
               <span>Suivant</span>
             </Button>

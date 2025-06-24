@@ -3,28 +3,27 @@ import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import { useNavigate } from 'react-router-dom';
 import React, { useCallback, useReducer, useState } from 'react';
 import {
-  choixTypeAidantFait,
-  demandeDevenirAidantCreee,
+  avancerEtapeSuivante,
   Etape,
   initialiseReducteur,
-  reducteurEtapes,
+  reducteurMonEspaceDemandeDevenirAidant,
   retourEtapePrecedente,
-  signeCharteAidant,
-  TypeAidantEtSonEntite,
-  valideCGU,
-} from '../../../gestion-demandes/parcours-aidant/reducteurEtapes.ts';
+} from '../../../gestion-demandes/parcours-aidant/reducteurMonEspaceDemandeDevenirAidant.ts';
 import { useRecupereContexteNavigation } from '../../../../hooks/useRecupereContexteNavigation.ts';
 import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../../../MoteurDeLiens.ts';
 import { useMutation } from '@tanstack/react-query';
 import {
   CorpsDemandeDevenirAidant,
   entiteEnFonctionDuTypeAidant,
+  TypeAidant,
 } from '../../../gestion-demandes/devenir-aidant/DevenirAidant.ts';
 import { constructeurParametresAPI } from '../../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ChoixTypeAidant } from '../../../gestion-demandes/parcours-aidant/choix-type-aidant/ChoixTypeAidant.tsx';
 import { SignatureCharteAidant } from '../../../gestion-demandes/parcours-aidant/SignatureCharteAidant.tsx';
-import { SignatureCGU } from '../../../gestion-demandes/parcours-aidant/SignatureCGU.tsx';
-import { FormulaireDevenirAidant } from '../../../gestion-demandes/devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
+import {
+  ChampsFormulaireDevenirAidant,
+  FormulaireDevenirAidant,
+} from '../../../gestion-demandes/devenir-aidant/formulaire-devenir-aidant/FormulaireDevenirAidant.tsx';
 import { TypographieH5 } from '../../../../composants/communs/typographie/TypographieH5/TypographieH5.tsx';
 import Button from '../../../../composants/atomes/Button/Button.tsx';
 import { Alerte } from '../../../../composants/communs/messages/Alerte.tsx';
@@ -33,18 +32,34 @@ import { TypographieH4 } from '../../../../composants/communs/typographie/Typogr
 import { LienMailtoMAC } from '../../../../composants/atomes/LienMailtoMAC.tsx';
 import { useRecupereLesInformationsLieesALaDemande } from '../../../../hooks/useRecupereLesInformationsLieesALaDemande.ts';
 import { ReponseHATEOAS } from '../../../Lien.ts';
+import { Entreprise } from '../../../gestion-demandes/parcours-aidant/Entreprise';
 
 type ReponseDemandeDevenirAidant = ReponseHATEOAS;
+
+type InformationsTypeAidant = {
+  typeAidant: TypeAidant | undefined;
+  entite: Entreprise | undefined;
+};
 
 export const EcranMonEspaceDemandeDevenirAidant = () => {
   const navigationMAC = useNavigationMAC();
   const macAPI = useMACAPI();
   const navigate = useNavigate();
 
-  const [etatEtapeCourante, envoie] = useReducer(reducteurEtapes, {
-    ...initialiseReducteur(),
-    etapeCourante: 'choixTypeAidant',
-  });
+  const [charteValidee, setCharteValidee] = useState<boolean>(false);
+  const [informationsAidant, setInformationsAidant] =
+    useState<InformationsTypeAidant>({
+      entite: undefined,
+      typeAidant: undefined,
+    });
+
+  const [etatEtapeCourante, envoie] = useReducer(
+    reducteurMonEspaceDemandeDevenirAidant,
+    {
+      ...initialiseReducteur(),
+      etapeCourante: 'choixTypeAidant',
+    }
+  );
 
   const [estValide, setEstValide] = useState(false);
 
@@ -85,31 +100,31 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
     },
     onSuccess: (reponse) => {
       navigationMAC.setEtat(reponse.liens);
-      envoie(demandeDevenirAidantCreee());
+      envoie(avancerEtapeSuivante());
       window.scrollTo({ top: 0 });
     },
   });
 
   const surClickChoixTypeAidant = useCallback(
-    ({ typeAidant, entite }: TypeAidantEtSonEntite) => {
-      envoie(
-        choixTypeAidantFait({
+    ({ typeAidant, entite }: InformationsTypeAidant) => {
+      setInformationsAidant((etatPrecedent) => {
+        envoie(avancerEtapeSuivante());
+        return {
+          ...etatPrecedent,
           typeAidant,
           entite,
-        })
-      );
+        };
+      });
       window.scrollTo({ top: 0 });
     },
     []
   );
 
   const surSignatureCharteAidant = useCallback(() => {
-    envoie(signeCharteAidant());
-    window.scrollTo({ top: 0 });
-  }, []);
-
-  const surValidationCGU = useCallback(() => {
-    envoie(valideCGU());
+    setCharteValidee(() => {
+      envoie(avancerEtapeSuivante());
+      return true;
+    });
     window.scrollTo({ top: 0 });
   }, []);
 
@@ -122,13 +137,33 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
     window.scrollTo({ top: 0 });
   }, []);
 
+  const surSoumission = (formulaire: ChampsFormulaireDevenirAidant) => {
+    const { typeAidant, entite } = informationsAidant;
+    if (!typeAidant || !entite) return;
+
+    const entiteCorrespondante = entiteEnFonctionDuTypeAidant.get(typeAidant);
+
+    if (!charteValidee) return;
+
+    mutate({
+      ...formulaire,
+      signatureCharte: charteValidee,
+      ...(entiteCorrespondante && {
+        entite: entiteCorrespondante(entite?.nom, entite?.siret),
+      }),
+    });
+  };
+
   const etapes: Map<Etape, React.ReactElement> = new Map([
     [
       'choixTypeAidant',
       <ChoixTypeAidant
         key="choixTypeAidant"
-        typeAidant={etatEtapeCourante.demande?.type}
-        surClick={surClickChoixTypeAidant}
+        typeAidant={{
+          typeAidant: informationsAidant.typeAidant,
+          entite: informationsAidant.entite,
+        }}
+        surChoixTypeAidant={surClickChoixTypeAidant}
         precedent={retourAuChoixUtilisation}
       />,
     ],
@@ -139,18 +174,6 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
         signeCharteAidant={surSignatureCharteAidant}
         precedent={surClickEtapePrecedente}
       />,
-    ],
-    [
-      'signatureCGUs',
-      <div
-        key="signatureCGUs"
-        className="fr-container fr-grid-row fr-grid-row--center zone-signature-cgu"
-      >
-        <SignatureCGU
-          valideCGUs={surValidationCGU}
-          precedent={surClickEtapePrecedente}
-        />
-      </div>,
     ],
     [
       'formulaireDevenirAidant',
@@ -181,24 +204,7 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
           </FormulaireDevenirAidant.AvantPropos>
           <FormulaireDevenirAidant.Formulaire
             informationsLieesALaDemande={informationsLieesALaDemande}
-            surSoumission={(formulaire) => {
-              const { typeAidant, entite: entiteDuFormulaire } =
-                etatEtapeCourante.demande!.type;
-
-              const entiteCorrespondante =
-                entiteEnFonctionDuTypeAidant.get(typeAidant);
-
-              mutate({
-                ...formulaire,
-                signatureCharte: etatEtapeCourante.demande!.signatureCharte,
-                ...(entiteCorrespondante && {
-                  entite: entiteCorrespondante(
-                    entiteDuFormulaire?.nom,
-                    entiteDuFormulaire?.siret
-                  ),
-                }),
-              });
-            }}
+            surSoumission={surSoumission}
             devientValide={(estFormulaireValide) => {
               setEstValide(estFormulaireValide);
             }}
