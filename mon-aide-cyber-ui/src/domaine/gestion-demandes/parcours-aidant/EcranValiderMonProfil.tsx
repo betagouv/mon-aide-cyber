@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import {
   CorpsValidationProfilAidant,
   entiteEnFonctionDuTypeAidant,
+  TypeAidant,
 } from '../devenir-aidant/DevenirAidant.ts';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI.ts';
@@ -19,8 +20,13 @@ import {
   initialiseReducteur,
   reducteurEtapesValidationProfilAidant,
   retourEtapePrecedente,
-  TypeAidantEtSonEntite,
 } from '../../parcours-utilisation-service/parcours-validation-profil-aidant/reducteurEtapesValidationProfilAidant.ts';
+import { Entreprise } from './Entreprise';
+
+type InformationsTypeAidant = {
+  typeAidant: TypeAidant | undefined;
+  entite: Entreprise | undefined;
+};
 
 export const EcranValiderMonProfil = () => {
   const navigationMAC = useNavigationMAC();
@@ -64,7 +70,9 @@ export const EcranValiderMonProfil = () => {
   });
 
   const surClickChoixTypeAidant = useCallback(
-    ({ typeAidant, entite }: TypeAidantEtSonEntite) => {
+    ({ typeAidant, entite }: InformationsTypeAidant) => {
+      if (!typeAidant || !entite) return;
+
       envoie(
         choixTypeAidantFait({
           typeAidant,
@@ -89,8 +97,11 @@ export const EcranValiderMonProfil = () => {
       'choixTypeAidant',
       <ChoixTypeAidant
         key="choixTypeAidant"
-        typeAidant={etatEtapeCourante.demande?.type}
-        surClick={surClickChoixTypeAidant}
+        typeAidant={{
+          typeAidant: etatEtapeCourante.demande?.type.typeAidant,
+          entite: etatEtapeCourante.demande?.type.entite,
+        }}
+        surChoixTypeAidant={surClickChoixTypeAidant}
         precedent={retourAuChoixUtilisation}
       />,
     ],

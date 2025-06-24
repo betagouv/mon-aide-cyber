@@ -1,10 +1,6 @@
 import { Entreprise } from '../../gestion-demandes/parcours-aidant/Entreprise';
 
-export type TypeAidant =
-  | 'RepresentantEtat'
-  | 'AgentPublic'
-  | 'Association'
-  | 'FuturAdherent';
+export type TypeAidant = 'RepresentantEtat' | 'AgentPublic' | 'Association';
 
 export type TypeAidantEtSonEntite = {
   typeAidant: TypeAidant;

@@ -1,6 +1,5 @@
 import { ReponseHATEOAS } from '../../Lien.ts';
 import { Departement } from '../departement.ts';
-import { TypeAidant } from '../parcours-aidant/reducteurEtapes.ts';
 
 export type ReponseDemandeInitiee = ReponseHATEOAS & PreRequisDemande;
 export type DonneesUtilisateur = { nom: string; prenom: string; email: string };
@@ -31,6 +30,8 @@ export type CorpsValidationProfilAidant = {
   entite?: Entite;
 };
 
+export type TypeAidant = 'RepresentantEtat' | 'AgentPublic' | 'Association';
+
 export const entiteEnFonctionDuTypeAidant = new Map<
   TypeAidant,
   (nom?: string, siret?: string) => Entite
@@ -57,12 +58,6 @@ export const entiteEnFonctionDuTypeAidant = new Map<
       type: 'Association',
       nom,
       siret,
-    }),
-  ],
-  [
-    'FuturAdherent',
-    () => ({
-      type: 'Association',
     }),
   ],
 ]);
