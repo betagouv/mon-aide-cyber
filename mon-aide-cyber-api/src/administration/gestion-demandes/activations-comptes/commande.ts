@@ -8,8 +8,8 @@ import {
   Aidant,
   DemandeEnErreur,
   DemandeIncomplete,
-  validationCompteAidant,
-} from './validationCompteAidant';
+  activationsComptesAidants,
+} from './activationsComptesAidants';
 import { AdaptateurRelationsMAC } from '../../../relation/AdaptateurRelationsMAC';
 import { BusCommandeMAC } from '../../../infrastructure/bus/BusCommandeMAC';
 import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
@@ -20,25 +20,25 @@ import { AdaptateurDeRequeteHTTP } from '../../../infrastructure/adaptateurs/ada
 import { fabriqueAdaptateurEnvoiMail } from '../../../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
 
 const command = program
-  .description('Importe des aidants cyber')
+  .description('Active les comptes des Aidants')
   .argument(
     '<cheminFichier>',
-    'le chemin du fichier contenant les aidants cyber à importer (au format csv, séparation avec ";")'
+    'le chemin du fichier contenant les aidants cyber à activer (au format csv, séparation avec ";")'
   );
 
 const estDemandeIncomplete = (
-  traitement: TraitementCreationEspaceAidant
+  traitement: TraitementActivationEspaceAidant
 ): traitement is DemandeIncomplete =>
   !!(traitement as DemandeIncomplete).identificationDemande;
 
 const estDemandeEnErreur = (
-  traitement: TraitementCreationEspaceAidant
+  traitement: TraitementActivationEspaceAidant
 ): traitement is DemandeEnErreur => !!(traitement as DemandeEnErreur).erreur;
 
-const versLigneCSV = (aidant: TraitementCreationEspaceAidant) =>
+const versLigneCSV = (aidant: TraitementActivationEspaceAidant) =>
   `${aidant.nom};${aidant.email};${estDemandeIncomplete(aidant) ? aidant.identificationDemande : ''};${estDemandeEnErreur(aidant) ? aidant.erreur : ''}\n`;
 
-type TraitementCreationEspaceAidant =
+type TraitementActivationEspaceAidant =
   | Aidant
   | DemandeIncomplete
   | DemandeEnErreur;
@@ -67,7 +67,7 @@ command.action(async (...args: any[]) => {
     unAdaptateurRechercheEntreprise,
     adaptateurRelations
   );
-  const resultat = await validationCompteAidant(
+  const resultat = await activationsComptesAidants(
     entrepots,
     busCommandeMAC,
     fs.readFileSync(args[0], { encoding: 'utf-8' })
@@ -76,15 +76,15 @@ command.action(async (...args: any[]) => {
   if (resultat) {
     const rapport: string[] = ['Nom;Email;Identifiant demande;Erreur'];
     const dateMaintenantISO = FournisseurHorloge.maintenant().toISOString();
-    const imports: TraitementCreationEspaceAidant[] = [
+    const imports: TraitementActivationEspaceAidant[] = [
       ...resultat.demandesEnErreur,
       ...resultat.demandesIncomplete,
-      ...resultat.envoisMailCreationEspaceAidant,
+      ...resultat.activationsComptesAidants,
     ];
     console.log(
-      'Nombre d’Aidants cyber : %d\nNombre de mail envoyés suite à une demande : %d\nNombre de demandes toujours en cours : %d\nNombre de demandes en erreur : %d',
+      'Nombre d’Aidants cyber : %d\nNombre de comptes activés suite à une demande : %d\nNombre de demandes toujours en cours : %d\nNombre de demandes en erreur : %d',
       imports.length,
-      resultat.envoisMailCreationEspaceAidant.length,
+      resultat.activationsComptesAidants.length,
       resultat.demandesIncomplete.length,
       resultat.demandesEnErreur.length
     );
@@ -93,7 +93,7 @@ command.action(async (...args: any[]) => {
     });
 
     fs.writeFileSync(
-      `/tmp/rapport-importation-aidants-${dateMaintenantISO}.csv`,
+      `/tmp/rapport-activation-aidants-${dateMaintenantISO}.csv`,
       rapport.join(''),
       {
         encoding: 'utf-8',

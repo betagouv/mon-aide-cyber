@@ -3,15 +3,15 @@ import {
   unConstructeurAidantCSV,
   unConstructeurFichierAidantCSV,
 } from './ConstructeurNouvelImportAidantCSV';
-import {
-  ResultatValidationCompteAidant,
-  validationCompteAidant,
-} from '../../../../src/administration/aidants/espace-aidant/validationCompteAidant';
 import { uneDemandeDevenirAidant } from '../../../constructeurs/constructeurDemandesDevenirAidant';
 import { EntrepotsMemoire } from '../../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { EntrepotDemandeDevenirAidantMemoire } from '../../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { DemandeDevenirAidant } from '../../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { BusCommandeTest } from '../../../infrastructure/bus/BusCommandeTest';
+import {
+  activationsComptesAidants,
+  ResultatActivationsComptesAidants,
+} from '../../../../src/administration/gestion-demandes/activations-comptes/activationsComptesAidants';
 
 class EntrepotDemandeDevenirAidantMemoireGenerantErreur extends EntrepotDemandeDevenirAidantMemoire {
   private critereLeveErreur = '';
@@ -56,14 +56,14 @@ describe('Validation des comptes Aidants', () => {
       ])
       .construis();
 
-    const resultat = await validationCompteAidant(
+    const resultat = await activationsComptesAidants(
       entrepots,
       new BusCommandeTest(),
       csv
     );
 
-    expect(resultat).toStrictEqual<ResultatValidationCompteAidant>({
-      envoisMailCreationEspaceAidant: [
+    expect(resultat).toStrictEqual<ResultatActivationsComptesAidants>({
+      activationsComptesAidants: [
         { nom: 'Jean Dupont', email: 'jean.dupont@email.com' },
       ],
       demandesIncomplete: [],
@@ -88,14 +88,14 @@ describe('Validation des comptes Aidants', () => {
       ])
       .construis();
 
-    const resultat = await validationCompteAidant(
+    const resultat = await activationsComptesAidants(
       entrepots,
       new BusCommandeTest(),
       csv
     );
 
-    expect(resultat).toStrictEqual<ResultatValidationCompteAidant>({
-      envoisMailCreationEspaceAidant: [],
+    expect(resultat).toStrictEqual<ResultatActivationsComptesAidants>({
+      activationsComptesAidants: [],
       demandesIncomplete: [
         {
           nom: 'Jean Dupont',
@@ -138,14 +138,14 @@ describe('Validation des comptes Aidants', () => {
       ])
       .construis();
 
-    const resultat = await validationCompteAidant(
+    const resultat = await activationsComptesAidants(
       entrepots,
       new BusCommandeTest(),
       csv
     );
 
-    expect(resultat).toStrictEqual<ResultatValidationCompteAidant>({
-      envoisMailCreationEspaceAidant: [
+    expect(resultat).toStrictEqual<ResultatActivationsComptesAidants>({
+      activationsComptesAidants: [
         { nom: 'Jean Dujardin', email: 'jean.dujardin@email.com' },
       ],
       demandesIncomplete: [],
