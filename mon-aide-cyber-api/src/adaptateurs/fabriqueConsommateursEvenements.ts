@@ -95,11 +95,11 @@ export const fabriqueConsommateursEvenements = (
       [demandeDevenirAidantModifiee(entrepotJournalisation)],
     ],
     [
-      'MAIL_CREATION_COMPTE_AIDANT_ENVOYE',
+      'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE',
       [mailCreationCompteAidantEnvoye(entrepotJournalisation)],
     ],
     [
-      'MAIL_CREATION_COMPTE_AIDANT_NON_ENVOYE',
+      'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE',
       [mailCreationCompteAidantNonEnvoye(entrepotJournalisation)],
     ],
     [

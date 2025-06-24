@@ -50,29 +50,27 @@ export class CapteurSagaActivationCompteAidant
       try {
         await this.envoieMail(demande);
         try {
-          await this.busEvenement.publie<MailFinalisationCreationCompteAidantEnvoye>(
-            {
-              corps: {
-                identifiantDemande: demande.identifiant,
-              },
-              date: FournisseurHorloge.maintenant(),
-              identifiant: adaptateurUUID.genereUUID(),
-              type: 'MAIL_CREATION_COMPTE_AIDANT_ENVOYE',
-            }
-          );
+          await this.busEvenement.publie<MailCompteAidantActiveEnvoye>({
+            corps: {
+              identifiantDemande: demande.identifiant,
+            },
+            date: FournisseurHorloge.maintenant(),
+            identifiant: adaptateurUUID.genereUUID(),
+            type: 'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE',
+          });
           return envoiMailCreationCompte(demande);
         } catch (__e) {
           return envoiMailCreationCompte(demande);
         }
       } catch (__e) {
         await this.busEvenement
-          .publie<MailFinalisationCreationCompteAidantNonEnvoye>({
+          .publie<MailCompteAidantActiveNonEnvoye>({
             corps: {
               identifiantDemande: demande.identifiant,
             },
             date: FournisseurHorloge.maintenant(),
             identifiant: adaptateurUUID.genereUUID(),
-            type: 'MAIL_CREATION_COMPTE_AIDANT_NON_ENVOYE',
+            type: 'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE',
           })
           .then(() => {
             throw new ErreurEnvoiMailCreationCompteAidant(
@@ -95,12 +93,11 @@ export class CapteurSagaActivationCompteAidant
   }
 }
 
-export type MailFinalisationCreationCompteAidantEnvoye = Evenement<{
+export type MailCompteAidantActiveEnvoye = Evenement<{
   identifiantDemande: UUID;
 }>;
 
-export type MailFinalisationCreationCompteAidantNonEnvoye =
-  MailFinalisationCreationCompteAidantEnvoye;
+export type MailCompteAidantActiveNonEnvoye = MailCompteAidantActiveEnvoye;
 
 export class ErreurEnvoiMailCreationCompteAidant extends Error {
   constructor(message: string) {
