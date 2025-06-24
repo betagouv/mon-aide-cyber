@@ -9,7 +9,7 @@
     "administration:rattrapage-relations-entites-aidees-diagnostic": "ts-node --transpile-only --require dotenv/config src/administration/diagnostics/rattrapage-entites-diagnostics/commande.ts",
     "administration:rattrapage-journalisation-excel-demo": "ts-node --transpile-only --require dotenv/config src/administration/journal/rattrapage/commande.ts",
     "administration:rattrapage-des-fantomes": "ts-node --transpile-only --require dotenv/config src/administration/journal/rattrapage-des-fantomes/commande.ts",
-    "administration:initialise-creation-espaces-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/espace-aidant/commande.ts",
+    "administration:activations-comptes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/activations-comptes/commande.ts",
     "administration:activation-compte-aidant": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/activation-compte/commande.ts",
     "administration:rapport-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/demandes-en-cours/commande.ts",
     "administration:recherche-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/recherche/commande.ts",

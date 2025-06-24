@@ -17,8 +17,8 @@ export type DemandeEnErreur = Aidant & {
   erreur: string;
 };
 
-export type ResultatValidationCompteAidant = {
-  envoisMailCreationEspaceAidant: Aidant[];
+export type ResultatActivationsComptesAidants = {
+  activationsComptesAidants: Aidant[];
   demandesIncomplete: DemandeIncomplete[];
   demandesEnErreur: DemandeEnErreur[];
 };
@@ -45,11 +45,11 @@ const recupereListeAidants = (aidants: string) => {
   return tableauAidants.slice(1);
 };
 
-export const validationCompteAidant = (
+export const activationsComptesAidants = async (
   entrepots: Entrepots,
   busCommande: BusCommande,
   contenuFichier: string
-): Promise<ResultatValidationCompteAidant> => {
+): Promise<ResultatActivationsComptesAidants> => {
   const transcris = (aidant: string[]): AidantCSV | undefined => {
     const identifiant = aidant[1];
     return {
@@ -57,11 +57,10 @@ export const validationCompteAidant = (
       nom: aidant[0].trim(),
     };
   };
-  const envoisMailCreationEspaceAidant: Aidant[] = [];
+  const activationsEspaceAidant: Aidant[] = [];
   const demandesIncomplete: DemandeIncomplete[] = [];
   const demandesEnErreur: DemandeEnErreur[] = [];
-
-  return Promise.all(
+  await Promise.all(
     recupereListeAidants(contenuFichier).map(async (aidantCourant) => {
       const aidant = transcris(aidantCourant.split(';'));
 
@@ -75,7 +74,7 @@ export const validationCompteAidant = (
               type: 'SagaActivationCompteAidant',
               mail: demandeEnCours.mail,
             });
-            envoisMailCreationEspaceAidant.push({
+            activationsEspaceAidant.push({
               nom: aidant.nom,
               email: aidant.email,
             });
@@ -95,9 +94,10 @@ export const validationCompteAidant = (
         }
       }
     })
-  ).then(() => ({
-    envoisMailCreationEspaceAidant,
+  );
+  return {
+    activationsComptesAidants: activationsEspaceAidant,
     demandesIncomplete,
     demandesEnErreur,
-  }));
+  };
 };

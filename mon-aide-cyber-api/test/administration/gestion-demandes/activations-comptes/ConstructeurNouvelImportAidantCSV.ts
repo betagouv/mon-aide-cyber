@@ -1,6 +1,6 @@
 import { Constructeur } from '../../../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
-import { AidantCSV } from '../../../../src/administration/aidants/espace-aidant/validationCompteAidant';
+import { AidantCSV } from '../../../../src/administration/gestion-demandes/activations-comptes/activationsComptesAidants';
 
 class ConstructeurAidantCSV implements Constructeur<AidantCSV> {
   private email: string = fakerFR.internet.email().toLowerCase();
