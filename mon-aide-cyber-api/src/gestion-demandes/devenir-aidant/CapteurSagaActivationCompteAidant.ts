@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { CapteurSaga, Saga } from '../../domaine/commande';
+import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
@@ -29,7 +29,8 @@ export class CapteurSagaActivationCompteAidant
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiDeMail: AdaptateurEnvoiMail,
-    private readonly serviceDeChiffrement: ServiceDeChiffrement
+    private readonly serviceDeChiffrement: ServiceDeChiffrement,
+    __busCommande: BusCommande
   ) {}
 
   execute(

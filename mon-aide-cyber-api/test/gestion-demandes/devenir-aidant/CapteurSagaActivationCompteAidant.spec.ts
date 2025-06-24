@@ -14,6 +14,7 @@ import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-ai
 import { adaptateurServiceChiffrement } from '../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
 
 describe('Capteur de commande pour envoyer le mail de création de compte suite à la demande devenir Aidant', () => {
   let adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
@@ -55,7 +56,8 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
             'aaa',
           ],
         ])
-      )
+      ),
+      new BusCommandeTest()
     ).execute({
       type: 'SagaActivationCompteAidant',
       mail: mailDeLAidant,
@@ -74,7 +76,8 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      adaptateurServiceChiffrement()
+      adaptateurServiceChiffrement(),
+      new BusCommandeTest()
     ).execute({
       mail: 'mail@noix.fr',
       type: 'SagaActivationCompteAidant',
@@ -98,7 +101,8 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      adaptateurServiceChiffrement()
+      adaptateurServiceChiffrement(),
+      new BusCommandeTest()
     ).execute({
       mail: demande.mail,
       type: 'SagaActivationCompteAidant',
@@ -124,7 +128,8 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      adaptateurServiceChiffrement()
+      adaptateurServiceChiffrement(),
+      new BusCommandeTest()
     ).execute({
       mail: demande.mail,
       type: 'SagaActivationCompteAidant',
@@ -157,7 +162,8 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        adaptateurServiceChiffrement()
+        adaptateurServiceChiffrement(),
+        new BusCommandeTest()
       ).execute({
         type: 'SagaActivationCompteAidant',
         mail: mailDeLAidant,
@@ -193,7 +199,8 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        adaptateurServiceChiffrement()
+        adaptateurServiceChiffrement(),
+        new BusCommandeTest()
       ).execute({
         type: 'SagaActivationCompteAidant',
         mail: mailDeLAidant,
@@ -219,7 +226,8 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        adaptateurServiceChiffrement()
+        adaptateurServiceChiffrement(),
+        new BusCommandeTest()
       ).execute({
         type: 'SagaActivationCompteAidant',
         mail: mailDeLAidant,

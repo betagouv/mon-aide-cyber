@@ -1,9 +1,6 @@
-import { CapteurSagaActivationCompteAidant } from '../../../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
-import { fabriqueAdaptateurEnvoiMail } from '../../../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
-import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { Entrepots } from '../../../domaine/Entrepots';
 import crypto from 'crypto';
-import { BusEvenement } from '../../../domaine/BusEvenement';
+import { BusCommande } from '../../../domaine/commande';
 
 export type AidantCSV = {
   nom: string;
@@ -50,7 +47,7 @@ const recupereListeAidants = (aidants: string) => {
 
 export const validationCompteAidant = (
   entrepots: Entrepots,
-  busEvenement: BusEvenement,
+  busCommande: BusCommande,
   contenuFichier: string
 ): Promise<ResultatValidationCompteAidant> => {
   const transcris = (aidant: string[]): AidantCSV | undefined => {
@@ -74,12 +71,7 @@ export const validationCompteAidant = (
             .demandesDevenirAidant()
             .rechercheDemandeEnCoursParMail(aidant.email);
           if (demandeEnCours && demandeEnCours.entite) {
-            await new CapteurSagaActivationCompteAidant(
-              entrepots,
-              busEvenement,
-              fabriqueAdaptateurEnvoiMail(),
-              adaptateurServiceChiffrement()
-            ).execute({
+            await busCommande.publie({
               type: 'SagaActivationCompteAidant',
               mail: demandeEnCours.mail,
             });

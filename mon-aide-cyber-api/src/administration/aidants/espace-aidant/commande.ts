@@ -10,6 +10,14 @@ import {
   DemandeIncomplete,
   validationCompteAidant,
 } from './validationCompteAidant';
+import { AdaptateurRelationsMAC } from '../../../relation/AdaptateurRelationsMAC';
+import { BusCommandeMAC } from '../../../infrastructure/bus/BusCommandeMAC';
+import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
+import { AdaptateurReferentielMAC } from '../../../infrastructure/adaptateurs/AdaptateurReferentielMAC';
+import { AdaptateurMesures } from '../../../infrastructure/adaptateurs/AdaptateurMesures';
+import { adaptateurRechercheEntreprise } from '../../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { AdaptateurDeRequeteHTTP } from '../../../infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
+import { fabriqueAdaptateurEnvoiMail } from '../../../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
 
 const command = program
   .description('Importe des aidants cyber')
@@ -36,9 +44,32 @@ type TraitementCreationEspaceAidant =
   | DemandeEnErreur;
 
 command.action(async (...args: any[]) => {
+  const adaptateurRelations = new AdaptateurRelationsMAC();
+  const entrepots = fabriqueEntrepots();
+  const busEvenementMAC = new BusEvenementMAC(
+    fabriqueConsommateursEvenements()
+  );
+  const unAdaptateurRechercheEntreprise = adaptateurRechercheEntreprise(
+    new AdaptateurDeRequeteHTTP()
+  );
+  const adaptateurEnvoiMessage = fabriqueAdaptateurEnvoiMail();
+  const busCommandeMAC = new BusCommandeMAC(
+    entrepots,
+    busEvenementMAC,
+    adaptateurEnvoiMessage,
+    {
+      aidant: unServiceAidant(entrepots.aidants()),
+      referentiels: {
+        diagnostic: new AdaptateurReferentielMAC(),
+        mesures: new AdaptateurMesures(),
+      },
+    },
+    unAdaptateurRechercheEntreprise,
+    adaptateurRelations
+  );
   const resultat = await validationCompteAidant(
-    fabriqueEntrepots(),
-    new BusEvenementMAC(fabriqueConsommateursEvenements()),
+    entrepots,
+    busCommandeMAC,
     fs.readFileSync(args[0], { encoding: 'utf-8' })
   );
 

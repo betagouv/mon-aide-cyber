@@ -9,9 +9,9 @@ import {
 } from '../../../../src/administration/aidants/espace-aidant/validationCompteAidant';
 import { uneDemandeDevenirAidant } from '../../../constructeurs/constructeurDemandesDevenirAidant';
 import { EntrepotsMemoire } from '../../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { BusEvenementDeTest } from '../../../infrastructure/bus/BusEvenementDeTest';
 import { EntrepotDemandeDevenirAidantMemoire } from '../../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { DemandeDevenirAidant } from '../../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import { BusCommandeTest } from '../../../infrastructure/bus/BusCommandeTest';
 
 class EntrepotDemandeDevenirAidantMemoireGenerantErreur extends EntrepotDemandeDevenirAidantMemoire {
   private critereLeveErreur = '';
@@ -35,11 +35,9 @@ class EntrepotDemandeDevenirAidantMemoireGenerantErreur extends EntrepotDemandeD
 
 describe('Validation des comptes Aidants', () => {
   let entrepots = new EntrepotsMemoire();
-  let busEvenement = new BusEvenementDeTest();
 
   beforeEach(() => {
     entrepots = new EntrepotsMemoire();
-    busEvenement = new BusEvenementDeTest();
   });
 
   it('Envoie le mail de création de l’espace Aidant', async () => {
@@ -58,7 +56,11 @@ describe('Validation des comptes Aidants', () => {
       ])
       .construis();
 
-    const resultat = await validationCompteAidant(entrepots, busEvenement, csv);
+    const resultat = await validationCompteAidant(
+      entrepots,
+      new BusCommandeTest(),
+      csv
+    );
 
     expect(resultat).toStrictEqual<ResultatValidationCompteAidant>({
       envoisMailCreationEspaceAidant: [
@@ -86,7 +88,11 @@ describe('Validation des comptes Aidants', () => {
       ])
       .construis();
 
-    const resultat = await validationCompteAidant(entrepots, busEvenement, csv);
+    const resultat = await validationCompteAidant(
+      entrepots,
+      new BusCommandeTest(),
+      csv
+    );
 
     expect(resultat).toStrictEqual<ResultatValidationCompteAidant>({
       envoisMailCreationEspaceAidant: [],
@@ -132,7 +138,11 @@ describe('Validation des comptes Aidants', () => {
       ])
       .construis();
 
-    const resultat = await validationCompteAidant(entrepots, busEvenement, csv);
+    const resultat = await validationCompteAidant(
+      entrepots,
+      new BusCommandeTest(),
+      csv
+    );
 
     expect(resultat).toStrictEqual<ResultatValidationCompteAidant>({
       envoisMailCreationEspaceAidant: [
