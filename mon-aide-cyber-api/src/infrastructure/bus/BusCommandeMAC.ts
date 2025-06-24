@@ -8,7 +8,7 @@ import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { CapteurSagaDemandeAide } from '../../gestion-demandes/aide/CapteurSagaDemandeAide';
 import { CapteurCommandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeDevenirAidant';
 import { fabriqueAnnuaireCOT } from '../adaptateurs/fabriqueAnnuaireCOT';
-import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
+import { CapteurSagaActivationCompteAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 import { adaptateurServiceChiffrement } from '../adaptateurs/adaptateurServiceChiffrement';
 import { CapteurCommandeCreeEspaceAidant } from '../../espace-aidant/CapteurCommandeCreeEspaceAidant';
 import { CapteurSagaDemandeAidantCreeEspaceAidant } from '../../gestion-demandes/devenir-aidant/CapteurSagaDemandeAidantCreeEspaceAidant';
@@ -168,10 +168,10 @@ const capteurs: Map<string, Capteur> = new Map([
     },
   ],
   [
-    'CommandeEnvoiMailCreationCompteAidant',
+    'SagaActivationCompteAidant',
     {
       capteur: (parametres) =>
-        new CapteurCommandeEnvoiMailCreationCompteAidant(
+        new CapteurSagaActivationCompteAidant(
           parametres.entrepots,
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,

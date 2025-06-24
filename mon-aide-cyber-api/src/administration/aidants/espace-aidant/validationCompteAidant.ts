@@ -1,4 +1,4 @@
-import { CapteurCommandeEnvoiMailCreationCompteAidant } from '../../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
+import { CapteurSagaActivationCompteAidant } from '../../../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 import { fabriqueAdaptateurEnvoiMail } from '../../../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
 import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { Entrepots } from '../../../domaine/Entrepots';
@@ -74,13 +74,13 @@ export const validationCompteAidant = (
             .demandesDevenirAidant()
             .rechercheDemandeEnCoursParMail(aidant.email);
           if (demandeEnCours && demandeEnCours.entite) {
-            await new CapteurCommandeEnvoiMailCreationCompteAidant(
+            await new CapteurSagaActivationCompteAidant(
               entrepots,
               busEvenement,
               fabriqueAdaptateurEnvoiMail(),
               adaptateurServiceChiffrement()
             ).execute({
-              type: 'CommandeEnvoiMailCreationCompteAidant',
+              type: 'SagaActivationCompteAidant',
               mail: demandeEnCours.mail,
             });
             envoisMailCreationEspaceAidant.push({
