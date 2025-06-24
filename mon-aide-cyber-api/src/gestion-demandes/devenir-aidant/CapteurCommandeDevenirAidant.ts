@@ -2,7 +2,6 @@ import { CapteurCommande, Commande } from '../../domaine/commande';
 import {
   DemandeDevenirAidant,
   EntiteDemande,
-  futurAidantEnAttenteAdhesionAssociation,
   StatutDemande,
   TypeEntite,
 } from './DemandeDevenirAidant';
@@ -145,12 +144,6 @@ export class CapteurCommandeDevenirAidant
           'MonAideCyber - Mise à jour pour une demande de participation à un atelier';
         generateurCorpsMessage =
           adaptateurCorpsMessage.miseAJourDemandeDevenirAidant;
-      }
-      if (futurAidantEnAttenteAdhesionAssociation(demandeDevenirAidant)) {
-        objet =
-          'MonAideCyber - Votre demande d’adhérer à une association pour participer à un atelier';
-        generateurCorpsMessage =
-          adaptateurCorpsMessage.demandeDevenirAidantEnAttenteAdhésion;
       }
       return { objet, generateurCorpsMessage };
     };
