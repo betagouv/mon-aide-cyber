@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { CapteurSaga, Commande } from '../../domaine/commande';
+import { CapteurSaga, Saga } from '../../domaine/commande';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
@@ -10,19 +10,19 @@ import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorl
 import { adaptateurUUID } from '../../infrastructure/adaptateurs/adaptateurUUID';
 import { DemandeDevenirAidant } from './DemandeDevenirAidant';
 
-export type CommandeEnvoiMailCreationCompteAidant = Omit<Commande, 'type'> & {
-  type: 'CommandeEnvoiMailCreationCompteAidant';
+export type SagaActivationCompteAidant = Omit<Saga, 'type'> & {
+  type: 'SagaActivationCompteAidant';
   mail: string;
 };
-export type DemandeFinalisationDevenirAidantEnvoyee = {
+export type ActivationCompteAidantFaite = {
   identifiantDemande: UUID;
 };
 
-export class CapteurCommandeEnvoiMailCreationCompteAidant
+export class CapteurSagaActivationCompteAidant
   implements
     CapteurSaga<
-      CommandeEnvoiMailCreationCompteAidant,
-      DemandeFinalisationDevenirAidantEnvoyee | undefined
+      SagaActivationCompteAidant,
+      ActivationCompteAidantFaite | undefined
     >
 {
   constructor(
@@ -33,8 +33,8 @@ export class CapteurCommandeEnvoiMailCreationCompteAidant
   ) {}
 
   execute(
-    commande: CommandeEnvoiMailCreationCompteAidant
-  ): Promise<DemandeFinalisationDevenirAidantEnvoyee | undefined> {
+    commande: SagaActivationCompteAidant
+  ): Promise<ActivationCompteAidantFaite | undefined> {
     const envoiMailCreationCompte = (demande: DemandeDevenirAidant) => ({
       identifiantDemande: demande.identifiant,
     });

@@ -4,11 +4,11 @@ import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import {
-  CapteurCommandeEnvoiMailCreationCompteAidant,
+  CapteurSagaActivationCompteAidant,
   ErreurEnvoiMailCreationCompteAidant,
   MailFinalisationCreationCompteAidantEnvoye,
   MailFinalisationCreationCompteAidantNonEnvoye,
-} from '../../../src/gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
+} from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServiceDeChiffrement';
 import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
 import { adaptateurServiceChiffrement } from '../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
@@ -38,7 +38,7 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
       .construis();
     await entrepots.demandesDevenirAidant().persiste(demande);
 
-    await new CapteurCommandeEnvoiMailCreationCompteAidant(
+    await new CapteurSagaActivationCompteAidant(
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
@@ -57,7 +57,7 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
         ])
       )
     ).execute({
-      type: 'CommandeEnvoiMailCreationCompteAidant',
+      type: 'SagaActivationCompteAidant',
       mail: mailDeLAidant,
     });
 
@@ -70,16 +70,15 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
   });
 
   it('Ne peut envoyer le mail pour une demande inexistante', async () => {
-    const demandeFinalisee =
-      await new CapteurCommandeEnvoiMailCreationCompteAidant(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        adaptateurServiceChiffrement()
-      ).execute({
-        mail: 'mail@noix.fr',
-        type: 'CommandeEnvoiMailCreationCompteAidant',
-      });
+    const demandeFinalisee = await new CapteurSagaActivationCompteAidant(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      adaptateurServiceChiffrement()
+    ).execute({
+      mail: 'mail@noix.fr',
+      type: 'SagaActivationCompteAidant',
+    });
 
     expect(demandeFinalisee).toBeUndefined();
     expect(
@@ -95,16 +94,15 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
       .traitee()
       .construis();
     await entrepots.demandesDevenirAidant().persiste(demande);
-    const demandeFinalisee =
-      await new CapteurCommandeEnvoiMailCreationCompteAidant(
-        entrepots,
-        busEvenement,
-        adaptateurEnvoiMail,
-        adaptateurServiceChiffrement()
-      ).execute({
-        mail: demande.mail,
-        type: 'CommandeEnvoiMailCreationCompteAidant',
-      });
+    const demandeFinalisee = await new CapteurSagaActivationCompteAidant(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      adaptateurServiceChiffrement()
+    ).execute({
+      mail: demande.mail,
+      type: 'SagaActivationCompteAidant',
+    });
 
     expect(demandeFinalisee).toBeUndefined();
     expect(
@@ -122,14 +120,14 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
     const demande = unConstructeurDeDemandeDevenirAidant().construis();
     await entrepots.demandesDevenirAidant().persiste(demande);
 
-    await new CapteurCommandeEnvoiMailCreationCompteAidant(
+    await new CapteurSagaActivationCompteAidant(
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
       adaptateurServiceChiffrement()
     ).execute({
       mail: demande.mail,
-      type: 'CommandeEnvoiMailCreationCompteAidant',
+      type: 'SagaActivationCompteAidant',
     });
 
     expect(
@@ -155,13 +153,13 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
     const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
     adaptateurEnvoiMail.genereErreur();
     try {
-      await new CapteurCommandeEnvoiMailCreationCompteAidant(
+      await new CapteurSagaActivationCompteAidant(
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
         adaptateurServiceChiffrement()
       ).execute({
-        type: 'CommandeEnvoiMailCreationCompteAidant',
+        type: 'SagaActivationCompteAidant',
         mail: mailDeLAidant,
       });
       assert.fail('Le test aurait dû échouer');
@@ -191,13 +189,13 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
     adaptateurEnvoiMail.genereErreur();
 
     expect(
-      new CapteurCommandeEnvoiMailCreationCompteAidant(
+      new CapteurSagaActivationCompteAidant(
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
         adaptateurServiceChiffrement()
       ).execute({
-        type: 'CommandeEnvoiMailCreationCompteAidant',
+        type: 'SagaActivationCompteAidant',
         mail: mailDeLAidant,
       })
     ).rejects.toStrictEqual(
@@ -217,13 +215,13 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
     adaptateurEnvoiMail.genereErreur();
 
     try {
-      await new CapteurCommandeEnvoiMailCreationCompteAidant(
+      await new CapteurSagaActivationCompteAidant(
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
         adaptateurServiceChiffrement()
       ).execute({
-        type: 'CommandeEnvoiMailCreationCompteAidant',
+        type: 'SagaActivationCompteAidant',
         mail: mailDeLAidant,
       });
       assert.fail('Le test aurait dû échouer');

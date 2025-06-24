@@ -6,9 +6,9 @@ import { fabriqueConsommateursEvenements } from '../../../adaptateurs/fabriqueCo
 import { AdaptateurRelationsMAC } from '../../../relation/AdaptateurRelationsMAC';
 import { fabriqueAdaptateurEnvoiMail } from '../../../infrastructure/adaptateurs/fabriqueAdaptateurEnvoiMail';
 import {
-  CommandeEnvoiMailCreationCompteAidant,
-  DemandeFinalisationDevenirAidantEnvoyee,
-} from '../../../gestion-demandes/devenir-aidant/CapteurCommandeEnvoiMailCreationCompteAidant';
+  SagaActivationCompteAidant,
+  ActivationCompteAidantFaite,
+} from '../../../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 import { AdaptateurReferentielMAC } from '../../../infrastructure/adaptateurs/AdaptateurReferentielMAC';
 import { AdaptateurMesures } from '../../../infrastructure/adaptateurs/AdaptateurMesures';
 import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
@@ -41,9 +41,9 @@ command.action(async (...args: any[]) => {
 
   try {
     const demande = await busCommandeMAC.publie<
-      CommandeEnvoiMailCreationCompteAidant,
-      DemandeFinalisationDevenirAidantEnvoyee
-    >({ type: 'CommandeEnvoiMailCreationCompteAidant', mail: mailAidant });
+      SagaActivationCompteAidant,
+      ActivationCompteAidantFaite
+    >({ type: 'SagaActivationCompteAidant', mail: mailAidant });
     console.log(
       'Email envoyé à : %s (demande n° : %s)',
       mailAidant,
