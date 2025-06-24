@@ -16,7 +16,7 @@ import { adaptateurRechercheEntreprise } from '../../../infrastructure/adaptateu
 import { AdaptateurDeRequeteHTTP } from '../../../infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
 
 const command = program
-  .description('Envoi un mail de création de compte à l’Aidant')
+  .description('Active le compte de l’Aidant et envoie un mail de confirmation')
   .argument('<mailAidant>', 'L’email de l’Aidant');
 
 command.action(async (...args: any[]) => {
@@ -45,7 +45,7 @@ command.action(async (...args: any[]) => {
       ActivationCompteAidantFaite
     >({ type: 'SagaActivationCompteAidant', mail: mailAidant });
     console.log(
-      'Email envoyé à : %s (demande n° : %s)',
+      'Activation faite, email envoyé à : %s (demande n° : %s)',
       mailAidant,
       demande.identifiantDemande
     );
