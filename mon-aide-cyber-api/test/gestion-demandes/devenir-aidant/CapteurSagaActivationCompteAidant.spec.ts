@@ -9,38 +9,15 @@ import {
   MailFinalisationCreationCompteAidantEnvoye,
   MailFinalisationCreationCompteAidantNonEnvoye,
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
-import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServiceDeChiffrement';
 import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
-import { adaptateurServiceChiffrement } from '../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
-import {
-  DemandeDevenirAidant,
-  StatutDemande,
-} from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import { StatutDemande } from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 import { BusCommande } from '../../../src/domaine/commande';
-
-function tableDeChiffrement(
-  demande: DemandeDevenirAidant,
-  mailDeLAidant: string
-) {
-  return new Map([
-    [
-      Buffer.from(
-        JSON.stringify({
-          demande: demande.identifiant,
-          mail: mailDeLAidant,
-        }),
-        'binary'
-      ).toString('base64'),
-      'aaa',
-    ],
-  ]);
-}
 
 describe('Capteur de saga pour activer le compte Aidant', () => {
   let adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
@@ -60,9 +37,8 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       unAdaptateurRechercheEntreprise().construis()
     );
     process.env.URL_MAC = 'http://localhost:8081';
-    adaptateurCorpsMessage.finaliseDemandeDevenirAidant = () => ({
-      genereCorpsMessage: (nomPrenom: string, url: string) =>
-        `Bonjour ${nomPrenom}, ${url}`,
+    adaptateurCorpsMessage.compteAidantActive = () => ({
+      genereCorpsMessage: (nomPrenom: string) => `Bonjour ${nomPrenom} !`,
     });
   });
 
@@ -77,7 +53,6 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      new FauxServiceDeChiffrement(tableDeChiffrement(demande, mailDeLAidant)),
       busCommande
     ).execute({ type: 'SagaActivationCompteAidant', mail: mailDeLAidant });
 
@@ -98,7 +73,6 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      new FauxServiceDeChiffrement(tableDeChiffrement(demande, mailDeLAidant)),
       busCommande
     ).execute({
       type: 'SagaActivationCompteAidant',
@@ -108,7 +82,7 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     expect(
       adaptateurEnvoiMail.aEteEnvoyeA(
         mailDeLAidant,
-        `Bonjour ${demande.prenom} ${demande.nom}, http://localhost:8081/demandes/devenir-aidant/finalise?token=aaa`
+        `Bonjour ${demande.prenom} ${demande.nom} !`
       )
     ).toBe(true);
   });
@@ -118,7 +92,6 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      adaptateurServiceChiffrement(),
       new BusCommandeTest()
     ).execute({
       mail: 'mail@noix.fr',
@@ -143,7 +116,6 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      adaptateurServiceChiffrement(),
       busCommande
     ).execute({
       mail: demande.mail,
@@ -170,7 +142,6 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      adaptateurServiceChiffrement(),
       busCommande
     ).execute({
       mail: demande.mail,
@@ -204,7 +175,6 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        adaptateurServiceChiffrement(),
         busCommande
       ).execute({
         type: 'SagaActivationCompteAidant',
@@ -241,7 +211,6 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        adaptateurServiceChiffrement(),
         busCommande
       ).execute({
         type: 'SagaActivationCompteAidant',
@@ -268,7 +237,6 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
         entrepots,
         busEvenement,
         adaptateurEnvoiMail,
-        adaptateurServiceChiffrement(),
         busCommande
       ).execute({
         type: 'SagaActivationCompteAidant',

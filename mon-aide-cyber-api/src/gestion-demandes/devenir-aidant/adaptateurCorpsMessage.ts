@@ -73,22 +73,25 @@ const genereCorpsDemandeDevenirAidant = (
   );
 };
 
-const genereCorpsFinalisationDemandeDevenirAidant = (
-  nomPrenom: string,
-  url: string
-) => {
+const genereCorpsCompteAidantActive = (nomPrenom: string) => {
   return (
     `Bonjour ${nomPrenom} \n` +
     '\n' +
-    'Vous êtes invité à vous créer un espace Aidant cyber en suivant ce lien sécurisé : \n' +
+    'Bienvenue dans la communauté des Aidants cyber ! \n' +
     '\n' +
-    `<a href="${url}" target="_blank">${url}</a> \n` +
+    'Vous faites désormais partie du réseau des Aidants cyber pour aider les entités publiques et privées à prendre leur cyberdépart !\n' +
     '\n' +
-    'Ce lien vous permettra de créer votre accès en définissant vous-même votre mot de passe pour accéder à votre espace Aidant.\n' +
+    'Pour recevoir des demandes de diagnostics adaptées à votre profil, pensez à finaliser la complétion de votre espace personnel !\n' +
     '\n' +
-    'Toute l’équipe reste à votre disposition,\n' +
+    'Rendez-vous sur la page "Mes préférences" pour renseigner :\n' +
     '\n' +
-    'Pour toute remarque ou question, n’hésitez pas à nous contacter sur contact@monaidecyber.beta.gouv.fr\n' +
+    '- Type d’entité à accompagner\n' +
+    '- Secteurs d’activité\n' +
+    '- Zones géographiques d’intervention\n' +
+    '\n' +
+    'Ces informations nous permettront de vous adresser des demandes de diagnostics pertinentes et adaptées à votre profil. \n' +
+    '\n' +
+    'Pensez également à visiter la page "Mes informations" pour activer l’affichage de votre profil dans l’annuaire des Aidants cyber si vous le souhaitez. \n' +
     '\n' +
     "<b>L'équipe MonAideCyber</b>"
   );
@@ -147,9 +150,9 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
 };
 
 const adaptateurCorpsMessage = {
-  finaliseDemandeDevenirAidant: () => ({
-    genereCorpsMessage: (nomPrenom: string, url: string) =>
-      genereCorpsFinalisationDemandeDevenirAidant(nomPrenom, url),
+  compteAidantActive: () => ({
+    genereCorpsMessage: (nomPrenom: string) =>
+      genereCorpsCompteAidantActive(nomPrenom),
   }),
   demandeDevenirAidant: () => ({
     genereCorpsMessage: (demandeDevenirAidant: DemandeDevenirAidant) =>
