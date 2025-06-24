@@ -34,7 +34,7 @@ export const EcranDevenirAidant = () => {
           <div className="fr-col-md-8 fr-col-sm-12">
             <TypographieH4>Comment devenir Aidant cyber ?</TypographieH4>
             <p>
-              Si vous n’êtes pas un représentants de l’État, il est nécessaire
+              Si vous n’êtes pas un représentant de l’État, il est nécessaire
               d’être adhérent à une association pour devenir Aidant cyber. Vous
               êtes déjà membre d’une association ou vous en connaissez une ?
               Vous souhaitez recevoir une liste des associations reconnues par
