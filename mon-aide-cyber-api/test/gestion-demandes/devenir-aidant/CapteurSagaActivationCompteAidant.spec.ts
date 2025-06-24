@@ -6,8 +6,8 @@ import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptate
 import {
   CapteurSagaActivationCompteAidant,
   ErreurEnvoiMailCreationCompteAidant,
-  MailFinalisationCreationCompteAidantEnvoye,
-  MailFinalisationCreationCompteAidantNonEnvoye,
+  MailCompteAidantActiveEnvoye,
+  MailCompteAidantActiveNonEnvoye,
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
@@ -101,7 +101,7 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     expect(demandeFinalisee).toBeUndefined();
     expect(
       busEvenement.consommateursTestes.get(
-        'MAIL_CREATION_COMPTE_AIDANT_ENVOYE'
+        'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE'
       )?.[0].evenementConsomme
     ).toBeUndefined();
     expect(adaptateurEnvoiMail.mailNonEnvoye()).toBe(true);
@@ -125,13 +125,13 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     expect(demandeFinalisee).toBeUndefined();
     expect(
       busEvenement.consommateursTestes.get(
-        'MAIL_CREATION_COMPTE_AIDANT_ENVOYE'
+        'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE'
       )?.[0].evenementConsomme
     ).toBeUndefined();
     expect(adaptateurEnvoiMail.mailNonEnvoye()).toBe(true);
   });
 
-  it('Publie l’événement MAIL_CREATION_COMPTE_AIDANT_ENVOYE', async () => {
+  it('Publie l’événement MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE', async () => {
     FournisseurHorlogeDeTest.initialise(
       new Date(Date.parse('2024-07-07T13:44:38'))
     );
@@ -150,11 +150,11 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
 
     expect(
       busEvenement.consommateursTestes.get(
-        'MAIL_CREATION_COMPTE_AIDANT_ENVOYE'
+        'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE'
       )?.[0].evenementConsomme
-    ).toStrictEqual<MailFinalisationCreationCompteAidantEnvoye>({
+    ).toStrictEqual<MailCompteAidantActiveEnvoye>({
       identifiant: expect.any(String),
-      type: 'MAIL_CREATION_COMPTE_AIDANT_ENVOYE',
+      type: 'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE',
       date: FournisseurHorloge.maintenant(),
       corps: {
         identifiantDemande: demande.identifiant,
@@ -162,7 +162,7 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     });
   });
 
-  it('Publie l’événement MAIL_CREATION_COMPTE_AIDANT_NON_ENVOYE en cas d’erreur d’envoi de mail', async () => {
+  it('Publie l’événement MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE en cas d’erreur d’envoi de mail', async () => {
     const mailDeLAidant = 'jean.dupont@mail.com';
     const demande = unConstructeurDeDemandeDevenirAidant()
       .avecUnMail(mailDeLAidant)
@@ -184,11 +184,11 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     } catch (_erreur) {
       expect(
         busEvenement.consommateursTestes.get(
-          'MAIL_CREATION_COMPTE_AIDANT_NON_ENVOYE'
+          'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE'
         )?.[0].evenementConsomme
-      ).toStrictEqual<MailFinalisationCreationCompteAidantNonEnvoye>({
+      ).toStrictEqual<MailCompteAidantActiveNonEnvoye>({
         identifiant: expect.any(String),
-        type: 'MAIL_CREATION_COMPTE_AIDANT_NON_ENVOYE',
+        type: 'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE',
         date: FournisseurHorloge.maintenant(),
         corps: {
           identifiantDemande: demande.identifiant,
@@ -223,7 +223,7 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     );
   });
 
-  it('Ne publie pas l’événement MAIL_CREATION_COMPTE_AIDANT_ENVOYE si l’envoi de mail a échoué', async () => {
+  it('Ne publie pas l’événement MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE si l’envoi de mail a échoué', async () => {
     const mailDeLAidant = 'jean.dupont@mail.com';
     const demande = unConstructeurDeDemandeDevenirAidant()
       .avecUnMail(mailDeLAidant)
@@ -246,7 +246,7 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     } catch (_erreur) {
       expect(
         busEvenement.consommateursTestes.get(
-          'MAIL_CREATION_COMPTE_AIDANT_ENVOYE'
+          'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE'
         )?.[0].evenementConsomme
       ).toBeUndefined();
     }
