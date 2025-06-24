@@ -1,7 +1,7 @@
 import { useNavigationMAC } from '../../../../fournisseurs/hooks.ts';
 import { useMACAPI } from '../../../../fournisseurs/api/useMACAPI.ts';
 import { useNavigate } from 'react-router-dom';
-import React, { useCallback, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import {
   avancerEtapeSuivante,
   Etape,
@@ -33,12 +33,23 @@ import { LienMailtoMAC } from '../../../../composants/atomes/LienMailtoMAC.tsx';
 import { useRecupereLesInformationsLieesALaDemande } from '../../../../hooks/useRecupereLesInformationsLieesALaDemande.ts';
 import { ReponseHATEOAS } from '../../../Lien.ts';
 import { Entreprise } from '../../../gestion-demandes/parcours-aidant/Entreprise';
+import {
+  choixTypeAidantFait,
+  initialiseReducteurInformationsAidant,
+  reducteurInformationsAidant,
+  valideLaCharteAidant,
+  videLesInformationsDuTypeAidant,
+} from './reducteurInformationsAidant.ts';
 
 type ReponseDemandeDevenirAidant = ReponseHATEOAS;
 
-type InformationsTypeAidant = {
+export type InformationsTypeAidant = {
   typeAidant: TypeAidant | undefined;
   entite: Entreprise | undefined;
+};
+
+export type InformationsAidant = InformationsTypeAidant & {
+  charteValidee: boolean;
 };
 
 export const EcranMonEspaceDemandeDevenirAidant = () => {
@@ -46,18 +57,17 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
   const macAPI = useMACAPI();
   const navigate = useNavigate();
 
-  const [charteValidee, setCharteValidee] = useState<boolean>(false);
-  const [informationsAidant, setInformationsAidant] =
-    useState<InformationsTypeAidant>({
-      entite: undefined,
-      typeAidant: undefined,
-    });
-
   const [etatEtapeCourante, envoie] = useReducer(
     reducteurMonEspaceDemandeDevenirAidant,
     {
       ...initialiseReducteur(),
       etapeCourante: 'choixTypeAidant',
+    }
+  );
+  const [etatInformationsAidant, envoieInformationsAidant] = useReducer(
+    reducteurInformationsAidant,
+    {
+      ...initialiseReducteurInformationsAidant(),
     }
   );
 
@@ -107,38 +117,53 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
 
   const surClickChoixTypeAidant = useCallback(
     ({ typeAidant, entite }: InformationsTypeAidant) => {
-      setInformationsAidant((etatPrecedent) => {
-        envoie(avancerEtapeSuivante());
-        return {
-          ...etatPrecedent,
-          typeAidant,
-          entite,
-        };
-      });
-      window.scrollTo({ top: 0 });
+      envoieInformationsAidant(choixTypeAidantFait({ typeAidant, entite }));
     },
+    [etatInformationsAidant.informations]
+  );
+
+  useEffect(() => {
+    if (
+      !etatInformationsAidant.informations.typeAidant &&
+      !etatInformationsAidant.informations.entite
+    ) {
+      return;
+    }
+
+    envoie(avancerEtapeSuivante());
+    window.scrollTo({ top: 0 });
+  }, [
+    etatInformationsAidant.informations.typeAidant,
+    etatInformationsAidant.informations.entite,
+  ]);
+
+  const surSignatureCharteAidant = useCallback(
+    () => envoieInformationsAidant(valideLaCharteAidant()),
     []
   );
 
-  const surSignatureCharteAidant = useCallback(() => {
-    setCharteValidee(() => {
-      envoie(avancerEtapeSuivante());
-      return true;
-    });
+  useEffect(() => {
+    if (!etatInformationsAidant.informations.charteValidee) return;
+
+    envoie(avancerEtapeSuivante());
     window.scrollTo({ top: 0 });
-  }, []);
+  }, [etatInformationsAidant.informations.charteValidee]);
 
   const retourAuChoixUtilisation = () => {
     window.history.back();
   };
 
   const surClickEtapePrecedente = useCallback(() => {
+    if (etatEtapeCourante.etapeCourante === 'signatureCharteAidant') {
+      envoieInformationsAidant(videLesInformationsDuTypeAidant());
+    }
     envoie(retourEtapePrecedente());
     window.scrollTo({ top: 0 });
-  }, []);
+  }, [etatEtapeCourante.etapeCourante]);
 
   const surSoumission = (formulaire: ChampsFormulaireDevenirAidant) => {
-    const { typeAidant, entite } = informationsAidant;
+    const { typeAidant, entite, charteValidee } =
+      etatInformationsAidant.informations;
     if (!typeAidant || !entite) return;
 
     const entiteCorrespondante = entiteEnFonctionDuTypeAidant.get(typeAidant);
@@ -160,8 +185,8 @@ export const EcranMonEspaceDemandeDevenirAidant = () => {
       <ChoixTypeAidant
         key="choixTypeAidant"
         typeAidant={{
-          typeAidant: informationsAidant.typeAidant,
-          entite: informationsAidant.entite,
+          typeAidant: etatInformationsAidant.informations.typeAidant,
+          entite: etatInformationsAidant.informations.entite,
         }}
         surChoixTypeAidant={surClickChoixTypeAidant}
         precedent={retourAuChoixUtilisation}
