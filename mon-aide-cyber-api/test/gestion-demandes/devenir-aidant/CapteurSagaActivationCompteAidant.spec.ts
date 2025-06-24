@@ -15,16 +15,50 @@ import { adaptateurServiceChiffrement } from '../../../src/infrastructure/adapta
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
+import {
+  DemandeDevenirAidant,
+  StatutDemande,
+} from '../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
+import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
+import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
+import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
+import { BusCommande } from '../../../src/domaine/commande';
 
-describe('Capteur de commande pour envoyer le mail de création de compte suite à la demande devenir Aidant', () => {
+function tableDeChiffrement(
+  demande: DemandeDevenirAidant,
+  mailDeLAidant: string
+) {
+  return new Map([
+    [
+      Buffer.from(
+        JSON.stringify({
+          demande: demande.identifiant,
+          mail: mailDeLAidant,
+        }),
+        'binary'
+      ).toString('base64'),
+      'aaa',
+    ],
+  ]);
+}
+
+describe('Capteur de saga pour activer le compte Aidant', () => {
   let adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
   let entrepots = new EntrepotsMemoire();
   let busEvenement = new BusEvenementDeTest();
+  let busCommande: BusCommande = new BusCommandeTest();
 
   beforeEach(() => {
     adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
     entrepots = new EntrepotsMemoire();
     busEvenement = new BusEvenementDeTest();
+    busCommande = new BusCommandeMAC(
+      entrepots,
+      busEvenement,
+      new AdaptateurEnvoiMailMemoire(),
+      unConstructeurDeServices(entrepots.aidants()),
+      unAdaptateurRechercheEntreprise().construis()
+    );
     process.env.URL_MAC = 'http://localhost:8081';
     adaptateurCorpsMessage.finaliseDemandeDevenirAidant = () => ({
       genereCorpsMessage: (nomPrenom: string, url: string) =>
@@ -32,7 +66,7 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
     });
   });
 
-  it('Envoie le mail', async () => {
+  it('Active le compte Aidant', async () => {
     const mailDeLAidant = 'jean.dupont@mail.com';
     const demande = unConstructeurDeDemandeDevenirAidant()
       .avecUnMail(mailDeLAidant)
@@ -43,21 +77,29 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      new FauxServiceDeChiffrement(
-        new Map([
-          [
-            Buffer.from(
-              JSON.stringify({
-                demande: demande.identifiant,
-                mail: mailDeLAidant,
-              }),
-              'binary'
-            ).toString('base64'),
-            'aaa',
-          ],
-        ])
-      ),
-      new BusCommandeTest()
+      new FauxServiceDeChiffrement(tableDeChiffrement(demande, mailDeLAidant)),
+      busCommande
+    ).execute({ type: 'SagaActivationCompteAidant', mail: mailDeLAidant });
+
+    const demandeTraitee = await entrepots
+      .demandesDevenirAidant()
+      .lis(demande.identifiant);
+    expect(demandeTraitee.statut).toBe(StatutDemande.TRAITEE);
+  });
+
+  it('Envoie le mail à l’Aidant pour lui signifier l’activation de son compte', async () => {
+    const mailDeLAidant = 'jean.dupont@mail.com';
+    const demande = unConstructeurDeDemandeDevenirAidant()
+      .avecUnMail(mailDeLAidant)
+      .construis();
+    await entrepots.demandesDevenirAidant().persiste(demande);
+
+    await new CapteurSagaActivationCompteAidant(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      new FauxServiceDeChiffrement(tableDeChiffrement(demande, mailDeLAidant)),
+      busCommande
     ).execute({
       type: 'SagaActivationCompteAidant',
       mail: mailDeLAidant,
@@ -102,7 +144,7 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
       busEvenement,
       adaptateurEnvoiMail,
       adaptateurServiceChiffrement(),
-      new BusCommandeTest()
+      busCommande
     ).execute({
       mail: demande.mail,
       type: 'SagaActivationCompteAidant',
@@ -129,7 +171,7 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
       busEvenement,
       adaptateurEnvoiMail,
       adaptateurServiceChiffrement(),
-      new BusCommandeTest()
+      busCommande
     ).execute({
       mail: demande.mail,
       type: 'SagaActivationCompteAidant',
@@ -163,7 +205,7 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
         busEvenement,
         adaptateurEnvoiMail,
         adaptateurServiceChiffrement(),
-        new BusCommandeTest()
+        busCommande
       ).execute({
         type: 'SagaActivationCompteAidant',
         mail: mailDeLAidant,
@@ -200,7 +242,7 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
         busEvenement,
         adaptateurEnvoiMail,
         adaptateurServiceChiffrement(),
-        new BusCommandeTest()
+        busCommande
       ).execute({
         type: 'SagaActivationCompteAidant',
         mail: mailDeLAidant,
@@ -227,7 +269,7 @@ describe('Capteur de commande pour envoyer le mail de création de compte suite 
         busEvenement,
         adaptateurEnvoiMail,
         adaptateurServiceChiffrement(),
-        new BusCommandeTest()
+        busCommande
       ).execute({
         type: 'SagaActivationCompteAidant',
         mail: mailDeLAidant,

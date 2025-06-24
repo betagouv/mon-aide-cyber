@@ -9,6 +9,7 @@ import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { adaptateurUUID } from '../../infrastructure/adaptateurs/adaptateurUUID';
 import { DemandeDevenirAidant } from './DemandeDevenirAidant';
+import { SagaDemandeAidantCreeEspaceAidant } from './CapteurSagaDemandeAidantCreeEspaceAidant';
 
 export type SagaActivationCompteAidant = Omit<Saga, 'type'> & {
   type: 'SagaActivationCompteAidant';
@@ -30,7 +31,7 @@ export class CapteurSagaActivationCompteAidant
     private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiDeMail: AdaptateurEnvoiMail,
     private readonly serviceDeChiffrement: ServiceDeChiffrement,
-    __busCommande: BusCommande
+    private readonly busCommande: BusCommande
   ) {}
 
   async execute(
@@ -45,6 +46,10 @@ export class CapteurSagaActivationCompteAidant
       .rechercheDemandeEnCoursParMail(commande.mail);
 
     if (demande) {
+      await this.busCommande.publie<SagaDemandeAidantCreeEspaceAidant, void>({
+        type: 'SagaDemandeAidantEspaceAidant',
+        idDemande: demande.identifiant,
+      });
       try {
         await this.envoieMail(demande);
         try {
