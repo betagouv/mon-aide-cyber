@@ -1,9 +1,7 @@
 import { UUID } from 'crypto';
 import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
-import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
-import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { Entrepots } from '../../domaine/Entrepots';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
@@ -30,7 +28,6 @@ export class CapteurSagaActivationCompteAidant
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
     private readonly adaptateurEnvoiDeMail: AdaptateurEnvoiMail,
-    private readonly serviceDeChiffrement: ServiceDeChiffrement,
     private readonly busCommande: BusCommande
   ) {}
 
@@ -88,20 +85,11 @@ export class CapteurSagaActivationCompteAidant
   }
 
   private envoieMail(demande: DemandeDevenirAidant): Promise<void> {
-    const partieChiffree = this.serviceDeChiffrement.chiffre(
-      Buffer.from(
-        JSON.stringify({ demande: demande.identifiant, mail: demande.mail }),
-        'binary'
-      ).toString('base64')
-    );
     return this.adaptateurEnvoiDeMail.envoie({
-      objet: 'MonAideCyber - Création de votre espace Aidant',
+      objet: 'MonAideCyber - Votre compte Aidant est activé !',
       corps: adaptateurCorpsMessage
-        .finaliseDemandeDevenirAidant()
-        .genereCorpsMessage(
-          `${demande.prenom} ${demande.nom}`,
-          `${adaptateurEnvironnement.mac().urlMAC()}/demandes/devenir-aidant/finalise?token=${partieChiffree}`
-        ),
+        .compteAidantActive()
+        .genereCorpsMessage(`${demande.prenom} ${demande.nom}`),
       destinataire: { email: demande.mail },
     });
   }
