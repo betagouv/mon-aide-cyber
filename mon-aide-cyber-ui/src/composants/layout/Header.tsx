@@ -112,7 +112,15 @@ export const Header = ({
                     {utilisateur ? (
                       <ComposantMenuUtilisateur utilisateur={utilisateur} />
                     ) : (
-                      <SeConnecter />
+                      <>
+                        <a
+                          className="fr-btn entete-lien-se-connecter"
+                          href="/inscription"
+                        >
+                          S‘inscrire
+                        </a>
+                        <SeConnecter />
+                      </>
                     )}
                   </div>
                 </div>
@@ -146,7 +154,15 @@ export const Header = ({
               {utilisateur ? (
                 <ComposantMenuUtilisateur utilisateur={utilisateur} />
               ) : (
-                <SeConnecter />
+                <>
+                  <a
+                    className="fr-btn entete-lien-se-connecter"
+                    href="/inscription"
+                  >
+                    S‘inscrire
+                  </a>
+                  <SeConnecter />
+                </>
               )}
             </div>
             <NavigationPublique liensNavigation={liensNavigation} />
