@@ -11,8 +11,8 @@ import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 
 export type Statistiques = {
   metabase: string;
-  nombreAidants: number;
-  nombreDiagnostics: number;
+  nombreAidants: string;
+  nombreDiagnostics: string;
 };
 export type ReponseStatistiques = Statistiques;
 
