@@ -9,7 +9,6 @@ import {
   MailCompteAidantActiveEnvoye,
   MailCompteAidantActiveNonEnvoye,
 } from '../../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
-import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
@@ -37,9 +36,6 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       unAdaptateurRechercheEntreprise().construis()
     );
     process.env.URL_MAC = 'http://localhost:8081';
-    adaptateurCorpsMessage.compteAidantActive = () => ({
-      genereCorpsMessage: (nomPrenom: string) => `Bonjour ${nomPrenom} !`,
-    });
   });
 
   it('Active le compte Aidant', async () => {
