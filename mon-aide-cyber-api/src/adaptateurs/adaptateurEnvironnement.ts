@@ -143,6 +143,7 @@ const metabase = (): {
   clefApi: string;
   identifiantQuestionNombreAidants: number;
   repartitionDesDiagnosticsParTerritoire: number;
+  identifiantQuestionNiveauSatifactionDiagnostic: number;
 } => {
   return {
     url: process.env.METABASE_URL || '',
@@ -155,6 +156,9 @@ const metabase = (): {
     ),
     identifiantQuestionNombreDiagnostics: Number(
       process.env.METABASE_IDENTIFIANT_QUESTION_NOMBRE_DIAGNOSTICS
+    ),
+    identifiantQuestionNiveauSatifactionDiagnostic: Number(
+      process.env.METABASE_IDENTIFIANT_QUESTION_NIVEAU_SATISFACTION_DIAGNOSTIC
     ),
   };
 };

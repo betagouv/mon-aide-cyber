@@ -24,24 +24,29 @@ export class AdaptateurAPIMetabase implements AdaptateurMetabase {
     });
 
     const corpsReponse: ReponseQuestionAPIMetabase = await reponse.json();
-    return parseInt(corpsReponse.data.rows[0][0], 10);
+    return Number(corpsReponse.data.rows[0][0]);
   }
 
   async statistiques(): Promise<ReponseMetabase> {
     const dashboardRepartitionDiagnosticsParTerritoire =
       this.genereLienDashboardRepartitionDesDiagnostics();
 
-    const [nombreAidants, nombreDiagnostics] = await Promise.all(
-      [
-        adaptateurEnvironnement.metabase().identifiantQuestionNombreAidants,
-        adaptateurEnvironnement.metabase().identifiantQuestionNombreDiagnostics,
-      ].map((id) => this.recupereResultat(id))
-    );
+    const [nombreAidants, nombreDiagnostics, niveauDeSatisfactionDuDiagnostic] =
+      await Promise.all(
+        [
+          adaptateurEnvironnement.metabase().identifiantQuestionNombreAidants,
+          adaptateurEnvironnement.metabase()
+            .identifiantQuestionNombreDiagnostics,
+          adaptateurEnvironnement.metabase()
+            .identifiantQuestionNiveauSatifactionDiagnostic,
+        ].map((id) => this.recupereResultat(id))
+      );
 
     return {
       dashboardRepartitionDiagnosticsParTerritoire,
       nombreAidants,
       nombreDiagnostics,
+      niveauDeSatisfactionDuDiagnostic,
     };
   }
 
