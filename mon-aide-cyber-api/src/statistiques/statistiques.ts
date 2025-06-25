@@ -4,6 +4,7 @@ export type RepresentationStatistiques = {
   metabase: string;
   nombreAidants: number;
   nombreDiagnostics: number;
+  niveauDeSatisfactionDuDiagnostic: number;
 };
 
 export class ServiceStatistiques {
@@ -14,6 +15,8 @@ export class ServiceStatistiques {
       metabase: reponse.dashboardRepartitionDiagnosticsParTerritoire,
       nombreAidants: reponse.nombreAidants,
       nombreDiagnostics: reponse.nombreDiagnostics,
+      niveauDeSatisfactionDuDiagnostic:
+        reponse.niveauDeSatisfactionDuDiagnostic,
     }));
   }
 }

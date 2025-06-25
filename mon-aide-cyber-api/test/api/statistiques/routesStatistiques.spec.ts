@@ -26,6 +26,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
         repartitionDiagnostics: 'metabase',
         nombreAidants: 1500,
         nombreDiagnostics: 2443,
+        niveauDeSatisfactionDuDiagnostic: 9.25,
       });
 
       const reponse = await executeRequete(
@@ -38,6 +39,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
         metabase: 'metabase',
         nombreAidants: 1500,
         nombreDiagnostics: 2443,
+        niveauDeSatisfactionDuDiagnostic: 9.25,
       });
     });
   });
