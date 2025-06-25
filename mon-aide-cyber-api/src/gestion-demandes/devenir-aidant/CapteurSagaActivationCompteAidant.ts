@@ -1,7 +1,6 @@
 import { UUID } from 'crypto';
 import { BusCommande, CapteurSaga, Saga } from '../../domaine/commande';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
-import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { Entrepots } from '../../domaine/Entrepots';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
@@ -82,14 +81,10 @@ export class CapteurSagaActivationCompteAidant
     return undefined;
   }
 
-  private envoieMail(demande: DemandeDevenirAidant): Promise<void> {
-    return this.adaptateurEnvoiDeMail.envoie({
-      objet: 'MonAideCyber - Votre compte Aidant est activé !',
-      corps: adaptateurCorpsMessage
-        .compteAidantActive()
-        .genereCorpsMessage(`${demande.prenom} ${demande.nom}`),
-      destinataire: { email: demande.mail },
-    });
+  private async envoieMail(demande: DemandeDevenirAidant): Promise<void> {
+    return await this.adaptateurEnvoiDeMail.envoieActivationCompteAidantFaite(
+      demande.mail
+    );
   }
 }
 

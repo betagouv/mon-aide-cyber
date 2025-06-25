@@ -53,6 +53,8 @@ export interface AdaptateurEnvoiMail {
     pdfRestitution: Buffer,
     emailEntiteAidee: string
   ): Promise<void>;
+
+  envoieActivationCompteAidantFaite(mail: string): Promise<void>;
 }
 
 export type Expediteur = 'MONAIDECYBER' | 'INFO';
