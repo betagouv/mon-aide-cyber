@@ -24,8 +24,22 @@ import { AidantMisEnRelation } from '../../gestion-demandes/aide/MiseEnRelationP
 import { emailCOTDeLaRegion } from '../annuaireCOT/annuaireCOT';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
-  async envoieActivationCompteAidantFaite(__mail: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async envoieActivationCompteAidantFaite(email: string): Promise<void> {
+    const destinataire: Destinataire = {
+      email,
+    };
+    const constructeurEmailBrevo = unConstructeurEnvoiDeMailAvecTemplate()
+      .ayantPourTemplate(
+        adaptateurEnvironnement.brevo().templateActivationCompteAidant()
+      )
+      .ayantPourDestinataires([[destinataire.email, destinataire.nom]])
+      .ayantPourParametres({
+        annuaireAidantsCyber: new URL(
+          '/beneficier-du-dispositif/annuaire',
+          adaptateurEnvironnement.mac().urlMAC()
+        ).toString(),
+      });
+    await this.envoieMailAvecTemplate(constructeurEmailBrevo.construis());
   }
 
   async envoieConfirmationDemandeAide(
