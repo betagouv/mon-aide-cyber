@@ -13,6 +13,7 @@ export type Statistiques = {
   metabase: string;
   nombreAidants: string;
   nombreDiagnostics: string;
+  niveauDeSatisfactionDuDiagnostic: string;
 };
 export type ReponseStatistiques = Statistiques;
 
@@ -79,12 +80,24 @@ export const EcranStatistiques = () => {
             </div>
             <div className="carte-statistique">
               <img
+                src="/images/icones/icone-statistiques-satisfaction-diagnostic.svg"
+                alt=""
+              />
+              <div className="statistique">
+                <div className="valeur">
+                  {statistiques?.niveauDeSatisfactionDuDiagnostic}/10
+                </div>
+                <div className="description">Taux de satisfaction</div>
+              </div>
+            </div>
+            <div className="carte-statistique">
+              <img
                 src="/images/icones/icone-statistiques-nombre-diagnostics.svg"
                 alt=""
               />
               <div className="statistique">
                 <div className="valeur">{statistiques?.nombreDiagnostics}</div>
-                <div className="description">diagnostics cyber réalisés</div>
+                <div className="description">Diagnostics cyber réalisés</div>
               </div>
             </div>
             <div className="carte-statistique">
@@ -94,7 +107,7 @@ export const EcranStatistiques = () => {
               />
               <div className="statistique">
                 <div className="valeur">30%</div>
-                <div className="description">des mesures mises en œuvre</div>
+                <div className="description">Mesures mises en œuvre</div>
               </div>
             </div>
           </div>
