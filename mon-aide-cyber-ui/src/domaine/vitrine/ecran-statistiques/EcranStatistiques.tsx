@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
 import { HeroStatistiques } from './composants/HeroStatistiques';
 import './ecran-statistiques.scss';
-import { MoteurDeLiens } from '../../MoteurDeLiens';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI';
-import { useNavigationMAC } from '../../../fournisseurs/hooks';
-import { Lien, ReponseHATEOAS } from '../../Lien';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
-import { useContexteNavigation } from '../../../hooks/useContexteNavigation';
 import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
+import { useQuery } from '@tanstack/react-query';
+import { useMoteurDeLiens } from '../../../hooks/useMoteurDeLiens.ts';
+import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
 
 export type Statistiques = {
   metabase: string;
@@ -21,46 +19,24 @@ export const EcranStatistiques = () => {
   useTitreDePage('Statistiques');
 
   const macAPI = useMACAPI();
-  const navigationMAC = useNavigationMAC();
-  const { recupereContexteNavigation } = useContexteNavigation();
+  useRecupereContexteNavigation('afficher-statistiques');
+  const { accedeALaRessource, ressource } = useMoteurDeLiens(
+    'afficher-statistiques'
+  );
 
-  const [enCoursDeChargement, setEnCoursDeChargement] = useState(true);
-  const [statistiques, setStatistiques] = useState<Statistiques | undefined>();
-
-  useEffect(() => {
-    recupereContexteNavigation({ contexte: 'afficher-statistiques' }).then(
-      (reponse) => {
-        navigationMAC.ajouteEtat((reponse as ReponseHATEOAS).liens);
-      }
-    );
-  }, []);
-
-  useEffect(() => {
-    new MoteurDeLiens(navigationMAC.etat).trouve(
-      'afficher-statistiques',
-      (lien: Lien) => {
-        if (enCoursDeChargement) {
-          macAPI
-            .execute<ReponseStatistiques, ReponseStatistiques>(
-              constructeurParametresAPI()
-                .url(lien.url)
-                .methode(lien.methode!)
-                .construis(),
-              (reponse) => reponse
-            )
-            .then((reponse) => {
-              setStatistiques(reponse);
-            })
-            .catch((erreur: ReponseHATEOAS) => {
-              console.log(erreur);
-            })
-            .finally(() => {
-              setEnCoursDeChargement(false);
-            });
-        }
-      }
-    );
-  }, [navigationMAC.etat]);
+  const { data: statistiques } = useQuery({
+    enabled: accedeALaRessource,
+    queryKey: ['recupere-statistiques'],
+    queryFn: (): Promise<Statistiques> => {
+      return macAPI.execute<ReponseStatistiques, ReponseStatistiques>(
+        constructeurParametresAPI()
+          .url(ressource.url)
+          .methode(ressource.methode!)
+          .construis(),
+        (reponse) => reponse
+      );
+    },
+  });
 
   return (
     <main role="main" className="ecran-statistiques">
@@ -111,7 +87,7 @@ export const EcranStatistiques = () => {
               </div>
             </div>
           </div>
-          <div className="carte ">
+          <div className="carte">
             <iframe src={statistiques?.metabase || ''}></iframe>
           </div>
         </div>
