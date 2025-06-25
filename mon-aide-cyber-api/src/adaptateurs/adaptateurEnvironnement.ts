@@ -12,21 +12,25 @@ const messagerie = () => ({
   expediteurInfoMAC: () => process.env.EMAIL_INFO_MAC_EXPEDITEUR || '',
 });
 
-const brevo = () => ({
-  templateConfirmationAide: () =>
-    Number(process.env.BREVO_TEMPLATE_CONFIRMATION_AIDE) || 0,
-  templateConfirmationAideEnRelationAvecUnUtilisateurMAC: () =>
-    Number(
-      process.env
-        .BREVO_TEMPLATE_CONFIRMATION_AIDE_EN_RELATION_AVEC_UN_UTILISATEUR_MAC
-    ) || 0,
-  templateAidantDemandeAideAttribuee: () =>
-    Number(process.env.BREVO_TEMPLATE_AIDANT_DEMANDE_AIDE_ATTRIBUEE) || 0,
-  templateMiseEnRelation: () =>
-    Number(process.env.BREVO_TEMPLATE_AIDANT_MISE_EN_RELATION),
-  templateRestitutionPDF: () =>
-    Number(process.env.BREVO_TEMPLATE_RESTITUTION_PDF),
-});
+const brevo = () => {
+  return {
+    templateConfirmationAide: () =>
+      Number(process.env.BREVO_TEMPLATE_CONFIRMATION_AIDE) || 0,
+    templateConfirmationAideEnRelationAvecUnUtilisateurMAC: () =>
+      Number(
+        process.env
+          .BREVO_TEMPLATE_CONFIRMATION_AIDE_EN_RELATION_AVEC_UN_UTILISATEUR_MAC
+      ) || 0,
+    templateAidantDemandeAideAttribuee: () =>
+      Number(process.env.BREVO_TEMPLATE_AIDANT_DEMANDE_AIDE_ATTRIBUEE),
+    templateMiseEnRelation: () =>
+      Number(process.env.BREVO_TEMPLATE_AIDANT_MISE_EN_RELATION),
+    templateRestitutionPDF: () =>
+      Number(process.env.BREVO_TEMPLATE_RESTITUTION_PDF),
+    templateActivationCompteAidant: () =>
+      Number(process.env.BREVO_TEMPLATE_ACTIVATION_COMPTE_AIDANT),
+  };
+};
 
 const mac = () => ({
   urlMAC: () => process.env.URL_MAC || '',
