@@ -7,6 +7,7 @@ type ReponseDesiree = {
   repartitionDiagnostics: string;
   nombreAidants: number;
   nombreDiagnostics: number;
+  niveauDeSatisfactionDuDiagnostic: number;
 };
 
 export class AdaptateurMetabaseMemoire implements AdaptateurMetabase {
@@ -14,6 +15,7 @@ export class AdaptateurMetabaseMemoire implements AdaptateurMetabase {
     repartitionDiagnostics: '',
     nombreAidants: 0,
     nombreDiagnostics: 0,
+    niveauDeSatisfactionDuDiagnostic: 0,
   };
 
   statistiques(): Promise<ReponseMetabase> {
@@ -22,6 +24,8 @@ export class AdaptateurMetabaseMemoire implements AdaptateurMetabase {
         this.reponse.repartitionDiagnostics,
       nombreAidants: this.reponse.nombreAidants,
       nombreDiagnostics: this.reponse.nombreDiagnostics,
+      niveauDeSatisfactionDuDiagnostic:
+        this.reponse.niveauDeSatisfactionDuDiagnostic,
     });
   }
 
@@ -29,6 +33,7 @@ export class AdaptateurMetabaseMemoire implements AdaptateurMetabase {
     repartitionDiagnostics: string;
     nombreAidants: number;
     nombreDiagnostics: number;
+    niveauDeSatisfactionDuDiagnostic: number;
   }) {
     this.reponse = reponse;
   }

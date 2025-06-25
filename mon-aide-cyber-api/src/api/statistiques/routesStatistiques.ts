@@ -6,6 +6,7 @@ export type ReponseStatistiques = {
   metabase: string;
   nombreAidants: number;
   nombreDiagnostics: number;
+  niveauDeSatisfactionDuDiagnostic: number;
 };
 
 export const routesStatistiques = (configuration: ConfigurationServeur) => {
@@ -21,6 +22,8 @@ export const routesStatistiques = (configuration: ConfigurationServeur) => {
           metabase: statistiques.metabase,
           nombreAidants: statistiques.nombreAidants,
           nombreDiagnostics: statistiques.nombreDiagnostics,
+          niveauDeSatisfactionDuDiagnostic:
+            statistiques.niveauDeSatisfactionDuDiagnostic,
         })
       );
     }
