@@ -33,6 +33,14 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     return Promise.resolve();
   }
 
+  async envoieActivationCompteAidantFaite(mail: string): Promise<void> {
+    if (this._genereErreur) {
+      return Promise.reject('Erreur');
+    }
+    this.destinataires.push(mail);
+    return;
+  }
+
   envoieConfirmationDemandeAide(
     email: string,
     utilisateurMACEnRelation: UtilisateurMACEnRelation | undefined
@@ -120,6 +128,10 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
 
   mailNonEnvoye(): boolean {
     return !this.mailEnvoye();
+  }
+
+  activationCompteAidantFaiteEnvoyee(mail: string): boolean {
+    return this.destinataires.includes(mail);
   }
 
   confirmationDemandeAideAEteEnvoyeeA(

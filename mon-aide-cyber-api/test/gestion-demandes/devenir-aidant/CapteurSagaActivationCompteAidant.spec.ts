@@ -80,10 +80,7 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     });
 
     expect(
-      adaptateurEnvoiMail.aEteEnvoyeA(
-        mailDeLAidant,
-        `Bonjour ${demande.prenom} ${demande.nom} !`
-      )
+      adaptateurEnvoiMail.activationCompteAidantFaiteEnvoyee(mailDeLAidant)
     ).toBe(true);
   });
 
