@@ -194,6 +194,7 @@ fieldset {
 .fr-btn {
   gap: 0.5rem;
 }
+
 .fr-btn:hover {
   background-color: rgba(0, 0, 0, 0.04) !important;
 }
@@ -236,5 +237,27 @@ fieldset {
     @include jusqu-a(xl) {
       white-space: normal;
     }
+  }
+}
+
+.spinner {
+  display: block;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  border-radius: 50%;
+  border: 4px solid var(--couleurs-mac-violet-fonce);
+  border-color: var(--couleurs-mac-violet-fonce) transparent;
+  animation: rotation 1.2s linear infinite;
+  top: calc(50% - 10px);
+  left: calc(50% - 10px);
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

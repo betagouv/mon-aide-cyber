@@ -6,6 +6,7 @@ import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
 import { useQuery } from '@tanstack/react-query';
 import { useMoteurDeLiens } from '../../../hooks/useMoteurDeLiens.ts';
 import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
+import Spinner from '../../../composants/atomes/Spinner.tsx';
 
 export type Statistiques = {
   metabase: string;
@@ -24,7 +25,7 @@ export const EcranStatistiques = () => {
     'afficher-statistiques'
   );
 
-  const { data: statistiques } = useQuery({
+  const { data: statistiques, isLoading } = useQuery({
     enabled: accedeALaRessource,
     queryKey: ['recupere-statistiques'],
     queryFn: (): Promise<Statistiques> => {
@@ -50,7 +51,9 @@ export const EcranStatistiques = () => {
                 alt=""
               />
               <div className="statistique">
-                <div className="valeur">{statistiques?.nombreAidants}</div>
+                <div className="valeur">
+                  {isLoading ? <Spinner /> : statistiques?.nombreAidants}
+                </div>
                 <div className="description">Aidants cyber</div>
               </div>
             </div>
@@ -61,7 +64,13 @@ export const EcranStatistiques = () => {
               />
               <div className="statistique">
                 <div className="valeur">
-                  {statistiques?.niveauDeSatisfactionDuDiagnostic}/10
+                  {isLoading ? (
+                    <Spinner />
+                  ) : statistiques ? (
+                    statistiques.niveauDeSatisfactionDuDiagnostic + '/10'
+                  ) : (
+                    ''
+                  )}
                 </div>
                 <div className="description">Taux de satisfaction</div>
               </div>
@@ -72,7 +81,9 @@ export const EcranStatistiques = () => {
                 alt=""
               />
               <div className="statistique">
-                <div className="valeur">{statistiques?.nombreDiagnostics}</div>
+                <div className="valeur">
+                  {isLoading ? <Spinner /> : statistiques?.nombreDiagnostics}
+                </div>
                 <div className="description">Diagnostics cyber réalisés</div>
               </div>
             </div>
@@ -82,7 +93,7 @@ export const EcranStatistiques = () => {
                 alt=""
               />
               <div className="statistique">
-                <div className="valeur">30%</div>
+                <div className="valeur">{isLoading ? <Spinner /> : '30%'}</div>
                 <div className="description">Mesures mises en œuvre</div>
               </div>
             </div>
