@@ -3,6 +3,7 @@ import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from '../executeurRequete';
 import {
+  CorpsReponseTallyRecue,
   Field,
   ReponseTally,
   ReponseTallyRecue,
@@ -11,6 +12,8 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import { Constructeur } from '../../constructeurs/constructeur';
 import { fakerFR } from '@faker-js/faker';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+
+type Reponse = { label: string; value: string };
 
 class ConstructeurDeReponseTally implements Constructeur<ReponseTally> {
   private dateCreation: Date = fakerFR.date.anytime();
@@ -27,8 +30,15 @@ class ConstructeurDeReponseTally implements Constructeur<ReponseTally> {
     return this;
   }
 
-  ajouteUneReponse(reponse: Field): ConstructeurDeReponseTally {
-    this.reponses.push(reponse);
+  ajouteUneReponse(reponse: Reponse): ConstructeurDeReponseTally {
+    this.reponses.push({ ...reponse, type: 'NUMBER' });
+    return this;
+  }
+
+  ajouteUneReponseZoneDeTexteLibre(
+    reponse: Reponse
+  ): ConstructeurDeReponseTally {
+    this.reponses.push({ ...reponse, type: 'TEXTAREA' });
     return this;
   }
 
@@ -106,6 +116,38 @@ describe('Routes Webhooks', () => {
       );
 
       expect(testeurMAC.adaptateurSignatureRequete.verifiePassage()).toBe(true);
+    });
+
+    it('Ne consigne pas les champs libre (TEXTAREA pour l’instant)', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/webhooks/tally`,
+        unConstructeurDeReponseTally()
+          .creeLe(new Date(Date.parse('2025-06-20T10:00:00')))
+          .avecUnNom('formulaire exemple')
+          .ajouteUneReponse({ label: 'Nom', value: 'DUPONT' })
+          .ajouteUneReponseZoneDeTexteLibre({
+            label: 'Une saisie',
+            value: 'Ma saisie libre',
+          })
+          .construis()
+      );
+
+      expect(reponse.statusCode).toBe(202);
+      expect(
+        (
+          testeurMAC.busEvenement.evenementRecu
+            ?.corps as unknown as CorpsReponseTallyRecue
+        ).reponses
+      ).toStrictEqual([
+        {
+          libelle: 'Nom',
+          valeur: 'DUPONT',
+        },
+      ]);
     });
   });
 });

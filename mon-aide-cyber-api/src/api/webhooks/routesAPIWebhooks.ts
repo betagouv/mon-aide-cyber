@@ -5,14 +5,14 @@ import bodyParser from 'body-parser';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import * as core from 'express-serve-static-core';
 
-type CorpsReponseTallyRecue = {
+export type CorpsReponseTallyRecue = {
   dateReponse: string;
   nomFormulaire: string;
   reponses: { libelle: string; valeur: string }[];
 };
 export type ReponseTallyRecue = Evenement<CorpsReponseTallyRecue>;
 
-export type Field = { label: string; value: string };
+export type Field = { label: string; value: string; type: string };
 export type ReponseTally = {
   createdAt: string;
   data: {
@@ -25,10 +25,12 @@ const mappeReponse = (reponseTally: ReponseTally): CorpsReponseTallyRecue => {
   return {
     dateReponse: reponseTally.createdAt,
     nomFormulaire: reponseTally.data.formName,
-    reponses: reponseTally.data.fields.map((f) => ({
-      libelle: f.label,
-      valeur: f.value,
-    })),
+    reponses: reponseTally.data.fields
+      .filter((f) => f.type !== 'TEXTAREA')
+      .map((f) => ({
+        libelle: f.label,
+        valeur: f.value,
+      })),
   };
 };
 
@@ -45,8 +47,9 @@ const routesAPITally = (configuration: ConfigurationServeur) => {
       requete: Request<core.ParamsDictionary & ReponseTally>,
       reponse: Response
     ) => {
+      const reponseTally = requete.body;
       await busEvenement.publie<ReponseTallyRecue>({
-        corps: mappeReponse(requete.body),
+        corps: mappeReponse(reponseTally),
         date: FournisseurHorloge.maintenant(),
         identifiant: crypto.randomUUID(),
         type: 'REPONSE_TALLY_RECUE',
