@@ -1,3 +1,5 @@
+import { pThrottle } from './adaptateurPThrottle';
+
 type ReponseBrevo = Response;
 
 type CorpsReponseEnErreur = {
@@ -170,4 +172,16 @@ const estReponseEnErreur = (
   reponse: ReponseBrevo | ReponseBrevoEnErreur
 ): reponse is ReponseBrevoEnErreur => {
   return !reponse.ok;
+};
+
+export const enCadence = async <T>(
+  intervalleEnMs: number,
+  fonctionEncapsulee: (
+    requete: RequeteBrevo<T>
+  ) => Promise<ReponseEnvoiMail | ReponseBrevoEnErreur>
+) => {
+  return (async () => {
+    const cadence = pThrottle({ limit: 1, interval: intervalleEnMs });
+    return cadence(fonctionEncapsulee);
+  })();
 };

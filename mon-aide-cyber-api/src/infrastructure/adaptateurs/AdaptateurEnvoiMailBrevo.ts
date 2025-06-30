@@ -10,6 +10,7 @@ import {
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 import {
   adaptateursRequeteBrevo,
+  enCadence,
   EnvoiMailBrevoAvecTemplate,
   ErreurRequeBrevo,
   RequeteBrevo,
@@ -140,7 +141,11 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     requeteBrevo: RequeteBrevo<T>
   ) {
     try {
-      await adaptateursRequeteBrevo().envoiMail().execute(requeteBrevo);
+      const envoiEnCadence = await enCadence<EnvoiMailBrevoAvecTemplate>(
+        300,
+        adaptateursRequeteBrevo().envoiMail().execute
+      );
+      await envoiEnCadence(requeteBrevo);
     } catch (reponse: unknown | ErreurRequeBrevo) {
       throw new ErreurEnvoiEmail(
         JSON.stringify((reponse as ErreurRequeBrevo).corps),
