@@ -79,8 +79,25 @@ export class AdaptateurDeRestitutionPDF
       });
   }
 
-  genereAnnexe(__restitution: Restitution): Promise<Buffer> {
-    throw new Error('Method not implemented.');
+  genereAnnexe(restitution: Restitution): Promise<Buffer> {
+    const mesures = this.genereHtml({
+      pugCorps: 'restitution.mesures-complementaires',
+      params: {
+        mesures: restitution.mesures.autresMesures,
+        mesServicesCyber: `${adaptateurEnvironnement.mesServicesCyber().urlCyberDepart()}`,
+        dateGeneration: FournisseurHorloge.formateDate(
+          FournisseurHorloge.maintenant()
+        ),
+      },
+    });
+
+    return Promise.all([mesures])
+      .then((htmls) => generePdfs(htmls))
+      .then((pdfs) => fusionnePdfs(pdfs))
+      .catch((erreur) => {
+        console.log('Erreur génération restitution', erreur);
+        throw new Error(erreur);
+      });
   }
 
   async genereHtml(configuration: {
