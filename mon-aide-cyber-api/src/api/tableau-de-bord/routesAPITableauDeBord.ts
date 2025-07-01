@@ -25,7 +25,7 @@ export const routesAPITableauDeBord = (configuration: ConfigurationServeur) => {
   routes.get(
     '/',
     session.verifie('Accède au Tableau de Bord'),
-    cgu.verifie(),
+    cgu.verifie('Accède au Tableau de Bord'),
     async (
       requete: RequeteUtilisateur,
       reponse: Response,

@@ -50,7 +50,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
   routes.get(
     '/',
     session.verifie('Accède au profil'),
-    cgu.verifie(),
+    cgu.verifie('Accède au profil'),
     async (
       requete: RequeteUtilisateur,
       reponse: Response,
@@ -132,7 +132,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     '/',
     express.json(),
     session.verifie('Modifie le profil Aidant'),
-    cgu.verifie(),
+    cgu.verifie('Modifie le profil Aidant'),
     body('consentementAnnuaire')
       .isBoolean()
       .withMessage(
@@ -175,7 +175,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     '/modifier-mot-de-passe',
     express.json(),
     session.verifie('Modifie le mot de passe'),
-    cgu.verifie(),
+    cgu.verifie('Modifie le mot de passe'),
     validateurDeNouveauMotDePasse(
       entrepots,
       'ancienMotDePasse',
