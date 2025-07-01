@@ -20,7 +20,6 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private _envoiRestitutionEntiteAideeEffectue:
     | { pdf: Buffer; emailEntiteAidee: string }
     | undefined = undefined;
-
   envoie(
     message: Email,
     expediteur: Expediteur = 'MONAIDECYBER'
@@ -61,6 +60,13 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     this.confirmation = confirmation;
     this.destinataires.push(confirmation.emailAidant);
     return Promise.resolve();
+  }
+
+  async envoiToutesLesMisesEnRelation(
+    matchingAidants: AidantMisEnRelation[],
+    __informations: InformationEntitePourMiseEnRelation
+  ): Promise<void> {
+    this.destinataires.push(...matchingAidants.map((a) => a.email));
   }
 
   envoieMiseEnRelation(

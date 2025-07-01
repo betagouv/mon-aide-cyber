@@ -10,7 +10,6 @@ import {
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 import {
   adaptateursRequeteBrevo,
-  enCadence,
   EnvoiMailBrevoAvecTemplate,
   ErreurRequeBrevo,
   RequeteBrevo,
@@ -23,6 +22,7 @@ import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironneme
 import { isArray } from 'lodash';
 import { AidantMisEnRelation } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 import { emailCOTDeLaRegion } from '../annuaireCOT/annuaireCOT';
+import { enCadence } from './enCadence';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   async envoieActivationCompteAidantFaite(email: string): Promise<void> {
@@ -92,7 +92,24 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     await this.envoieMailAvecTemplate(constructeurEmailBrevo.construis());
   }
 
-  async envoieMiseEnRelation(
+  async envoiToutesLesMisesEnRelation(
+    matchingAidants: AidantMisEnRelation[],
+    informations: InformationEntitePourMiseEnRelation
+  ): Promise<void> {
+    const etaleLesEnvois = async (
+      i: InformationEntitePourMiseEnRelation,
+      a: AidantMisEnRelation
+    ) => {
+      await enCadence(100, () => this.envoieUneMiseEnRelation(i, a));
+    };
+
+    const tousLesEnvois = matchingAidants.map((a) =>
+      etaleLesEnvois(informations, a)
+    );
+    await Promise.all(tousLesEnvois);
+  }
+
+  private async envoieUneMiseEnRelation(
     informations: InformationEntitePourMiseEnRelation,
     aidant: AidantMisEnRelation
   ): Promise<void> {
@@ -141,11 +158,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     requeteBrevo: RequeteBrevo<T>
   ) {
     try {
-      const envoiEnCadence = await enCadence<EnvoiMailBrevoAvecTemplate>(
-        300,
-        adaptateursRequeteBrevo().envoiMail().execute
-      );
-      await envoiEnCadence(requeteBrevo);
+      await adaptateursRequeteBrevo().envoiMail().execute(requeteBrevo);
     } catch (reponse: unknown | ErreurRequeBrevo) {
       throw new ErreurEnvoiEmail(
         JSON.stringify((reponse as ErreurRequeBrevo).corps),

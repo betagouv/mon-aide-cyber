@@ -44,9 +44,9 @@ export interface AdaptateurEnvoiMail {
     confirmation: ConfirmationDemandeAideAttribuee
   ): Promise<void>;
 
-  envoieMiseEnRelation(
-    informations: InformationEntitePourMiseEnRelation,
-    aidant: AidantMisEnRelation
+  envoiToutesLesMisesEnRelation(
+    matchingAidants: AidantMisEnRelation[],
+    informations: InformationEntitePourMiseEnRelation
   ): Promise<void>;
 
   envoieRestitutionEntiteAidee(

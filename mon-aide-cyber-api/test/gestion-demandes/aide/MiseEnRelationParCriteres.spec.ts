@@ -189,11 +189,11 @@ describe('Mise en relation par critères', () => {
       await entrepots.aidants().persiste(deuxiemeAidant);
 
       const aidantsContactes: AidantMisEnRelation[] = [];
-      envoieMail.envoieMiseEnRelation = async (
-        _donneesMiseEnRelation,
-        aidant
+      envoieMail.envoiToutesLesMisesEnRelation = async (
+        aidants: AidantMisEnRelation[],
+        __donneesMiseEnRelation
       ) => {
-        aidantsContactes.push(aidant);
+        aidantsContactes.push(...aidants);
       };
 
       const miseEnRelation = laMiseEnRelation();
@@ -247,9 +247,9 @@ describe('Mise en relation par critères', () => {
       await entrepots.aidants().persiste(premierAidant);
 
       let informationsDuMail: InformationEntitePourMiseEnRelation;
-      envoieMail.envoieMiseEnRelation = async (
-        informations: InformationEntitePourMiseEnRelation,
-        __aidant
+      envoieMail.envoiToutesLesMisesEnRelation = async (
+        __aidants: AidantMisEnRelation[],
+        informations: InformationEntitePourMiseEnRelation
       ) => {
         informationsDuMail = informations;
       };
@@ -286,11 +286,11 @@ describe('Mise en relation par critères', () => {
         .ayantPourTypesEntite([entitesPubliques])
         .construis();
       const aidantsContactes: AidantMisEnRelation[] = [];
-      envoieMail.envoieMiseEnRelation = async (
-        _donneesMiseEnRelation,
-        aidant
+      envoieMail.envoiToutesLesMisesEnRelation = async (
+        aidants: AidantMisEnRelation[],
+        __donneesMiseEnRelation
       ) => {
-        aidantsContactes.push(aidant);
+        aidantsContactes.push(...aidants);
       };
       await entrepots.aidants().persiste(premierAidant);
       const miseEnRelation = laMiseEnRelation();
@@ -370,9 +370,9 @@ describe('Mise en relation par critères', () => {
         .ayantPourSecteursActivite([{ nom: 'Transports' }])
         .ayantPourTypesEntite([entitesPubliques])
         .construis();
-      envoieMail.envoieMiseEnRelation = async (
-        _donneesMiseEnRelation,
-        __aidant
+      envoieMail.envoiToutesLesMisesEnRelation = async (
+        __aidants,
+        __donneesMiseEnRelation
       ) => {
         throw new Error('Erreur pour test lors de l’envoi du mail');
       };
