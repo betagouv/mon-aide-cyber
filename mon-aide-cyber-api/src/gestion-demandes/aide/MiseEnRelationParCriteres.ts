@@ -21,6 +21,8 @@ import {
   AdaptateurRechercheEntreprise,
   Entreprise,
 } from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { fabriqueGestionnaireErreurs } from '../../infrastructure/adaptateurs/fabriqueGestionnaireErreurs';
+import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 
 export type AidantMisEnRelation = {
   email: string;
@@ -95,7 +97,22 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
         this.annuaireCOT
       );
     } else {
-      await this.informeAidantsDeLaDemandeAide(aidants, donneesMiseEnRelation);
+      try {
+        await this.informeAidantsDeLaDemandeAide(
+          aidants,
+          donneesMiseEnRelation
+        );
+      } catch (e: unknown | Error) {
+        fabriqueGestionnaireErreurs()
+          .consignateur()
+          .consigne(
+            new ErreurEnvoiEmail(
+              'Erreur lors de l’envoi du mail aux Aidants qui matchent. Mais le process n’est pas interrompu !!',
+              { cause: e as Error }
+            )
+          );
+        console.error(e);
+      }
     }
     await envoieConfirmationDemandeAide(
       this.adaptateurEnvoiMail,
