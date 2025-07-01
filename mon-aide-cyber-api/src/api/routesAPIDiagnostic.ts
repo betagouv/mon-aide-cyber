@@ -244,7 +244,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
           .pdf()
           .genereRestitution(restitution);
         await envoiMessage.envoieRestitutionEntiteAidee(
-          pdfRestitution,
+          [pdfRestitution],
           tuple.utilisateur.identifiant
         );
         await busEvenement.publie<RestitutionEnvoyee>({

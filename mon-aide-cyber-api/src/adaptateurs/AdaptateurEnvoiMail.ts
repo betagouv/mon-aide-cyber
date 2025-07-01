@@ -50,7 +50,7 @@ export interface AdaptateurEnvoiMail {
   ): Promise<void>;
 
   envoieRestitutionEntiteAidee(
-    pdfRestitution: Buffer,
+    pdfsRestitution: Buffer[],
     emailEntiteAidee: string
   ): Promise<void>;
 

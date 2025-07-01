@@ -752,7 +752,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       expect(reponse.statusCode).toBe(202);
       expect(
         adaptateurEnvoiMail.envoiRestitutionEntiteAideeEffectue(
-          restitutionGeneree,
+          [restitutionGeneree],
           'entite-aide@email.com'
         )
       ).toBe(true);
