@@ -361,5 +361,32 @@ describe('Mise en relation par critères', () => {
         identifiantAidant: '7571dfe9-31e7-4e6f-80de-fafa3f323b1d',
       });
     });
+
+    it('Va au bout même si l’envoi de mail aux Aidants lève une erreur (bug survenu en PROD)', async () => {
+      const premierAidant = unAidant()
+        .avecUnEmail('aidant-qui-matche@mail.con')
+        .avecUnNomPrenom('Jean DUPONT')
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .construis();
+      envoieMail.envoieMiseEnRelation = async (
+        _donneesMiseEnRelation,
+        __aidant
+      ) => {
+        throw new Error('Erreur pour test lors de l’envoi du mail');
+      };
+      await entrepots.aidants().persiste(premierAidant);
+      const miseEnRelation = laMiseEnRelation();
+
+      const resultatMiseEnRelation = await miseEnRelation.execute({
+        demandeAide: uneDemandeAide().dansLeDepartement(finistere).construis(),
+        secteursActivite: [{ nom: 'Transports' }],
+        typeEntite: entitesPubliques,
+        siret: '12345',
+      });
+
+      expect(resultatMiseEnRelation.resultat).toBeDefined();
+    });
   });
 });
