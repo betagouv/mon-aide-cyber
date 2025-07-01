@@ -172,8 +172,9 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     emailEntiteAidee: string
   ): boolean {
     const tousPresents =
-      this._envoiRestitutionEntiteAideeEffectue?.pdfs?.every(
-        (val, index) => val === pdfEnvoyes[index]
+      pdfEnvoyes.every(
+        (val, index) =>
+          val === this._envoiRestitutionEntiteAideeEffectue?.pdfs[index]
       ) || false;
 
     return (

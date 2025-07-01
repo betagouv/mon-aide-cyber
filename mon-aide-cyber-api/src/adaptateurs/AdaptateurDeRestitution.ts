@@ -15,4 +15,6 @@ export type ContenuHtml = {
 
 export interface AdaptateurDeRestitution<T> {
   genereRestitution(restitution: Restitution): Promise<T>;
+
+  genereAnnexe(restitution: Restitution): Promise<T>;
 }

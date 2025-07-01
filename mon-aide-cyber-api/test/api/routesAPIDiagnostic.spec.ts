@@ -678,6 +678,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
     const testeurMAC = testeurIntegration();
     let donneesServeur: { app: Express };
     let restitutionGeneree: Buffer;
+    let annexeGeneree: Buffer;
     let adaptateurEnvoiMail: AdaptateurEnvoiMailMemoire;
     let restitutionEnvoyee: Restitution | undefined = undefined;
 
@@ -725,10 +726,15 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
 
     beforeEach(async () => {
       restitutionGeneree = Buffer.from('PDF Mesures généré');
+      annexeGeneree = Buffer.from('PDF Annexe généré');
       const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
       adaptateurRestitutionPDF.genereRestitution = (restitution) => {
         restitutionEnvoyee = restitution;
         return Promise.resolve(restitutionGeneree);
+      };
+      adaptateurRestitutionPDF.genereAnnexe = (restitution) => {
+        restitutionEnvoyee = restitution;
+        return Promise.resolve(annexeGeneree);
       };
       testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
       adaptateurEnvoiMail =
@@ -752,7 +758,7 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       expect(reponse.statusCode).toBe(202);
       expect(
         adaptateurEnvoiMail.envoiRestitutionEntiteAideeEffectue(
-          [restitutionGeneree],
+          [restitutionGeneree, annexeGeneree],
           'entite-aide@email.com'
         )
       ).toBe(true);

@@ -79,6 +79,10 @@ export class AdaptateurDeRestitutionPDF
       });
   }
 
+  genereAnnexe(__restitution: Restitution): Promise<Buffer> {
+    throw new Error('Method not implemented.');
+  }
+
   async genereHtml(configuration: {
     pugCorps: string;
     params: any;
