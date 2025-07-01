@@ -153,20 +153,17 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       )) as Entreprise;
     const epci = await this.adaptateurGeo.epciAvecCode(entreprise.codeEpci);
 
-    const envoisEmails = matchingAidants.map((a) =>
-      this.adaptateurEnvoiMail.envoieMiseEnRelation(
-        {
-          departement: donneesMiseEnRelation.demandeAide.departement.nom,
-          epci: epci.nom,
-          typeEntite: donneesMiseEnRelation.typeEntite.nom,
-          secteursActivite: donneesMiseEnRelation.secteursActivite
-            .map((s) => s.nom)
-            .join(','),
-        },
-        a
-      )
+    await this.adaptateurEnvoiMail.envoiToutesLesMisesEnRelation(
+      matchingAidants,
+      {
+        departement: donneesMiseEnRelation.demandeAide.departement.nom,
+        epci: epci.nom,
+        typeEntite: donneesMiseEnRelation.typeEntite.nom,
+        secteursActivite: donneesMiseEnRelation.secteursActivite
+          .map((s) => s.nom)
+          .join(','),
+      }
     );
-    await Promise.all(envoisEmails);
   }
 
   private aidantsPourPostuler = (
