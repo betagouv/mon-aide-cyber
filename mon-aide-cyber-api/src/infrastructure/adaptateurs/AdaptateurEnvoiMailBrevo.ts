@@ -115,7 +115,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   }
 
   async envoieRestitutionEntiteAidee(
-    pdfRestitution: Buffer,
+    pdfsRestitution: Buffer[],
     emailEntiteAidee: string
   ): Promise<void> {
     const emailBrevo = unConstructeurEnvoiDeMailAvecTemplate()
@@ -130,7 +130,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
           .toString(),
       })
       .ayantEnPieceJointe({
-        contenu: pdfRestitution.toString('base64'),
+        contenu: pdfsRestitution[0].toString('base64'),
         nom: 'Restitution.pdf',
       })
       .construis();
