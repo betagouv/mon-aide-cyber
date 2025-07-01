@@ -84,7 +84,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     body('emailEntiteAidee')
       .isEmail()
       .withMessage('Veuillez renseigner une adresse email valide.'),
-    cgu.verifie(),
+    cgu.verifie('Lance le diagnostic'),
     demandeAide.verifie(),
     (
       requete: RequeteUtilisateur<CorpsRequeteLanceDiagnostic>,
@@ -113,7 +113,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.get(
     '/:id',
     session.verifie('Accès diagnostic'),
-    cgu.verifie(),
+    cgu.verifie('Accès diagnostic'),
     verifieRelations(relations, entrepots),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;
@@ -137,7 +137,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.patch(
     '/:id',
     session.verifie('Ajout réponse au diagnostic'),
-    cgu.verifie(),
+    cgu.verifie('Ajout réponse au diagnostic'),
     verifieRelations(relations, entrepots),
     bodyParser.json(),
     (
@@ -172,7 +172,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
   routes.get(
     '/:id/restitution',
     session.verifie('Demande la restitution'),
-    cgu.verifie(),
+    cgu.verifie('Demande la restitution'),
     verifieRelations(relations, entrepots),
     (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
       const { id } = requete.params;

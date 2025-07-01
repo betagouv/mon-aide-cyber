@@ -36,7 +36,7 @@ describe('Adaptateur de Vérification de CGU', () => {
       },
     } as Response;
 
-    await adaptateurDeVerificationDeCGU.verifie()(
+    await adaptateurDeVerificationDeCGU.verifie('Accède au profil')(
       {
         identifiantUtilisateurCourant: aidant.identifiant,
       } as RequeteUtilisateur,
@@ -73,7 +73,7 @@ describe('Adaptateur de Vérification de CGU', () => {
       },
     } as Response;
 
-    await adaptateurDeVerificationDeCGU.verifie()(
+    await adaptateurDeVerificationDeCGU.verifie('Accède au profil')(
       {
         identifiantUtilisateurCourant: utilisateurInscrit.identifiant,
       } as RequeteUtilisateur,
@@ -100,7 +100,7 @@ describe('Adaptateur de Vérification de CGU', () => {
     await entrepots.aidants().persiste(utilisateur);
     let suiteAppelee = false;
 
-    await adaptateurDeVerificationDeCGU.verifie()(
+    await adaptateurDeVerificationDeCGU.verifie('Accède au profil')(
       {
         identifiantUtilisateurCourant: utilisateur.identifiant,
       } as RequeteUtilisateur,
@@ -115,7 +115,7 @@ describe('Adaptateur de Vérification de CGU', () => {
 
   it("Retourne une erreur si l'utilisateur n'est pas trouvé", async () => {
     try {
-      await adaptateurDeVerificationDeCGU.verifie()(
+      await adaptateurDeVerificationDeCGU.verifie('Accède au profil')(
         {
           identifiantUtilisateurCourant: crypto.randomUUID(),
         } as RequeteUtilisateur,
@@ -125,7 +125,7 @@ describe('Adaptateur de Vérification de CGU', () => {
       assert.fail('');
     } catch (e: unknown | Error) {
       expect((e as Error).message).toStrictEqual(
-        "L'utilisateur voulant accédé à cette ressource n'est pas connu."
+        "[Accède au profil] L'utilisateur voulant accéder à cette ressource n'est pas connu."
       );
     }
   });

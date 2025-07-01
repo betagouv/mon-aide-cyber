@@ -96,7 +96,7 @@ export const routesAPIAidantPreferences = (
   routes.get(
     '/',
     session.verifie('Accède aux préférences de l’Aidant'),
-    cgu.verifie(),
+    cgu.verifie('Accède aux préférences de l’Aidant'),
     async (
       requete: RequeteUtilisateur,
       reponse: Response<ReponsePreferencesAidantAPI>,
@@ -141,7 +141,7 @@ export const routesAPIAidantPreferences = (
   routes.patch(
     '/',
     session.verifie('Modifie les préférences de l’Aidant'),
-    cgu.verifie(),
+    cgu.verifie('Modifie les préférences de l’Aidant'),
     express.json(),
     valideLesPreferences(),
     async (
