@@ -1,7 +1,7 @@
 import * as pug from 'pug';
 import {
-  ContenuHtml,
   AdaptateurDeRestitution,
+  ContenuHtml,
   estMesurePrioritaire,
 } from '../../adaptateurs/AdaptateurDeRestitution';
 import { Restitution, trieLesIndicateurs } from '../../restitution/Restitution';
@@ -21,6 +21,10 @@ export type RestitutionHTML = {
 export class AdaptateurDeRestitutionHTML
   implements AdaptateurDeRestitution<RestitutionHTML>
 {
+  genereAnnexe(__restitution: Restitution): Promise<RestitutionHTML> {
+    throw new Error("Le HTML ne génère pas d'annexes");
+  }
+
   genereRestitution(restitution: Restitution): Promise<RestitutionHTML> {
     return this.genereLaRestitution(restitution);
   }

@@ -133,6 +133,10 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
         contenu: pdfsRestitution[0].toString('base64'),
         nom: 'Restitution.pdf',
       })
+      .ayantEnPieceJointe({
+        contenu: pdfsRestitution[1].toString('base64'),
+        nom: 'Annexe.pdf',
+      })
       .construis();
     await this.envoieMailAvecTemplate(emailBrevo);
   }
