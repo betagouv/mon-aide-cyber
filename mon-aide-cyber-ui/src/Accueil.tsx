@@ -135,7 +135,7 @@ export const Accueil = () => {
           imagedecouverture:
             '/images/video-presentation-mac/apercu-video-mon-aide-cyber.jpg',
           source:
-            'https://ressources-mac.cellar-c2.services.clever-cloud.com/Video_MAC.mp4',
+            'https://ressources-mac.cellar-c2.services.clever-cloud.com/MAC_video_devenir-aidants_avec_st.mp4',
         })}
       ></lab-anssi-titre-multimedia>
 
