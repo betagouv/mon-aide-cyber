@@ -37,6 +37,7 @@ import {
   restitutionEnvoyee,
 } from '../diagnostic/consommateursEvenements';
 import { adaptateurRepertoireDeContacts } from './adaptateurRepertoireDeContacts';
+import { Entrepots } from '../domaine/Entrepots';
 
 const fabriqueEntrepotJournalisation = () => {
   return process.env.URL_JOURNALISATION_BASE_DONNEES
@@ -53,7 +54,8 @@ export const fabriqueConsommateursEvenements = (
   } = {
     aidantCree: () => aidantCree(entrepotJournalisation),
     aideCree: () => aideCree(entrepotJournalisation),
-  }
+  },
+  entrepots: Entrepots = fabriqueEntrepots()
 ): Map<TypeEvenement, ConsommateurEvenement[]> => {
   return new Map<TypeEvenement, ConsommateurEvenement[]>([
     ['RESTITUTION_LANCEE', [restitutionLancee(entrepotJournalisation)]],
@@ -66,15 +68,16 @@ export const fabriqueConsommateursEvenements = (
       [
         diagnosticLance(
           entrepotJournalisation,
-          uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
+          uneRechercheUtilisateursMAC(entrepots.utilisateursMAC()),
+          entrepots.demandesAides()
         ),
         aidantInitieDiagnostic(
           adaptateurRelations,
-          uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
+          uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
         ),
         utilisateurInscritInitieDiagnostic(
           adaptateurRelations,
-          uneRechercheUtilisateursMAC(fabriqueEntrepots().utilisateursMAC())
+          uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
         ),
         entiteAideeBeneficieDiagnostic(
           adaptateurRelations,

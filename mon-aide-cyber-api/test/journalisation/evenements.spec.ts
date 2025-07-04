@@ -19,7 +19,8 @@ import { Publication } from '../../src/journalisation/Publication';
 import { DiagnosticLance } from '../../src/diagnostic/CapteurCommandeLanceDiagnostic';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
-import { fakerFR } from '@faker-js/faker';
+import { uneDemandeAide } from '../gestion-demandes/aide/ConstructeurDemandeAide';
+import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 
 describe('Évènements', () => {
   beforeEach(() => {
@@ -31,7 +32,7 @@ describe('Évènements', () => {
       const entrepot = new EntrepotEvenementJournalMemoire();
       const identifiant = crypto.randomUUID();
 
-      restitutionLancee(entrepot).consomme<RestitutionLancee>({
+      await restitutionLancee(entrepot).consomme<RestitutionLancee>({
         identifiant: identifiant,
         type: 'RESTITUTION_LANCEE',
         date: FournisseurHorloge.maintenant(),
@@ -55,11 +56,16 @@ describe('Évènements', () => {
     describe("Dans le cas d'un Aidant", () => {
       const entrepoUtilisateurInscrit = new EntrepotUtilisateurInscritMemoire();
       it("lorsque l'évènement est consommé, il est persisté", async () => {
+        const entrepots = new EntrepotsMemoire();
         const entrepot = new EntrepotEvenementJournalMemoire();
         const entrepotAidant = new EntrepotAidantMemoire();
         const aidant = unAidant().construis();
         await entrepotAidant.persiste(aidant);
-        const identifiant = crypto.randomUUID();
+        const demandeAide = uneDemandeAide()
+          .avecUnEmail('beta@beta.gouv.fr')
+          .construis();
+        await entrepots.demandesAides().persiste(demandeAide);
+        const identifiantEvenement = crypto.randomUUID();
 
         await diagnosticLance(
           entrepot,
@@ -68,15 +74,16 @@ describe('Évènements', () => {
               aidant: entrepotAidant,
               utilisateurInscrit: entrepoUtilisateurInscrit,
             })
-          )
+          ),
+          entrepots.demandesAides()
         ).consomme<DiagnosticLance>({
-          identifiant: identifiant,
+          identifiant: identifiantEvenement,
           type: 'DIAGNOSTIC_LANCE',
           date: FournisseurHorloge.maintenant(),
           corps: {
-            identifiantDiagnostic: identifiant,
+            identifiantDiagnostic: identifiantEvenement,
             identifiantUtilisateur: aidant.identifiant,
-            emailEntite: fakerFR.internet.email(),
+            emailEntite: demandeAide.email,
           },
         });
 
@@ -86,20 +93,26 @@ describe('Évènements', () => {
             date: FournisseurHorloge.maintenant(),
             type: 'DIAGNOSTIC_LANCE',
             donnees: {
-              identifiantDiagnostic: identifiant,
+              identifiantDiagnostic: identifiantEvenement,
               identifiantUtilisateur: aidant.identifiant,
               profil: 'Aidant',
+              identifiantDemandeAide: demandeAide.identifiant,
             },
           },
         ]);
       });
 
       it("Lorsque l'évènement est publié suite à un diagnostic Gendarme, l'information Gendarme est persistée", async () => {
+        const entrepots = new EntrepotsMemoire();
         const entrepot = new EntrepotEvenementJournalMemoire();
         const entrepotAidant = new EntrepotAidantMemoire();
         const aidant = unAidant().avecUnProfilGendarme().construis();
         await entrepotAidant.persiste(aidant);
-        const identifiant = crypto.randomUUID();
+        const identifiantEvenement = crypto.randomUUID();
+        const demandeAide = uneDemandeAide()
+          .avecUnEmail('beta@beta.gouv.fr')
+          .construis();
+        await entrepots.demandesAides().persiste(demandeAide);
 
         await diagnosticLance(
           entrepot,
@@ -108,15 +121,16 @@ describe('Évènements', () => {
               aidant: entrepotAidant,
               utilisateurInscrit: entrepoUtilisateurInscrit,
             })
-          )
+          ),
+          entrepots.demandesAides()
         ).consomme<DiagnosticLance>({
-          identifiant: identifiant,
+          identifiant: identifiantEvenement,
           type: 'DIAGNOSTIC_LANCE',
           date: FournisseurHorloge.maintenant(),
           corps: {
-            identifiantDiagnostic: identifiant,
+            identifiantDiagnostic: identifiantEvenement,
             identifiantUtilisateur: aidant.identifiant,
-            emailEntite: fakerFR.internet.email(),
+            emailEntite: demandeAide.email,
           },
         });
 
@@ -126,8 +140,9 @@ describe('Évènements', () => {
             date: FournisseurHorloge.maintenant(),
             type: 'DIAGNOSTIC_LANCE',
             donnees: {
-              identifiantDiagnostic: identifiant,
+              identifiantDiagnostic: identifiantEvenement,
               identifiantUtilisateur: aidant.identifiant,
+              identifiantDemandeAide: demandeAide.identifiant,
               profil: 'Gendarme',
             },
           },
