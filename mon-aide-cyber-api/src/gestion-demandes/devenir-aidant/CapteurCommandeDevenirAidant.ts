@@ -10,7 +10,6 @@ import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorl
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { Departement } from '../departements';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
-import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import crypto from 'crypto';
@@ -132,23 +131,13 @@ export class CapteurCommandeDevenirAidant
     miseAJourDemande: boolean
   ) {
     if (miseAJourDemande) {
-      const objet =
-        'MonAideCyber - Mise à jour pour une demande de participation à un atelier';
-      const generateurCorpsMessage =
-        adaptateurCorpsMessage.miseAJourDemandeDevenirAidant;
-      await this.adaptateurEnvoiMail.envoie({
-        objet: objet,
-        destinataire: {
-          nom: `${demandeDevenirAidant.nom} ${demandeDevenirAidant.prenom}`,
-          email: demandeDevenirAidant.mail,
-        },
-        corps:
-          generateurCorpsMessage().genereCorpsMessage(demandeDevenirAidant),
-        copie: this.annuaireCOT().rechercheEmailParDepartement(
+      await this.adaptateurEnvoiMail.envoieMailMiseAJourParticipationAUnAtelier(
+        demandeDevenirAidant,
+        this.annuaireCOT().rechercheEmailParDepartement(
           demandeDevenirAidant.departement
         ),
-        copieInvisible: adaptateurEnvironnement.messagerie().emailMAC(),
-      });
+        adaptateurEnvironnement.messagerie().emailMAC()
+      );
       return;
     }
     await this.adaptateurEnvoiMail.envoieMailParticipationAUnAtelier(

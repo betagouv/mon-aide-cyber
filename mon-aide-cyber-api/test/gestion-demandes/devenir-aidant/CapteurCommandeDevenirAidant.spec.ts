@@ -19,7 +19,6 @@ import {
 } from '../../../src/gestion-demandes/departements';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
-import { adaptateurCorpsMessage } from '../../../src/gestion-demandes/devenir-aidant/adaptateurCorpsMessage';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
@@ -330,11 +329,6 @@ describe('Capteur de commande demande devenir aidant', () => {
     });
 
     describe("Dans le cas de mise à jour d'une demande existante", () => {
-      adaptateurCorpsMessage.miseAJourDemandeDevenirAidant = () => ({
-        genereCorpsMessage: () =>
-          'Bonjour le monde! Ta demande a été mise à jour',
-      });
-
       it('Met à jour la demande', async () => {
         const entrepots = new EntrepotsMemoire();
         await entrepots
@@ -401,9 +395,8 @@ describe('Capteur de commande demande devenir aidant', () => {
         );
 
         expect(
-          adaptateurEnvoiMail.aEteEnvoyeA(
-            'email-existant@mail.com',
-            'Bonjour le monde! Ta demande a été mise à jour'
+          adaptateurEnvoiMail.mailMiseAJourDeParticipationAUnAtelierEnvoye(
+            'email-existant@mail.com'
           )
         ).toBe(true);
         expect(
