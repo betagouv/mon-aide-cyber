@@ -22,6 +22,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     | { pdfs: Buffer[]; emailEntiteAidee: string }
     | undefined = undefined;
   private _envoieMailParticipationAUnAtelier = false;
+  private _envoieMailMiseAJourParticipationAUnAtelier = false;
 
   envoie(
     message: Email,
@@ -33,6 +34,18 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     this.messages.push(message);
     this.expediteurs.push(expediteur);
     return Promise.resolve();
+  }
+
+  async envoieMailMiseAJourParticipationAUnAtelier(
+    demandeDevenirAidant: DemandeDevenirAidant,
+    emailCOT: string,
+    emailMAC: string
+  ): Promise<void> {
+    this._envoieMailMiseAJourParticipationAUnAtelier = true;
+    if (this._genereErreur) {
+      throw new Error('Erreur');
+    }
+    this.destinataires.push(...[demandeDevenirAidant.mail, emailCOT, emailMAC]);
   }
 
   async envoieMailParticipationAUnAtelier(
@@ -185,6 +198,13 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   mailDeParticipationAUnAtelierEnvoye(emailAidant: string): boolean {
     return (
       this._envoieMailParticipationAUnAtelier &&
+      this.destinataires.includes(emailAidant)
+    );
+  }
+
+  mailMiseAJourDeParticipationAUnAtelierEnvoye(emailAidant: string): boolean {
+    return (
+      this._envoieMailMiseAJourParticipationAUnAtelier &&
       this.destinataires.includes(emailAidant)
     );
   }

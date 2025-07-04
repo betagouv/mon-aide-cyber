@@ -62,6 +62,12 @@ export interface AdaptateurEnvoiMail {
     emailCOT: string,
     emailMAC: string
   ): Promise<void>;
+
+  envoieMailMiseAJourParticipationAUnAtelier(
+    demandeDevenirAidant: DemandeDevenirAidant,
+    emailCOT: string,
+    emailMAC: string
+  ): Promise<void>;
 }
 
 export type Expediteur = 'MONAIDECYBER' | 'INFO';
