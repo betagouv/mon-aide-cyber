@@ -15,6 +15,7 @@ import {
   RequeteBrevo,
 } from './adaptateursRequeteBrevo';
 import {
+  ConstructeurBrevoEnvoiMailAvecTemplate,
   unConstructeurEnvoiDeMail,
   unConstructeurEnvoiDeMailAvecTemplate,
 } from '../brevo/ConstructeursBrevo';
@@ -27,11 +28,30 @@ import { DemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/Dema
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
   async envoieMailMiseAJourParticipationAUnAtelier(
-    __demandeDevenirAidant: DemandeDevenirAidant,
-    __emailCOT: string,
-    __emailMAC: string
+    demandeDevenirAidant: DemandeDevenirAidant,
+    emailCOT: string,
+    emailMAC: string
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    const futurAidant: Destinataire = {
+      email: demandeDevenirAidant.mail,
+    };
+    const cot: Destinataire = {
+      email: emailCOT,
+    };
+    const mac: Destinataire = { email: emailMAC };
+
+    const constructeurBrevoEnvoiMailAvecTemplate =
+      unConstructeurEnvoiDeMailAvecTemplate().ayantPourTemplate(
+        adaptateurEnvironnement
+          .brevo()
+          .templateMiseAJourParticipationAtelierAidant()
+      );
+    await this.envoieParticipationAtelierAidant(
+      constructeurBrevoEnvoiMailAvecTemplate,
+      futurAidant,
+      cot,
+      mac
+    );
   }
 
   async envoieMailParticipationAUnAtelier(
@@ -47,30 +67,47 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     };
     const mac: Destinataire = { email: emailMAC };
 
-    const constructeurEmailBrevo = unConstructeurEnvoiDeMailAvecTemplate()
-      .ayantPourTemplate(
+    const constructeurBrevoEnvoiMailAvecTemplate =
+      unConstructeurEnvoiDeMailAvecTemplate().ayantPourTemplate(
         adaptateurEnvironnement.brevo().templateParticipationAtelierAidant()
-      )
-      .ayantPourDestinataires([[futurAidant.email, futurAidant.nom]])
-      .ayantPourDestinatairesEnCopie([[cot.email, cot.nom]])
-      .ayantPourDestinatairesEnCopieInvisible([[mac.email, mac.nom]])
-      .ayantPourParametres({
-        urls: {
-          connexion: new URL(
-            '/connexion',
-            adaptateurEnvironnement.mac().urlMAC()
-          ).toString(),
-          kitDeCommunication: new URL(
-            '/promouvoir-communaute-aidants-cyber',
-            adaptateurEnvironnement.mac().urlMAC()
-          ).toString(),
-          charteAidant: new URL(
-            '/charte-aidant',
-            adaptateurEnvironnement.mac().urlMAC()
-          ).toString(),
-        },
-      });
-    await this.envoieMailAvecTemplate(constructeurEmailBrevo.construis());
+      );
+    await this.envoieParticipationAtelierAidant(
+      constructeurBrevoEnvoiMailAvecTemplate,
+      futurAidant,
+      cot,
+      mac
+    );
+  }
+
+  private async envoieParticipationAtelierAidant(
+    constructeurBrevoEnvoiMailAvecTemplate: ConstructeurBrevoEnvoiMailAvecTemplate,
+    futurAidant: Destinataire,
+    cot: Destinataire,
+    mac: Destinataire
+  ) {
+    await this.envoieMailAvecTemplate(
+      constructeurBrevoEnvoiMailAvecTemplate
+        .ayantPourDestinataires([[futurAidant.email, futurAidant.nom]])
+        .ayantPourDestinatairesEnCopie([[cot.email, cot.nom]])
+        .ayantPourDestinatairesEnCopieInvisible([[mac.email, mac.nom]])
+        .ayantPourParametres({
+          urls: {
+            connexion: new URL(
+              '/connexion',
+              adaptateurEnvironnement.mac().urlMAC()
+            ).toString(),
+            kitDeCommunication: new URL(
+              '/promouvoir-communaute-aidants-cyber',
+              adaptateurEnvironnement.mac().urlMAC()
+            ).toString(),
+            charteAidant: new URL(
+              '/charte-aidant',
+              adaptateurEnvironnement.mac().urlMAC()
+            ).toString(),
+          },
+        })
+        .construis()
+    );
   }
 
   async envoieActivationCompteAidantFaite(email: string): Promise<void> {

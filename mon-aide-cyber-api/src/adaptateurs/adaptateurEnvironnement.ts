@@ -31,6 +31,10 @@ const brevo = () => {
       Number(process.env.BREVO_TEMPLATE_ACTIVATION_COMPTE_AIDANT),
     templateParticipationAtelierAidant: () =>
       Number(process.env.BREVO_TEMPLATE_PARTICIPATION_ATELIER_AIDANT),
+    templateMiseAJourParticipationAtelierAidant: () =>
+      Number(
+        process.env.BREVO_TEMPLATE_MISE_A_JOUR_PARTICIPATION_ATELIER_AIDANT
+      ),
   };
 };
 

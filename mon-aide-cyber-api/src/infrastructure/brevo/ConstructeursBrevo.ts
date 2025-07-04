@@ -113,7 +113,7 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevoTexteBr
 
 type Parametres = Record<string, string | Record<string, string>>;
 
-class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMailBrevoAvecTemplate> {
+export class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMailBrevoAvecTemplate> {
   private identifiantTemplate = 0;
   private destinataires: EmailBrevo[] = [];
   private destinatairesEnCopie: EmailBrevo[] = [];
