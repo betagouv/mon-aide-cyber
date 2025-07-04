@@ -3,6 +3,10 @@ import crypto from 'crypto';
 import { EntrepotEvenementJournal, Publication } from './Publication';
 import { DiagnosticLance } from '../diagnostic/CapteurCommandeLanceDiagnostic';
 import { RechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  EntrepotDemandeAide,
+  RechercheDemandeAideComplete,
+} from '../gestion-demandes/aide/DemandeAide';
 
 const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
   new (class implements ConsommateurEvenement {
@@ -16,26 +20,34 @@ export const restitutionLancee = consommateurEvenement();
 const consommateurDiagnosticLance =
   () =>
   (
-    entrepot: EntrepotEvenementJournal,
-    rechercheUtilisateursMAC: RechercheUtilisateursMAC
+    entrepotJournal: EntrepotEvenementJournal,
+    rechercheUtilisateursMAC: RechercheUtilisateursMAC,
+    entrepotDemandeAide: EntrepotDemandeAide
   ) =>
     new (class implements ConsommateurEvenement {
-      consomme<E extends Evenement<unknown>>(evenement: E): Promise<void> {
+      async consomme<E extends Evenement<unknown>>(
+        evenement: E
+      ): Promise<void> {
         const { corps } = evenement as DiagnosticLance;
-        return rechercheUtilisateursMAC
-          .rechercheParIdentifiant(corps.identifiantUtilisateur)
-          .then((utilisateur) => {
-            const { emailEntite, ...reste } = corps;
-            return entrepot.persiste(
-              genereEvenement({
-                ...evenement,
-                corps: {
-                  ...reste,
-                  profil: utilisateur?.profil,
-                },
-              })
-            );
-          });
+        const utilisateur =
+          await rechercheUtilisateursMAC.rechercheParIdentifiant(
+            corps.identifiantUtilisateur
+          );
+        const { emailEntite, ...reste } = corps;
+        const demandeAide: RechercheDemandeAideComplete =
+          (await entrepotDemandeAide.rechercheParEmail(
+            corps.emailEntite
+          )) as RechercheDemandeAideComplete;
+        return entrepotJournal.persiste(
+          genereEvenement({
+            ...evenement,
+            corps: {
+              ...reste,
+              profil: utilisateur?.profil,
+              identifiantDemandeAide: demandeAide.demandeAide.identifiant,
+            },
+          })
+        );
       }
     })();
 export const diagnosticLance = consommateurDiagnosticLance();
