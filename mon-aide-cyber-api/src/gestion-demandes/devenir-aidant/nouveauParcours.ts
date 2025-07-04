@@ -13,6 +13,3 @@ export const estDateNouveauParcoursDemandeDevenirAidant = () => {
     )
   );
 };
-
-export const estAvantDateNouveauParcours = () =>
-  !estDateNouveauParcoursDemandeDevenirAidant();
