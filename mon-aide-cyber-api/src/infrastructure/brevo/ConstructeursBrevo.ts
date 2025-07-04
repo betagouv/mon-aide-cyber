@@ -111,7 +111,7 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevoTexteBr
   }
 }
 
-type Parametres = Record<string, string>;
+type Parametres = Record<string, string | Record<string, string>>;
 
 class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMailBrevoAvecTemplate> {
   private identifiantTemplate = 0;
@@ -119,6 +119,7 @@ class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMail
   private destinatairesEnCopie: EmailBrevo[] = [];
   private parametres: Parametres | undefined = undefined;
   private piecesJointes: PieceJointeBrevo[] = [];
+  private destinatairesEnCopieInvisible: EmailBrevo[] = [];
 
   constructor() {
     super('POST');
@@ -151,6 +152,15 @@ class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMail
     return this;
   }
 
+  ayantPourDestinatairesEnCopieInvisible(
+    destinatairesEnCopieInvisible: [Email, Nom | undefined][]
+  ): ConstructeurBrevoEnvoiMailAvecTemplate {
+    this.destinatairesEnCopieInvisible = destinatairesEnCopieInvisible.map(
+      ([email, nom]) => ({ email, ...(nom && { name: nom }) })
+    );
+    return this;
+  }
+
   ayantPourParametres(
     parametres: Parametres
   ): ConstructeurBrevoEnvoiMailAvecTemplate {
@@ -177,6 +187,9 @@ class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMail
       }),
       ...(this.parametres && { params: this.parametres }),
       ...(this.piecesJointes.length > 0 && { attachment: this.piecesJointes }),
+      ...(this.destinatairesEnCopieInvisible.length > 0 && {
+        bcc: this.destinatairesEnCopieInvisible,
+      }),
     };
   }
 }
