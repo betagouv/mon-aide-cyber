@@ -23,8 +23,17 @@ import { isArray } from 'lodash';
 import { AidantMisEnRelation } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 import { emailCOTDeLaRegion } from '../annuaireCOT/annuaireCOT';
 import { enCadence } from './enCadence';
+import { DemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
+  envoieMailParticipationAUnAtelier(
+    __demande: DemandeDevenirAidant,
+    __emailCOT: string,
+    __emailMAC: string
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   async envoieActivationCompteAidantFaite(email: string): Promise<void> {
     const destinataire: Destinataire = {
       email,

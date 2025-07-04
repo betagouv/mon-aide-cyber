@@ -9,6 +9,7 @@ import {
 } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { AidantMisEnRelation } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 import { Departement } from '../../gestion-demandes/departements';
+import { DemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private messages: Email[] = [];
@@ -20,6 +21,8 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private _envoiRestitutionEntiteAideeEffectue:
     | { pdfs: Buffer[]; emailEntiteAidee: string }
     | undefined = undefined;
+  private _envoieMailParticipationAUnAtelier = false;
+
   envoie(
     message: Email,
     expediteur: Expediteur = 'MONAIDECYBER'
@@ -30,6 +33,18 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     this.messages.push(message);
     this.expediteurs.push(expediteur);
     return Promise.resolve();
+  }
+
+  async envoieMailParticipationAUnAtelier(
+    demande: DemandeDevenirAidant,
+    emailCOT: string,
+    emailMAC: string
+  ): Promise<void> {
+    this._envoieMailParticipationAUnAtelier = true;
+    if (this._genereErreur) {
+      throw new Error('Erreur');
+    }
+    this.destinataires.push(...[demande.mail, emailCOT, emailMAC]);
   }
 
   async envoieActivationCompteAidantFaite(mail: string): Promise<void> {
@@ -68,15 +83,6 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   ): Promise<void> {
     this.destinataires.push(...matchingAidants.map((a) => a.email));
   }
-
-  envoieMiseEnRelation(
-    _informations: InformationEntitePourMiseEnRelation,
-    aidant: AidantMisEnRelation
-  ): Promise<void> {
-    this.destinataires.push(aidant.email);
-    return Promise.resolve();
-  }
-
   envoieRestitutionEntiteAidee(
     pdfsRestitution: Buffer[],
     emailEntiteAidee: string
@@ -116,14 +122,6 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     );
     return messageTrouve !== undefined || false;
   }
-
-  aEteEnvoyeEnCopieInvisibleA(email: string, message: string): boolean {
-    const messageTrouve = this.messages.find(
-      (m) => m.copieInvisible === email && m.corps === message
-    );
-    return messageTrouve !== undefined || false;
-  }
-
   mailEnvoye(): boolean {
     return this.messages.length > 0;
   }
@@ -181,6 +179,13 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
       tousPresents &&
       this._envoiRestitutionEntiteAideeEffectue?.emailEntiteAidee ===
         emailEntiteAidee
+    );
+  }
+
+  mailDeParticipationAUnAtelierEnvoye(emailAidant: string): boolean {
+    return (
+      this._envoieMailParticipationAUnAtelier &&
+      this.destinataires.includes(emailAidant)
     );
   }
 }

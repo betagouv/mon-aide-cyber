@@ -1,77 +1,6 @@
 import { DemandeDevenirAidant } from './DemandeDevenirAidant';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
-import { estDateNouveauParcoursDemandeDevenirAidant } from './nouveauParcours';
-
-const genereCorpsDemandeDevenirAidant = (
-  demandeDevenirAidant: DemandeDevenirAidant
-) => {
-  if (estDateNouveauParcoursDemandeDevenirAidant()) {
-    let appartenanceEntite = '';
-    if (demandeDevenirAidant.entite?.nom) {
-      appartenanceEntite =
-        '\n' +
-        `Vous avez déclaré appartenir ou adhérer à l'organisation ${demandeDevenirAidant.entite?.nom} \n`;
-    }
-    return (
-      '<html lang="fr">' +
-      '<body>' +
-      `Bonjour ${demandeDevenirAidant.prenom},\n` +
-      '\n' +
-      `<b>Votre demande pour participer à un atelier Aidant cyber sur le ` +
-      `territoire ${demandeDevenirAidant.departement.nom} a été envoyée.</b>\n` +
-      `${appartenanceEntite}` +
-      '\n' +
-      'Des ateliers "Devenir Aidant MonAideCyber" ont lieu régulièrement. Votre délégation territoriale ANSSI, en copie de cet échange, ' +
-      "vous informera sur l’adresse mail que vous nous avez communiquée des prochaines dates prévues d'ateliers.\n" +
-      '\n' +
-      '<b>Utiliser dès maintenant l’outil de diagnostic en vous connectant avec ProConnect</b>\n' +
-      '\n' +
-      `<a href="${adaptateurEnvironnement.mac().urlMAC()}/connexion">J’initie un diagnostic</a>` +
-      '\n' +
-      '<b>Comment bien préparer l’atelier Devenir Aidant cyber ?</b>\n' +
-      '\n' +
-      '<ul>' +
-      `<li>En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/promouvoir-diagnostic-cyber">la plaquette d’information</a></li>` +
-      `<li>Relire la <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">charte de l’Aidant</a> ` +
-      `rappelant les principes et les engagements des Aidants Cyber</li>` +
-      '</ul>' +
-      '\n' +
-      'Toute l’équipe reste à votre disposition,\n' +
-      '\n' +
-      'Pour toute remarque ou question, n’hésitez pas à nous contacter sur contact@monaidecyber.beta.gouv.fr\n' +
-      '\n' +
-      '<b>L’équipe MonAideCyber</b>' +
-      '</body>' +
-      '</html>'
-    );
-  }
-  return (
-    '<html lang="fr">' +
-    '<body>' +
-    `Bonjour ${demandeDevenirAidant.prenom},\n` +
-    '\n' +
-    `<b>Votre demande pour participer à un atelier Aidant Cyber sur le territoire ${demandeDevenirAidant.departement.nom} a été envoyée.</b>\n` +
-    '\n' +
-    'Votre délégation régionale ANSSI, en copie de ce mail, vérifie les dates des prochains ateliers prévus.\n' +
-    '\n' +
-    'Elle vous recontactera dans les plus brefs délais, sur le mail que vous nous avez communiqué, avec une ou plusieurs dates disponibles.\n' +
-    '\n' +
-    '<b>Comment bien préparer mon atelier Devenir Aidant cyber ?</b>\n' +
-    '\n' +
-    `\t - En savoir plus sur le fonctionnement de MonAideCyber avec <a href="${adaptateurEnvironnement.mac().urlMAC()}/promouvoir-diagnostic-cyber">la plaquette informative</a>\n` +
-    `\t - Consulter <a href="${adaptateurEnvironnement.mac().urlMAC()}/charte-aidant">la charte Aidant</a> qui rappelle le principe de gratuité du dispositif à signer avant, pendant ou après l'atelier\n` +
-    '\t - Noter qu’aucun autre pré-requis n’est demandé pour participer à cet atelier\n' +
-    '\n' +
-    'Toute l’équipe reste à votre disposition,\n' +
-    '\n' +
-    'Pour toute remarque ou question, n’hésitez pas à nous contacter sur contact@monaidecyber.beta.gouv.fr\n' +
-    '\n' +
-    '<b>L’équipe MonAideCyber</b>' +
-    '</body>' +
-    '</html>'
-  );
-};
 
 const genereCorpsMiseAJourDemandeDevenirAidant = (
   demandeDevenirAidant: DemandeDevenirAidant
@@ -126,10 +55,6 @@ const genereCorpsMiseAJourDemandeDevenirAidant = (
 };
 
 const adaptateurCorpsMessage = {
-  demandeDevenirAidant: () => ({
-    genereCorpsMessage: (demandeDevenirAidant: DemandeDevenirAidant) =>
-      genereCorpsDemandeDevenirAidant(demandeDevenirAidant),
-  }),
   miseAJourDemandeDevenirAidant: () => ({
     genereCorpsMessage: (demandeDevenirAidant: DemandeDevenirAidant) =>
       genereCorpsMiseAJourDemandeDevenirAidant(demandeDevenirAidant),

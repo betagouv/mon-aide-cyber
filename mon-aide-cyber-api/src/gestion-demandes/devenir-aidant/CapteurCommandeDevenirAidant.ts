@@ -93,7 +93,7 @@ export class CapteurCommandeDevenirAidant
       .persiste(demandeDevenirAidant)
       .then(async () => {
         await this.publieLaDemande(demandeDevenirAidant, !!demandeEnCours);
-        return this.envoieLeMailDeMiseEnRelation(
+        return this.envoieLeMailDeParticipationAUnAtelier(
           demandeDevenirAidant,
           !!demandeEnCours
         )
@@ -127,40 +127,37 @@ export class CapteurCommandeDevenirAidant
     return !!(await this.serviceAidant.rechercheParMail(mailDemandeur));
   }
 
-  private async envoieLeMailDeMiseEnRelation(
+  private async envoieLeMailDeParticipationAUnAtelier(
     demandeDevenirAidant: DemandeDevenirAidant,
     miseAJourDemande: boolean
   ) {
-    const genereObjetEtCorpsDuMessage = () => {
-      let objet =
-        'MonAideCyber - Demande de participation à un atelier Devenir Aidant';
-      let generateurCorpsMessage: () => {
-        genereCorpsMessage: (
-          demandeDevenirAidant: DemandeDevenirAidant
-        ) => string;
-      } = adaptateurCorpsMessage.demandeDevenirAidant;
-      if (miseAJourDemande) {
-        objet =
-          'MonAideCyber - Mise à jour pour une demande de participation à un atelier';
-        generateurCorpsMessage =
-          adaptateurCorpsMessage.miseAJourDemandeDevenirAidant;
-      }
-      return { objet, generateurCorpsMessage };
-    };
-
-    const { objet, generateurCorpsMessage } = genereObjetEtCorpsDuMessage();
-    await this.adaptateurEnvoiMail.envoie({
-      objet: objet,
-      destinataire: {
-        nom: `${demandeDevenirAidant.nom} ${demandeDevenirAidant.prenom}`,
-        email: demandeDevenirAidant.mail,
-      },
-      corps: generateurCorpsMessage().genereCorpsMessage(demandeDevenirAidant),
-      copie: this.annuaireCOT().rechercheEmailParDepartement(
+    if (miseAJourDemande) {
+      const objet =
+        'MonAideCyber - Mise à jour pour une demande de participation à un atelier';
+      const generateurCorpsMessage =
+        adaptateurCorpsMessage.miseAJourDemandeDevenirAidant;
+      await this.adaptateurEnvoiMail.envoie({
+        objet: objet,
+        destinataire: {
+          nom: `${demandeDevenirAidant.nom} ${demandeDevenirAidant.prenom}`,
+          email: demandeDevenirAidant.mail,
+        },
+        corps:
+          generateurCorpsMessage().genereCorpsMessage(demandeDevenirAidant),
+        copie: this.annuaireCOT().rechercheEmailParDepartement(
+          demandeDevenirAidant.departement
+        ),
+        copieInvisible: adaptateurEnvironnement.messagerie().emailMAC(),
+      });
+      return;
+    }
+    await this.adaptateurEnvoiMail.envoieMailParticipationAUnAtelier(
+      demandeDevenirAidant,
+      this.annuaireCOT().rechercheEmailParDepartement(
         demandeDevenirAidant.departement
       ),
-      copieInvisible: adaptateurEnvironnement.messagerie().emailMAC(),
-    });
+      adaptateurEnvironnement.messagerie().emailMAC()
+    );
   }
 
   private async publieLaDemande(

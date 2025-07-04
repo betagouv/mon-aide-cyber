@@ -180,12 +180,6 @@ describe('Capteur de commande demande devenir aidant', () => {
   });
 
   describe('Lors de la mise en relation', () => {
-    beforeEach(
-      () =>
-        (adaptateurCorpsMessage.demandeDevenirAidant = () => ({
-          genereCorpsMessage: () => 'Bonjour le monde!',
-        }))
-    );
     it("Envoie le mail récapitulatif à l'Aidant", async () => {
       const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
       const entrepots = new EntrepotsMemoire();
@@ -199,7 +193,7 @@ describe('Capteur de commande demande devenir aidant', () => {
       ).execute(uneCommandeDevenirAidant());
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeA('email', 'Bonjour le monde!')
+        adaptateurEnvoiMail.mailDeParticipationAUnAtelierEnvoye('email')
       ).toBe(true);
     });
 
@@ -219,9 +213,8 @@ describe('Capteur de commande demande devenir aidant', () => {
       ).execute(uneCommandeDevenirAidant());
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeEnCopieA(
-          'hauts-de-france@ssi.gouv.fr',
-          'Bonjour le monde!'
+        adaptateurEnvoiMail.mailDeParticipationAUnAtelierEnvoye(
+          'hauts-de-france@ssi.gouv.fr'
         )
       ).toBe(true);
     });
@@ -241,10 +234,7 @@ describe('Capteur de commande demande devenir aidant', () => {
       ).execute(uneCommandeDevenirAidant());
 
       expect(
-        adaptateurEnvoiMail.aEteEnvoyeEnCopieInvisibleA(
-          'mac@email.com',
-          'Bonjour le monde!'
-        )
+        adaptateurEnvoiMail.mailDeParticipationAUnAtelierEnvoye('mac@email.com')
       ).toBe(true);
     });
 
@@ -416,6 +406,11 @@ describe('Capteur de commande demande devenir aidant', () => {
             'Bonjour le monde! Ta demande a été mise à jour'
           )
         ).toBe(true);
+        expect(
+          adaptateurEnvoiMail.mailDeParticipationAUnAtelierEnvoye(
+            'email-existant@mail.com'
+          )
+        ).toBe(false);
       });
 
       it('Publie l’événement DemandeDevenirAidantModifiée', async () => {

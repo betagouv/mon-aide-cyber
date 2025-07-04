@@ -1,5 +1,6 @@
 import { Departement } from '../gestion-demandes/departements';
 import { AidantMisEnRelation } from '../gestion-demandes/aide/MiseEnRelationParCriteres';
+import { DemandeDevenirAidant } from '../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 export type AdresseEmail = string;
 
@@ -55,6 +56,12 @@ export interface AdaptateurEnvoiMail {
   ): Promise<void>;
 
   envoieActivationCompteAidantFaite(mail: string): Promise<void>;
+
+  envoieMailParticipationAUnAtelier(
+    demande: DemandeDevenirAidant,
+    emailCOT: string,
+    emailMAC: string
+  ): Promise<void>;
 }
 
 export type Expediteur = 'MONAIDECYBER' | 'INFO';
