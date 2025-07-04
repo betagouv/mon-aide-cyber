@@ -68,7 +68,8 @@ export type EnvoiMailBrevoAvecTemplate = {
   templateId: number;
   to: DestinataireBrevo[];
   cc?: DestinataireBrevo[];
-  params?: Record<string, string>;
+  bcc?: DestinataireBrevo[];
+  params?: Record<string, string | Record<string, string>>;
   attachment?: PieceJointeBrevo[];
 };
 

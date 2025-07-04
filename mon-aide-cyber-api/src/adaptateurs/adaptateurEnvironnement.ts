@@ -29,6 +29,8 @@ const brevo = () => {
       Number(process.env.BREVO_TEMPLATE_RESTITUTION_PDF),
     templateActivationCompteAidant: () =>
       Number(process.env.BREVO_TEMPLATE_ACTIVATION_COMPTE_AIDANT),
+    templateParticipationAtelierAidant: () =>
+      Number(process.env.BREVO_TEMPLATE_PARTICIPATION_ATELIER_AIDANT),
   };
 };
 
