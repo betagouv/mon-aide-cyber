@@ -36,6 +36,11 @@ class ConstructeurAdaptateurRechercheEntrepriseEnDur
     return this;
   }
 
+  dansLesTransports(): ConstructeurAdaptateurRechercheEntrepriseEnDur {
+    this.reponse[0].secteursActivite = [{ nom: 'Transports' }];
+    return this;
+  }
+
   dansLeServicePublic(): ConstructeurAdaptateurRechercheEntrepriseEnDur {
     this.reponse[0].typeEntite = entitesPubliques;
     return this;

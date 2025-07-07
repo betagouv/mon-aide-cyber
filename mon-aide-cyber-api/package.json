@@ -11,6 +11,7 @@
     "administration:rattrapage-des-fantomes": "ts-node --transpile-only --require dotenv/config src/administration/journal/rattrapage-des-fantomes/commande.ts",
     "administration:activations-comptes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/activations-comptes/commande.ts",
     "administration:activation-compte-aidant": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/activation-compte/commande.ts",
+    "administration:mise-en-relation-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/mise-en-relation/commande.ts",
     "administration:rapport-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/demandes-en-cours/commande.ts",
     "administration:recherche-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/recherche/commande.ts",
     "administration:recherche-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/recherche/commande.ts",
