@@ -27,6 +27,7 @@ import { unAdaptateurRestitutionPDF } from '../../adaptateurs/ConstructeurAdapta
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { add } from 'date-fns';
+import { SagaAjoutReponse } from '../../../src/diagnostic/CapteurSagaAjoutReponse';
 
 describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
   const testeurMAC = testeurIntegration();
@@ -317,6 +318,48 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
           },
         },
         message: "Le diagnostic demandé n'existe pas.",
+      });
+    });
+
+    it('Valide la réponse', async () => {
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .aChoixUnique('Une question ?')
+                .avecReponsesPossibles([
+                  uneReponsePossible().avecLibelle('Réponse 1').construis(),
+                  uneReponsePossible().avecLibelle('Réponse 2').construis(),
+                ])
+                .construis()
+            )
+            .construis()
+        )
+        .construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      await executeRequete(
+        donneesServeur.app,
+        'PATCH',
+        `/api/diagnostic-libre-acces/${diagnostic.identifiant}`,
+        {
+          chemin: 'contexte',
+          identifiant: 'une-question-',
+          reponse: 'reponse-2',
+          champs1: 'champs1',
+          champs2: 'champs2',
+        }
+      );
+
+      expect(
+        testeurMAC.busCommande.laCommande('SagaAjoutReponse')
+      ).toStrictEqual<SagaAjoutReponse>({
+        chemin: 'contexte',
+        identifiant: 'une-question-',
+        reponse: 'reponse-2',
+        type: 'SagaAjoutReponse',
+        idDiagnostic: diagnostic.identifiant,
       });
     });
   });
