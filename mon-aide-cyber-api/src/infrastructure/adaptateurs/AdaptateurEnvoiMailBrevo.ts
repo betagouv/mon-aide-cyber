@@ -213,16 +213,12 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     matchingAidants: AidantMisEnRelation[],
     informations: InformationEntitePourMiseEnRelation
   ): Promise<void> {
-    const etaleLesEnvois = async (
-      i: InformationEntitePourMiseEnRelation,
-      a: AidantMisEnRelation
-    ) => {
-      await enCadence(100, () => this.envoieUneMiseEnRelation(i, a));
-    };
-
-    const tousLesEnvois = matchingAidants.map((a) =>
-      etaleLesEnvois(informations, a)
-    );
+    const tousLesEnvois = matchingAidants.map(async (a) => {
+      const envoiCadence = await enCadence(100, () =>
+        this.envoieUneMiseEnRelation(informations, a)
+      );
+      await envoiCadence();
+    });
     await Promise.all(tousLesEnvois);
   }
 
