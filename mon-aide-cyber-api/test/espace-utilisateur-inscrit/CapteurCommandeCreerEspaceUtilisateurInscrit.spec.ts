@@ -9,7 +9,6 @@ import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/Ent
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
-import { adaptateurCorpsMessage } from '../../src/espace-utilisateur-inscrit/tableau-de-bord/adaptateurCorpsMessage';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 import { Entrepots } from '../../src/domaine/Entrepots';
@@ -152,9 +151,6 @@ describe('Capteur de commande de création d’un Utilisateur Inscrit', () => {
   });
 
   it('Envoie le mail de confirmation', async () => {
-    adaptateurCorpsMessage.confirmationUtilisateurInscritCree = () => ({
-      genereCorpsMessage: () => 'Bonjour le monde!',
-    });
     const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
 
     await fabriqueCapteur({ envoiMail: adaptateurEnvoiMail }).execute({
@@ -165,9 +161,8 @@ describe('Capteur de commande de création d’un Utilisateur Inscrit', () => {
     });
 
     expect(
-      adaptateurEnvoiMail.aEteEnvoyeA(
-        'jean.dupont@utilisateur-inscrit.com',
-        'Bonjour le monde!'
+      adaptateurEnvoiMail.confirmationUtilisateurInscritCreeEnvoye(
+        'jean.dupont@utilisateur-inscrit.com'
       )
     ).toBe(true);
   });

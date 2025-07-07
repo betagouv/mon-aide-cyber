@@ -68,6 +68,11 @@ export interface AdaptateurEnvoiMail {
     emailCOT: string,
     emailMAC: string
   ): Promise<void>;
+
+  envoieConfirmationUtilisateurInscritCree(utilisateurInscrit: {
+    email: string;
+    nomPrenom: string;
+  }): Promise<void>;
 }
 
 export type Expediteur = 'MONAIDECYBER' | 'INFO';

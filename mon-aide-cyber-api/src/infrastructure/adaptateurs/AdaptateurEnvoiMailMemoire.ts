@@ -23,6 +23,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     | undefined = undefined;
   private _envoieMailParticipationAUnAtelier = false;
   private _envoieMailMiseAJourParticipationAUnAtelier = false;
+  private _envoieConfirmationUtilisateurInscritCree = false;
 
   envoie(
     message: Email,
@@ -34,6 +35,14 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     this.messages.push(message);
     this.expediteurs.push(expediteur);
     return Promise.resolve();
+  }
+
+  async envoieConfirmationUtilisateurInscritCree(utilisateurInscrit: {
+    email: string;
+    nomPrenom: string;
+  }): Promise<void> {
+    this._envoieConfirmationUtilisateurInscritCree = true;
+    this.destinataires.push(utilisateurInscrit.email);
   }
 
   async envoieMailMiseAJourParticipationAUnAtelier(
@@ -206,6 +215,13 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     return (
       this._envoieMailMiseAJourParticipationAUnAtelier &&
       this.destinataires.includes(emailAidant)
+    );
+  }
+
+  confirmationUtilisateurInscritCreeEnvoye(emailUtilisateur: string) {
+    return (
+      this._envoieConfirmationUtilisateurInscritCree &&
+      this.destinataires.includes(emailUtilisateur)
     );
   }
 }

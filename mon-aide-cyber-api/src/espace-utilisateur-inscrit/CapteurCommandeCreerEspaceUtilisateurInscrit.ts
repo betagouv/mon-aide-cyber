@@ -4,7 +4,6 @@ import { Entrepots } from '../domaine/Entrepots';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../adaptateurs/AdaptateurEnvoiMail';
 import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
-import { adaptateurCorpsMessage } from './tableau-de-bord/adaptateurCorpsMessage';
 import { RepertoireDeContacts } from '../contacts/RepertoireDeContacts';
 
 export type CommandeCreerEspaceUtilisateurInscrit = Omit<Commande, 'type'> & {
@@ -49,12 +48,9 @@ export class CapteurCommandeCreerEspaceUtilisateurInscrit
 
     await this.repertoireDeContacts.creeUtilisateurInscrit(utilisateur.email);
 
-    await this.adaptateurEnvoiDeMail.envoie({
-      destinataire: { email: commande.email },
-      corps: adaptateurCorpsMessage
-        .confirmationUtilisateurInscritCree()
-        .genereCorpsMessage(commande.nomPrenom),
-      objet: 'MonAideCyber - Votre inscription au dispositif est confirmée',
+    await this.adaptateurEnvoiDeMail.envoieConfirmationUtilisateurInscritCree({
+      email: commande.email,
+      nomPrenom: commande.nomPrenom,
     });
 
     await this.busEvenement.publie<UtilisateurInscritCree>({
