@@ -21,6 +21,9 @@ import {
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { EntiteAidant } from '../../../src/espace-aidant/Aidant';
 import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
+import { AdaptateurRelationsMAC } from '../../../src/relation/AdaptateurRelationsMAC';
+import { EntrepotRelationMemoire } from '../../../src/relation/infrastructure/EntrepotRelationMemoire';
+import { ServiceDeChiffrementClair } from '../../infrastructure/securite/ServiceDeChiffrementClair';
 
 describe('Capteur de saga pour créer un espace Aidant correspondant à une demande', () => {
   let busEvenementDeTest = new BusEvenementDeTest();
@@ -35,7 +38,11 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       busEvenementDeTest,
       new AdaptateurEnvoiMailMemoire(),
       unConstructeurDeServices(entrepots.aidants()),
-      unAdaptateurRechercheEntreprise().construis()
+      unAdaptateurRechercheEntreprise().construis(),
+      new AdaptateurRelationsMAC(
+        new EntrepotRelationMemoire(),
+        new ServiceDeChiffrementClair()
+      )
     );
   });
 
