@@ -14,6 +14,7 @@ describe('Les middlewares', () => {
     beforeEach(() => {
       adaptateurEnvironnement.mac = () => ({
         urlMAC: () => 'http://domaine:1234',
+        urlAideMAC: () => 'http://domaine:1234',
       });
     });
 

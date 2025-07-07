@@ -51,6 +51,7 @@ describe('Mise en relation par critères', () => {
       });
     adaptateurEnvironnement.mac = () => ({
       urlMAC: () => 'http://domaine:1234',
+      urlAideMAC: () => 'http://domaine:1234/aide',
     });
 
     envoieMail = new AdaptateurEnvoiMailMemoire();
