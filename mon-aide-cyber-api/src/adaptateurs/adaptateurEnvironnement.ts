@@ -35,16 +35,16 @@ const brevo = () => {
       Number(
         process.env.BREVO_TEMPLATE_MISE_A_JOUR_PARTICIPATION_ATELIER_AIDANT
       ),
-    templateConfirmationUtilisateurInscritCree: () => {
-      return Number(
-        process.env.BREVO_TEMPLATE_CONFIRMATION_UTILISATEUR_INSCRIT_CREE
-      );
-    },
+    templateConfirmationUtilisateurInscritCree: () =>
+      Number(process.env.BREVO_TEMPLATE_CONFIRMATION_UTILISATEUR_INSCRIT_CREE),
+    templateReinitialisationMotDePasse: () =>
+      Number(process.env.BREVO_TEMPLATE_REINITIALISATION_MOT_DE_PASSE),
   };
 };
 
 const mac = () => ({
   urlMAC: () => process.env.URL_MAC || '',
+  urlAideMAC: () => process.env.URL_AIDE_MAC || '',
 });
 
 const mesServicesCyber = () => ({
