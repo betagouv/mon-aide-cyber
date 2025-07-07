@@ -3,7 +3,6 @@ import { Entrepots } from '../../domaine/Entrepots';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
 import { AdaptateurEnvoiMail } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
-import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { sommeDeControle } from '../sommeDeControle';
@@ -42,18 +41,12 @@ export class CapteurCommandeReinitialisationMotDePasse
         ).toString('base64')
       );
 
-      await this.adapteurEnvoiMail.envoie(
-        {
-          objet: '[MonAideCyber] Réinitialisation de votre mot de passe',
-          corps: adaptateurCorpsMessage
-            .reinitialiserMotDePasse()
-            .genereCorpsMessage(
-              utilisateur.nomPrenom,
-              `${adaptateurEnvironnement.mac().urlMAC()}/utilisateur/reinitialiser-mot-de-passe?token=${partieChiffree}`
-            ),
-          destinataire: { email: utilisateur.identifiantConnexion },
-        },
-        'INFO'
+      await this.adapteurEnvoiMail.envoieReinitialisationMotDePasse(
+        utilisateur.identifiantConnexion,
+        new URL(
+          `/utilisateur/reinitialiser-mot-de-passe?token=${partieChiffree}`,
+          adaptateurEnvironnement.mac().urlMAC()
+        ).toString()
       );
 
       await this.busEvenement.publie<ReinitialisationMotDePasseDemandee>(

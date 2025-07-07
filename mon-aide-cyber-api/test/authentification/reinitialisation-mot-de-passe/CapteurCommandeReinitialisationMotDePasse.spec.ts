@@ -8,7 +8,6 @@ import {
   ReinitialisationMotDePasseDemandee,
 } from '../../../src/authentification/reinitialisation-mot-de-passe/CapteurCommandeReinitialisationMotDePasse';
 import { FauxServiceDeChiffrement } from '../../infrastructure/securite/FauxServiceDeChiffrement';
-import { adaptateurCorpsMessage } from '../../../src/authentification/reinitialisation-mot-de-passe/adaptateurCorpsMessage';
 import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { sommeDeControle } from '../../../src/authentification/sommeDeControle';
@@ -30,10 +29,6 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
   });
 
   it('Envoie le mail de modification de mot de passe', async () => {
-    adaptateurCorpsMessage.reinitialiserMotDePasse = () => ({
-      genereCorpsMessage: (nomPrenom: string, url: string) =>
-        `Bonjour ${nomPrenom}, ${url}`,
-    });
     const utilisateur = unUtilisateur().construis();
     await entrepots.utilisateurs().persiste(utilisateur);
 
@@ -62,12 +57,11 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
     });
 
     expect(
-      adaptateurEnvoiMail.aEteEnvoyeA(
+      adaptateurEnvoiMail.reinitialisationMotDePasseEnvoyee(
         utilisateur.identifiantConnexion,
-        `Bonjour ${utilisateur.nomPrenom}, http://localhost:8081/utilisateur/reinitialiser-mot-de-passe?token=aaa`
+        'http://localhost:8081/utilisateur/reinitialiser-mot-de-passe?token=aaa'
       )
     ).toBe(true);
-    expect(adaptateurEnvoiMail.aEteEnvoyePar('INFO')).toBe(true);
   });
 
   it('Publie l’événement REINITIALISATION_MOT_DE_PASSE_DEMANDEE', async () => {
