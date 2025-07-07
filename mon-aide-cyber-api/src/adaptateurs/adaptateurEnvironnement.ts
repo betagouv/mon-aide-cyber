@@ -35,6 +35,11 @@ const brevo = () => {
       Number(
         process.env.BREVO_TEMPLATE_MISE_A_JOUR_PARTICIPATION_ATELIER_AIDANT
       ),
+    templateConfirmationUtilisateurInscritCree: () => {
+      return Number(
+        process.env.BREVO_TEMPLATE_CONFIRMATION_UTILISATEUR_INSCRIT_CREE
+      );
+    },
   };
 };
 
