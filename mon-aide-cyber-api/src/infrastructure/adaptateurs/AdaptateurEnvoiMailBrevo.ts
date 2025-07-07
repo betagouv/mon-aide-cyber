@@ -27,6 +27,13 @@ import { enCadence } from './enCadence';
 import { DemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
+  envoieConfirmationUtilisateurInscritCree(__utilisateurInscrit: {
+    email: string;
+    nomPrenom: string;
+  }): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   async envoieMailMiseAJourParticipationAUnAtelier(
     demandeDevenirAidant: DemandeDevenirAidant,
     emailCOT: string,
