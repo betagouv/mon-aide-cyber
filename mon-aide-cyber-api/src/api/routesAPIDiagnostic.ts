@@ -150,7 +150,9 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
       const commande: SagaAjoutReponse = {
         type: 'SagaAjoutReponse',
         idDiagnostic: id,
-        ...corpsReponse,
+        reponse: corpsReponse.reponse,
+        identifiant: corpsReponse.identifiant,
+        chemin: corpsReponse.chemin,
       };
       busCommande
         .publie<SagaAjoutReponse, Diagnostic>(commande)

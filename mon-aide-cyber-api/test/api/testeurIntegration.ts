@@ -11,7 +11,6 @@ import { AdaptateurDeVerificationDeSessionDeTest } from '../adaptateurs/Adaptate
 import { unAdaptateurDeRestitutionHTML } from '../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { AdaptateursRestitution } from '../../src/adaptateurs/AdaptateursRestitution';
 import { unAdaptateurRestitutionPDF } from '../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
-import { BusCommandeMAC } from '../../src/infrastructure/bus/BusCommandeMAC';
 import { AdaptateurEnvoiMail } from '../../src/adaptateurs/AdaptateurEnvoiMail';
 import { AdaptateurEnvoiMailMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import { AdapatateurDeVerificationDeCGUDeTest } from '../adaptateurs/AdaptateurDeVerificationDeCGUDeTest';
@@ -35,6 +34,7 @@ import { AdaptateurCmsCrispMACMemoire } from '../adaptateurs/AdaptateurCmsCrispM
 import { AdaptateurCmsCrispMAC } from '../../src/adaptateurs/AdaptateurCmsCrispMAC';
 import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
 import { AdaptateurSignatureRequeteDeTest } from '../adaptateurs/AdaptateurSignatureRequeteDeTest';
+import { BusCommandeMACIntercepte } from '../infrastructure/bus/BusCommandeMACIntercepte';
 
 const PORT_DISPONIBLE = 0;
 
@@ -81,31 +81,45 @@ class TesteurIntegrationMAC {
     public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
     public adaptateurDeRechercheEntreprise = unAdaptateurRechercheEntreprise().construis(),
     public adaptateurCmsCrisp: AdaptateurCmsCrispMAC = new AdaptateurCmsCrispMACMemoire(),
-    public adaptateurSignatureRequete: AdaptateurSignatureRequeteDeTest = new AdaptateurSignatureRequeteDeTest()
+    public adaptateurSignatureRequete: AdaptateurSignatureRequeteDeTest = new AdaptateurSignatureRequeteDeTest(),
+    public busCommande: BusCommandeMACIntercepte = new BusCommandeMACIntercepte(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoieMessage,
+      {
+        aidant: unServiceAidant(entrepots.aidants()),
+        referentiels: {
+          diagnostic: adaptateurReferentiel,
+          mesures: adaptateurMesures,
+        },
+      },
+      adaptateurDeRechercheEntreprise,
+      adaptateurRelations
+    )
   ) {}
 
   initialise() {
-    this.entrepots = new EntrepotsMemoire();
+    this.busCommande = new BusCommandeMACIntercepte(
+      this.entrepots,
+      this.busEvenement,
+      this.adaptateurEnvoieMessage,
+      {
+        aidant: unServiceAidant(this.entrepots.aidants()),
+        referentiels: {
+          diagnostic: this.adaptateurReferentiel,
+          mesures: this.adaptateurMesures,
+        },
+      },
+      this.adaptateurDeRechercheEntreprise,
+      this.adaptateurRelations
+    );
     this.serveurDeTest = serveur.creeServeur({
       adaptateurRelations: this.adaptateurRelations,
       adaptateurReferentiel: this.adaptateurReferentiel,
       adaptateurTranscripteurDonnees: this.adaptateurTranscripteurDonnees,
       adaptateurMesures: this.adaptateurMesures,
       entrepots: this.entrepots,
-      busCommande: new BusCommandeMAC(
-        this.entrepots,
-        this.busEvenement,
-        this.adaptateurEnvoieMessage,
-        {
-          aidant: unServiceAidant(this.entrepots.aidants()),
-          referentiels: {
-            diagnostic: this.adaptateurReferentiel,
-            mesures: this.adaptateurMesures,
-          },
-        },
-        this.adaptateurDeRechercheEntreprise,
-        this.adaptateurRelations
-      ),
+      busCommande: this.busCommande,
       busEvenement: this.busEvenement,
       gestionnaireErreurs: this.gestionnaireErreurs,
       gestionnaireDeJeton: this.gestionnaireDeJeton,
@@ -141,6 +155,7 @@ class TesteurIntegrationMAC {
   }
 
   arrete() {
+    this.entrepots = new EntrepotsMemoire();
     this.serveurDeTest?.arreteEcoute();
   }
 }
