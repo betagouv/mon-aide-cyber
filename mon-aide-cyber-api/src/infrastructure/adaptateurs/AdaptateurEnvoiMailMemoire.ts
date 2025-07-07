@@ -24,6 +24,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private _envoieMailParticipationAUnAtelier = false;
   private _envoieMailMiseAJourParticipationAUnAtelier = false;
   private _envoieConfirmationUtilisateurInscritCree = false;
+  private _lienConfirmationMotDePasse = '';
 
   envoie(
     message: Email,
@@ -35,6 +36,14 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     this.messages.push(message);
     this.expediteurs.push(expediteur);
     return Promise.resolve();
+  }
+
+  async envoieReinitialisationMotDePasse(
+    email: string,
+    lienReinitialisation: string
+  ): Promise<void> {
+    this.destinataires.push(email);
+    this._lienConfirmationMotDePasse = lienReinitialisation;
   }
 
   async envoieConfirmationUtilisateurInscritCree(utilisateurInscrit: {
@@ -218,10 +227,18 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     );
   }
 
-  confirmationUtilisateurInscritCreeEnvoye(emailUtilisateur: string) {
+  confirmationUtilisateurInscritCreeEnvoye(emailUtilisateur: string): boolean {
     return (
       this._envoieConfirmationUtilisateurInscritCree &&
       this.destinataires.includes(emailUtilisateur)
+    );
+  }
+
+  reinitialisationMotDePasseEnvoyee(email: string, lien: string): boolean {
+    return (
+      this.destinataires.includes(email) &&
+      lien !== '' &&
+      lien === this._lienConfirmationMotDePasse
     );
   }
 }

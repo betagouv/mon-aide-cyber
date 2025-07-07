@@ -73,6 +73,11 @@ export interface AdaptateurEnvoiMail {
     email: string;
     nomPrenom: string;
   }): Promise<void>;
+
+  envoieReinitialisationMotDePasse(
+    email: string,
+    lienReinitialisation: string
+  ): Promise<void>;
 }
 
 export type Expediteur = 'MONAIDECYBER' | 'INFO';
