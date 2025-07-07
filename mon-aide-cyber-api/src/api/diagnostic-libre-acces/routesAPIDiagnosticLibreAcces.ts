@@ -198,7 +198,9 @@ export const routesAPIDiagnosticLibreAcces = (
       const commande: SagaAjoutReponse = {
         type: 'SagaAjoutReponse',
         idDiagnostic: id,
-        ...corpsReponse,
+        reponse: corpsReponse.reponse,
+        chemin: corpsReponse.chemin,
+        identifiant: corpsReponse.identifiant,
       };
       return busCommande
         .publie<SagaAjoutReponse, Diagnostic>(commande)
