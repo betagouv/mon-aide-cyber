@@ -27,11 +27,36 @@ import { enCadence } from './enCadence';
 import { DemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 
 export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
-  envoieConfirmationUtilisateurInscritCree(__utilisateurInscrit: {
+  async envoieConfirmationUtilisateurInscritCree(utilisateurInscrit: {
     email: string;
     nomPrenom: string;
   }): Promise<void> {
-    throw new Error('Method not implemented.');
+    const destinataire: Destinataire = {
+      email: utilisateurInscrit.email,
+    };
+    const constructeurEmailBrevo = unConstructeurEnvoiDeMailAvecTemplate()
+      .ayantPourTemplate(
+        adaptateurEnvironnement
+          .brevo()
+          .templateConfirmationUtilisateurInscritCree()
+      )
+      .ayantPourDestinataires([[destinataire.email, destinataire.nom]])
+      .ayantPourParametres({
+        tableauDeBord: new URL(
+          '/mon-espace/tableau-de-bord',
+          adaptateurEnvironnement.mac().urlMAC()
+        ).toString(),
+        kitDeCommunication: new URL(
+          '/promouvoir-communaute-aidants-cyber',
+          adaptateurEnvironnement.mac().urlMAC()
+        ).toString(),
+        emailMonAideCyber: adaptateurEnvironnement.messagerie().emailMAC(),
+        relaisAssociatifs: new URL(
+          '/relais-associatifs',
+          adaptateurEnvironnement.mac().urlMAC()
+        ).toString(),
+      });
+    await this.envoieMailAvecTemplate(constructeurEmailBrevo.construis());
   }
 
   async envoieMailMiseAJourParticipationAUnAtelier(
