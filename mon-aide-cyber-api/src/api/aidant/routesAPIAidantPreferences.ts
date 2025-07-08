@@ -15,6 +15,7 @@ import {
   validationResult,
 } from 'express-validator';
 import { typesEntites, TypesEntites } from '../../espace-aidant/Aidant';
+import { valideLaConsistence } from '../validateurs/valideLaConsistence';
 
 export type ReponsePreferencesAidantAPI = ReponseHATEOAS & {
   preferencesAidant: {
@@ -144,6 +145,18 @@ export const routesAPIAidantPreferences = (
     cgu.verifie('Modifie les préférences de l’Aidant'),
     express.json(),
     valideLesPreferences(),
+    valideLaConsistence({
+      champs: [
+        {
+          nom: 'preferencesAidant',
+          champs: [
+            { nom: 'secteursActivite' },
+            { nom: 'departements' },
+            { nom: 'typesEntites' },
+          ],
+        },
+      ],
+    }),
     async (
       requete: RequeteUtilisateur<PatchRequestPreferencesAidant>,
       reponse: Response<ReponsePreferencesAidantAPI>,
