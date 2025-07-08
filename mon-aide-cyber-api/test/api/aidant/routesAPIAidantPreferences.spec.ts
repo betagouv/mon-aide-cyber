@@ -377,6 +377,60 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
           message: 'Les types d’entités sont erronés.',
         });
       });
+
+      it('Valide la consistence de la requête', async () => {
+        await unCompteAidantConnecte({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurAidant: unAidant(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
+        });
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'PATCH',
+          `/api/aidant/preferences`,
+          {
+            preferencesAidant: {
+              secteursActivite: ['Administration', 'Transports'],
+            },
+            champsInconnu: 'valeur inconnue',
+          }
+        );
+
+        expect(reponse.statusCode).toBe(400);
+        expect(await reponse.json()).toStrictEqual({
+          message: 'Votre demande ne peut être acceptée.',
+        });
+      });
+
+      it('Valide la consistence de la requête sur des champs imbriqués', async () => {
+        await unCompteAidantConnecte({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          constructeurAidant: unAidant(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
+        });
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'PATCH',
+          `/api/aidant/preferences`,
+          {
+            preferencesAidant: {
+              secteursActivite: ['Administration', 'Transports'],
+              champsInconnu: 'valeur inconnue',
+            },
+          }
+        );
+
+        expect(reponse.statusCode).toBe(400);
+        expect(await reponse.json()).toStrictEqual({
+          message: 'Votre demande ne peut être acceptée.',
+        });
+      });
     });
   });
 });
