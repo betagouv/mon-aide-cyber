@@ -1122,6 +1122,51 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       );
     });
 
+    it('Valide le corps de la requête', async () => {
+      await unCompteAidantConnecte({
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().cguValideesLe(
+          new Date(Date.parse('2024-04-12T12:34:54'))
+        ),
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
+
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-aidant`,
+        {
+          cguValidees: true,
+          signatureCharte: true,
+          entite: {
+            nom: 'Beta-Gouv',
+            siret: '1234567890',
+            type: 'ServicePublic',
+          },
+          departement: 'Gironde',
+          unNouveauChamp: 'unNouveauChamp',
+        }
+      );
+
+      expect(
+        testeurMAC.adaptateurValidateurCoherence.champsAutorises
+      ).toStrictEqual({
+        champs: [
+          {
+            nom: 'cguValidees',
+          },
+          { nom: 'signatureCharte' },
+          {
+            nom: 'entite',
+            champs: [{ nom: 'nom' }, { nom: 'siret' }, { nom: 'type' }],
+          },
+          { nom: 'departement' },
+        ],
+      });
+    });
+
     it.each([
       ['Beta-Gouv', '1234567890', 'ServicePublic', 200],
       [undefined, undefined, 'ServicePublic', 422],
