@@ -25,7 +25,6 @@ import { AdaptateurRelations } from './relation/AdaptateurRelations';
 import CookieSession from 'cookie-session';
 import { AdaptateurDeVerificationDesAcces } from './adaptateurs/AdaptateurDeVerificationDesAcces';
 import { ServiceDeChiffrement } from './securite/ServiceDeChiffrement';
-import { routesStatistiques } from './api/statistiques/routesStatistiques';
 import { AdaptateurMetabase } from './adaptateurs/AdaptateurMetabase';
 import { adaptateurConfigurationLimiteurTraffic } from './api/adaptateurLimiteurTraffic';
 import { AdaptateurDeVerificationDeTypeDeRelation } from './adaptateurs/AdaptateurDeVerificationDeTypeDeRelation';
@@ -138,7 +137,6 @@ const creeApp = (config: ConfigurationServeur) => {
   app.use('/api', routesAPI(config));
   app.use('/pro-connect', routesProConnect(config));
   app.use('/contact', routeContact(config));
-  app.use('/statistiques', routesStatistiques(config));
 
   app.get('*', (_: Request, reponse: Response) =>
     envoieIndexAvecNonce(reponse)

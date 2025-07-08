@@ -1,5 +1,8 @@
 import { ContexteSpecifique } from './contextesUtilisateur';
 
 export const afficherStatistiques: ContexteSpecifique = {
-  'afficher-statistiques': { url: '/statistiques', methode: 'GET' },
+  'afficher-statistiques': {
+    url: '/api/statistiques',
+    methode: 'GET',
+  },
 };

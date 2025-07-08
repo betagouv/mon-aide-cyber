@@ -2,10 +2,10 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { executeRequete } from '../executeurRequete';
-import { ReponseStatistiques } from '../../../src/api/statistiques/routesStatistiques';
+import { ReponseStatistiques } from '../../../src/api/statistiques/routesAPIStatistiques';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 
-describe('Le serveur MAC sur les routes /statistiques', () => {
+describe('Le serveur MAC sur les routes /api/statistiques', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
 
@@ -20,7 +20,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
     testeurMAC.arrete();
   });
 
-  describe('Quand une requête GET est reçue sur /statistiques', () => {
+  describe('Quand une requête GET est reçue sur /api/statistiques', () => {
     it('Appelle metabase pour retourner les statistiques', async () => {
       testeurMAC.adaptateurMetabase.retourStatistiques({
         repartitionDiagnostics: 'metabase',
@@ -32,7 +32,7 @@ describe('Le serveur MAC sur les routes /statistiques', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'GET',
-        `/statistiques`
+        `/api/statistiques`
       );
 
       expect(await reponse.json()).toStrictEqual<ReponseStatistiques>({

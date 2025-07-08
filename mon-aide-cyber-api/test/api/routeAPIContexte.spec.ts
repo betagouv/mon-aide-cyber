@@ -102,7 +102,7 @@ describe('Route contexte', () => {
             methode: 'GET',
           },
           'afficher-statistiques': {
-            url: '/statistiques',
+            url: '/api/statistiques',
             methode: 'GET',
           },
         },

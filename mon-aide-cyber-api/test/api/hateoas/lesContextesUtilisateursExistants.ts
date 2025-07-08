@@ -90,7 +90,7 @@ export const lesContextesUtilisateursNouveauParcoursExistants: ContextesUtilisat
       },
       liens: {
         'afficher-statistiques': {
-          url: '/statistiques',
+          url: '/api/statistiques',
           methode: 'GET',
         },
       },

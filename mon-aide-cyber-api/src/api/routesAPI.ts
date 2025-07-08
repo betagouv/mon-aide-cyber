@@ -15,6 +15,7 @@ import { routesAPIDiagnosticLibreAcces } from './diagnostic-libre-acces/routesAP
 import { routesAPIRechercheEntreprise } from './recherche-entreprise/routesAPIRechercheEntreprise';
 import { routesAPIArticles } from './articles/routeAPIArticles';
 import { routesAPIWebhooks } from './webhooks/routesAPIWebhooks';
+import { routesAPIStatistiques } from './statistiques/routesAPIStatistiques';
 
 export interface RequeteUtilisateur<
   CORPS = void,
@@ -56,6 +57,7 @@ const routesAPI = (configuration: ConfigurationServeur) => {
   );
   routes.use('/articles', routesAPIArticles(configuration));
   routes.use('/webhooks', routesAPIWebhooks(configuration));
+  routes.use('/statistiques', routesAPIStatistiques(configuration));
 
   return routes;
 };
