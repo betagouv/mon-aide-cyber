@@ -9,7 +9,7 @@ export type ReponseStatistiques = {
   niveauDeSatisfactionDuDiagnostic: string;
 };
 
-export const routesStatistiques = (configuration: ConfigurationServeur) => {
+export const routesAPIStatistiques = (configuration: ConfigurationServeur) => {
   const routes = express.Router();
   const { adaptateurMetabase: metabase } = configuration;
 

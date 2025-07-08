@@ -72,7 +72,7 @@ describe('Les middlewares', () => {
         statusCode: 401,
       },
       { ressource: '/contact/', methode: 'POST', statusCode: 400 },
-      { ressource: '/statistiques', methode: 'GET', statusCode: 200 },
+      { ressource: '/api/statistiques', methode: 'GET', statusCode: 200 },
     ])(
       'Vérifie la présence des HEADERS interdisant la mise en cache sur la ressource $ressource',
       async ({ ressource, methode, statusCode }) => {
