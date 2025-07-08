@@ -119,6 +119,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     adaptateurEnvoiMessage,
     adaptateurRelations,
     repertoireDeContacts,
+    adaptateurValidateurCoherence,
   } = configuration;
 
   routes.get(
@@ -340,6 +341,17 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       .custom((value: boolean) => value)
       .withMessage('Veuillez valider la Charte de l’Aidant'),
     validateurEntite(),
+    adaptateurValidateurCoherence.valide({
+      champs: [
+        { nom: 'cguValidees' },
+        { nom: 'signatureCharte' },
+        {
+          nom: 'entite',
+          champs: [{ nom: 'nom' }, { nom: 'siret' }, { nom: 'type' }],
+        },
+        { nom: 'departement' },
+      ],
+    }),
     async (
       requete: RequeteUtilisateur<CorpsValiderProfilAidant>,
       reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>,
@@ -362,7 +374,11 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         .valideProfilAidant(
           requete.identifiantUtilisateurCourant!,
           {
-            ...requete.body,
+            entite: {
+              nom: requete.body.entite.nom,
+              siret: requete.body.entite.siret,
+              type: requete.body.entite.type,
+            },
           },
           adaptateurEnvoiMessage
         )

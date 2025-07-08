@@ -8,9 +8,10 @@ export class AdaptateurValidateurCoherenceDeTest
   implements AdaptateurValidateurCoherence
 {
   public champsAutorises: ChampsAutorises | undefined = undefined;
+
   valide(champs: ChampsAutorises): RequestHandler {
-    this.champsAutorises = champs;
     return (__requete, __reponse, suite) => {
+      this.champsAutorises = champs;
       return suite();
     };
   }
