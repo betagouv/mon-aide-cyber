@@ -387,7 +387,7 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
             testeurMAC.adaptateurDeVerificationDeSession,
         });
 
-        const reponse = await executeRequete(
+        await executeRequete(
           donneesServeur.app,
           'PATCH',
           `/api/aidant/preferences`,
@@ -399,36 +399,25 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
           }
         );
 
-        expect(reponse.statusCode).toBe(400);
-        expect(await reponse.json()).toStrictEqual({
-          message: 'Votre demande ne peut être acceptée.',
-        });
-      });
-
-      it('Valide la consistence de la requête sur des champs imbriqués', async () => {
-        await unCompteAidantConnecte({
-          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
-          entrepotAidant: testeurMAC.entrepots.aidants(),
-          constructeurAidant: unAidant(),
-          adaptateurDeVerificationDeSession:
-            testeurMAC.adaptateurDeVerificationDeSession,
-        });
-
-        const reponse = await executeRequete(
-          donneesServeur.app,
-          'PATCH',
-          `/api/aidant/preferences`,
-          {
-            preferencesAidant: {
-              secteursActivite: ['Administration', 'Transports'],
-              champsInconnu: 'valeur inconnue',
+        expect(
+          testeurMAC.adaptateurValidateurCoherence.champsAutorises
+        ).toStrictEqual({
+          champs: [
+            {
+              champs: [
+                {
+                  nom: 'secteursActivite',
+                },
+                {
+                  nom: 'departements',
+                },
+                {
+                  nom: 'typesEntites',
+                },
+              ],
+              nom: 'preferencesAidant',
             },
-          }
-        );
-
-        expect(reponse.statusCode).toBe(400);
-        expect(await reponse.json()).toStrictEqual({
-          message: 'Votre demande ne peut être acceptée.',
+          ],
         });
       });
     });

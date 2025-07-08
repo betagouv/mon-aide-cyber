@@ -43,6 +43,7 @@ import { AdaptateurCmsCrispMAC } from './adaptateurs/AdaptateurCmsCrispMAC';
 import { interdisLaMiseEnCache } from './infrastructure/middlewares/middlewares';
 
 import { AdaptateurSignatureRequete } from './adaptateurs/AdaptateurSignatureRequete';
+import { AdaptateurValidateurCoherence } from './adaptateurs/AdaptateurValidateurCoherence';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -76,6 +77,7 @@ export type ConfigurationServeur = {
   adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise;
   adaptateurCmsCrisp: AdaptateurCmsCrispMAC;
   adaptateurSignatureRequete: AdaptateurSignatureRequete;
+  adaptateurValidateurCoherence: AdaptateurValidateurCoherence;
   estEnMaintenance: boolean;
 };
 
