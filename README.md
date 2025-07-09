@@ -22,6 +22,15 @@ Rajouter le réseau commun à l'application et au journal (s'il n'existe pas dé
 $ docker network create reseau-mon-aide-cyber
 ```
 
+Copier les fichiers pour déclarer les variables d'environnement nécessaires :
+
+```sh
+$ cp ./mon-aide-cyber-api/.env.template ./mon-aide-cyber-api/.env
+$ cp ./mon-aide-cyber-ui/.env.template ./mon-aide-cyber-ui/.env
+```
+
+Demander aux collègues pour les valeurs à associer aux variables.
+
 ## Lancement du serveur
 
 Lancer Docker et exécuter docker-compose pour lancer l'application.
@@ -39,6 +48,14 @@ Optionnellement, forcer le build si nécessaire.
 ## Lancement de la suite de tests automatisés
 
 Les tests sont lancés manuellement et nécessitent une première installation des espaces de travail du projet (`npm install`).
+
+Il faut tout d'abord démarrer un conteneur qui contient une base de données de test :
+
+```shell
+$ cd mon-aide-cyber-api/tests && docker-compose up
+```
+
+Puis on peut exécuter les tests :
 
 - `npm run test` lance les tests de l'`api` et du `front`
 - `npm run test:watch` lance les tests à chaque modification de fichier de l'`api` et du `front`
