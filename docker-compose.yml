@@ -13,7 +13,7 @@ services:
 
   db:
     container_name: mon-aide-cyber-bd
-    image: postgres:14
+    image: docker.io/postgres:14
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:

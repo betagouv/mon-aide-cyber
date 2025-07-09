@@ -3,7 +3,7 @@ version: '3'
 services:
   db:
     container_name: mon-aide-cyber-bd-test
-    image: postgres
+    image: docker.io/postgres
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
@@ -13,7 +13,7 @@ services:
       - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
 
   node:
-    image: node:18.12.1 # Version LTS
+    image: docker.io/node:18.12.1 # Version LTS
     environment:
       - URL_SERVEUR_BASE_DONNEES=postgres://postgres@mon-aide-cyber-bd-test
     volumes:
