@@ -965,7 +965,6 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
             siret: '1234567890',
             type: 'ServicePublic',
           },
-          departement: 'Gironde',
         }
       );
 
@@ -1133,11 +1132,12 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           testeurMAC.adaptateurDeVerificationDeSession,
       });
 
-      await executeRequete(
+      const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
         `/api/utilisateur/valider-profil-aidant`,
         {
+          unNouveauChamp: 'unNouveauChamp',
           cguValidees: true,
           signatureCharte: true,
           entite: {
@@ -1145,35 +1145,22 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
             siret: '1234567890',
             type: 'ServicePublic',
           },
-          departement: 'Gironde',
-          unNouveauChamp: 'unNouveauChamp',
         }
       );
 
-      expect(
-        testeurMAC.adaptateurValidateurCoherence.champsAutorises
-      ).toStrictEqual({
-        champs: [
-          {
-            nom: 'cguValidees',
-          },
-          { nom: 'signatureCharte' },
-          {
-            nom: 'entite',
-            champs: [{ nom: 'nom' }, { nom: 'siret' }, { nom: 'type' }],
-          },
-          { nom: 'departement' },
-        ],
-      });
+      expect(reponse.statusCode).toBe(400);
     });
 
     it.each([
       ['Beta-Gouv', '1234567890', 'ServicePublic', 200],
-      [undefined, undefined, 'ServicePublic', 422],
+      [undefined, undefined, 'ServicePublic', 400],
+      ['', '', 'ServicePublic', 422],
       ['Beta-Gouv', '1234567890', 'ServiceEtat', 200],
-      [undefined, undefined, 'ServiceEtat', 422],
+      [undefined, undefined, 'ServiceEtat', 400],
+      ['', '', 'ServiceEtat', 422],
       ['Beta-Gouv', '1234567890', 'Association', 200],
-      [undefined, undefined, 'Association', 200],
+      [undefined, undefined, 'Association', 400],
+      ['', '', 'Association', 200],
     ])(
       "S'assure de la validité de l'entité [Pour %s - %s en %s] fournie (",
       async (nomEntite, siretEntite, typeEntite, codeHttpRetour) => {

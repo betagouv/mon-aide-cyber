@@ -31,6 +31,8 @@ import {
 } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { estDateNouveauParcoursDemandeDevenirAidant } from '../gestion-demandes/devenir-aidant/nouveauParcours';
 import { unServiceUtilisateurInscrit } from '../espace-utilisateur-inscrit/ServiceUtilisateurInscritMAC';
+import * as z from 'zod/v4';
+import { valideLaCoherenceDuCorps } from './ValideLaCoherenceDuCorps';
 
 type CorpsRequeteReinitialiserMotDePasse = core.ParamsDictionary & {
   token: string;
@@ -119,7 +121,6 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
     adaptateurEnvoiMessage,
     adaptateurRelations,
     repertoireDeContacts,
-    adaptateurValidateurCoherence,
   } = configuration;
 
   routes.get(
@@ -341,17 +342,17 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       .custom((value: boolean) => value)
       .withMessage('Veuillez valider la Charte de l’Aidant'),
     validateurEntite(),
-    adaptateurValidateurCoherence.valide({
-      champs: [
-        { nom: 'cguValidees' },
-        { nom: 'signatureCharte' },
-        {
-          nom: 'entite',
-          champs: [{ nom: 'nom' }, { nom: 'siret' }, { nom: 'type' }],
-        },
-        { nom: 'departement' },
-      ],
-    }),
+    valideLaCoherenceDuCorps(
+      z.strictObject({
+        cguValidees: z.boolean(),
+        signatureCharte: z.boolean(),
+        entite: z.strictObject({
+          nom: z.string(),
+          siret: z.string(),
+          type: z.string(),
+        }),
+      })
+    ),
     async (
       requete: RequeteUtilisateur<CorpsValiderProfilAidant>,
       reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>,

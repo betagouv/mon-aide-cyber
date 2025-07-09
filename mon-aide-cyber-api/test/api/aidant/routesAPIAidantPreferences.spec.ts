@@ -387,38 +387,19 @@ describe('Le serveur MAC sur les routes /api/aidant', () => {
             testeurMAC.adaptateurDeVerificationDeSession,
         });
 
-        await executeRequete(
+        const reponse = await executeRequete(
           donneesServeur.app,
           'PATCH',
           `/api/aidant/preferences`,
           {
+            champsInconnu: 'valeur inconnue',
             preferencesAidant: {
               secteursActivite: ['Administration', 'Transports'],
             },
-            champsInconnu: 'valeur inconnue',
           }
         );
 
-        expect(
-          testeurMAC.adaptateurValidateurCoherence.champsAutorises
-        ).toStrictEqual({
-          champs: [
-            {
-              champs: [
-                {
-                  nom: 'secteursActivite',
-                },
-                {
-                  nom: 'departements',
-                },
-                {
-                  nom: 'typesEntites',
-                },
-              ],
-              nom: 'preferencesAidant',
-            },
-          ],
-        });
+        expect(reponse.statusCode).toBe(400);
       });
     });
   });

@@ -15,6 +15,8 @@ import {
   validationResult,
 } from 'express-validator';
 import { typesEntites, TypesEntites } from '../../espace-aidant/Aidant';
+import { valideLaCoherenceDuCorps } from '../ValideLaCoherenceDuCorps';
+import { z } from 'zod/v4';
 
 export type ReponsePreferencesAidantAPI = ReponseHATEOAS & {
   preferencesAidant: {
@@ -91,7 +93,6 @@ export const routesAPIAidantPreferences = (
     adaptateurDeVerificationDeCGU: cgu,
     entrepots,
     busEvenement,
-    adaptateurValidateurCoherence,
   } = configuration;
 
   routes.get(
@@ -145,18 +146,15 @@ export const routesAPIAidantPreferences = (
     cgu.verifie('Modifie les préférences de l’Aidant'),
     express.json(),
     valideLesPreferences(),
-    adaptateurValidateurCoherence.valide({
-      champs: [
-        {
-          nom: 'preferencesAidant',
-          champs: [
-            { nom: 'secteursActivite' },
-            { nom: 'departements' },
-            { nom: 'typesEntites' },
-          ],
-        },
-      ],
-    }),
+    valideLaCoherenceDuCorps(
+      z.strictObject({
+        preferencesAidant: z.strictObject({
+          secteursActivite: z.array(z.string()).optional(),
+          departements: z.array(z.string()).optional(),
+          typesEntites: z.array(z.string()).optional(),
+        }),
+      })
+    ),
     async (
       requete: RequeteUtilisateur<PatchRequestPreferencesAidant>,
       reponse: Response<ReponsePreferencesAidantAPI>,
@@ -170,7 +168,18 @@ export const routesAPIAidantPreferences = (
         return new ServicePreferencesAidant(entrepots.aidants(), busEvenement)
           .metsAJour({
             identifiantAidant: requete.identifiantUtilisateurCourant!,
-            preferences: { ...requete.body.preferencesAidant },
+            preferences: {
+              ...(requete.body.preferencesAidant.departements && {
+                departements: requete.body.preferencesAidant.departements,
+              }),
+              ...(requete.body.preferencesAidant.secteursActivite && {
+                secteursActivite:
+                  requete.body.preferencesAidant.secteursActivite,
+              }),
+              ...(requete.body.preferencesAidant.typesEntites && {
+                typesEntites: requete.body.preferencesAidant.typesEntites,
+              }),
+            },
           })
           .then(() => reponse.status(204).send())
           .catch((erreur) =>
@@ -203,6 +212,6 @@ type PatchRequestPreferencesAidant = {
   preferencesAidant: {
     secteursActivite?: string[];
     departements?: string[];
-    typesEntites: string[];
+    typesEntites?: string[];
   };
 };
