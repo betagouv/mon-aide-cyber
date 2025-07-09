@@ -1,4 +1,5 @@
 import { useTitreDePage } from '../hooks/useTitreDePage.ts';
+import { LienMailtoMAC } from '../composants/atomes/LienMailtoMAC.tsx';
 
 export const EcranAccessibilite = () => {
   useTitreDePage('Accessibilité');
@@ -62,6 +63,22 @@ export const EcranAccessibilite = () => {
                 Défenseur des droits
                 <br />
                 Libre réponse 71120 75342 Paris CEDEX 07
+              </li>
+            </ul>
+
+            <h2>Contact</h2>
+            <ul>
+              <li>
+                Mail : <LienMailtoMAC />
+              </li>
+              <li>
+                <a
+                  href="https://aide.monaide.cyber.gouv.fr/fr/?chat=ouvert"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Chat en ligne
+                </a>
               </li>
             </ul>
             <hr />
