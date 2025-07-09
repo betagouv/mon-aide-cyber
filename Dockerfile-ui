@@ -1,4 +1,4 @@
-FROM node:22.9.0
+FROM docker.io/node:22.9.0
 
 RUN apt-get update
 
