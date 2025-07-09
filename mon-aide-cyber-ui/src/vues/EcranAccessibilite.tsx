@@ -1,5 +1,6 @@
 import { useTitreDePage } from '../hooks/useTitreDePage.ts';
 import { LienMailtoMAC } from '../composants/atomes/LienMailtoMAC.tsx';
+import { TypographieH2 } from '../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 
 export const EcranAccessibilite = () => {
   useTitreDePage('Accessibilité');
@@ -18,10 +19,13 @@ export const EcranAccessibilite = () => {
             </p>
             <p>
               Cette déclaration d’accessibilité s’applique à{' '}
-              <strong>Mon Aide Cyber</strong> ( https://monaide.cyber.gouv.fr/)
-              .
+              <strong>Mon Aide Cyber</strong> (
+              <a href="https://monaide.cyber.gouv.fr/">
+                https://monaide.cyber.gouv.fr/
+              </a>
+              ).
             </p>
-            <h2>État de conformité</h2>
+            <TypographieH2>État de conformité</TypographieH2>
             <p>
               <strong>Mon Aide Cyber</strong> est <strong>non conforme</strong>{' '}
               avec le{' '}
@@ -34,7 +38,7 @@ export const EcranAccessibilite = () => {
                 <br />
               </span>
             </p>
-            <h2>Voie de recours</h2>
+            <TypographieH2>Voie de recours</TypographieH2>
             <p>
               Cette procédure est à utiliser dans le cas suivant&nbsp;: vous
               avez signalé au responsable du site internet un défaut
@@ -66,7 +70,7 @@ export const EcranAccessibilite = () => {
               </li>
             </ul>
 
-            <h2>Contact</h2>
+            <TypographieH2>Contact</TypographieH2>
             <ul>
               <li>
                 Mail : <LienMailtoMAC />
@@ -83,9 +87,8 @@ export const EcranAccessibilite = () => {
             </ul>
             <hr />
             <p>
-              Cette déclaration d’accessibilité a été créé le
-              <span>30 septembre 2024</span>
-              grâce au
+              Cette déclaration d’accessibilité a été créé le{' '}
+              <span>30 septembre 2024</span> grâce au{' '}
               <a href="https://betagouv.github.io/a11y-generateur-declaration/#create">
                 Générateur de Déclaration d’Accessibilité de BetaGouv
               </a>
