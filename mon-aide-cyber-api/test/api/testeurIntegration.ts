@@ -35,7 +35,6 @@ import { AdaptateurCmsCrispMAC } from '../../src/adaptateurs/AdaptateurCmsCrispM
 import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
 import { AdaptateurSignatureRequeteDeTest } from '../adaptateurs/AdaptateurSignatureRequeteDeTest';
 import { BusCommandeMACIntercepte } from '../infrastructure/bus/BusCommandeMACIntercepte';
-import { AdaptateurValidateurCoherenceDeTest } from '../adaptateurs/AdaptateurValidateurCoherenceDeTest';
 
 const PORT_DISPONIBLE = 0;
 
@@ -96,8 +95,7 @@ class TesteurIntegrationMAC {
       },
       adaptateurDeRechercheEntreprise,
       adaptateurRelations
-    ),
-    public adaptateurValidateurCoherence: AdaptateurValidateurCoherenceDeTest = new AdaptateurValidateurCoherenceDeTest()
+    )
   ) {}
 
   initialise() {
@@ -143,7 +141,6 @@ class TesteurIntegrationMAC {
       adaptateurRechercheEntreprise: this.adaptateurDeRechercheEntreprise,
       adaptateurCmsCrisp: this.adaptateurCmsCrisp,
       adaptateurSignatureRequete: this.adaptateurSignatureRequete,
-      adaptateurValidateurCoherence: this.adaptateurValidateurCoherence,
       estEnMaintenance: false,
       redirigeVersUrlBase: (
         _requete: Request,
