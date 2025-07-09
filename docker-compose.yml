@@ -35,6 +35,7 @@ services:
       - 8081:8081
     volumes:
       - ./mon-aide-cyber-api:/usr/src/app/mon-aide-cyber-api
+      - /usr/src/app/mon-aide-cyber-api/node_modules # on ne veut pas monter le `node_modules` de l'hôte
       - ./mon-aide-cyber-ui/dist/:/usr/src/app/mon-aide-cyber-ui/dist
     depends_on:
       - db
