@@ -41,6 +41,7 @@ import {
   allier,
   Departement,
   departements,
+  finistere,
   gironde,
 } from '../../../../src/gestion-demandes/departements';
 import { SecteurActivite } from '../../../../src/espace-aidant/preferences/secteursActivite';
@@ -65,6 +66,7 @@ import {
 import { adaptateurServiceChiffrement } from '../../../../src/infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import {
   unTupleAidantInitieDiagnostic,
+  unTupleAttributionDemandeAideAAidant,
   unTupleUtilisateurInscritInitieDiagnostic,
 } from '../../../../src/diagnostic/tuples';
 import { ProfilAidant } from '../../../../src/espace-aidant/profil/profilAidant';
@@ -83,6 +85,10 @@ import { ServiceDeChiffrement } from '../../../../src/securite/ServiceDeChiffrem
 import { EntrepotStatistiquesAidantPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesAidantPostgres';
 import { StatistiquesAidant as AidantExtraction } from '../../../../src/statistiques/aidant/StastistiquesAidant';
 import { EntrepotStatistiquesUtilisateursInscritsPostgres } from '../../../../src/infrastructure/entrepots/postgres/EntrepotStatistiquesUtilisateursInscritsPostgres';
+import { uneDemandeAide } from '../../../gestion-demandes/aide/ConstructeurDemandeAide';
+import { EntrepotAideConcret } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAideConcret';
+import { AdaptateurRepertoireDeContactsMemoire } from '../../../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { EntrepotAideBrevoMemoire } from './EntrepotAideConcret.spec';
 
 describe('Entrepots Postgres', () => {
   describe('Entrepot Diagnostic Postgres', () => {
@@ -778,7 +784,40 @@ describe('Entrepot Aidant', () => {
     });
   });
 
-  describe('Recherche par critères', () => {
+  describe('Recherche les Aidants correspondant aux critères de l’entité à moins de 2 diagnostics sur 30 jours glissant', () => {
+    const creeDeuxDemandesAideEnDatePour = async (
+      aidantAyantPostuleADeuxDemandesAide: Aidant,
+      lesDates: Date[]
+    ) => {
+      const serviceDeChiffrement = new ServiceDeChiffrementClair();
+      const entrepotAideConcret = new EntrepotAideConcret(
+        serviceDeChiffrement,
+        new AdaptateurRepertoireDeContactsMemoire(),
+        new EntrepotAideBrevoMemoire()
+      );
+      const premiereDemande = uneDemandeAide()
+        .avecUneDateDeSignatureDesCGU(lesDates[0])
+        .construis();
+      const secondeDemande = uneDemandeAide()
+        .avecUneDateDeSignatureDesCGU(lesDates[1])
+        .construis();
+      await entrepotAideConcret.persiste(premiereDemande);
+      await entrepotAideConcret.persiste(secondeDemande);
+      const entrepotRelation = new EntrepotRelationPostgres();
+      await entrepotRelation.persiste(
+        unTupleAttributionDemandeAideAAidant(
+          premiereDemande.identifiant,
+          aidantAyantPostuleADeuxDemandesAide.identifiant
+        )
+      );
+      await entrepotRelation.persiste(
+        unTupleAttributionDemandeAideAAidant(
+          secondeDemande.identifiant,
+          aidantAyantPostuleADeuxDemandesAide.identifiant
+        )
+      );
+    };
+
     it('recherche les Aidants correspondants aux 3 critères', async () => {
       const unAidantEnGirondeDansLesTransportsAssociatifs = unAidant()
         .ayantPourDepartements([gironde])
@@ -846,6 +885,93 @@ describe('Entrepot Aidant', () => {
       expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
         unAidantEnAllierPourAdministrationPublique,
       ]);
+    });
+
+    it('Retourne un Aidant parmi 2', async () => {
+      const entrepotAidant = new EntrepotAidantPostgres(
+        new ServiceDeChiffrementClair()
+      );
+      FournisseurHorlogeDeTest.initialise(new Date('2025-03-19T13:50:00.000Z'));
+      const aidantAyantPostuleADeuxDemandesAide = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .avecUnEmail('aidant-avec-deux-demandes@mail.con')
+        .avecUnNomPrenom('Jean DUPONT')
+        .construis();
+      const secondAidant = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .avecUnEmail('aidant-qui-matche@mail.con')
+        .avecUnNomPrenom('Jean MARTIN')
+        .construis();
+      await entrepotAidant.persiste(aidantAyantPostuleADeuxDemandesAide);
+      await entrepotAidant.persiste(secondAidant);
+      await creeDeuxDemandesAideEnDatePour(
+        aidantAyantPostuleADeuxDemandesAide,
+        [
+          new Date('2025-02-21T14:50:00.000Z'),
+          new Date('2025-03-15T08:50:00.000Z'),
+        ]
+      );
+
+      const lesAidantsRetournes =
+        await entrepotAidant.lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
+          {
+            departement: finistere,
+            secteursActivite: [{ nom: 'Transports' }],
+            typeEntite: entitesPubliques,
+          }
+        );
+
+      expect(lesAidantsRetournes).toHaveLength(1);
+      expect(lesAidantsRetournes[0].email).toBe('aidant-qui-matche@mail.con');
+      expect(lesAidantsRetournes[0].nomPrenom).toBe('Jean MARTIN');
+    });
+
+    it('Retourne 2 aidants', async () => {
+      const entrepotAidant = new EntrepotAidantPostgres(
+        new ServiceDeChiffrementClair()
+      );
+      FournisseurHorlogeDeTest.initialise(new Date('2025-03-19T13:50:00.000Z'));
+      const aidantPouvantANouveauMatcher = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .avecUnEmail('aidant-avec-deux-demandes@mail.con')
+        .avecUnNomPrenom('Jean DUPONT')
+        .construis();
+      const secondAidant = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .avecUnEmail('aidant-qui-matche@mail.con')
+        .avecUnNomPrenom('Jean MARTIN')
+        .construis();
+      await entrepotAidant.persiste(aidantPouvantANouveauMatcher);
+      await entrepotAidant.persiste(secondAidant);
+      await creeDeuxDemandesAideEnDatePour(aidantPouvantANouveauMatcher, [
+        new Date('2025-02-17T13:49:00.000Z'),
+        new Date('2025-03-15T08:50:00.000Z'),
+      ]);
+
+      const lesAidantsRetournes =
+        await entrepotAidant.lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
+          {
+            departement: finistere,
+            secteursActivite: [{ nom: 'Transports' }],
+            typeEntite: entitesPubliques,
+          }
+        );
+
+      expect(lesAidantsRetournes).toHaveLength(2);
+      expect(lesAidantsRetournes.map((a) => a.email)).toEqual(
+        expect.arrayContaining([
+          'aidant-qui-matche@mail.con',
+          'aidant-avec-deux-demandes@mail.con',
+        ])
+      );
     });
   });
 });

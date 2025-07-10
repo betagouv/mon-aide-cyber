@@ -272,7 +272,7 @@ describe('Entrepot Aidé Concret', () => {
   });
 });
 
-class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
+export class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
   protected entites: Map<string, AideDistantBrevoDTO> = new Map();
   private avecMetaDonnees = true;
 
