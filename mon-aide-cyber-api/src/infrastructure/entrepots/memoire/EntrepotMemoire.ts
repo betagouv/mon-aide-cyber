@@ -135,7 +135,14 @@ export class EntrepotAidantMemoire
   extends EntrepotMemoire<Aidant>
   implements EntrepotAidant
 {
-  async rechercheParPreferences(criteres: {
+  constructor(
+    public readonly entrepotAides: EntrepotAideMemoire = new EntrepotAideMemoire(),
+    public readonly entrepotRelation: EntrepotRelationMemoire = new EntrepotRelationMemoire()
+  ) {
+    super();
+  }
+
+  async lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(criteres: {
     departement: Departement;
     secteursActivite: SecteurActivite[];
     typeEntite:
@@ -155,7 +162,32 @@ export class EntrepotAidantMemoire
       );
       return departementMatche && secteursActiviteMatchent && typeEntiteMatche;
     });
-    return aidantsTrouve;
+
+    const lesAidantsQuiMatchent = (
+      await Promise.all(
+        aidantsTrouve.map(async (aidant) => {
+          const relationsAidant =
+            await this.entrepotRelation.trouveObjetsLiesAUtilisateur(
+              aidant.identifiant
+            );
+
+          const flatMap = (
+            await Promise.all(
+              relationsAidant
+                .filter((d) => d.relation === 'demandeAttribuee')
+                .flatMap(async (t) => {
+                  return await this.entrepotAides.parIdentifiant(
+                    t.objet.identifiant
+                  );
+                })
+            )
+          ).flatMap((d) => d);
+          return flatMap.length < 2 ? aidant : undefined;
+        })
+      )
+    ).filter((a): a is Aidant => a !== undefined);
+
+    return lesAidantsQuiMatchent;
   }
 
   async rechercheParEmail(email: string): Promise<Aidant> {
@@ -184,7 +216,7 @@ export class EntrepotAideMemoire
       .filter(([, valeur]) => valeur.email === demandeAide.email)
       .map(([clef]) => clef);
     demandesExistantes.forEach((clef) => this.entites.delete(clef));
-    super.persiste(demandeAide);
+    await super.persiste(demandeAide);
   }
 
   async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
@@ -199,6 +231,12 @@ export class EntrepotAideMemoire
           etat: !aides[0].identifiant ? 'INCOMPLET' : 'COMPLET',
         }
       : { etat: 'INEXISTANT' };
+  }
+
+  async parIdentifiant(identifiant: string): Promise<DemandeAide[]> {
+    return Array.from(this.entites.values()).filter(
+      (aide) => aide.identifiant === identifiant
+    );
   }
 }
 
@@ -241,6 +279,7 @@ export class EntrepotAnnuaireAidantsMemoire
   constructor(private readonly entrepotAidant: EntrepotAidant) {
     super();
   }
+
   async rechercheParCriteres(
     criteresDeRecherche?: CriteresDeRecherche
   ): Promise<AnnuaireAidant[]> {

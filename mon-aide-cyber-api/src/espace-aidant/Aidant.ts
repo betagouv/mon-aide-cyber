@@ -83,7 +83,7 @@ export type Aidant = Aggregat & {
 export interface EntrepotAidant extends EntrepotEcriture<Aidant> {
   rechercheParEmail(email: string): Promise<Aidant>;
 
-  rechercheParPreferences(criteres: {
+  lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(criteres: {
     departement: Departement;
     secteursActivite: SecteurActivite[];
     typeEntite:

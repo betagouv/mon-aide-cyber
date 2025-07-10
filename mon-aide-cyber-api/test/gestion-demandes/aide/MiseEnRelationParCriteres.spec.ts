@@ -20,6 +20,7 @@ import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeM
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import {
+  Aidant,
   entitesPrivees,
   entitesPubliques,
 } from '../../../src/espace-aidant/Aidant';
@@ -31,6 +32,8 @@ import { AdaptateurGeographie } from '../../../src/adaptateurs/AdaptateurGeograp
 import { AdaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 import { InformationEntitePourMiseEnRelation } from '../../../src/adaptateurs/AdaptateurEnvoiMail';
+import { unTupleAttributionDemandeAideAAidant } from '../../../src/diagnostic/tuples';
+import { EntrepotAidantMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 
 describe('Mise en relation par critères', () => {
   let envoieMail: AdaptateurEnvoiMailMemoire;
@@ -388,6 +391,87 @@ describe('Mise en relation par critères', () => {
       });
 
       expect(resultatMiseEnRelation.resultat).toBeDefined();
+    });
+
+    describe('Dans le cadre de la limite de mise en relation à 2 diagnostics sur une période glissante de 30 jours', () => {
+      const creeDeuxDemandesAideEnDatePour = async (
+        aidantAyantPostuleADeuxDemandesAide: Aidant,
+        lesDates: Date[]
+      ) => {
+        const premiereDemande = uneDemandeAide()
+          .avecUneDateDeSignatureDesCGU(lesDates[0])
+          .construis();
+        const secondeDemande = uneDemandeAide()
+          .avecUneDateDeSignatureDesCGU(lesDates[1])
+          .construis();
+        await entrepots.demandesAides().persiste(premiereDemande);
+        await entrepots.demandesAides().persiste(secondeDemande);
+        const entrepotRelation = (entrepots.aidants() as EntrepotAidantMemoire)
+          .entrepotRelation;
+        await entrepotRelation.persiste(
+          unTupleAttributionDemandeAideAAidant(
+            premiereDemande.identifiant,
+            aidantAyantPostuleADeuxDemandesAide.identifiant
+          )
+        );
+        await entrepotRelation.persiste(
+          unTupleAttributionDemandeAideAAidant(
+            secondeDemande.identifiant,
+            aidantAyantPostuleADeuxDemandesAide.identifiant
+          )
+        );
+      };
+
+      it('Retourne uniquement les Aidants à moins de 2 diagnostics', async () => {
+        FournisseurHorlogeDeTest.initialise(
+          new Date('2025-03-19T13:50:00.000Z')
+        );
+        const aidantAyantPostuleADeuxDemandesAide = unAidant()
+          .ayantPourDepartements([finistere])
+          .ayantPourSecteursActivite([{ nom: 'Transports' }])
+          .ayantPourTypesEntite([entitesPubliques])
+          .avecUnEmail('aidant-avec-deux-demandes@mail.con')
+          .avecUnNomPrenom('Jean DUPONT')
+          .construis();
+        const secondAidant = unAidant()
+          .ayantPourDepartements([finistere])
+          .ayantPourSecteursActivite([{ nom: 'Transports' }])
+          .ayantPourTypesEntite([entitesPubliques])
+          .avecUnEmail('aidant-qui-matche@mail.con')
+          .avecUnNomPrenom('Jean MARTIN')
+          .construis();
+        const aidantsContactes: AidantMisEnRelation[] = [];
+        envoieMail.envoiToutesLesMisesEnRelation = async (
+          aidants: AidantMisEnRelation[],
+          __donneesMiseEnRelation
+        ) => {
+          aidantsContactes.push(...aidants);
+        };
+        await entrepots.aidants().persiste(aidantAyantPostuleADeuxDemandesAide);
+        await entrepots.aidants().persiste(secondAidant);
+        await creeDeuxDemandesAideEnDatePour(
+          aidantAyantPostuleADeuxDemandesAide,
+          [
+            new Date('2025-02-21T14:50:00.000Z'),
+            new Date('2025-03-15T08:50:00.000Z'),
+          ]
+        );
+        const miseEnRelation = laMiseEnRelation();
+
+        const donneesMiseEnRelation: DonneesMiseEnRelation = {
+          demandeAide: uneDemandeAide()
+            .dansLeDepartement(finistere)
+            .construis(),
+          secteursActivite: [{ nom: 'Transports' }],
+          typeEntite: entitesPubliques,
+          siret: '12345',
+        };
+        await miseEnRelation.execute(donneesMiseEnRelation);
+
+        expect(aidantsContactes).toHaveLength(1);
+        expect(aidantsContactes[0].email).toBe('aidant-qui-matche@mail.con');
+        expect(aidantsContactes[0].nomPrenom).toBe('Jean MARTIN');
+      });
     });
   });
 });

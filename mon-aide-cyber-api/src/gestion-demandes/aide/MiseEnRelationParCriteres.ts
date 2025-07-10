@@ -84,11 +84,15 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
   async execute(
     donneesMiseEnRelation: DonneesMiseEnRelation
   ): Promise<ResultatMiseEnRelation<ParCriteres>> {
-    const aidants = await this.entrepots.aidants().rechercheParPreferences({
-      departement: donneesMiseEnRelation.demandeAide.departement,
-      secteursActivite: donneesMiseEnRelation.secteursActivite,
-      typeEntite: donneesMiseEnRelation.typeEntite,
-    });
+    const aidants = await this.entrepots
+      .aidants()
+      .lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
+        {
+          departement: donneesMiseEnRelation.demandeAide.departement,
+          secteursActivite: donneesMiseEnRelation.secteursActivite,
+          typeEntite: donneesMiseEnRelation.typeEntite,
+        }
+      );
     const aucunAidantMatche = aidants.length === 0;
     if (aucunAidantMatche) {
       await envoieAuCOTAucunAidantPourLaDemandeAide(

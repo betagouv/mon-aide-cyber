@@ -799,11 +799,13 @@ describe('Entrepot Aidant', () => {
       await entrepotAidant.persiste(unAidantEnAllierPourAdministrationPublique);
 
       const aidantsTrouvesEnGironde =
-        await entrepotAidant.rechercheParPreferences({
-          departement: gironde,
-          secteursActivite: [{ nom: 'Transports' }],
-          typeEntite: associations,
-        });
+        await entrepotAidant.lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
+          {
+            departement: gironde,
+            secteursActivite: [{ nom: 'Transports' }],
+            typeEntite: associations,
+          }
+        );
 
       expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
         unAidantEnGirondeDansLesTransportsAssociatifs,
@@ -833,11 +835,13 @@ describe('Entrepot Aidant', () => {
       await entrepotAidant.persiste(unAidantEnAllierPourAdministrationPublique);
 
       const aidantsTrouvesEnGironde =
-        await entrepotAidant.rechercheParPreferences({
-          departement: allier,
-          secteursActivite: [{ nom: 'Administration' }, { nom: 'Tertiaire' }],
-          typeEntite: entitesPubliques,
-        });
+        await entrepotAidant.lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
+          {
+            departement: allier,
+            secteursActivite: [{ nom: 'Administration' }, { nom: 'Tertiaire' }],
+            typeEntite: entitesPubliques,
+          }
+        );
 
       expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
         unAidantEnAllierPourAdministrationPublique,

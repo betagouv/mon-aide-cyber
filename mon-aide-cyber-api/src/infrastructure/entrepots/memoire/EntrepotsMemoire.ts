@@ -36,12 +36,15 @@ import { EntrepotStatistiquesUtilisateurInscrit } from '../../../statistiques/ut
 export class EntrepotsMemoire implements Entrepots {
   private entrepotDiagnostic: EntrepotDiagnostic =
     new EntrepotDiagnosticMemoire();
-  private entrepotAidants: EntrepotAidant = new EntrepotAidantMemoire();
   private entrepotUtilisateursInscrits: EntrepotUtilisateurInscrit =
     new EntrepotUtilisateurInscritMemoire();
   private entrepotRestitution: EntrepotRestitution =
     new EntrepotRestitutionMemoire();
   private entrepotAides: EntrepotDemandeAide = new EntrepotAideMemoire();
+  private entrepotAidants: EntrepotAidant = new EntrepotAidantMemoire(
+    this.entrepotAides as EntrepotAideMemoire,
+    new EntrepotRelationMemoire()
+  );
   private entrepotDemandeDevenirAidant =
     new EntrepotDemandeDevenirAidantMemoire();
   private entrepotAnnuaireAidants: EntrepotAnnuaireAidants =
