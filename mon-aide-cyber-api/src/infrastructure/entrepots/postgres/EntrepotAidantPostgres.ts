@@ -59,7 +59,7 @@ export class EntrepotAidantPostgres
     super();
   }
 
-  async rechercheParPreferences(criteres: {
+  async lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(criteres: {
     departement: Departement;
     secteursActivite: SecteurActivite[];
     typeEntite:
