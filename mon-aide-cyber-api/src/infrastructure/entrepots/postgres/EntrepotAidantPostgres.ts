@@ -82,11 +82,17 @@ export class EntrepotAidantPostgres
         SELECT jsonb_array_elements_text(:secteursActivite::jsonb)
       )
     )
-    AND type = 'AIDANT';`;
+    AND type = 'AIDANT'
+    AND (SELECT COUNT(*)
+        FROM relations, aides
+        WHERE relations.donnees -> 'objet' ->> 'identifiant' = (aides.id)::text
+            AND relations.donnees -> 'utilisateur' ->> 'identifiant' = (u.id)::text
+            AND (aides.donnees ->> 'dateSignatureCGU')::timestamp with time zone >= ((:maintenant)::timestamp - interval '30 days'))::int < 2;`;
     const parametres = {
       departement: departement,
       secteursActivite: secteursActivite,
       typeEntite: typeEntite,
+      maintenant: FournisseurHorloge.maintenant(),
     };
 
     return await this.knex
