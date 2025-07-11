@@ -25,22 +25,25 @@ export const EcranRepondreAUneDemande = ({
   const macAPI = useMACAPI();
   const navigationMAC = useNavigationMAC();
 
-  const { data: demandeAide, isError: tokenIllegal } =
-    useQuery<DemandePourPostuler>({
-      enabled: !!token,
-      queryKey: ['recuperer-demande-aide', token],
-      retry: false,
-      queryFn: async () =>
-        await macAPI.execute<DemandePourPostuler, DemandePourPostuler>(
-          constructeurParametresAPI()
-            .url(
-              `/api/aidant/repondre-a-une-demande/informations-de-demande?token=${token}`
-            )
-            .methode('GET')
-            .construis(),
-          async (json) => await json
-        ),
-    });
+  const {
+    data: demandeAide,
+    isLoading,
+    isError: tokenIllegal,
+  } = useQuery<DemandePourPostuler>({
+    enabled: !!token,
+    queryKey: ['recuperer-demande-aide', token],
+    retry: false,
+    queryFn: async () =>
+      await macAPI.execute<DemandePourPostuler, DemandePourPostuler>(
+        constructeurParametresAPI()
+          .url(
+            `/api/aidant/repondre-a-une-demande/informations-de-demande?token=${token}`
+          )
+          .methode('GET')
+          .construis(),
+        async (json) => await json
+      ),
+  });
 
   const postulerALaDemande = useMutation({
     mutationKey: ['repondre-a-une-demande'],
@@ -85,6 +88,8 @@ export const EcranRepondreAUneDemande = ({
         surReponse={() => {
           if (token) postulerALaDemande.mutate(token);
         }}
+        enChargement={isLoading}
+        enAffectation={postulerALaDemande.isPending}
       />
     </main>
   );
