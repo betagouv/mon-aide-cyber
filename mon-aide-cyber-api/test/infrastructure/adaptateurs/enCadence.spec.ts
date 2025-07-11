@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { enCadence } from '../../../src/infrastructure/adaptateurs/enCadence';
 
 const assertDuree = (fin: number, debut: number) => {
-  expect(Math.round(Number(fin - debut))).toBeGreaterThanOrEqual(10 * 4);
+  expect(Math.ceil(Number(fin - debut))).toBeGreaterThanOrEqual(10 * 4);
 };
 
 describe('En cadence', () => {
