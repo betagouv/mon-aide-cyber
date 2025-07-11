@@ -1,27 +1,16 @@
-import {
-  AideDistant,
-  AideDistantBrevoDTO,
-  AideDistantDTO,
-  EntrepotAideConcret,
-  EntrepotAideDistant,
-} from '../../../../src/infrastructure/entrepots/postgres/EntrepotAideConcret';
+import { EntrepotAideConcret } from '../../../../src/infrastructure/entrepots/postgres/EntrepotAideConcret';
 import { FauxServiceDeChiffrement } from '../../securite/FauxServiceDeChiffrement';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { nettoieLaBaseDeDonneesAides } from '../../../utilitaires/nettoyeurBDD';
-import crypto from 'crypto';
-import { fakerFR } from '@faker-js/faker';
-import {
-  Dictionnaire,
-  DictionnaireDeChiffrement,
-} from '../../../constructeurs/DictionnaireDeChiffrement';
 import { FournisseurHorloge } from '../../../../src/infrastructure/horloge/FournisseurHorloge';
 import {
-  DemandeAide,
   RechercheDemandeAide,
   RechercheDemandeAideComplete,
 } from '../../../../src/gestion-demandes/aide/DemandeAide';
 import { uneDemandeAide } from '../../../gestion-demandes/aide/ConstructeurDemandeAide';
 import { AdaptateurRepertoireDeContactsMemoire } from '../../../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { DictionnaireDeChiffrementAide } from './aideAuxTests/DictionnaireDeChiffrementAide';
+import { EntrepotAideBrevoMemoire } from './aideAuxTests/EntrepotAideBrevoMemoire';
 
 describe('Entrepot Aidé Concret', () => {
   beforeEach(async () => {
@@ -271,80 +260,3 @@ describe('Entrepot Aidé Concret', () => {
     });
   });
 });
-
-export class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
-  protected entites: Map<string, AideDistantBrevoDTO> = new Map();
-  private avecMetaDonnees = true;
-
-  async persiste(
-    entite: AideDistant,
-    chiffrement: (
-      identifiantMAC: crypto.UUID,
-      departement: string,
-      siret: string,
-      raisonSociale?: string
-    ) => string
-  ): Promise<void> {
-    const contactBrevo: Omit<AideDistantBrevoDTO, 'attributes'> & {
-      attributes: { METADONNEES?: string };
-    } = {
-      email: entite.email,
-      attributes: {
-        ...(this.avecMetaDonnees && {
-          METADONNEES: chiffrement(
-            entite.identifiantMAC,
-            entite.departement.nom,
-            entite.siret,
-            entite.raisonSociale
-          ),
-        }),
-      },
-    };
-    this.entites.set(entite.email, contactBrevo as AideDistantBrevoDTO);
-  }
-
-  async rechercheParEmail(email: string): Promise<AideDistantDTO | undefined> {
-    const aideDistantDTO = this.entites.get(email);
-    if (aideDistantDTO === undefined) {
-      return undefined;
-    }
-    return {
-      email: aideDistantDTO.email,
-      metaDonnees: aideDistantDTO.attributes.METADONNEES,
-    };
-  }
-
-  sansMetadonnees(): EntrepotAideBrevoMemoire {
-    this.avecMetaDonnees = false;
-    return this;
-  }
-}
-
-class DictionnaireDeChiffrementAide
-  implements DictionnaireDeChiffrement<DemandeAide>
-{
-  private _dictionnaire: Dictionnaire = new Map();
-  private _avecSIRET = true;
-  private aide: DemandeAide | undefined = undefined;
-
-  avec(aide: DemandeAide): DictionnaireDeChiffrementAide {
-    this.aide = aide;
-    return this;
-  }
-
-  sansSIRET(): DictionnaireDeChiffrementAide {
-    this._avecSIRET = false;
-    return this;
-  }
-
-  construis(): Dictionnaire {
-    const valeurEnClair = JSON.stringify({
-      identifiantMAC: this.aide!.identifiant,
-      departement: this.aide!.departement.nom,
-      raisonSociale: this.aide!.raisonSociale,
-      ...(this._avecSIRET && { siret: this.aide!.siret }),
-    });
-    this._dictionnaire.set(valeurEnClair, fakerFR.string.alpha(10));
-    return this._dictionnaire;
-  }
-}
