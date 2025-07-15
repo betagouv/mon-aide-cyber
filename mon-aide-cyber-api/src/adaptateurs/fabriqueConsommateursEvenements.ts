@@ -1,4 +1,5 @@
 import {
+  affectationAnnulee,
   aidantCree,
   aidantMigreEnUtilisateurInscrit,
   aideCree,
@@ -89,6 +90,7 @@ export const fabriqueConsommateursEvenements = (
     ['AIDANT_CREE', [consommateurs.aidantCree()]],
     ['AIDE_CREE', [consommateurs.aideCree()]],
     ['DEMANDE_AIDE_POURVUE', [demandeAidePourvue(entrepotJournalisation)]],
+    ['AFFECTATION_ANNULEE', [affectationAnnulee(entrepotJournalisation)]],
     [
       'DEMANDE_DEVENIR_AIDANT_CREEE',
       [demandeDevenirAidantCree(entrepotJournalisation)],
