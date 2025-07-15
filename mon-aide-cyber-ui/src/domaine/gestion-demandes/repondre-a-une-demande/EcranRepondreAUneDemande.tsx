@@ -19,6 +19,12 @@ export type DemandePourPostuler = {
   secteurActivite: string;
 };
 
+export enum ETAT_RESEAU {
+  RECUPERATION_DEMANDE_AIDE_EN_COURS,
+  REPONSE_A_UNE_DEMANDE_EN_COURS,
+  IDLE,
+}
+
 export const EcranRepondreAUneDemande = ({
   token,
 }: ProprietesEcransAvecToken) => {
@@ -61,6 +67,13 @@ export const EcranRepondreAUneDemande = ({
     },
   });
 
+  const etatDuReseau = (): ETAT_RESEAU => {
+    if (isLoading) return ETAT_RESEAU.RECUPERATION_DEMANDE_AIDE_EN_COURS;
+    if (postulerALaDemande.isPending)
+      return ETAT_RESEAU.REPONSE_A_UNE_DEMANDE_EN_COURS;
+    return ETAT_RESEAU.IDLE;
+  };
+
   if (tokenIllegal) {
     navigationMAC.navigue('/', navigationMAC.etat);
   }
@@ -88,8 +101,7 @@ export const EcranRepondreAUneDemande = ({
         surReponse={() => {
           if (token) postulerALaDemande.mutate(token);
         }}
-        enChargement={isLoading}
-        enAffectation={postulerALaDemande.isPending}
+        etatDuReseau={etatDuReseau()}
       />
     </main>
   );
