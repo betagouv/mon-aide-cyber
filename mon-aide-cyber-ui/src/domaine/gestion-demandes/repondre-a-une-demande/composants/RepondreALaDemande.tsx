@@ -2,19 +2,20 @@ import HeroBloc from '../../../../composants/communs/HeroBloc.tsx';
 import { TypographieH1 } from '../../../../composants/communs/typographie/TypographieH1/TypographieH1.tsx';
 import { TypographieH4 } from '../../../../composants/communs/typographie/TypographieH4/TypographieH4.tsx';
 import Button from '../../../../composants/atomes/Button/Button.tsx';
-import { DemandePourPostuler } from '../EcranRepondreAUneDemande.tsx';
+import {
+  DemandePourPostuler,
+  ETAT_RESEAU,
+} from '../EcranRepondreAUneDemande.tsx';
 import Spinner from '../../../../composants/atomes/Spinner.tsx';
 
 export const RepondreALaDemande = ({
   demandeAide,
   surReponse,
-  enChargement,
-  enAffectation,
+  etatDuReseau,
 }: {
   demandeAide?: DemandePourPostuler;
-  enChargement: boolean;
-  enAffectation: boolean;
   surReponse?: () => void;
+  etatDuReseau: ETAT_RESEAU;
 }) => {
   return (
     <>
@@ -30,7 +31,7 @@ export const RepondreALaDemande = ({
       </HeroBloc>
       <section className="contenu-principal fond-clair-mac">
         <div className="section-blanche">
-          {enChargement ? (
+          {etatDuReseau === ETAT_RESEAU.RECUPERATION_DEMANDE_AIDE_EN_COURS ? (
             <div className="flex justify-center">
               <Spinner />
             </div>
@@ -72,7 +73,10 @@ export const RepondreALaDemande = ({
                     <Button
                       type="button"
                       variant="primary"
-                      disabled={enAffectation}
+                      disabled={
+                        etatDuReseau ===
+                        ETAT_RESEAU.REPONSE_A_UNE_DEMANDE_EN_COURS
+                      }
                       onClick={surReponse}
                     >
                       Je souhaite réaliser ce diagnostic
