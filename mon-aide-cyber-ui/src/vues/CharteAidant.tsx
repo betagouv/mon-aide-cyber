@@ -23,10 +23,7 @@ const ContenuCharteAidant = () => (
         </p>
       </li>
       <li>
-        <p dir="auto">
-          Signer la présente Charte et la communiquer à l’équipe MonAideCyber ou
-          à un agent de l’ANSSI.&nbsp;
-        </p>
+        <p dir="auto">Signer la présente Charte.</p>
       </li>
       <li>
         <p dir="auto">
