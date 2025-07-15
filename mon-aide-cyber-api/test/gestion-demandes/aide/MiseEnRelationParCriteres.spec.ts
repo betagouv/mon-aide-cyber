@@ -29,8 +29,6 @@ import { DonneesMiseEnRelation } from '../../../src/gestion-demandes/aide/miseEn
 import { ServiceDeChiffrementChacha20 } from '../../../src/infrastructure/securite/ServiceDeChiffrementChacha20';
 import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
 import { AdaptateurGeographie } from '../../../src/adaptateurs/AdaptateurGeographie';
-import { AdaptateurRechercheEntreprise } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
-import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 import { InformationEntitePourMiseEnRelation } from '../../../src/adaptateurs/AdaptateurEnvoiMail';
 import { unTupleAttributionDemandeAideAAidant } from '../../../src/diagnostic/tuples';
 import { EntrepotAidantMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
@@ -41,7 +39,6 @@ describe('Mise en relation par critères', () => {
     rechercheEmailParDepartement: (departement: Departement) => string;
   };
   let entrepots: EntrepotsMemoire;
-  let rechercheEntreprise: AdaptateurRechercheEntreprise;
   let adaptateurGeo: AdaptateurGeographie;
 
   beforeEach(() => {
@@ -62,7 +59,6 @@ describe('Mise en relation par critères', () => {
       rechercheEmailParDepartement: (__d: Departement) => 'cot@email.com',
     };
     entrepots = new EntrepotsMemoire();
-    rechercheEntreprise = unAdaptateurRechercheEntreprise().construis();
     annuaireCot = {
       rechercheEmailParDepartement: (__departement: Departement) =>
         'cot@par-defaut.fr',
@@ -77,7 +73,6 @@ describe('Mise en relation par critères', () => {
       envoieMail,
       annuaireCot,
       entrepots,
-      rechercheEntreprise,
       adaptateurGeo
     );
 
@@ -92,6 +87,7 @@ describe('Mise en relation par critères', () => {
       secteursActivite: [{ nom: 'Administration' }],
       typeEntite: entitesPubliques,
       siret: '12345',
+      codeEPCI: 'Bordeaux Métropole',
     });
 
     expect(
@@ -115,6 +111,7 @@ describe('Mise en relation par critères', () => {
       secteursActivite: [{ nom: 'Administration' }],
       typeEntite: entitesPrivees,
       siret: '12345',
+      codeEPCI: 'Bordeaux Métropole',
     });
 
     expect(
@@ -165,6 +162,7 @@ describe('Mise en relation par critères', () => {
         secteursActivite: [{ nom: 'Transports' }],
         typeEntite: entitesPrivees,
         siret: '12345',
+        codeEPCI: 'Bordeaux Métropole',
       });
 
       expect(
@@ -213,6 +211,7 @@ describe('Mise en relation par critères', () => {
         secteursActivite: [{ nom: 'Transports' }],
         typeEntite: entitesPubliques,
         siret: '12345',
+        codeEPCI: 'Bordeaux Métropole',
       });
 
       expect(aidantsContactes).toHaveLength(2);
@@ -257,9 +256,6 @@ describe('Mise en relation par critères', () => {
       ) => {
         informationsDuMail = informations;
       };
-      rechercheEntreprise = unAdaptateurRechercheEntreprise()
-        .quiRenvoieCodeEpci('888999')
-        .construis();
       adaptateurGeo.epciAvecCode = async (__codeEpci: string) => ({
         nom: 'Bordeaux Métropole',
       });
@@ -276,6 +272,7 @@ describe('Mise en relation par critères', () => {
         secteursActivite: [{ nom: 'Transports' }],
         typeEntite: entitesPubliques,
         siret: '12345',
+        codeEPCI: '888999',
       });
 
       expect(informationsDuMail!.epci).toBe('Bordeaux Métropole');
@@ -304,6 +301,7 @@ describe('Mise en relation par critères', () => {
         secteursActivite: [{ nom: 'Transports' }],
         typeEntite: entitesPubliques,
         siret: '12345',
+        codeEPCI: 'Bordeaux Métropole',
       };
       await miseEnRelation.execute(donneesMiseEnRelation);
 
@@ -329,6 +327,7 @@ describe('Mise en relation par critères', () => {
         secteursActivite: [{ nom: 'Transports' }],
         typeEntite: entitesPrivees,
         siret: '12345',
+        codeEPCI: 'Bordeaux Métropole',
       });
 
       expect(
@@ -388,6 +387,7 @@ describe('Mise en relation par critères', () => {
         secteursActivite: [{ nom: 'Transports' }],
         typeEntite: entitesPubliques,
         siret: '12345',
+        codeEPCI: 'Bordeaux Métropole',
       });
 
       expect(resultatMiseEnRelation.resultat).toBeDefined();
@@ -465,6 +465,7 @@ describe('Mise en relation par critères', () => {
           secteursActivite: [{ nom: 'Transports' }],
           typeEntite: entitesPubliques,
           siret: '12345',
+          codeEPCI: 'Bordeaux Métropole',
         };
         await miseEnRelation.execute(donneesMiseEnRelation);
 

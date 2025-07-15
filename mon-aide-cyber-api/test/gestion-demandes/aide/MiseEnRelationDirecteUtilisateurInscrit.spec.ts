@@ -35,6 +35,7 @@ describe('Mise en relation directe avec un Utilisateur Inscrit', () => {
       secteursActivite: [{ nom: 'Administration' }],
       typeEntite: entitesPubliques,
       siret: '12345',
+      codeEPCI: 'Bordeaux Métropole',
     });
 
     expect(

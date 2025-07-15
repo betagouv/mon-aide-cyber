@@ -161,6 +161,7 @@ export class CapteurSagaDemandeAide
             siret: entreprise.siret,
             secteursActivite: entreprise.secteursActivite,
             typeEntite: entreprise.typeEntite,
+            codeEPCI: entreprise.codeEpci,
           });
 
           const origine = saga.origine ?? 'inconnue';
