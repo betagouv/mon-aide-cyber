@@ -130,7 +130,7 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
       };
     }
 
-    throw new Error();
+    throw new ErreurDemandeAttribueeNonTrouvee(identifiantDemandeAide);
   }
 }
 
@@ -139,5 +139,11 @@ class ErreurDiagnosticAideNonTrouve extends Error {
     super(
       `Le diagnostic '${identifiantDiagnostic}' n’est relié à aucune entité Aidée.`
     );
+  }
+}
+
+class ErreurDemandeAttribueeNonTrouvee extends Error {
+  constructor(identifiantDemande: crypto.UUID) {
+    super(`La demande '${identifiantDemande}' n’est pas attribuée.`);
   }
 }

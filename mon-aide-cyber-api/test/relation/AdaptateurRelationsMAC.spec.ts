@@ -5,6 +5,7 @@ import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/Ent
 import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/EntrepotRelationMemoire';
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { Tuple } from '../../src/relation/Tuple';
 
 describe('Adaptateur De Relation MAC', () => {
   it("retourne l'identifiant du diagnostic initié par l'aidant", async () => {
@@ -27,6 +28,47 @@ describe('Adaptateur De Relation MAC', () => {
       );
 
     expect(identifiantDiagnostics[0]).toStrictEqual(diagnostic.identifiant);
+  });
+
+  it('retourne le tuple pour une demande attribuée', async () => {
+    const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
+      new EntrepotRelationMemoire()
+    );
+    const identifiantDemande = crypto.randomUUID();
+    const identifiantAidant = crypto.randomUUID();
+    await adaptateurRelationsMAC.attribueDemandeAAidant(
+      identifiantDemande,
+      identifiantAidant
+    );
+
+    const demandeAttribueeRecue =
+      await adaptateurRelationsMAC.demandeAttribuee(identifiantDemande);
+
+    expect(demandeAttribueeRecue).toStrictEqual<Tuple>({
+      identifiant: expect.any(String),
+      utilisateur: {
+        type: 'aidant',
+        identifiant: identifiantAidant,
+      },
+      relation: 'demandeAttribuee',
+      objet: {
+        type: 'demandeAide',
+        identifiant: identifiantDemande,
+      },
+    });
+  });
+
+  it('remonte une erreur si la demande n‘est pas attribuée', async () => {
+    const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
+      new EntrepotRelationMemoire()
+    );
+    const identifiantDemande = crypto.randomUUID();
+
+    expect(
+      adaptateurRelationsMAC.demandeAttribuee(identifiantDemande)
+    ).rejects.toThrow(
+      `La demande '${identifiantDemande}' n’est pas attribuée.`
+    );
   });
 
   it("retourne tous les identifiants des diagnostics initiés par l'aidant", async () => {
