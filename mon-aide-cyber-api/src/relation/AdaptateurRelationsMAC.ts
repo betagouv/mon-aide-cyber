@@ -105,6 +105,33 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
       identifiant: identifiantDemande,
     });
   }
+
+  async demandeAttribuee(identifiantDemandeAide: crypto.UUID): Promise<Tuple> {
+    const relationDemandesAttribuees =
+      await this.entrepotRelation.trouveLesRelationsPourCetObjet(
+        'demandeAttribuee',
+        {
+          identifiant: identifiantDemandeAide,
+          type: 'demandeAide',
+        }
+      );
+
+    const relationDemandeAttribuee = relationDemandesAttribuees.find(
+      (tuple) => tuple.utilisateur.type === 'aidant'
+    );
+
+    if (relationDemandeAttribuee) {
+      return {
+        ...relationDemandeAttribuee,
+        utilisateur: {
+          type: relationDemandeAttribuee.utilisateur.type,
+          identifiant: relationDemandeAttribuee.utilisateur.identifiant,
+        },
+      };
+    }
+
+    throw new Error();
+  }
 }
 
 class ErreurDiagnosticAideNonTrouve extends Error {
