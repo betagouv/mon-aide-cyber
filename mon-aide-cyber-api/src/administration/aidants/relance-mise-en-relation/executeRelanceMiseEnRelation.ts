@@ -91,13 +91,13 @@ export const executeRelanceMiseEnRelation = async (
     configuration.adaptateurMail,
     configuration.annuaireCot,
     configuration.entrepots,
-    configuration.adaptateurRechercheEntreprise,
     configuration.adaptateurGeographie
   ).execute({
     demandeAide: demandeAide.demandeAide,
     siret: demandeAide.demandeAide.siret,
     secteursActivite: entreprise.secteursActivite,
     typeEntite: entreprise.typeEntite,
+    codeEPCI: entreprise.codeEpci,
   });
 };
 export type AffectationAnnulee = Evenement<{

@@ -783,7 +783,6 @@ class FabriqueDeMiseEnRelationEcoutee extends FabriqueMiseEnRelationConcrete {
           'cot@email.com',
       },
       entrepots,
-      unAdaptateurRechercheEntreprise().construis(),
       new AdaptateurGeographieMemoire()
     );
   }

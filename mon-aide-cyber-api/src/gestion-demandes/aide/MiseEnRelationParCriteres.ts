@@ -17,10 +17,6 @@ import { DemandeAide } from './DemandeAide';
 import { adaptateurServiceChiffrement } from '../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import { AdaptateurGeographie } from '../../adaptateurs/AdaptateurGeographie';
-import {
-  AdaptateurRechercheEntreprise,
-  Entreprise,
-} from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { fabriqueGestionnaireErreurs } from '../../infrastructure/adaptateurs/fabriqueGestionnaireErreurs';
 import { ErreurEnvoiEmail } from '../../api/messagerie/Messagerie';
 
@@ -77,7 +73,6 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       rechercheEmailParDepartement: (departement: Departement) => string;
     },
     private readonly entrepots: Entrepots,
-    private readonly adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise,
     private readonly adaptateurGeo: AdaptateurGeographie
   ) {}
 
@@ -151,11 +146,10 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       donneesMiseEnRelation.demandeAide,
       aidants
     );
-    const entreprise =
-      (await this.adaptateurRechercheEntreprise.rechercheParSiret(
-        donneesMiseEnRelation.siret
-      )) as Entreprise;
-    const epci = await this.adaptateurGeo.epciAvecCode(entreprise.codeEpci);
+
+    const epci = await this.adaptateurGeo.epciAvecCode(
+      donneesMiseEnRelation.codeEPCI
+    );
 
     await this.adaptateurEnvoiMail.envoiToutesLesMisesEnRelation(
       matchingAidants,

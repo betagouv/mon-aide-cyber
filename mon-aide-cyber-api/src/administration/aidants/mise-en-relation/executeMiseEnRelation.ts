@@ -51,7 +51,6 @@ export const executeMiseEnRelation = async (
     configuration.adaptateurEnvoiMail,
     configuration.annuaireCot,
     configuration.entrepots,
-    configuration.adaptateurRechercheEntreprise,
     configuration.adaptateurGeographie
   ).execute({
     demandeAide: {
@@ -67,5 +66,6 @@ export const executeMiseEnRelation = async (
     siret: demandeAide.demandeAide.siret,
     typeEntite: entreprise.typeEntite,
     secteursActivite: entreprise.secteursActivite,
+    codeEPCI: entreprise.codeEpci,
   });
 };

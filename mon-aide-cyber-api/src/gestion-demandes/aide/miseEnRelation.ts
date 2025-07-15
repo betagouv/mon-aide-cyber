@@ -16,7 +16,6 @@ import {
 } from '../../espace-aidant/Aidant';
 import { Entrepots } from '../../domaine/Entrepots';
 import crypto from 'crypto';
-import { AdaptateurRechercheEntreprise } from '../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurGeographie } from '../../adaptateurs/AdaptateurGeographie';
 
 export const envoieConfirmationDemandeAide = async (
@@ -111,6 +110,7 @@ export type DonneesMiseEnRelation = {
     | EntitesEntreprisesPrivees
     | EntitesAssociations;
   secteursActivite: SecteurActivite[];
+  codeEPCI: string;
 };
 
 type DonneesEntite = {
@@ -159,7 +159,6 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
       rechercheEmailParDepartement: (departement: Departement) => string;
     },
     private readonly entrepots: Entrepots,
-    private readonly adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise,
     private readonly adaptateurGeo: AdaptateurGeographie
   ) {}
 
@@ -186,7 +185,6 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
       this.adaptateurEnvoiMail,
       this.annuaireCOT,
       this.entrepots,
-      this.adaptateurRechercheEntreprise,
       this.adaptateurGeo
     );
   }
@@ -198,13 +196,11 @@ export const fabriqueMiseEnRelation = (
     rechercheEmailParDepartement: (departement: Departement) => string;
   },
   entrepots: Entrepots,
-  adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise,
   adaptateurGeo: AdaptateurGeographie
 ): FabriqueMiseEnRelation =>
   new FabriqueMiseEnRelationConcrete(
     adaptateurEnvoiMail,
     annuaireCOT,
     entrepots,
-    adaptateurRechercheEntreprise,
     adaptateurGeo
   );

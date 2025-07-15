@@ -80,7 +80,6 @@ const capteurs: Map<string, Capteur> = new Map([
             parametres.adaptateurEnvoiMail!,
             fabriqueAnnuaireCOT().annuaireCOT(),
             parametres.entrepots,
-            parametres.adaptateurRechercheEntreprise,
             unAdaptateurGeographie()
           ),
           parametres.adaptateurRechercheEntreprise

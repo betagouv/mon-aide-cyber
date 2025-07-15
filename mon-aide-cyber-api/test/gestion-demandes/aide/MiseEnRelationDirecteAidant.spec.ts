@@ -57,6 +57,7 @@ describe('Mise en relation directe avec un Aidant', () => {
       secteursActivite: [{ nom: 'Administration' }],
       typeEntite: entitesPubliques,
       siret: '123456',
+      codeEPCI: 'Bordeaux Métropole',
     });
 
     expect(
@@ -98,6 +99,7 @@ describe('Mise en relation directe avec un Aidant', () => {
       secteursActivite: [{ nom: 'Administration' }],
       typeEntite: entitesPubliques,
       siret: '12345',
+      codeEPCI: 'Bordeaux Métropole',
     });
 
     expect(
@@ -148,6 +150,7 @@ describe('Mise en relation directe avec un Aidant', () => {
       secteursActivite: [{ nom: 'Administration' }],
       typeEntite: entitesPubliques,
       siret: '123456',
+      codeEPCI: 'Bordeaux Métropole',
     });
 
     expect(
