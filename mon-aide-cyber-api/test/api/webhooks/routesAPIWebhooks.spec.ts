@@ -13,6 +13,7 @@ import {
   unConstructeurDeFinAtelierLivestorm,
   unConstructeurDeReponseTally,
 } from './constructeursDeWebhooks';
+import { EntrepotDemandeDevenirAidantMemoireGenerantErreur } from '../../infrastructure/entrepots/memoire/EntrepotDemandeDevenirAidantMemoireGenerantErreur';
 
 describe('Routes Webhooks', () => {
   const testeurMAC = testeurIntegration();
@@ -172,6 +173,49 @@ describe('Routes Webhooks', () => {
 
         expect(reponse.statusCode).toBe(200);
         expect(await testeurMAC.entrepots.aidants().tous()).toHaveLength(2);
+      });
+
+      it('active les comptes même en cas d‘erreur lors de l‘exécution', async () => {
+        const entrepotDemandeDevenirAidant =
+          new EntrepotDemandeDevenirAidantMemoireGenerantErreur();
+        testeurMAC.entrepots.demandesDevenirAidant = () =>
+          entrepotDemandeDevenirAidant;
+        donneesServeur = testeurMAC.initialise();
+        const demandeJeanDupont = uneDemandeDevenirAidant()
+          .ayantPourMail('jean.dupont@email.com')
+          .construis();
+        const demandeJeanMartin = uneDemandeDevenirAidant()
+          .ayantPourMail('jean.martin@email.com')
+          .construis();
+        await testeurMAC.entrepots
+          .demandesDevenirAidant()
+          .persiste(demandeJeanDupont);
+        await testeurMAC.entrepots
+          .demandesDevenirAidant()
+          .persiste(demandeJeanMartin);
+        entrepotDemandeDevenirAidant.surRechercheParMail(
+          'jean.dupont@email.com'
+        );
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/webhooks/livestorm`,
+          unConstructeurDeFinAtelierLivestorm()
+            .creeLe(new Date(Date.parse('2025-06-20T10:00:00')))
+            .avecUnTitre('Atelier Aidant du 20/06/2025')
+            .ajouteUnParticipant('jean.dupont@email.com')
+            .ajouteUnParticipant('jean.martin@email.com')
+            .construis()
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect(await testeurMAC.entrepots.aidants().tous()).toHaveLength(1);
+        expect(
+          await testeurMAC.entrepots
+            .aidants()
+            .rechercheParEmail('jean.martin@email.com')
+        ).toBeDefined();
       });
     });
   });

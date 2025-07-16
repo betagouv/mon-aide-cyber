@@ -88,19 +88,24 @@ const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
       const corpsFinAtelierLivestorm: CorpsFinAtelierLivestorm = requete.body;
       const toutesLesActivations =
         corpsFinAtelierLivestorm.webinar.attendees.map(async (a) => {
-          const demandeDevenirAidant = await entrepots
-            .demandesDevenirAidant()
-            .rechercheDemandeEnCoursParMail(a.email);
-          if (demandeDevenirAidant) {
-            return busCommande.publie<
-              SagaActivationCompteAidant,
-              ActivationCompteAidantFaite
-            >({
-              mail: demandeDevenirAidant.mail,
-              type: 'SagaActivationCompteAidant',
-            });
+          try {
+            const demandeDevenirAidant = await entrepots
+              .demandesDevenirAidant()
+              .rechercheDemandeEnCoursParMail(a.email);
+            if (demandeDevenirAidant) {
+              return busCommande.publie<
+                SagaActivationCompteAidant,
+                ActivationCompteAidantFaite
+              >({
+                mail: demandeDevenirAidant.mail,
+                type: 'SagaActivationCompteAidant',
+              });
+            }
+            return undefined;
+          } catch (e) {
+            console.error(e);
+            return undefined;
           }
-          return undefined;
         });
 
       await Promise.all(toutesLesActivations);

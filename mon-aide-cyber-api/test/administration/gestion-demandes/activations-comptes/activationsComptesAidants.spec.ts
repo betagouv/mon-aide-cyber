@@ -5,33 +5,13 @@ import {
 } from './ConstructeurNouvelImportAidantCSV';
 import { uneDemandeDevenirAidant } from '../../../constructeurs/constructeurDemandesDevenirAidant';
 import { EntrepotsMemoire } from '../../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { EntrepotDemandeDevenirAidantMemoire } from '../../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { DemandeDevenirAidant } from '../../../../src/gestion-demandes/devenir-aidant/DemandeDevenirAidant';
 import { BusCommandeTest } from '../../../infrastructure/bus/BusCommandeTest';
 import {
   activationsComptesAidants,
   ResultatActivationsComptesAidants,
 } from '../../../../src/administration/gestion-demandes/activations-comptes/activationsComptesAidants';
-
-class EntrepotDemandeDevenirAidantMemoireGenerantErreur extends EntrepotDemandeDevenirAidantMemoire {
-  private critereLeveErreur = '';
-
-  rechercheDemandeEnCoursParMail(
-    mail: string
-  ): Promise<DemandeDevenirAidant | undefined> {
-    if (this.critereLeveErreur === mail) {
-      throw new Error('Erreur de recherche');
-    }
-    return super.rechercheDemandeEnCoursParMail(mail);
-  }
-
-  surRechercheParMail(
-    critereLeveErreur: string
-  ): EntrepotDemandeDevenirAidantMemoireGenerantErreur {
-    this.critereLeveErreur = critereLeveErreur;
-    return this;
-  }
-}
+import { EntrepotDemandeDevenirAidantMemoireGenerantErreur } from '../../../infrastructure/entrepots/memoire/EntrepotDemandeDevenirAidantMemoireGenerantErreur';
 
 describe('Validation des comptes Aidants', () => {
   let entrepots = new EntrepotsMemoire();
