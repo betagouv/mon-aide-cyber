@@ -24,11 +24,12 @@ export type CorpsParticipantFinAtelierLivestorm = {
 export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
-  const { busCommande } = configuration;
+  const { busCommande, adaptateurSignatureRequete } = configuration;
 
   routes.post(
     '/activation-compte-aidant',
     bodyParser.json(),
+    adaptateurSignatureRequete.verifie('LIVESTORM'),
     async (
       requete: Request<
         core.ParamsDictionary & CorpsParticipantFinAtelierLivestorm
