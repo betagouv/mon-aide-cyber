@@ -12,6 +12,7 @@
   body {
     font-size: 12px;
     line-height: 1rem;
+
     p {
       font-size: 12px;
     }
@@ -91,9 +92,9 @@
       line-height: 2rem !important;
       border-left: 8px solid var(--couleurs-mac-violet-fonce);
       border-image: linear-gradient(
-                      to top,
-                      var(--couleurs-mac-violet-fonce) 0 85%,
-                      rgba(0, 0, 0, 0) 15%
+              to top,
+              var(--couleurs-mac-violet-fonce) 0 85%,
+              rgba(0, 0, 0, 0) 15%
       );
       border-image-slice: 1;
     }
@@ -107,9 +108,9 @@
       line-height: 2rem !important;
       border-left: 8px solid var(--couleurs-mac-violet-fonce);
       border-image: linear-gradient(
-                      to top,
-                      var(--couleurs-mac-violet-fonce) 0 85%,
-                      rgba(0, 0, 0, 0) 15%
+              to top,
+              var(--couleurs-mac-violet-fonce) 0 85%,
+              rgba(0, 0, 0, 0) 15%
       );
       border-image-slice: 1;
     }
@@ -143,7 +144,8 @@
       background-color: unset;
       color: var(--couleurs-mac-noir) !important;
       font-size: 1.2rem;
-      font-family: "Marianne ExtraBold";
+      font-family: "Marianne", 'sans-serif';
+      font-weight: 700;
       padding: 1rem 0 1.5rem 0;
     }
 
@@ -156,8 +158,8 @@
       padding-bottom: 5mm;
     }
 
-    .section-mesure > div > b{
-      font-family: "Marianne ExtraBold";
+    .section-mesure > div > b {
+      font-family: "Marianne", 'sans-serif';
     }
 
     summary {
@@ -231,8 +233,8 @@
 
     #information-id {
       font-size: 22px;
-      font-family: 'Marianne ExtraBold';
-      font-weight: 800;
+      font-family: 'Marianne', 'sans-serif';
+      font-weight: 700;
     }
 
     p {
@@ -240,8 +242,8 @@
       font-weight: 400;
 
       strong {
-        font-family: 'Marianne ExtraBold';
-        font-weight: 400;
+        font-family: 'Marianne', 'sans-serif';
+        font-weight: 700;
       }
     }
   }

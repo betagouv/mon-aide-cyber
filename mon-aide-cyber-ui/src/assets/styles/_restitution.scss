@@ -28,8 +28,8 @@ html {
       padding-right: 16px;
     }
 
-    font-family: 'Marianne ExtraBold';
-    font-weight: 800;
+    font-family: 'Marianne', 'sans-serif';
+    font-weight: 700;
     line-height: 2rem;
     font-size: 1.375rem;
     margin-bottom: 1rem;
@@ -55,9 +55,10 @@ html {
     user-select: none;
     display: inline-flex;
     color: var(--couleurs-mac-violet-fonce) !important;
-    font-family: 'Marianne ExtraBold';
+    font-family: 'Marianne', 'sans-serif';
     font-size: 22px;
-    line-height: 32px;
+    font-weight: 700;
+    line-height: 28px;
     align-items: baseline;
     padding: 0.75rem 1rem;
     border-top: solid var(--couleurs-mac-violet-leger) 1px;
@@ -141,8 +142,8 @@ html {
 
   #information-id {
     font-size: 22px;
-    font-family: 'Marianne ExtraBold';
-    font-weight: 800;
+    font-family: 'Marianne', 'sans-serif';
+    font-weight: 700;
   }
 
   p {
@@ -150,8 +151,8 @@ html {
     font-weight: 400;
 
     strong {
-      font-family: 'Marianne ExtraBold';
-      font-weight: 400;
+      font-family: 'Marianne', 'sans-serif';
+      font-weight: 700;
     }
   }
 }
@@ -240,18 +241,23 @@ html {
     .badge-gouvernance {
       background-color: var(--couleurs-mac-gouvernance);
     }
+
     .badge-securiteacces {
       background-color: var(--couleurs-mac-securiteacces);
     }
+
     .badge-securiteposte {
       background-color: var(--couleurs-mac-securiteposte);
     }
+
     .badge-securiteinfrastructure {
       background-color: var(--couleurs-mac-securiteinfrastructure);
     }
+
     .badge-sensibilisation {
       background-color: var(--couleurs-mac-sensibilisation);
     }
+
     .badge-reaction {
       background-color: var(--couleurs-mac-reaction);
     }
