@@ -1,5 +1,4 @@
 import { ROUTE_MON_ESPACE } from '../../../../domaine/MoteurDeLiens';
-import { useFeatureFlag } from '../../../../hooks/useFeatureFlag';
 import { useMoteurDeLiens } from '../../../../hooks/useMoteurDeLiens';
 import { TypographieH6 } from '../../../communs/typographie/TypographieH6/TypographieH6';
 import { MenuNavigation } from './menu-navigation/MenuNavigation';
@@ -21,10 +20,6 @@ export const Sidebar = () => {
     'demande-devenir-aidant'
   );
 
-  const { estFonctionaliteActive } = useFeatureFlag(
-    'ESPACE_AIDANT_ECRAN_MES_PREFERENCES'
-  );
-
   return (
     <aside className="barre-navigation-laterale mode-fonce">
       <div className="barre-navigation-laterale-sticky">
@@ -43,24 +38,20 @@ export const Sidebar = () => {
                     },
                   ]
                 : []),
-              ...(estFonctionaliteActive
+              ...(peutAfficherLesPreferencesAidant
                 ? [
-                    ...(peutAfficherLesPreferencesAidant
-                      ? [
-                          {
-                            nom: 'Mes préférences',
-                            route: `${ROUTE_MON_ESPACE}/mes-preferences`,
-                            actif: true,
-                          },
-                        ]
-                      : []),
                     {
-                      nom: 'Mes informations',
-                      route: `${ROUTE_MON_ESPACE}/mes-informations`,
+                      nom: 'Mes préférences',
+                      route: `${ROUTE_MON_ESPACE}/mes-preferences`,
                       actif: true,
                     },
                   ]
                 : []),
+              {
+                nom: 'Mes informations',
+                route: `${ROUTE_MON_ESPACE}/mes-informations`,
+                actif: true,
+              },
             ]}
           />
         </section>
