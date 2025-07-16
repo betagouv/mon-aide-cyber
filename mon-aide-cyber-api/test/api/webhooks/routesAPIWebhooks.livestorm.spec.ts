@@ -4,12 +4,15 @@ import { executeRequete } from '../executeurRequete';
 import { unConstructeurDeParticipantFinAtelierLivestorm } from './constructeursDeWebhooks';
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
+import { AdaptateurSignatureRequeteDeTest } from '../../adaptateurs/AdaptateurSignatureRequeteDeTest';
 
 describe('Route Webhook livestorm', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
 
   beforeEach(() => {
+    testeurMAC.adaptateurSignatureRequete =
+      new AdaptateurSignatureRequeteDeTest();
     donneesServeur = testeurMAC.initialise();
   });
 
@@ -85,6 +88,21 @@ describe('Route Webhook livestorm', () => {
       );
 
       expect(reponse.statusCode).toBe(204);
+    });
+
+    it('La route est protégée', async () => {
+      await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/webhooks/livestorm/activation-compte-aidant`,
+        unConstructeurDeParticipantFinAtelierLivestorm()
+          .emailParticipant('jean.dupont@email.com')
+          .construis()
+      );
+
+      expect(
+        testeurMAC.adaptateurSignatureRequete.verifiePassage('LIVESTORM')
+      ).toBe(true);
     });
   });
 });

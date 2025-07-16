@@ -9,12 +9,15 @@ import {
   CorpsReponseTallyRecue,
   ReponseTallyRecue,
 } from '../../../src/api/webhooks/routesAPIWebhooks.tally';
+import { AdaptateurSignatureRequeteDeTest } from '../../adaptateurs/AdaptateurSignatureRequeteDeTest';
 
 describe('Routes Webhooks Tally', () => {
   const testeurMAC = testeurIntegration();
   let donneesServeur: { app: Express };
 
   beforeEach(() => {
+    testeurMAC.adaptateurSignatureRequete =
+      new AdaptateurSignatureRequeteDeTest();
     donneesServeur = testeurMAC.initialise();
   });
 
@@ -71,7 +74,9 @@ describe('Routes Webhooks Tally', () => {
           .construis()
       );
 
-      expect(testeurMAC.adaptateurSignatureRequete.verifiePassage()).toBe(true);
+      expect(
+        testeurMAC.adaptateurSignatureRequete.verifiePassage('TALLY')
+      ).toBe(true);
     });
 
     it('Ne consigne pas les champs libre (TEXTAREA pour l’instant)', async () => {

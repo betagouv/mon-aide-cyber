@@ -7,19 +7,21 @@ export class AdaptateurSignatureRequeteDeTest
   implements AdaptateurSignatureRequete
 {
   private estPassee = false;
+  private fournisseurAppele: 'TALLY' | 'LIVESTORM' | undefined = undefined;
 
-  verifie(__fournisseur: 'TALLY' | 'LIVESTORM'): RequestHandler {
+  verifie(fournisseur: 'TALLY' | 'LIVESTORM'): RequestHandler {
     return (
       __requete: RequeteUtilisateur,
       __reponse: Response,
       suite: NextFunction
     ) => {
       this.estPassee = true;
+      this.fournisseurAppele = fournisseur;
       return suite();
     };
   }
 
-  verifiePassage() {
-    return this.estPassee;
+  verifiePassage(fournisseurAttendu: 'TALLY' | 'LIVESTORM') {
+    return this.estPassee && this.fournisseurAppele === fournisseurAttendu;
   }
 }
