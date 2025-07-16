@@ -43,37 +43,24 @@ export const Sidebar = () => {
                     },
                   ]
                 : []),
-            ]}
-          />
-        </section>
-        <section>
-          <MenuNavigation
-            elements={[
-              {
-                nom: 'Mon compte',
-                route: `${ROUTE_MON_ESPACE}/mes-informations`,
-                actif: true,
-                enfants: [
-                  ...(estFonctionaliteActive
-                    ? [
-                        {
-                          nom: 'Mes informations',
-                          route: `${ROUTE_MON_ESPACE}/mes-informations`,
-                          actif: true,
-                        },
-                        ...(peutAfficherLesPreferencesAidant
-                          ? [
-                              {
-                                nom: 'Mes préférences',
-                                route: `${ROUTE_MON_ESPACE}/mes-preferences`,
-                                actif: true,
-                              },
-                            ]
-                          : []),
-                      ]
-                    : []),
-                ],
-              },
+              ...(estFonctionaliteActive
+                ? [
+                    ...(peutAfficherLesPreferencesAidant
+                      ? [
+                          {
+                            nom: 'Mes préférences',
+                            route: `${ROUTE_MON_ESPACE}/mes-preferences`,
+                            actif: true,
+                          },
+                        ]
+                      : []),
+                    {
+                      nom: 'Mes informations',
+                      route: `${ROUTE_MON_ESPACE}/mes-informations`,
+                      actif: true,
+                    },
+                  ]
+                : []),
             ]}
           />
         </section>
