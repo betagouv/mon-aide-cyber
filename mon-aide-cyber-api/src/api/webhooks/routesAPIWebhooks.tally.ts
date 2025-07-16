@@ -39,7 +39,7 @@ export const routesAPITally = (configuration: ConfigurationServeur) => {
   routes.post(
     '/',
     bodyParser.json(),
-    adaptateurSignatureRequete.verifie(),
+    adaptateurSignatureRequete.verifie('TALLY'),
     async (
       requete: Request<core.ParamsDictionary & ReponseTally>,
       reponse: Response

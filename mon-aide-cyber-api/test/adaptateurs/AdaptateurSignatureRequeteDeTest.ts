@@ -8,7 +8,7 @@ export class AdaptateurSignatureRequeteDeTest
 {
   private estPassee = false;
 
-  verifie(): RequestHandler {
+  verifie(__fournisseur: 'TALLY' | 'LIVESTORM'): RequestHandler {
     return (
       __requete: RequeteUtilisateur,
       __reponse: Response,
