@@ -135,9 +135,16 @@ type SignaturesHTTP = {
   tally: () => {
     suiviDiagnostic: string;
   };
+  livestorm: () => {
+    finAtelier: string;
+  };
 };
+
 const signatures = (): SignaturesHTTP => {
   return {
+    livestorm: () => ({
+      finAtelier: process.env.SIGNATURE_LIVESTORM_FIN_ATELIER || '',
+    }),
     tally: () => ({
       suiviDiagnostic:
         process.env.SIGNATURE_TALLY_FORMULAIRE_SUIVI_DIAGNOSTIC || '',

@@ -2,6 +2,7 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { AdaptateurSignatureRequete } from './AdaptateurSignatureRequete';
 import crypto from 'crypto';
 import { adaptateurEnvironnement } from './adaptateurEnvironnement';
+import { FournisseurHorloge } from '../infrastructure/horloge/FournisseurHorloge';
 
 interface FournisseurSignature {
   verifie(requete: Request): boolean;
@@ -28,13 +29,48 @@ class FournisseurSignatureTally implements FournisseurSignature {
   }
 }
 
+class FournisseurSignatureLivestorm implements FournisseurSignature {
+  verifie(requete: Request): boolean {
+    const corpsDeRequete = requete.body;
+
+    const [payloadSignature, payloadTimestamp] = (
+      requete.headers['x-livestorm-signature'] as string
+    )?.split(',');
+
+    const ageTolere = 5;
+
+    const secretLivestormFinAtelier = adaptateurEnvironnement
+      .signatures()
+      .livestorm().finAtelier;
+
+    const signatureCalculee = crypto
+      .createHash('sha256')
+      .update(
+        payloadTimestamp +
+          secretLivestormFinAtelier +
+          JSON.stringify(corpsDeRequete)
+      )
+      .digest('hex');
+
+    return (
+      payloadSignature === signatureCalculee &&
+      FournisseurHorloge.maintenant().getTime() / 1000 -
+        Number(payloadTimestamp) <=
+        ageTolere
+    );
+  }
+}
+
 export class AdaptateurSignatureRequeteHTTP
   implements AdaptateurSignatureRequete
 {
   private readonly fournisseursDeSignature: Map<
     NomFournisseur,
     FournisseurSignature
-  > = new Map([['TALLY', new FournisseurSignatureTally()]]);
+  > = new Map([
+    ['TALLY', new FournisseurSignatureTally()],
+    ['LIVESTORM', new FournisseurSignatureLivestorm()],
+  ]);
 
   verifie(fournisseur: NomFournisseur): RequestHandler {
     return (requete: Request, reponse: Response, suite: NextFunction) => {
