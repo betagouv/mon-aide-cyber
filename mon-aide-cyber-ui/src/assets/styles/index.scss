@@ -103,7 +103,7 @@ html {
 }
 
 @font-face {
-  font-family: 'Marianne ExtraBold';
+  font-family: 'Marianne', 'sans-serif';
   src: url('/fontes/Marianne-ExtraBold.woff2') format('woff2');
 }
 
@@ -112,8 +112,8 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Marianne ExtraBold';
-  font-weight: 800;
+  font-family: 'Marianne', 'sans-serif';
+  font-weight: 700;
 }
 
 .composant-erreur {
