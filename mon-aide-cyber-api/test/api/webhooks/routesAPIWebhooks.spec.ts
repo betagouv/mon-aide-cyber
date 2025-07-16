@@ -143,6 +143,36 @@ describe('Routes Webhooks', () => {
             .rechercheParEmail('jean.dupont@email.com')
         ).toBeDefined();
       });
+
+      it('active les comptes de plusieurs Aidants', async () => {
+        const demandeJeanDupont = uneDemandeDevenirAidant()
+          .ayantPourMail('jean.dupont@email.com')
+          .construis();
+        const demandeJeanMartin = uneDemandeDevenirAidant()
+          .ayantPourMail('jean.martin@email.com')
+          .construis();
+        await testeurMAC.entrepots
+          .demandesDevenirAidant()
+          .persiste(demandeJeanDupont);
+        await testeurMAC.entrepots
+          .demandesDevenirAidant()
+          .persiste(demandeJeanMartin);
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/webhooks/livestorm`,
+          unConstructeurDeFinAtelierLivestorm()
+            .creeLe(new Date(Date.parse('2025-06-20T10:00:00')))
+            .avecUnTitre('Atelier Aidant du 20/06/2025')
+            .ajouteUnParticipant('jean.dupont@email.com')
+            .ajouteUnParticipant('jean.martin@email.com')
+            .construis()
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect(await testeurMAC.entrepots.aidants().tous()).toHaveLength(2);
+      });
     });
   });
 });

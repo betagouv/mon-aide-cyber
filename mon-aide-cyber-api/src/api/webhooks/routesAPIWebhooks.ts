@@ -85,21 +85,26 @@ const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
       requete: Request<core.ParamsDictionary & CorpsFinAtelierLivestorm>,
       reponse: Response
     ) => {
-      const demandeDevenirAidant = await entrepots
-        .demandesDevenirAidant()
-        .rechercheDemandeEnCoursParMail(
-          requete.body.webinar.attendees[0].email
-        );
-
-      if (demandeDevenirAidant) {
-        await busCommande.publie<
-          SagaActivationCompteAidant,
-          ActivationCompteAidantFaite
-        >({
-          mail: demandeDevenirAidant.mail,
-          type: 'SagaActivationCompteAidant',
+      const corpsFinAtelierLivestorm: CorpsFinAtelierLivestorm = requete.body;
+      const toutesLesActivations =
+        corpsFinAtelierLivestorm.webinar.attendees.map(async (a) => {
+          const demandeDevenirAidant = await entrepots
+            .demandesDevenirAidant()
+            .rechercheDemandeEnCoursParMail(a.email);
+          if (demandeDevenirAidant) {
+            return busCommande.publie<
+              SagaActivationCompteAidant,
+              ActivationCompteAidantFaite
+            >({
+              mail: demandeDevenirAidant.mail,
+              type: 'SagaActivationCompteAidant',
+            });
+          }
+          return undefined;
         });
-      }
+
+      await Promise.all(toutesLesActivations);
+
       return reponse.sendStatus(200);
     }
   );
