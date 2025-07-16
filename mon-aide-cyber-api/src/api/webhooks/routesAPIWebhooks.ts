@@ -4,6 +4,10 @@ import { Evenement } from '../../domaine/BusEvenement';
 import bodyParser from 'body-parser';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import * as core from 'express-serve-static-core';
+import {
+  ActivationCompteAidantFaite,
+  SagaActivationCompteAidant,
+} from '../../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 
 export type CorpsReponseTallyRecue = {
   dateReponse: string;
@@ -61,10 +65,53 @@ const routesAPITally = (configuration: ConfigurationServeur) => {
   return routes;
 };
 
+export type CorpsFinAtelierLivestorm = {
+  webinar: {
+    created_at: string;
+    title: string;
+    attendees: { email: string }[];
+  };
+};
+
+const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
+  const routes: Router = express.Router();
+
+  const { entrepots, busCommande } = configuration;
+
+  routes.post(
+    '/',
+    bodyParser.json(),
+    async (
+      requete: Request<core.ParamsDictionary & CorpsFinAtelierLivestorm>,
+      reponse: Response
+    ) => {
+      const demandeDevenirAidant = await entrepots
+        .demandesDevenirAidant()
+        .rechercheDemandeEnCoursParMail(
+          requete.body.webinar.attendees[0].email
+        );
+
+      if (demandeDevenirAidant) {
+        await busCommande.publie<
+          SagaActivationCompteAidant,
+          ActivationCompteAidantFaite
+        >({
+          mail: demandeDevenirAidant.mail,
+          type: 'SagaActivationCompteAidant',
+        });
+      }
+      return reponse.sendStatus(200);
+    }
+  );
+
+  return routes;
+};
+
 export const routesAPIWebhooks = (configuration: ConfigurationServeur) => {
   const routes: Router = express.Router();
 
   routes.use('/tally', routesAPITally(configuration));
+  routes.use('/livestorm', routesAPILiveStorm(configuration));
 
   return routes;
 };
