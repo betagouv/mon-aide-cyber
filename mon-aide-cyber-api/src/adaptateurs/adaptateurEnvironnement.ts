@@ -136,14 +136,14 @@ type SignaturesHTTP = {
     suiviDiagnostic: string;
   };
   livestorm: () => {
-    finAtelier: string;
+    finAtelier: string | undefined;
   };
 };
 
 const signatures = (): SignaturesHTTP => {
   return {
     livestorm: () => ({
-      finAtelier: process.env.SIGNATURE_LIVESTORM_FIN_ATELIER || '',
+      finAtelier: process.env.SIGNATURE_LIVESTORM_FIN_ATELIER || undefined,
     }),
     tally: () => ({
       suiviDiagnostic:
