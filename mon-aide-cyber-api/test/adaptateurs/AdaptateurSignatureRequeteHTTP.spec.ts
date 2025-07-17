@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { AdaptateurSignatureRequeteHTTP } from '../../src/adaptateurs/AdaptateurSignatureRequeteHTTP';
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { FournisseurHorloge } from '../../src/infrastructure/horloge/FournisseurHorloge';
+import { adaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement';
 
 describe('Signature Requete HTTP', () => {
   it('Vérifie la signature TALLY', async () => {
@@ -59,11 +60,19 @@ describe('Signature Requete HTTP', () => {
   });
 
   it('Vérifie la signature LIVESTORM', async () => {
-    FournisseurHorlogeDeTest.initialise(new Date('2025-07-16T08:00:00'));
+    FournisseurHorlogeDeTest.initialise(new Date('2025-07-16T08:00:00Z'));
     let suiteAppelee = false;
+    adaptateurEnvironnement.signatures = () => ({
+      livestorm: () => ({
+        finAtelier: 'signature',
+      }),
+      tally: () => ({
+        suiviDiagnostic: '',
+      }),
+    });
     const requete: Request = {
       headers: {
-        'x-livestorm-signature': `fc99757d086ef7278ff266e46769f8bbbe64c24fe7473d6d31cab501122ede08,${FournisseurHorloge.maintenant().getTime()}`,
+        'x-livestorm-signature': `bcee8607a976dee318a3aa34fa780a4a9ce777b4feb4a6ab218c24c45ca7953e,${FournisseurHorloge.maintenant().getTime()}`,
       },
       body: {
         uneClef: 'valeur',

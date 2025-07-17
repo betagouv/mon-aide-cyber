@@ -31,6 +31,12 @@ class FournisseurSignatureTally implements FournisseurSignature {
 
 class FournisseurSignatureLivestorm implements FournisseurSignature {
   verifie(requete: Request): boolean {
+    const secretLivestormFinAtelier = adaptateurEnvironnement
+      .signatures()
+      .livestorm().finAtelier;
+
+    if (!secretLivestormFinAtelier) return false;
+
     const corpsDeRequete = requete.body;
 
     const [payloadSignature, payloadTimestamp] = (
@@ -38,10 +44,6 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
     )?.split(',');
 
     const ageTolere = 5;
-
-    const secretLivestormFinAtelier = adaptateurEnvironnement
-      .signatures()
-      .livestorm().finAtelier;
 
     const signatureCalculee = crypto
       .createHash('sha256')
