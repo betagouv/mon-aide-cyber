@@ -35,11 +35,17 @@ export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
       >,
       reponse: Response
     ) => {
-      const emailParticipant = (
-        requete.body as CorpsParticipantFinAtelierLivestorm
-      ).data.attributes.registrant_details.fields.find(
-        (f) => f.id === 'email'
-      )?.value;
+      const corpsParticipantFinAtelierLivestorm: CorpsParticipantFinAtelierLivestorm =
+        requete.body;
+
+      if (corpsParticipantFinAtelierLivestorm.data.type !== 'people') {
+        return reponse.sendStatus(204);
+      }
+
+      const emailParticipant =
+        corpsParticipantFinAtelierLivestorm.data.attributes.registrant_details.fields.find(
+          (f) => f.id === 'email'
+        )?.value;
 
       await busCommande.publie<
         SagaActivationCompteAidant,

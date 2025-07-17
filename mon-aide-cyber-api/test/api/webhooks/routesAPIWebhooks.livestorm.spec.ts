@@ -69,5 +69,22 @@ describe('Route Webhook livestorm', () => {
           .rechercheParEmail('jean.dupont@email.com')
       ).toBeDefined();
     });
+
+    it('renvoie une réponse HTTP 204 si la requête Livestorm n‘est pas du type "people" (correspond à l‘événement people.attended)', async () => {
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/webhooks/livestorm/activation-compte-aidant`,
+        {
+          data: {
+            ...unConstructeurDeParticipantFinAtelierLivestorm().construis()
+              .data,
+            type: 'session',
+          },
+        }
+      );
+
+      expect(reponse.statusCode).toBe(204);
+    });
   });
 });
