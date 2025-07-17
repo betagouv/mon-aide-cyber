@@ -155,6 +155,39 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     });
   });
 
+  it('Publie l’événement MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE en précisant l‘origine de l‘activation', async () => {
+    FournisseurHorlogeDeTest.initialise(
+      new Date(Date.parse('2024-07-07T13:44:38'))
+    );
+    const demande = unConstructeurDeDemandeDevenirAidant().construis();
+    await entrepots.demandesDevenirAidant().persiste(demande);
+
+    await new CapteurSagaActivationCompteAidant(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      busCommande
+    ).execute({
+      mail: demande.mail,
+      origine: 'formation-livestorm',
+      type: 'SagaActivationCompteAidant',
+    });
+
+    expect(
+      busEvenement.consommateursTestes.get(
+        'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE'
+      )?.[0].evenementConsomme
+    ).toStrictEqual<MailCompteAidantActiveEnvoye>({
+      identifiant: expect.any(String),
+      type: 'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        identifiantDemande: demande.identifiant,
+        origine: 'formation-livestorm',
+      },
+    });
+  });
+
   it('Publie l’événement MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE en cas d’erreur d’envoi de mail', async () => {
     const mailDeLAidant = 'jean.dupont@mail.com';
     const demande = unConstructeurDeDemandeDevenirAidant()

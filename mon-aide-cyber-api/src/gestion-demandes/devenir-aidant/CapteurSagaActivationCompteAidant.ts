@@ -11,6 +11,7 @@ import { SagaDemandeAidantCreeEspaceAidant } from './CapteurSagaDemandeAidantCre
 export type SagaActivationCompteAidant = Omit<Saga, 'type'> & {
   type: 'SagaActivationCompteAidant';
   mail: string;
+  origine?: 'manuelle' | 'formation-livestorm';
 };
 export type ActivationCompteAidantFaite = {
   identifiantDemande: UUID;
@@ -52,6 +53,7 @@ export class CapteurSagaActivationCompteAidant
           await this.busEvenement.publie<MailCompteAidantActiveEnvoye>({
             corps: {
               identifiantDemande: demande.identifiant,
+              origine: commande.origine as string,
             },
             date: FournisseurHorloge.maintenant(),
             identifiant: adaptateurUUID.genereUUID(),
@@ -66,6 +68,7 @@ export class CapteurSagaActivationCompteAidant
           .publie<MailCompteAidantActiveNonEnvoye>({
             corps: {
               identifiantDemande: demande.identifiant,
+              origine: commande.origine as string,
             },
             date: FournisseurHorloge.maintenant(),
             identifiant: adaptateurUUID.genereUUID(),
@@ -90,6 +93,7 @@ export class CapteurSagaActivationCompteAidant
 
 export type MailCompteAidantActiveEnvoye = Evenement<{
   identifiantDemande: UUID;
+  origine: string;
 }>;
 
 export type MailCompteAidantActiveNonEnvoye = MailCompteAidantActiveEnvoye;
