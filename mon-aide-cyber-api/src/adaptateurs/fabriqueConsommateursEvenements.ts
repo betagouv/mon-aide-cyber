@@ -6,6 +6,7 @@ import {
   demandeAidePourvue,
   demandeDevenirAidantCree,
   demandeDevenirAidantespaceAidantCree,
+  demandeDevenirAidantInexistanteRecue,
   demandeDevenirAidantModifiee,
   diagnosticLance,
   diagnosticLibreAccesLance,
@@ -110,6 +111,10 @@ export const fabriqueConsommateursEvenements = (
     [
       'DEMANDE_DEVENIR_AIDANT_ESPACE_AIDANT_CREE',
       [demandeDevenirAidantespaceAidantCree(entrepotJournalisation)],
+    ],
+    [
+      'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
+      [demandeDevenirAidantInexistanteRecue()],
     ],
     [
       'PREFERENCES_AIDANT_MODIFIEES',

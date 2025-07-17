@@ -4,6 +4,10 @@ const sentry = () => ({
   tracesSampleRate: () => Number(process.env.SENTRY_TRACES_SAMPLE_RATE) || 0,
 });
 
+const mattermost = () => ({
+  clefWebhook: () => process.env.WEBHOOK_MATTERMOST_AIDANT_CREE_INCONNU || '',
+});
+
 const messagerie = () => ({
   clefAPI: () => process.env.BREVO_CLEF_API || '',
   emailMAC: () => process.env.EMAIL_CONTACT_MAC_DESTINATAIRE || '',
@@ -183,6 +187,7 @@ const metabase = (): {
 
 const adaptateurEnvironnement = {
   messagerie,
+  mattermost,
   mac,
   mesServicesCyber,
   proConnect,

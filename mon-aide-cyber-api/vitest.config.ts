@@ -14,6 +14,7 @@ export default defineProject({
       PRO_CONNECT_ACTIF: 'true',
       SIRET_GENDARMERIE: 'GENDARMERIE',
       FEATURE_FLAG_ESPACE_AIDANT_ECRAN_PROFIL_MODIFIER_PROFIL: 'true',
+      URL_LAB_ANSSI_UTILITAIRES: 'http://lab-anssi-utilitaires.domain',
     },
     onConsoleLog(log: string): boolean {
       return !log.includes('Une erreur est survenue:');

@@ -3,6 +3,7 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import {
   aidantCree,
+  demandeDevenirAidantInexistanteRecue,
   diagnosticLance,
   reponseAjoutee,
   restitutionLancee,
@@ -21,6 +22,8 @@ import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscrit
 import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { uneDemandeAide } from '../gestion-demandes/aide/ConstructeurDemandeAide';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
+import { DemandeInexistanteRecue } from '../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
+import { Messagerie } from '../../src/infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
 
 describe('Évènements', () => {
   beforeEach(() => {
@@ -177,7 +180,7 @@ describe('Évènements', () => {
       const identifiant = crypto.randomUUID();
       const entrepot = new EntrepotEvenementJournalMemoire();
 
-      aidantCree(entrepot).consomme({
+      await aidantCree(entrepot).consomme({
         date: FournisseurHorloge.maintenant(),
         identifiant,
         type: 'AIDANT_CREE',
@@ -191,6 +194,36 @@ describe('Évènements', () => {
           type: 'AIDANT_CREE',
         },
       ]);
+    });
+  });
+
+  describe('Activation compte Aidant', () => {
+    it('publie sur la messagerie', async () => {
+      let messageEnvoye: string | null = null;
+
+      const messagerie: Messagerie = {
+        envoieMessageMarkdown: async (message: string) => {
+          messageEnvoye = message;
+        },
+      };
+
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const identifiant = crypto.randomUUID();
+
+      await demandeDevenirAidantInexistanteRecue(
+        messagerie
+      ).consomme<DemandeInexistanteRecue>({
+        identifiant,
+        type: 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          emailDemande: 'mail-inconnu@mail.com',
+        },
+      });
+
+      expect(messageEnvoye).toStrictEqual(
+        "#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : mail-inconnu@mail.com"
+      );
     });
   });
 });
