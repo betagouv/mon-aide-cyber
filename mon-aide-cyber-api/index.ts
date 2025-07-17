@@ -30,6 +30,7 @@ import { adaptateurRepertoireDeContacts } from './src/adaptateurs/adaptateurRepe
 import { adaptateurRechercheEntreprise } from './src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { unAdaptateurCmsCrisp } from './src/adaptateurs/AdaptateurCmsCrispMAC';
 import { AdaptateurSignatureRequeteHTTP } from './src/adaptateurs/AdaptateurSignatureRequeteHTTP';
+import { adaptateurMessagerie } from './src/adaptateurs/adaptateurMessagerie';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -93,6 +94,7 @@ const serveurMAC = serveur.creeServeur({
   adaptateurDeVerificationDeRelations:
     new AdaptateurDeVerificationDeTypeDeRelationMAC(adaptateurRelations),
   repertoireDeContacts: adaptateurRepertoireDeContacts(),
+  messagerie: adaptateurMessagerie(),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: adaptateurEnvoiMessage,
   serviceDeChiffrement: adaptateurServiceChiffrement(),

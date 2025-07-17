@@ -42,6 +42,7 @@ import { AdaptateurCmsCrispMAC } from './adaptateurs/AdaptateurCmsCrispMAC';
 import { interdisLaMiseEnCache } from './infrastructure/middlewares/middlewares';
 
 import { AdaptateurSignatureRequete } from './adaptateurs/AdaptateurSignatureRequete';
+import { Messagerie } from './infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -63,6 +64,7 @@ export type ConfigurationServeur = {
   adaptateurDeVerificationDesAcces: AdaptateurDeVerificationDesAcces;
   adaptateurDeVerificationDeRelations: AdaptateurDeVerificationDeTypeDeRelation;
   repertoireDeContacts: RepertoireDeContacts;
+  messagerie: Messagerie;
   adaptateurProConnect: AdaptateurProConnect;
   serviceDeChiffrement: ServiceDeChiffrement;
   avecProtectionCsrf: boolean;

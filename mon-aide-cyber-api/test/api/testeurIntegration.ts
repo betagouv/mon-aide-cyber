@@ -35,6 +35,8 @@ import { AdaptateurCmsCrispMAC } from '../../src/adaptateurs/AdaptateurCmsCrispM
 import { AdaptateurRelations } from '../../src/relation/AdaptateurRelations';
 import { AdaptateurSignatureRequeteDeTest } from '../adaptateurs/AdaptateurSignatureRequeteDeTest';
 import { BusCommandeMACIntercepte } from '../infrastructure/bus/BusCommandeMACIntercepte';
+import { Messagerie } from '../../src/infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
+import { AdaptateurMessagerieMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurMessagerieMemoire';
 
 const PORT_DISPONIBLE = 0;
 
@@ -66,6 +68,7 @@ class TesteurIntegrationMAC {
     public repertoireDeContacts = new AdaptateurRepertoireDeContactsMemoire(),
     public gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire(),
     public adaptateurEnvoieMessage: AdaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire(),
+    public messagerie: Messagerie = new AdaptateurMessagerieMemoire(),
     public serviceDeChiffrement: ServiceDeChiffrement = new ServiceDeChiffrementClair(),
     public adaptateurDeGestionDeCookies: AdaptateurDeGestionDeCookiesDeTest = new AdaptateurDeGestionDeCookiesDeTest(),
     public adaptateursRestitution: AdaptateursRestitution = {
@@ -132,6 +135,7 @@ class TesteurIntegrationMAC {
       adaptateursRestitution: this.adaptateursRestitution,
       avecProtectionCsrf: false,
       adaptateurEnvoiMessage: this.adaptateurEnvoieMessage,
+      messagerie: this.messagerie,
       serviceDeChiffrement: this.serviceDeChiffrement,
       adaptateurMetabase: this.adaptateurMetabase,
       adaptateurDeVerificationDeRelations:

@@ -5,6 +5,7 @@ import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest'
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import {
   CapteurSagaActivationCompteAidant,
+  DemandeInexistanteRecue,
   ErreurEnvoiMailCreationCompteAidant,
   MailCompteAidantActiveEnvoye,
   MailCompteAidantActiveNonEnvoye,
@@ -98,6 +99,33 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       )?.[0].evenementConsomme
     ).toBeUndefined();
     expect(adaptateurEnvoiMail.mailNonEnvoye()).toBe(true);
+  });
+
+  it('Publie l‘événement DEMANDE_INEXISTANTE_RECUE pour une demande inexistante', async () => {
+    FournisseurHorlogeDeTest.initialise(new Date());
+    await new CapteurSagaActivationCompteAidant(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      new BusCommandeTest()
+    ).execute({
+      mail: 'mail@noix.fr',
+      type: 'SagaActivationCompteAidant',
+    });
+
+    expect(busEvenement.evenementRecu).toStrictEqual<DemandeInexistanteRecue>({
+      identifiant: expect.any(String),
+      type: 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        emailDemande: 'mail@noix.fr',
+      },
+    });
+    expect(
+      busEvenement.consommateursTestes.get(
+        'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE'
+      )?.[0].evenementConsomme
+    ).toBeDefined();
   });
 
   it('Ne peut envoyer le mail pour une demande déjà traitée', async () => {

@@ -78,6 +78,14 @@ export class CapteurSagaActivationCompteAidant
           });
       }
     }
+    await this.busEvenement.publie<DemandeInexistanteRecue>({
+      identifiant: crypto.randomUUID(),
+      type: 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        emailDemande: commande.mail,
+      },
+    });
     return undefined;
   }
 
@@ -90,6 +98,10 @@ export class CapteurSagaActivationCompteAidant
 
 export type MailCompteAidantActiveEnvoye = Evenement<{
   identifiantDemande: UUID;
+}>;
+
+export type DemandeInexistanteRecue = Evenement<{
+  emailDemande: string;
 }>;
 
 export type MailCompteAidantActiveNonEnvoye = MailCompteAidantActiveEnvoye;
