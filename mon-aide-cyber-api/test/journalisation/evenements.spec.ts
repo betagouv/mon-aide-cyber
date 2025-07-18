@@ -307,5 +307,33 @@ describe('Évènements', () => {
         },
       });
     });
+
+    it('publie sur la messagerie lorsque le mail d‘activation n‘a pu être envoyé', async () => {
+      let messageEnvoye: string | null = null;
+      const messagerie: Messagerie = {
+        envoieMessageMarkdown: async (message: string) => {
+          messageEnvoye = message;
+        },
+      };
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const identifiant = crypto.randomUUID();
+
+      await mailCreationCompteAidantNonEnvoye(
+        new EntrepotEvenementJournalMemoire(),
+        messagerie
+      ).consomme<MailCompteAidantActiveNonEnvoye>({
+        identifiant,
+        type: 'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          identifiantDemande: identifiant,
+          erreur: 'Erreur lors de l‘envoi',
+        },
+      });
+
+      expect(messageEnvoye).toStrictEqual(
+        `#### :alert: Activation compte Aidant : \n > Le mail d‘activation n‘ pu être remis pour la demande ${identifiant} (erreur: 'Erreur lors de l‘envoi')`
+      );
+    });
   });
 });
