@@ -9,7 +9,10 @@ import {
 } from '../gestion-demandes/aide/DemandeAide';
 import { Messagerie } from '../infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
 import { adaptateurMessagerie } from '../adaptateurs/adaptateurMessagerie';
-import { DemandeInexistanteRecue } from '../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
+import {
+  DemandeInexistanteRecue,
+  MailCompteAidantActiveEnvoye,
+} from '../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 
 const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
   new (class implements ConsommateurEvenement {
@@ -68,6 +71,27 @@ const consommateurDemandeDevenirAidantInexsitanteRecue =
       }
     })();
 
+const consommateurCompteAidantActive =
+  () =>
+  (
+    entrepotJournalisation: EntrepotEvenementJournal,
+    messagerie: Messagerie = adaptateurMessagerie()
+  ) => {
+    return new (class implements ConsommateurEvenement {
+      async consomme<E extends Evenement<unknown>>(
+        evenement: E
+      ): Promise<void> {
+        const compteAidantActive = evenement as MailCompteAidantActiveEnvoye;
+        await entrepotJournalisation.persiste(
+          genereEvenement(compteAidantActive)
+        );
+        await messagerie.envoieMessageMarkdown(
+          `#### :partying_face: Activation compte Aidant : \n > Activation faite pour la demande ${compteAidantActive.identifiant}`
+        );
+      }
+    })();
+  };
+
 export const diagnosticLance = consommateurDiagnosticLance();
 
 export const reponseAjoutee = consommateurEvenement();
@@ -81,7 +105,7 @@ export const affectationAnnulee = consommateurEvenement();
 export const demandeDevenirAidantCree = consommateurEvenement();
 export const demandeDevenirAidantModifiee = consommateurEvenement();
 
-export const mailCreationCompteAidantEnvoye = consommateurEvenement();
+export const mailCreationCompteAidantEnvoye = consommateurCompteAidantActive();
 
 export const mailCreationCompteAidantNonEnvoye = consommateurEvenement();
 
