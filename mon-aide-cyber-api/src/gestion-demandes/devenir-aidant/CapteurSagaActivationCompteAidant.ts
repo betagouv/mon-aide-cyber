@@ -61,11 +61,12 @@ export class CapteurSagaActivationCompteAidant
         } catch (__e) {
           return envoiMailCreationCompte(demande);
         }
-      } catch (__e) {
+      } catch (e: unknown | Error) {
         await this.busEvenement
           .publie<MailCompteAidantActiveNonEnvoye>({
             corps: {
               identifiantDemande: demande.identifiant,
+              erreur: e instanceof Error ? e.message : (e as string),
             },
             date: FournisseurHorloge.maintenant(),
             identifiant: adaptateurUUID.genereUUID(),
@@ -104,7 +105,10 @@ export type DemandeInexistanteRecue = Evenement<{
   emailDemande: string;
 }>;
 
-export type MailCompteAidantActiveNonEnvoye = MailCompteAidantActiveEnvoye;
+export type MailCompteAidantActiveNonEnvoye = Evenement<{
+  identifiantDemande: UUID;
+  erreur: string;
+}>;
 
 export class ErreurEnvoiMailCreationCompteAidant extends Error {
   constructor(message: string) {
