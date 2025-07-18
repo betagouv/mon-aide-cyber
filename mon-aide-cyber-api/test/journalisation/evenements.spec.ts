@@ -6,6 +6,7 @@ import {
   demandeDevenirAidantInexistanteRecue,
   diagnosticLance,
   mailCreationCompteAidantEnvoye,
+  mailCreationCompteAidantNonEnvoye,
   reponseAjoutee,
   restitutionLancee,
 } from '../../src/journalisation/evenements';
@@ -26,6 +27,7 @@ import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/Ent
 import {
   DemandeInexistanteRecue,
   MailCompteAidantActiveEnvoye,
+  MailCompteAidantActiveNonEnvoye,
 } from '../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 import { Messagerie } from '../../src/infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
 
@@ -275,6 +277,35 @@ describe('Évènements', () => {
       expect(messageEnvoye).toStrictEqual(
         `#### :partying_face: Activation compte Aidant : \n > Activation faite pour la demande ${identifiant}`
       );
+    });
+
+    it("journalise l'événément MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE", async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const identifiant = crypto.randomUUID();
+
+      const entrepotEvenementJournalMemoire =
+        new EntrepotEvenementJournalMemoire();
+      await mailCreationCompteAidantNonEnvoye(
+        entrepotEvenementJournalMemoire
+      ).consomme<MailCompteAidantActiveNonEnvoye>({
+        identifiant,
+        type: 'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          identifiantDemande: identifiant,
+          erreur: 'Erreur',
+        },
+      });
+
+      const tousLesEvenements = await entrepotEvenementJournalMemoire.tous();
+      expect(tousLesEvenements[0]).toStrictEqual<Publication>({
+        identifiant: expect.any(String),
+        date: FournisseurHorloge.maintenant(),
+        type: 'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE',
+        donnees: {
+          identifiantDemande: identifiant,
+        },
+      });
     });
   });
 });
