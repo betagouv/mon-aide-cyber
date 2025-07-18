@@ -3,8 +3,8 @@ import {
   CreationContactBrevo,
   CreationEvenement,
   EmailBrevo,
-  EnvoiMailBrevoTexteBrut,
   EnvoiMailBrevoAvecTemplate,
+  EnvoiMailBrevoTexteBrut,
   PieceJointeBrevo,
   RechercheContactBrevo,
   RequeteBrevo,
@@ -26,7 +26,7 @@ abstract class ConstructeurBrevo<T> {
       headers: {
         'Content-Type': 'application/json',
         accept: 'application/json',
-        'api-key': adaptateurEnvironnement.messagerie().clefAPI(),
+        'api-key': adaptateurEnvironnement.messagerie().brevo().clefAPI(),
       },
     };
   }

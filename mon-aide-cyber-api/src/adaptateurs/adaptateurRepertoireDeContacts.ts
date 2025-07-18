@@ -4,6 +4,6 @@ import { AdaptateurRepertoireDeContactsMemoire } from '../infrastructure/adaptat
 import { RepertoireDeContacts } from '../contacts/RepertoireDeContacts';
 
 export const adaptateurRepertoireDeContacts = (): RepertoireDeContacts =>
-  adaptateurEnvironnement.messagerie().clefAPI() !== ''
+  adaptateurEnvironnement.messagerie().brevo().clefAPI() !== ''
     ? new AdaptateurRepertoireDeContactsBrevo()
     : new AdaptateurRepertoireDeContactsMemoire();

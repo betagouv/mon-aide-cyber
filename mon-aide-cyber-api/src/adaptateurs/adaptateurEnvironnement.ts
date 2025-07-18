@@ -4,17 +4,18 @@ const sentry = () => ({
   tracesSampleRate: () => Number(process.env.SENTRY_TRACES_SAMPLE_RATE) || 0,
 });
 
-const mattermost = () => ({
-  webhook: () =>
-    process.env.WEBHOOK_MATTERMOST_DEMANDE_DEVENIR_AIDANT_NON_TROUVEE || '',
-});
-
 const messagerie = () => ({
-  clefAPI: () => process.env.BREVO_CLEF_API || '',
-  emailMAC: () => process.env.EMAIL_CONTACT_MAC_DESTINATAIRE || '',
-  copieMAC: () => process.env.EMAIL_CONTACT_MAC_COPIE || '',
-  expediteurMAC: () => process.env.EMAIL_CONTACT_MAC_EXPEDITEUR || '',
-  expediteurInfoMAC: () => process.env.EMAIL_INFO_MAC_EXPEDITEUR || '',
+  mattermost: () => ({
+    webhook: () =>
+      process.env.WEBHOOK_MATTERMOST_DEMANDE_DEVENIR_AIDANT_NON_TROUVEE || '',
+  }),
+  brevo: () => ({
+    clefAPI: () => process.env.BREVO_CLEF_API || '',
+    emailMAC: () => process.env.EMAIL_CONTACT_MAC_DESTINATAIRE || '',
+    copieMAC: () => process.env.EMAIL_CONTACT_MAC_COPIE || '',
+    expediteurMAC: () => process.env.EMAIL_CONTACT_MAC_EXPEDITEUR || '',
+    expediteurInfoMAC: () => process.env.EMAIL_INFO_MAC_EXPEDITEUR || '',
+  }),
 });
 
 const brevo = () => {
@@ -188,7 +189,6 @@ const metabase = (): {
 
 const adaptateurEnvironnement = {
   messagerie,
-  mattermost,
   mac,
   mesServicesCyber,
   proConnect,

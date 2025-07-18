@@ -6,6 +6,6 @@ import { adaptateurEnvironnement } from './adaptateurEnvironnement';
 import { AdaptateurMessagerieMemoire } from '../infrastructure/adaptateurs/AdaptateurMessagerieMemoire';
 
 export const adaptateurMessagerie = (): Messagerie =>
-  adaptateurEnvironnement.mattermost().webhook() !== ''
+  adaptateurEnvironnement.messagerie().mattermost().webhook() !== ''
     ? new AdaptateurMessagerieMattermost()
     : new AdaptateurMessagerieMemoire();
