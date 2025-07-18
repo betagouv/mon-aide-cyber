@@ -9,7 +9,7 @@ export class AdaptateurMessagerieMattermost implements Messagerie {
     const urlWebhook = adaptateurEnvironnement
       .messagerie()
       .mattermost()
-      .webhook();
+      .webhookActivationCompteAidant();
     await fetch(urlWebhook, {
       method: 'POST',
       body: JSON.stringify({

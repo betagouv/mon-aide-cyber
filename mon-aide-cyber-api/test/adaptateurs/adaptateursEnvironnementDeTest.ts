@@ -9,7 +9,7 @@ type ParametresMessagerieTest = {
 export const adaptateursEnvironnementDeTest = {
   messagerie: (parametresMessagerie?: ParametresMessagerieTest) => ({
     mattermost: () => ({
-      webhook: () => '',
+      webhookActivationCompteAidant: () => '',
     }),
     brevo: () => ({
       emailMAC: () => parametresMessagerie?.emailMac || 'mac@email.com',
