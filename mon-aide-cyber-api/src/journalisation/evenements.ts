@@ -94,7 +94,11 @@ const consommateurCompteAidantActive =
   };
 
 const consommateurCompteAidantActiveMailNonEnvoye =
-  () => (entrepotJournalisation: EntrepotEvenementJournal) => {
+  () =>
+  (
+    entrepotJournalisation: EntrepotEvenementJournal,
+    messagerie: Messagerie = adaptateurMessagerie()
+  ) => {
     return new (class implements ConsommateurEvenement {
       async consomme<E extends Evenement<unknown>>(
         evenement: E
@@ -108,6 +112,9 @@ const consommateurCompteAidantActiveMailNonEnvoye =
               identifiantDemande: corps.identifiantDemande,
             },
           })
+        );
+        await messagerie.envoieMessageMarkdown(
+          `#### :alert: Activation compte Aidant : \n > Le mail d‘activation n‘ pu être remis pour la demande ${corps.identifiantDemande} (erreur: '${corps.erreur}')`
         );
       }
     })();
