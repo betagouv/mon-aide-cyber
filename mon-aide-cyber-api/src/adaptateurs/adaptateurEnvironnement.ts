@@ -6,8 +6,8 @@ const sentry = () => ({
 
 const messagerie = () => ({
   mattermost: () => ({
-    webhook: () =>
-      process.env.WEBHOOK_MATTERMOST_DEMANDE_DEVENIR_AIDANT_NON_TROUVEE || '',
+    webhookActivationCompteAidant: () =>
+      process.env.WEBHOOK_MATTERMOST_ACTIVATION_COMPTE_AIDANT || '',
   }),
   brevo: () => ({
     clefAPI: () => process.env.BREVO_CLEF_API || '',
