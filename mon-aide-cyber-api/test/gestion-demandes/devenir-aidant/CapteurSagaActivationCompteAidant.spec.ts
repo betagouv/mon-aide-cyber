@@ -213,6 +213,43 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
         date: FournisseurHorloge.maintenant(),
         corps: {
           identifiantDemande: demande.identifiant,
+          erreur: 'Erreur',
+        },
+      });
+    }
+  });
+
+  it('Gère les exceptions en cas d’erreur d’envoi de mail', async () => {
+    const mailDeLAidant = 'jean.dupont@mail.com';
+    const demande = unConstructeurDeDemandeDevenirAidant()
+      .avecUnMail(mailDeLAidant)
+      .construis();
+    await entrepots.demandesDevenirAidant().persiste(demande);
+    const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
+    adaptateurEnvoiMail.leveUneException('erreur');
+    try {
+      await new CapteurSagaActivationCompteAidant(
+        entrepots,
+        busEvenement,
+        adaptateurEnvoiMail,
+        busCommande
+      ).execute({
+        type: 'SagaActivationCompteAidant',
+        mail: mailDeLAidant,
+      });
+      assert.fail('Le test aurait dû échouer');
+    } catch (_erreur) {
+      expect(
+        busEvenement.consommateursTestes.get(
+          'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE'
+        )?.[0].evenementConsomme
+      ).toStrictEqual<MailCompteAidantActiveNonEnvoye>({
+        identifiant: expect.any(String),
+        type: 'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          identifiantDemande: demande.identifiant,
+          erreur: 'erreur',
         },
       });
     }

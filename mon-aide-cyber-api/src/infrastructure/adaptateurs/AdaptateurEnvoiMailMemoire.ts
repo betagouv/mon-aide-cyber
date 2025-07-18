@@ -14,6 +14,7 @@ import { DemandeDevenirAidant } from '../../gestion-demandes/devenir-aidant/Dema
 export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private messages: Email[] = [];
   private _genereErreur = false;
+  private _leveUneException: string | undefined = undefined;
   private expediteurs: Expediteur[] = ['MONAIDECYBER'];
   private destinataires: string[] = [];
   private confirmation: ConfirmationDemandeAideAttribuee | undefined =
@@ -79,6 +80,9 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   }
 
   async envoieActivationCompteAidantFaite(mail: string): Promise<void> {
+    if (this._leveUneException) {
+      throw new Error(this._leveUneException);
+    }
     if (this._genereErreur) {
       return Promise.reject('Erreur');
     }
@@ -114,6 +118,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   ): Promise<void> {
     this.destinataires.push(...matchingAidants.map((a) => a.email));
   }
+
   envoieRestitutionEntiteAidee(
     pdfsRestitution: Buffer[],
     emailEntiteAidee: string
@@ -153,12 +158,17 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
     );
     return messageTrouve !== undefined || false;
   }
+
   mailEnvoye(): boolean {
     return this.messages.length > 0;
   }
 
   genereErreur() {
     this._genereErreur = true;
+  }
+
+  leveUneException(erreur: string) {
+    this._leveUneException = erreur;
   }
 
   mailNonEnvoye(): boolean {
