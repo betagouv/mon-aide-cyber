@@ -28,6 +28,7 @@ program
           .createHash('sha256')
           .update(aidant.identifiant)
           .digest('hex'),
+        entite: aidant.entite,
         email: aidant.email,
       }));
     console.log(
