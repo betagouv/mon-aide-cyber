@@ -5,6 +5,7 @@ import {
   aidantCree,
   demandeDevenirAidantInexistanteRecue,
   diagnosticLance,
+  mailCreationCompteAidantEnvoye,
   reponseAjoutee,
   restitutionLancee,
 } from '../../src/journalisation/evenements';
@@ -22,7 +23,10 @@ import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscrit
 import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { uneDemandeAide } from '../gestion-demandes/aide/ConstructeurDemandeAide';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { DemandeInexistanteRecue } from '../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
+import {
+  DemandeInexistanteRecue,
+  MailCompteAidantActiveEnvoye,
+} from '../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 import { Messagerie } from '../../src/infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
 
 describe('Évènements', () => {
@@ -198,7 +202,7 @@ describe('Évènements', () => {
   });
 
   describe('Activation compte Aidant', () => {
-    it('publie sur la messagerie', async () => {
+    it("publie sur la messagerie lorsqu'une demande inexistante est reçue", async () => {
       let messageEnvoye: string | null = null;
 
       const messagerie: Messagerie = {
@@ -223,6 +227,53 @@ describe('Évènements', () => {
 
       expect(messageEnvoye).toStrictEqual(
         "#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : mail-inconnu@mail.com"
+      );
+    });
+
+    it("journalise l'événément MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE", async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const identifiant = crypto.randomUUID();
+
+      const entrepotEvenementJournalMemoire =
+        new EntrepotEvenementJournalMemoire();
+      await mailCreationCompteAidantEnvoye(
+        entrepotEvenementJournalMemoire
+      ).consomme<MailCompteAidantActiveEnvoye>({
+        identifiant,
+        type: 'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          identifiantDemande: identifiant,
+        },
+      });
+
+      expect(await entrepotEvenementJournalMemoire.tous()).toHaveLength(1);
+    });
+
+    it('publie sur la messagerie quand le compte Aidant est activé', async () => {
+      let messageEnvoye: string | null = null;
+      const messagerie: Messagerie = {
+        envoieMessageMarkdown: async (message: string) => {
+          messageEnvoye = message;
+        },
+      };
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const identifiant = crypto.randomUUID();
+
+      await mailCreationCompteAidantEnvoye(
+        new EntrepotEvenementJournalMemoire(),
+        messagerie
+      ).consomme<MailCompteAidantActiveEnvoye>({
+        identifiant,
+        type: 'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          identifiantDemande: identifiant,
+        },
+      });
+
+      expect(messageEnvoye).toStrictEqual(
+        `#### :partying_face: Activation compte Aidant : \n > Activation faite pour la demande ${identifiant}`
       );
     });
   });
