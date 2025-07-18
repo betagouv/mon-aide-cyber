@@ -7,14 +7,17 @@ type ParametresMessagerieTest = {
 };
 
 export const adaptateursEnvironnementDeTest = {
-  messagerie: (parametresMessagerie?: ParametresMessagerieTest) => {
-    return {
+  messagerie: (parametresMessagerie?: ParametresMessagerieTest) => ({
+    mattermost: () => ({
+      webhook: () => '',
+    }),
+    brevo: () => ({
       emailMAC: () => parametresMessagerie?.emailMac || 'mac@email.com',
       expediteurMAC: () => parametresMessagerie?.expediteurMAC || 'expéditeur',
       copieMAC: () => parametresMessagerie?.copieMac || 'copie',
       expediteurInfoMAC: () =>
         parametresMessagerie?.expediteurInfoMAC || 'expéditeur Info',
       clefAPI: () => parametresMessagerie?.clefAPI || 'clef',
-    };
-  },
+    }),
+  }),
 };

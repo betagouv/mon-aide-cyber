@@ -69,7 +69,10 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
           '/promouvoir-communaute-aidants-cyber',
           adaptateurEnvironnement.mac().urlMAC()
         ).toString(),
-        emailMonAideCyber: adaptateurEnvironnement.messagerie().emailMAC(),
+        emailMonAideCyber: adaptateurEnvironnement
+          .messagerie()
+          .brevo()
+          .emailMAC(),
         relaisAssociatifs: new URL(
           '/relais-associatifs',
           adaptateurEnvironnement.mac().urlMAC()
@@ -311,8 +314,8 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
       .ayantPourExpediteur(
         'MonAideCyber',
         expediteur === 'MONAIDECYBER'
-          ? adaptateurEnvironnement.messagerie().expediteurMAC()
-          : adaptateurEnvironnement.messagerie().expediteurInfoMAC()
+          ? adaptateurEnvironnement.messagerie().brevo().expediteurMAC()
+          : adaptateurEnvironnement.messagerie().brevo().expediteurInfoMAC()
       )
       .ayantPourDestinataires(
         isArray(message.destinataire)

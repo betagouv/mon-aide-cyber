@@ -32,7 +32,7 @@ export const routeContact = (configuration: ConfigurationServeur) => {
           `${requete.body.message}`,
         destinataire: {
           nom: 'MonAideCyber',
-          email: adaptateurEnvironnement.messagerie().emailMAC(),
+          email: adaptateurEnvironnement.messagerie().brevo().emailMAC(),
         },
       });
 

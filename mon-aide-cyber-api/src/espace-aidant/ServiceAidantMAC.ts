@@ -58,7 +58,7 @@ class ServiceAidantMAC implements ServiceAidant {
               ? annuaireCOT().rechercheEmailParDepartement(
                   aidant.preferences.departements[0]
                 )
-              : adaptateurEnvironnement.messagerie().emailMAC();
+              : adaptateurEnvironnement.messagerie().brevo().emailMAC();
 
           return adaptateurEnvoiMail.envoie({
             objet:

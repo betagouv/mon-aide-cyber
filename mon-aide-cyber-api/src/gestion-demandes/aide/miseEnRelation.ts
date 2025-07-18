@@ -48,7 +48,7 @@ export const envoieAuCOTAucunAidantPourLaDemandeAide = async (
         donneesMiseEnRelation.demandeAide.departement
       ),
     },
-    copie: adaptateurEnvironnement.messagerie().copieMAC(),
+    copie: adaptateurEnvironnement.messagerie().brevo().copieMAC(),
     corps: adaptateursCorpsMessage
       .demande()
       .aucunAidantPourLaDemandeAide()
@@ -72,7 +72,7 @@ export const envoieAuCotRecapitulatifDemandeAideDirecteAidant = async (
         donneesMiseEnRelation.demandeAide.departement
       ),
     },
-    copie: adaptateurEnvironnement.messagerie().copieMAC(),
+    copie: adaptateurEnvironnement.messagerie().brevo().copieMAC(),
     corps: adaptateursCorpsMessage
       .demande()
       .recapitulatifDemandeAideDirecteAidant()
@@ -94,7 +94,7 @@ export const envoieRecapitulatifDemandeAide = async (
     destinataire: {
       email: annuaireCOT.rechercheEmailParDepartement(aide.departement),
     },
-    copie: adaptateurEnvironnement.messagerie().copieMAC(),
+    copie: adaptateurEnvironnement.messagerie().brevo().copieMAC(),
     corps: adaptateursCorpsMessage
       .demande()
       .recapitulatifDemandeAide()
