@@ -120,7 +120,12 @@ export class EntrepotDiagnosticMemoire
 
 export class EntrepotEvenementJournalMemoire
   extends EntrepotMemoire<Publication>
-  implements EntrepotEvenementJournal {}
+  implements EntrepotEvenementJournal
+{
+  typeAggregat(): string {
+    return 'publication';
+  }
+}
 
 export class EntrepotRestitutionMemoire
   extends EntrepotMemoire<Restitution>

@@ -12,6 +12,7 @@ import { adaptateurMessagerie } from '../adaptateurs/adaptateurMessagerie';
 import {
   DemandeInexistanteRecue,
   MailCompteAidantActiveEnvoye,
+  MailCompteAidantActiveNonEnvoye,
 } from '../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 
 const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
@@ -92,6 +93,26 @@ const consommateurCompteAidantActive =
     })();
   };
 
+const consommateurCompteAidantActiveMailNonEnvoye =
+  () => (entrepotJournalisation: EntrepotEvenementJournal) => {
+    return new (class implements ConsommateurEvenement {
+      async consomme<E extends Evenement<unknown>>(
+        evenement: E
+      ): Promise<void> {
+        const { corps, ...reste } =
+          evenement as MailCompteAidantActiveNonEnvoye;
+        await entrepotJournalisation.persiste(
+          genereEvenement({
+            ...reste,
+            corps: {
+              identifiantDemande: corps.identifiantDemande,
+            },
+          })
+        );
+      }
+    })();
+  };
+
 export const diagnosticLance = consommateurDiagnosticLance();
 
 export const reponseAjoutee = consommateurEvenement();
@@ -107,7 +128,8 @@ export const demandeDevenirAidantModifiee = consommateurEvenement();
 
 export const mailCreationCompteAidantEnvoye = consommateurCompteAidantActive();
 
-export const mailCreationCompteAidantNonEnvoye = consommateurEvenement();
+export const mailCreationCompteAidantNonEnvoye =
+  consommateurCompteAidantActiveMailNonEnvoye();
 
 export const demandeDevenirAidantespaceAidantCree = consommateurEvenement();
 
