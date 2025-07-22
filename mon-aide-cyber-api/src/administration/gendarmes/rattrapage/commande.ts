@@ -3,6 +3,7 @@ import { EntrepotAidantPostgres } from '../../../infrastructure/entrepots/postgr
 import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 import { trouveLesAidantsGendarmes } from './trouveLesAidantsGendarmes';
 import { Aidant } from '../../../espace-aidant/Aidant';
+import { metAJourLesGendarmesSansEntite } from './metAJourLesGendarmesSansEntite';
 
 program
   .description('Rattrape les gendarmes')
@@ -10,7 +11,7 @@ program
   .action(async (options) => {
     const dryRunActif = options.dryRun !== 'false';
     console.log(
-      `Le script tourne en mode : ${dryRunActif ? 'dry-run' : 'sans-dry-run'}`
+      `Le script tourne en mode : ${dryRunActif ? 'DRY-RUN' : 'SANS-DRY-RUN'}`
     );
 
     const serviceDeChiffrement = adaptateurServiceChiffrement();
@@ -31,6 +32,16 @@ program
       console.log({
         gendarmesSansEntite: gendarmesSansEntite.map((gse) => gse.identifiant),
       });
+    }
+
+    if (!dryRunActif && gendarmesSansEntite.length > 0) {
+      await metAJourLesGendarmesSansEntite(
+        gendarmesSansEntite,
+        entrepotAidants
+      );
+      console.log(
+        'Entité correcte désormais rattachée aux gendarmes concernés'
+      );
     }
 
     process.exit(0);
