@@ -100,7 +100,7 @@ program
             .update({ donnees: nouvellesDonnees })
             .then(() => {
               console.log(
-                `${((index + 1) / evenementsAidantCree.length) * 100}% (${index + 1} / ${evenementsAidantCree.length}) des événements modifiés`
+                `${Math.ceil(((index + 1) / evenementsAidantCree.length) * 100)}% (${index + 1} / ${evenementsAidantCree.length}) des événements modifiés`
               );
             });
         });
