@@ -17,7 +17,7 @@ export async function metAJourLesGendarmesSansEntite(
       })
       .then(() => {
         console.log(
-          `${((index + 1) / gendarmesSansEntite.length) * 100}% (${index + 1} / ${gendarmesSansEntite.length}) des utilisateurs_mac modifiés`
+          `${Math.ceil(((index + 1) / gendarmesSansEntite.length) * 100)}% (${index + 1} / ${gendarmesSansEntite.length}) des utilisateurs_mac modifiés`
         );
       });
   });
