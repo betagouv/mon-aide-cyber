@@ -1,10 +1,6 @@
-import {
-  desAidants,
-  unAidant,
-} from '../../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { unAidant } from '../../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { EntrepotAidantMemoire } from '../../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { adaptateurEnvironnement } from '../../../../src/adaptateurs/adaptateurEnvironnement';
 import { trouveLesAidantsGendarmes } from '../../../../src/administration/gendarmes/rattrapage/trouveLesAidantsGendarmes';
 
 describe('Récupération des Aidants gendarmes', () => {
@@ -12,8 +8,6 @@ describe('Récupération des Aidants gendarmes', () => {
 
   beforeEach(() => {
     entrepotAidant = new EntrepotAidantMemoire();
-    adaptateurEnvironnement.siretsEntreprise().gendarmerie = () =>
-      'GENDARMERIE';
   });
 
   it("S'assure de ne retrouver que des Aidants avec le bon nom de domaine (gendarmerie.interieur.gouv.fr)", async () => {
@@ -24,16 +18,14 @@ describe('Récupération des Aidants gendarmes', () => {
       .avecUnEmail('aidant2@gendarmerie.interieur.gouv.fr')
       .avecUnProfilGendarme()
       .construis();
-    const dAutresAidants = desAidants()
-      .auNombreDe(3)
-      .enGironde()
-      .dansLeServicePublic()
-      .pourLesSecteursActivite([{ nom: 'Administration' }])
-      .construis();
     await entrepotAidant.persiste(unGendarmeSansEntite);
     await entrepotAidant.persiste(unSecondGendarmeAvecLeBonSiret);
-    for await (const aidant of dAutresAidants) {
-      await entrepotAidant.persiste(aidant);
+
+    for (let i = 0; i < 3; i++) {
+      const aidantPasGendarme = unAidant()
+        .avecUnEmail(`aidant${i}@email.com`)
+        .construis();
+      await entrepotAidant.persiste(aidantPasGendarme);
     }
 
     const gendarmesTrouves = await trouveLesAidantsGendarmes(entrepotAidant);
