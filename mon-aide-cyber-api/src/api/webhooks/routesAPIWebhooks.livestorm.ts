@@ -11,7 +11,7 @@ export type CorpsParticipantFinAtelierLivestorm = {
   data: {
     type: 'people';
     attributes: {
-      registrant_details: {
+      registrant_detail: {
         fields: {
           id: string;
           value: string;
@@ -44,7 +44,7 @@ export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
       }
 
       const emailParticipant =
-        corpsParticipantFinAtelierLivestorm.data.attributes.registrant_details.fields.find(
+        corpsParticipantFinAtelierLivestorm.data.attributes.registrant_detail.fields.find(
           (f) => f.id === 'email'
         )?.value;
 
