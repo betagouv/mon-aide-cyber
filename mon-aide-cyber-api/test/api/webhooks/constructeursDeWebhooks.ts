@@ -73,7 +73,7 @@ class ConstructeurDeParticipantFinAtelierLivestorm
       data: {
         type: this.type,
         attributes: {
-          registrant_details: {
+          registrant_detail: {
             fields: this.fields,
           },
         },
