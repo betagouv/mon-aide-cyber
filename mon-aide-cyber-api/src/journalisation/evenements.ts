@@ -161,6 +161,8 @@ export const reponseTallyRecue = consommateurEvenement();
 export const demandeDevenirAidantInexistanteRecue =
   consommateurDemandeDevenirAidantInexsitanteRecue();
 
+export const compteAidantDejaExistant = consommateurEvenement();
+
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E
 ): Publication => {

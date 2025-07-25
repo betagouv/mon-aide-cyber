@@ -3,6 +3,7 @@ import {
   aidantCree,
   aidantMigreEnUtilisateurInscrit,
   aideCree,
+  compteAidantDejaExistant,
   demandeAidePourvue,
   demandeDevenirAidantCree,
   demandeDevenirAidantespaceAidantCree,
@@ -115,6 +116,10 @@ export const fabriqueConsommateursEvenements = (
     [
       'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
       [demandeDevenirAidantInexistanteRecue()],
+    ],
+    [
+      'COMPTE_AIDANT_DEJA_EXISTANT',
+      [compteAidantDejaExistant(entrepotJournalisation)],
     ],
     [
       'PREFERENCES_AIDANT_MODIFIEES',

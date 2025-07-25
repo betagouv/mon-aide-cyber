@@ -5,6 +5,7 @@ import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest'
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import {
   CapteurSagaActivationCompteAidant,
+  CompteAidantDejaExistant,
   DemandeInexistanteRecue,
   ErreurEnvoiMailCreationCompteAidant,
   MailCompteAidantActiveEnvoye,
@@ -18,6 +19,7 @@ import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 import { BusCommande } from '../../../src/domaine/commande';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Capteur de saga pour activer le compte Aidant', () => {
   let adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
@@ -125,6 +127,58 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       busEvenement.consommateursTestes.get(
         'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE'
       )?.[0].evenementConsomme
+    ).toBeDefined();
+  });
+
+  it('Ne pas envoyer de mail pour une demande correspondant déjà à un Aidant cyber', async () => {
+    const aidant = unAidant().avecUnEmail('aidant@email.com').construis();
+    await entrepots.aidants().persiste(aidant);
+
+    const demandeFinalisee = await new CapteurSagaActivationCompteAidant(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      new BusCommandeTest()
+    ).execute({
+      mail: 'mail@noix.fr',
+      type: 'SagaActivationCompteAidant',
+    });
+
+    expect(demandeFinalisee).toBeUndefined();
+    expect(
+      busEvenement.consommateursTestes.get(
+        'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE'
+      )?.[0].evenementConsomme
+    ).toBeUndefined();
+    expect(adaptateurEnvoiMail.mailNonEnvoye()).toBe(true);
+  });
+
+  it('Publie l‘événement COMPTE_AIDANT_DEJA_EXISTANT pour un utilisateur étant déjà Aidant cyber', async () => {
+    const aidant = unAidant().avecUnEmail('aidant@email.com').construis();
+    await entrepots.aidants().persiste(aidant);
+
+    FournisseurHorlogeDeTest.initialise(new Date());
+    await new CapteurSagaActivationCompteAidant(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      new BusCommandeTest()
+    ).execute({
+      mail: 'aidant@email.com',
+      type: 'SagaActivationCompteAidant',
+    });
+
+    expect(busEvenement.evenementRecu).toStrictEqual<CompteAidantDejaExistant>({
+      identifiant: expect.any(String),
+      type: 'COMPTE_AIDANT_DEJA_EXISTANT',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        emailDemande: 'aidant@email.com',
+      },
+    });
+    expect(
+      busEvenement.consommateursTestes.get('COMPTE_AIDANT_DEJA_EXISTANT')?.[0]
+        .evenementConsomme
     ).toBeDefined();
   });
 
