@@ -72,6 +72,20 @@ const consommateurDemandeDevenirAidantInexsitanteRecue =
       }
     })();
 
+const consommateurCompteAidantDejaExistant =
+  () =>
+  (messagerie: Messagerie = adaptateurMessagerie()) =>
+    new (class implements ConsommateurEvenement {
+      async consomme<E extends Evenement<unknown>>(
+        evenement: E
+      ): Promise<void> {
+        const demande = evenement as DemandeInexistanteRecue;
+        await messagerie.envoieMessageMarkdown(
+          `#### :handshake: Activation compte Aidant : \n > La personne ayant pour email "${demande.corps.emailDemande}" est déjà Aidante !`
+        );
+      }
+    })();
+
 const consommateurCompteAidantActive =
   () =>
   (
@@ -161,7 +175,7 @@ export const reponseTallyRecue = consommateurEvenement();
 export const demandeDevenirAidantInexistanteRecue =
   consommateurDemandeDevenirAidantInexsitanteRecue();
 
-export const compteAidantDejaExistant = consommateurEvenement();
+export const compteAidantDejaExistant = consommateurCompteAidantDejaExistant();
 
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E

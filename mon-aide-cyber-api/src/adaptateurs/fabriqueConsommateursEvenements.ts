@@ -117,10 +117,7 @@ export const fabriqueConsommateursEvenements = (
       'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
       [demandeDevenirAidantInexistanteRecue()],
     ],
-    [
-      'COMPTE_AIDANT_DEJA_EXISTANT',
-      [compteAidantDejaExistant(entrepotJournalisation)],
-    ],
+    ['COMPTE_AIDANT_DEJA_EXISTANT', [compteAidantDejaExistant()]],
     [
       'PREFERENCES_AIDANT_MODIFIEES',
       [preferencesAidantModifiees(entrepotJournalisation)],
