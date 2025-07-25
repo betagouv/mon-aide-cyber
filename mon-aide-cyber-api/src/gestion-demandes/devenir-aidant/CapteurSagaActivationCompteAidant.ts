@@ -37,6 +37,18 @@ export class CapteurSagaActivationCompteAidant
       identifiantDemande: demande.identifiant,
     });
 
+    if (await this.verifieSiUnAidantExisteDeja(commande.mail)) {
+      await this.busEvenement.publie<CompteAidantDejaExistant>({
+        identifiant: crypto.randomUUID(),
+        type: 'COMPTE_AIDANT_DEJA_EXISTANT',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          emailDemande: commande.mail,
+        },
+      });
+      return;
+    }
+
     const demande = await this.entrepots
       .demandesDevenirAidant()
       .rechercheDemandeEnCoursParMail(commande.mail);
@@ -90,6 +102,15 @@ export class CapteurSagaActivationCompteAidant
     return undefined;
   }
 
+  private async verifieSiUnAidantExisteDeja(email: string): Promise<boolean> {
+    try {
+      await this.entrepots.aidants().rechercheParEmail(email);
+      return true;
+    } catch (erreur) {
+      return false;
+    }
+  }
+
   private async envoieMail(demande: DemandeDevenirAidant): Promise<void> {
     return await this.adaptateurEnvoiDeMail.envoieActivationCompteAidantFaite(
       demande.mail
@@ -105,12 +126,20 @@ export type DemandeInexistanteRecue = Evenement<{
   emailDemande: string;
 }>;
 
+export type CompteAidantDejaExistant = Evenement<{ emailDemande: string }>;
+
 export type MailCompteAidantActiveNonEnvoye = Evenement<{
   identifiantDemande: UUID;
   erreur: string;
 }>;
 
 export class ErreurEnvoiMailCreationCompteAidant extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
+export class ErreurCompteAidantDejaExistant extends Error {
   constructor(message: string) {
     super(message);
   }
