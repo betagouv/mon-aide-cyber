@@ -39,11 +39,11 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
 
     const corpsDeRequete = requete.body;
 
-    const [payloadSignature, payloadTimestamp] = (
+    const [payloadTimestamp, payloadSignature] = (
       requete.headers['x-livestorm-signature'] as string
     )?.split(',');
 
-    const ageTolere = 5;
+    const ageSignatureTolereEnSecondes = 5;
 
     const signatureCalculee = crypto
       .createHash('sha256')
@@ -58,7 +58,7 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
       payloadSignature === signatureCalculee &&
       FournisseurHorloge.maintenant().getTime() / 1000 -
         Number(payloadTimestamp) <=
-        ageTolere
+        ageSignatureTolereEnSecondes
     );
   }
 }
