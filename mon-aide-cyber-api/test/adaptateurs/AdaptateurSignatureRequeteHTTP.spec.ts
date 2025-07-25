@@ -72,7 +72,7 @@ describe('Signature Requete HTTP', () => {
     });
     const requete: Request = {
       headers: {
-        'x-livestorm-signature': `bcee8607a976dee318a3aa34fa780a4a9ce777b4feb4a6ab218c24c45ca7953e,${FournisseurHorloge.maintenant().getTime()}`,
+        'x-livestorm-signature': `${FournisseurHorloge.maintenant().getTime()},bcee8607a976dee318a3aa34fa780a4a9ce777b4feb4a6ab218c24c45ca7953e`,
       },
       body: {
         uneClef: 'valeur',
@@ -96,7 +96,7 @@ describe('Signature Requete HTTP', () => {
     let messageRecu: string | undefined = undefined;
     const requete: Request = {
       headers: {
-        'x-livestorm-signature': `abc,${FournisseurHorloge.maintenant().getTime()}`,
+        'x-livestorm-signature': `${FournisseurHorloge.maintenant().getTime()},abc`,
       },
       body: {
         uneClef: 'valeur',
