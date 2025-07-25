@@ -38,9 +38,9 @@ export class CapteurSagaActivationCompteAidant
     });
 
     if (await this.verifieSiUnAidantExisteDeja(commande.mail)) {
-      await this.busEvenement.publie<CompteAidantDejaExistant>({
+      await this.busEvenement.publie<CompteAidantDejaExistantRecu>({
         identifiant: crypto.randomUUID(),
-        type: 'COMPTE_AIDANT_DEJA_EXISTANT',
+        type: 'COMPTE_AIDANT_DEJA_EXISTANT_RECU',
         date: FournisseurHorloge.maintenant(),
         corps: {
           emailDemande: commande.mail,
@@ -126,7 +126,7 @@ export type DemandeInexistanteRecue = Evenement<{
   emailDemande: string;
 }>;
 
-export type CompteAidantDejaExistant = Evenement<{ emailDemande: string }>;
+export type CompteAidantDejaExistantRecu = Evenement<{ emailDemande: string }>;
 
 export type MailCompteAidantActiveNonEnvoye = Evenement<{
   identifiantDemande: UUID;

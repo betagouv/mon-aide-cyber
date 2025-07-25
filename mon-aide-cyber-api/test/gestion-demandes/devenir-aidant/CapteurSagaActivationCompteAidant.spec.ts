@@ -5,7 +5,7 @@ import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest'
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import {
   CapteurSagaActivationCompteAidant,
-  CompteAidantDejaExistant,
+  CompteAidantDejaExistantRecu,
   DemandeInexistanteRecue,
   ErreurEnvoiMailCreationCompteAidant,
   MailCompteAidantActiveEnvoye,
@@ -168,17 +168,20 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       type: 'SagaActivationCompteAidant',
     });
 
-    expect(busEvenement.evenementRecu).toStrictEqual<CompteAidantDejaExistant>({
+    expect(
+      busEvenement.evenementRecu
+    ).toStrictEqual<CompteAidantDejaExistantRecu>({
       identifiant: expect.any(String),
-      type: 'COMPTE_AIDANT_DEJA_EXISTANT',
+      type: 'COMPTE_AIDANT_DEJA_EXISTANT_RECU',
       date: FournisseurHorloge.maintenant(),
       corps: {
         emailDemande: 'aidant@email.com',
       },
     });
     expect(
-      busEvenement.consommateursTestes.get('COMPTE_AIDANT_DEJA_EXISTANT')?.[0]
-        .evenementConsomme
+      busEvenement.consommateursTestes.get(
+        'COMPTE_AIDANT_DEJA_EXISTANT_RECU'
+      )?.[0].evenementConsomme
     ).toBeDefined();
   });
 

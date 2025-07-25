@@ -3,6 +3,7 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import {
   aidantCree,
+  compteAidantDejaExistantRecu,
   demandeDevenirAidantInexistanteRecue,
   diagnosticLance,
   mailCreationCompteAidantEnvoye,
@@ -25,6 +26,7 @@ import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-ma
 import { uneDemandeAide } from '../gestion-demandes/aide/ConstructeurDemandeAide';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import {
+  CompteAidantDejaExistantRecu,
   DemandeInexistanteRecue,
   MailCompteAidantActiveEnvoye,
   MailCompteAidantActiveNonEnvoye,
@@ -229,6 +231,33 @@ describe('Évènements', () => {
 
       expect(messageEnvoye).toStrictEqual(
         "#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : mail-inconnu@mail.com"
+      );
+    });
+
+    it("publie sur la messagerie lorsqu'un compte Aidant existe déjà", async () => {
+      let messageEnvoye: string | null = null;
+      const messagerie: Messagerie = {
+        envoieMessageMarkdown: async (message: string) => {
+          messageEnvoye = message;
+        },
+      };
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const identifiant = crypto.randomUUID();
+      const emailDemande = 'mail-inconnu@mail.com';
+
+      await compteAidantDejaExistantRecu(
+        messagerie
+      ).consomme<CompteAidantDejaExistantRecu>({
+        identifiant,
+        type: 'COMPTE_AIDANT_DEJA_EXISTANT_RECU',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          emailDemande: emailDemande,
+        },
+      });
+
+      expect(messageEnvoye).toStrictEqual(
+        `#### :dancers: Activation compte Aidant : \n > La personne ayant pour email "${emailDemande}" est déjà Aidante !`
       );
     });
 
