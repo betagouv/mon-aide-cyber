@@ -1,4 +1,7 @@
-import { ROUTE_MON_ESPACE } from '../../../../domaine/MoteurDeLiens';
+import {
+  ROUTE_MON_ESPACE,
+  ROUTE_MON_ESPACE_RESSOURCES,
+} from '../../../../domaine/MoteurDeLiens';
 import { useMoteurDeLiens } from '../../../../hooks/useMoteurDeLiens';
 import { TypographieH6 } from '../../../communs/typographie/TypographieH6/TypographieH6';
 import { MenuNavigation } from './menu-navigation/MenuNavigation';
@@ -43,6 +46,11 @@ export const Sidebar = () => {
                     {
                       nom: 'Mes préférences',
                       route: `${ROUTE_MON_ESPACE}/mes-preferences`,
+                      actif: true,
+                    },
+                    {
+                      nom: 'Ressources',
+                      route: ROUTE_MON_ESPACE_RESSOURCES,
                       actif: true,
                     },
                   ]

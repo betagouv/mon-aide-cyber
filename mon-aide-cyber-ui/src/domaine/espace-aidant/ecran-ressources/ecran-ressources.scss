@@ -1,0 +1,40 @@
+@import '../../../assets/styles/points-de-rupture';
+
+
+.ecran-ressources {
+  display: flex;
+  flex-direction: column;
+
+  section {
+    padding: 48px 7.5rem 48px 4.25rem;
+
+    p {
+      margin: 0;
+    }
+
+    .texte {
+      margin-bottom: 32px;
+    }
+  }
+
+  section.contenu {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .video {
+    video {
+      cursor: pointer;
+      width: 100%;
+    }
+  }
+
+  section.entete {
+    background-color: var(--couleurs-mac-violet-tres-clair);
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

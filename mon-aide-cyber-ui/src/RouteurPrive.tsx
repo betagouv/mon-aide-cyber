@@ -20,6 +20,7 @@ import { EcranValiderProfilUtilisateurInscrit } from './domaine/parcours-utilisa
 import { EcranMonEspaceDemandeDevenirAidant } from './domaine/parcours-utilisation-service/parcours-mon-espace-demande-devenir-aidant/ecran-mon-espace-demande-devenir-aidant/EcranMonEspaceDemandeDevenirAidant.tsx';
 import { EcranDevenirAidant } from './domaine/espace-aidant/ecran-devenir-aidant/EcranDevenirAidant.tsx';
 import EcranMonEspaceInscription from './domaine/espace-aidant/parcours-inscription/ecran-inscription/EcranMonEspaceInscription.tsx';
+import EcranRessources from './domaine/espace-aidant/ecran-ressources/EcranRessources.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -98,6 +99,7 @@ export const RouteurPrive = () => {
             ></Route>
             <Route path="diagnostics" element={<EcranDiagnostics />}></Route>
             <Route path="devenir-aidant" element={<EcranDevenirAidant />} />
+            <Route path="ressources" element={<EcranRessources />} />
             <Route
               path="mes-informations"
               element={<EcranMesInformations />}
