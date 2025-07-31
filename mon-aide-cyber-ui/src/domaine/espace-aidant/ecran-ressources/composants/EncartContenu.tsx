@@ -31,6 +31,7 @@ const EncartContenu = ({
           >
             <source src={video.source} type="video/mp4" />
             <track
+              default
               src={video.sousTitres}
               kind="captions"
               srcLang="fr"
