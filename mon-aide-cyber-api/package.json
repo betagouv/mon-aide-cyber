@@ -10,6 +10,7 @@
     "administration:rattrapage-journalisation-excel-demo": "ts-node --transpile-only --require dotenv/config src/administration/journal/rattrapage/commande.ts",
     "administration:rattrapage-des-fantomes": "ts-node --transpile-only --require dotenv/config src/administration/journal/rattrapage-des-fantomes/commande.ts",
     "administration:activation-compte-aidant": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/activation-compte/commande.ts",
+    "administration:modification-emails-de-comptes": "ts-node --transpile-only --require dotenv/config src/administration/utilisateurs/modification-emails-de-comptes/commande.ts",
     "administration:mise-en-relation-aidants": "ts-node --transpile-only --require dotenv/config src/administration/aidants/mise-en-relation/commande.ts",
     "administration:relance-affectation-demande-aide": "ts-node --transpile-only --require dotenv/config src/administration/aidants/relance-mise-en-relation/commande.ts",
     "administration:rapport-demandes-aidants": "ts-node --transpile-only --require dotenv/config src/administration/gestion-demandes/demandes-en-cours/commande.ts",
