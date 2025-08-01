@@ -13,14 +13,14 @@ import { PieceJointe } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { TypeEvenement } from '../../contacts/RepertoireDeContacts';
 
 abstract class ConstructeurBrevo<T> {
-  constructor(private readonly methode: 'POST' | 'GET') {}
+  constructor(private readonly methode: 'POST' | 'GET' | 'PUT') {}
 
   protected abstract construisCorps(): T;
 
   construis(): RequeteBrevo<T> {
     return {
       methode: this.methode,
-      ...(this.methode === 'POST' && {
+      ...(['POST', 'PUT'].includes(this.methode) && {
         corps: this.construisCorps(),
       }),
       headers: {
@@ -112,6 +112,19 @@ class ConstructeurBrevoEnvoiMail extends ConstructeurBrevo<EnvoiMailBrevoTexteBr
 }
 
 type Parametres = Record<string, string | Record<string, string>>;
+
+class ConstructeurBrevoRequeteBrute extends ConstructeurBrevo<RecordRecursif> {
+  constructor(
+    methode: 'GET' | 'POST' | 'PUT',
+    private readonly corps: RecordRecursif
+  ) {
+    super(methode);
+  }
+
+  protected construisCorps(): RecordRecursif {
+    return this.corps;
+  }
+}
 
 export class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<EnvoiMailBrevoAvecTemplate> {
   private identifiantTemplate = 0;
@@ -272,3 +285,9 @@ export const unConstructeurRechercheDeContact = () =>
 
 export const unConstructeurEvenement = () =>
   new ConstructeurBrevoCreationEvenement();
+
+type RecordRecursif = {
+  [key: string]: string | RecordRecursif;
+};
+export const uneRequeteBrevoPut = (body: RecordRecursif) =>
+  new ConstructeurBrevoRequeteBrute('PUT', body);
