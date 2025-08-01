@@ -160,15 +160,21 @@ const signatures = (): SignaturesHTTP => {
 
 type IdentifiantsWebinaires = {
   livestorm: () => {
-    idEvenementAteliersDevenirAidant: string | undefined;
+    idEvenementAteliersDevenirAidant: string;
   };
 };
 const webinaires = (): IdentifiantsWebinaires => {
   return {
-    livestorm: () => ({
-      idEvenementAteliersDevenirAidant:
-        process.env.LIVESTORM_ID_EVENEMENT_ATELIERS_DEVENIR_AIDANT || undefined,
-    }),
+    livestorm: () => {
+      const idEvenementAteliersDevenirAidant =
+        process.env.LIVESTORM_ID_EVENEMENT_ATELIERS_DEVENIR_AIDANT;
+      if (!idEvenementAteliersDevenirAidant)
+        throw new Error(
+          'Il manque la variable d‘environnement LIVESTORM_ID_EVENEMENT_ATELIERS_DEVENIR_AIDANT'
+        );
+
+      return { idEvenementAteliersDevenirAidant };
+    },
   };
 };
 
