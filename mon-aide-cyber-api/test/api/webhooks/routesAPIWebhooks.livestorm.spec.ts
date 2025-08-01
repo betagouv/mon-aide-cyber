@@ -22,12 +22,15 @@ describe('Route Webhook livestorm', () => {
   });
 
   describe("Lorsqu'une requête POST est reçue sur /webhooks/livestorm/activation-compte-aidant", () => {
-    it('active le compte Aidant', async () => {
+    beforeEach(() => {
       adaptateurEnvironnement.webinaires = () => ({
         livestorm: () => ({
           idEvenementAteliersDevenirAidant: '12345',
         }),
       });
+    });
+
+    it('active le compte Aidant', async () => {
       const demandeDevenirAidant = uneDemandeDevenirAidant()
         .ayantPourMail('jean.dupont@email.com')
         .construis();
@@ -53,11 +56,6 @@ describe('Route Webhook livestorm', () => {
     });
 
     it('active le compte Aidant avec l‘email du participant', async () => {
-      adaptateurEnvironnement.webinaires = () => ({
-        livestorm: () => ({
-          idEvenementAteliersDevenirAidant: '12345',
-        }),
-      });
       const demandeDevenirAidant = uneDemandeDevenirAidant()
         .ayantPourMail('jean.dupont@email.com')
         .construis();
@@ -102,12 +100,6 @@ describe('Route Webhook livestorm', () => {
     });
 
     it('renvoie une réponse HTTP 204 si la requête Livestorm ne comporte pas un bon event_id (correspond à l‘événement people.attended)', async () => {
-      adaptateurEnvironnement.webinaires = () => ({
-        livestorm: () => ({
-          idEvenementAteliersDevenirAidant: '12345',
-        }),
-      });
-
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
