@@ -46,7 +46,7 @@ interface AdaptateurRequeteBrevo<REQUETE, REPONSE extends Response> {
 }
 
 export type RequeteBrevo<T = void> = {
-  methode: 'GET' | 'POST';
+  methode: 'GET' | 'POST' | 'PUT';
   headers: Record<string, string>;
   corps?: T;
 };
@@ -103,7 +103,19 @@ export class ErreurRequeBrevo extends Error {
   }
 }
 
+type RecordRecursif = {
+  [key: string]: string | RecordRecursif;
+};
+
 export class AdaptateursRequeteBrevo {
+  requetePostSurContacts(
+    email: string
+  ): AdaptateurRequeteBrevo<RequeteBrevo<RecordRecursif>, Response> {
+    return this.adaptateur(
+      `https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`
+    );
+  }
+
   envoiMail(): AdaptateurRequeteBrevo<
     RequeteBrevo<EnvoiMailBrevoTexteBrut | EnvoiMailBrevoAvecTemplate>,
     ReponseEnvoiMail | ReponseBrevoEnErreur
@@ -139,11 +151,11 @@ export class AdaptateursRequeteBrevo {
   ) {
     return new (class implements AdaptateurRequeteBrevo<RequeteBrevo<T>, R> {
       async execute(requete: RequeteBrevo<T>): Promise<R> {
-        console.log('INITIE APPEL BREVO', url);
+        console.log(`INITIE APPEL BREVO en ${requete.methode}`, url);
         const reponse = (await fetch(url, {
           method: requete.methode,
           headers: requete.headers,
-          ...(requete.methode === 'POST' && {
+          ...(['POST', 'PUT'].includes(requete.methode) && {
             body: JSON.stringify(requete.corps),
           }),
         })) as unknown as R;

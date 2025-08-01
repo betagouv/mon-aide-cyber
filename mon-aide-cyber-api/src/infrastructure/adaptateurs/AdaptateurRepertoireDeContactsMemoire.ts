@@ -26,4 +26,11 @@ export class AdaptateurRepertoireDeContactsMemoire
   async emetsEvenement(evenement: Evenement): Promise<void> {
     this.evenements.push(evenement);
   }
+
+  async modifieEmail(
+    __ancienEmail: string,
+    __nouvelEmail: string
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 }

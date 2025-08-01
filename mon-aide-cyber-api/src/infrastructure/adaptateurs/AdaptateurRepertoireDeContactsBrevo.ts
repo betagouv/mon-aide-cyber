@@ -9,6 +9,7 @@ import {
 import {
   unConstructeurCreationDeContact,
   unConstructeurEvenement,
+  uneRequeteBrevoPut,
 } from '../brevo/ConstructeursBrevo';
 
 export class AdaptateurRepertoireDeContactsBrevo
@@ -18,6 +19,14 @@ export class AdaptateurRepertoireDeContactsBrevo
 
   constructor() {
     this.brevo = adaptateursRequeteBrevo();
+  }
+
+  async modifieEmail(ancienEmail: string, nouvelEmail: string): Promise<void> {
+    await this.brevo
+      .requetePostSurContacts(ancienEmail)
+      .execute(
+        uneRequeteBrevoPut({ attributes: { EMAIL: nouvelEmail } }).construis()
+      );
   }
 
   private async creeContact(
