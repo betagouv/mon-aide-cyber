@@ -48,6 +48,7 @@ class ConstructeurDeParticipantFinAtelierLivestorm
 {
   private type = 'people' as const;
   private fields: { id: string; value: string }[] = [];
+  private event_id = '12345';
 
   emailParticipant(
     email: string
@@ -74,11 +75,17 @@ class ConstructeurDeParticipantFinAtelierLivestorm
         type: this.type,
         attributes: {
           registrant_detail: {
+            event_id: this.event_id,
             fields: this.fields,
           },
         },
       },
     };
+  }
+
+  pourUnIdEvenement(idEvement: string) {
+    this.event_id = idEvement;
+    return this;
   }
 }
 
