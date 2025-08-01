@@ -158,6 +158,20 @@ const signatures = (): SignaturesHTTP => {
   };
 };
 
+type IdentifiantsWebinaires = {
+  livestorm: () => {
+    idEvenementAteliersDevenirAidant: string | undefined;
+  };
+};
+const webinaires = (): IdentifiantsWebinaires => {
+  return {
+    livestorm: () => ({
+      idEvenementAteliersDevenirAidant:
+        process.env.LIVESTORM_ID_EVENEMENT_ATELIERS_DEVENIR_AIDANT || undefined,
+    }),
+  };
+};
+
 const ipAutorisees = (): false | string[] =>
   process.env.RESEAU_ADRESSES_IP_AUTORISEES?.split(',') ?? false;
 
@@ -204,6 +218,7 @@ const adaptateurEnvironnement = {
   crisp,
   signatures,
   metabase,
+  webinaires,
 };
 
 export { sentry, adaptateurEnvironnement };

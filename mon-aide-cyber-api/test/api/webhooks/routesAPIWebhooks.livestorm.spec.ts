@@ -5,6 +5,7 @@ import { unConstructeurDeParticipantFinAtelierLivestorm } from './constructeursD
 import testeurIntegration from '../testeurIntegration';
 import { Express } from 'express';
 import { AdaptateurSignatureRequeteDeTest } from '../../adaptateurs/AdaptateurSignatureRequeteDeTest';
+import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 
 describe('Route Webhook livestorm', () => {
   const testeurMAC = testeurIntegration();
@@ -22,6 +23,11 @@ describe('Route Webhook livestorm', () => {
 
   describe("Lorsqu'une requête POST est reçue sur /webhooks/livestorm/activation-compte-aidant", () => {
     it('active le compte Aidant', async () => {
+      adaptateurEnvironnement.webinaires = () => ({
+        livestorm: () => ({
+          idEvenementAteliersDevenirAidant: '12345',
+        }),
+      });
       const demandeDevenirAidant = uneDemandeDevenirAidant()
         .ayantPourMail('jean.dupont@email.com')
         .construis();
@@ -47,6 +53,11 @@ describe('Route Webhook livestorm', () => {
     });
 
     it('active le compte Aidant avec l‘email du participant', async () => {
+      adaptateurEnvironnement.webinaires = () => ({
+        livestorm: () => ({
+          idEvenementAteliersDevenirAidant: '12345',
+        }),
+      });
       const demandeDevenirAidant = uneDemandeDevenirAidant()
         .ayantPourMail('jean.dupont@email.com')
         .construis();
@@ -85,6 +96,25 @@ describe('Route Webhook livestorm', () => {
             type: 'session',
           },
         }
+      );
+
+      expect(reponse.statusCode).toBe(204);
+    });
+
+    it('renvoie une réponse HTTP 204 si la requête Livestorm ne comporte pas un bon event_id (correspond à l‘événement people.attended)', async () => {
+      adaptateurEnvironnement.webinaires = () => ({
+        livestorm: () => ({
+          idEvenementAteliersDevenirAidant: '12345',
+        }),
+      });
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/webhooks/livestorm/activation-compte-aidant`,
+        unConstructeurDeParticipantFinAtelierLivestorm()
+          .pourUnIdEvenement('faux_id')
+          .construis()
       );
 
       expect(reponse.statusCode).toBe(204);

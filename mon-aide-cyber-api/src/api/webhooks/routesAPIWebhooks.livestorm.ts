@@ -6,12 +6,14 @@ import {
   ActivationCompteAidantFaite,
   SagaActivationCompteAidant,
 } from '../../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
+import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 
 export type CorpsParticipantFinAtelierLivestorm = {
   data: {
     type: 'people';
     attributes: {
       registrant_detail: {
+        event_id?: string;
         fields: {
           id: string;
           value: string;
@@ -38,6 +40,16 @@ export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
     ) => {
       const corpsParticipantFinAtelierLivestorm: CorpsParticipantFinAtelierLivestorm =
         requete.body;
+
+      const pasNotreWebinaire =
+        corpsParticipantFinAtelierLivestorm.data.attributes.registrant_detail
+          .event_id !==
+        adaptateurEnvironnement.webinaires().livestorm()
+          .idEvenementAteliersDevenirAidant;
+
+      if (pasNotreWebinaire) {
+        return reponse.sendStatus(204);
+      }
 
       if (corpsParticipantFinAtelierLivestorm.data.type !== 'people') {
         return reponse.sendStatus(204);
