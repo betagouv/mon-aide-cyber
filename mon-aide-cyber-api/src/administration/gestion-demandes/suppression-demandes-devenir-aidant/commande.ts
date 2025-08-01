@@ -5,12 +5,14 @@ import { DemandeDevenirAidant } from '../../../gestion-demandes/devenir-aidant/D
 import knexfile from '../../../infrastructure/entrepots/postgres/knexfile';
 import { Knex, knex } from 'knex';
 
+const l = console.log;
+
 const supprimeLaDemande = async (
   mailASupprimer: string,
   toutesLesDemandes: DemandeDevenirAidant[],
   connexionKnex: Knex,
   avancement: { courante: number; total: number }
-) => {
+): Promise<string> => {
   const position = () =>
     `[${avancement.courante.toString().padStart(3)} / ${avancement.total}]`;
 
@@ -42,16 +44,16 @@ program
       .split(',')
       .map((mail: string) => mail.trim());
 
-    console.log(
+    l(
       `🗒️  Vous avez demandé la suppression de ${tousLesMails.length} demande(s) devenir aidant.`
     );
 
     if (dryRunActif) {
-      console.log(`🧪 Le mode dry-run est actif ! On s'arrête là…`);
+      l(`🧪 Le mode dry-run est actif ! On s'arrête là…`);
       process.exit(0);
     }
 
-    console.log(`🚚 C'est parti…`);
+    l(`🚚 C'est parti…`);
 
     const entrepot = new EntrepotDemandeDevenirAidantPostgres(
       adaptateurServiceChiffrement()
@@ -68,10 +70,10 @@ program
 
     for (const supprimeUn of lesResultatsDeSuppressions) {
       const resultat = await supprimeUn;
-      console.log(resultat);
+      l(resultat);
     }
 
-    process.exit(0); // On ne traite que la première ligne
+    process.exit(0);
   });
 
 program.parse();
