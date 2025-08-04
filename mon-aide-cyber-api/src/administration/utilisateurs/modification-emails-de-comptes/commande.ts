@@ -8,6 +8,19 @@ import { Utilisateur } from '../../../authentification/Utilisateur';
 
 const l = console.log;
 
+function trouveAidant(tousLesAidants: Aidant[], email: string) {
+  return tousLesAidants.find(
+    (u) => u.email.toLowerCase().trim() === email.toLowerCase().trim()
+  ) as Aidant;
+}
+
+function trouveCompteUtilisateur(tousLesComptes: Utilisateur[], email: string) {
+  return tousLesComptes.find(
+    (c) =>
+      c.identifiantConnexion.toLowerCase().trim() === email.toLowerCase().trim()
+  ) as Utilisateur;
+}
+
 program
   .description("Modifie les emails de comptes d'Utilisateurs")
   .requiredOption(
@@ -48,12 +61,29 @@ program
     const tousLesComptes = await comptesUtilisateursMAC.tous();
 
     for (const { ancien, nouveau } of todo) {
-      const utilisateur = tousLesAidants.find(
-        (u) => u.email.toLowerCase().trim() === ancien.toLowerCase().trim()
-      ) as Aidant;
+      const aidantAncien = trouveAidant(tousLesAidants, ancien);
 
-      if (!utilisateur) {
-        l(`🔴 ${ancien} : email non trouvé chez MAC`);
+      if (!aidantAncien) {
+        l(`🔴 ${ancien} : email non trouvé parmi les AIDANTS MAC`);
+        continue;
+      }
+
+      const aidantNouveau = trouveAidant(tousLesAidants, nouveau);
+      if (aidantNouveau) {
+        l(
+          `🔴 ${ancien} : le mail cible ${nouveau} est DÉJÀ un AIDANT MAC… on ne fait rien, il faut se concerter`
+        );
+        continue;
+      }
+
+      const utilisateurNouveau = trouveCompteUtilisateur(
+        tousLesComptes,
+        nouveau
+      );
+      if (utilisateurNouveau) {
+        l(
+          `🔴 ${ancien} : le mail cible ${nouveau} a DÉJÀ un compte UTILISATEUR INSCRIT MAC… on ne fait rien, il faut se concerter`
+        );
         continue;
       }
 
@@ -64,14 +94,10 @@ program
         await brevo.modifieEmail(ancien, nouveau);
         l(`🟢⚫️⚫️ ${ancien} : email modifié en ${nouveau} chez Brevo`);
 
-        await entrepotAidants.persiste({ ...utilisateur, email: nouveau });
+        await entrepotAidants.persiste({ ...aidantAncien, email: nouveau });
         l(`🟢🟢⚫️ ${ancien} : email modifié en ${nouveau} chez nous`);
 
-        const compteMAC = tousLesComptes.find(
-          (c) =>
-            c.identifiantConnexion.toLowerCase().trim() ===
-            ancien.toLowerCase().trim()
-        ) as Utilisateur;
+        const compteMAC = trouveCompteUtilisateur(tousLesComptes, ancien);
         if (compteMAC) {
           const aJour = { ...compteMAC, identifiantConnexion: nouveau };
           await comptesUtilisateursMAC.persiste(aJour);
