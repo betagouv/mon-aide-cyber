@@ -67,12 +67,16 @@ export const relaieSurMattermostActivationCompteAidantEchouee = (
       const { emailDemande, raisonEchec } = corps;
 
       let message: string;
+      const emailEchape = encodeURIComponent(emailDemande).replaceAll(
+        '%40',
+        '@'
+      );
       switch (raisonEchec) {
         case 'AIDANT_DEJA_EXISTANT':
-          message = `#### 🙆‍♂️ Activation compte Aidant : \n > La personne ayant pour email \`${emailDemande}\` est déjà Aidante !`;
+          message = `#### 🙆‍♂️ Activation compte Aidant : \n > La personne ayant pour email \`${emailEchape}\` est déjà Aidante !`;
           break;
         case 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE':
-          message = `#### ❌ Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : \`${emailDemande}\``;
+          message = `#### ❌ Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : \`${emailEchape}\``;
           break;
       }
 
