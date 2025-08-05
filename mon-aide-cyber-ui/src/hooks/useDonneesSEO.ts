@@ -18,7 +18,10 @@ export type Titres =
   | 'S‘inscrire'
   | 'Annuaire des Aidants cyber'
   | 'Créer mon espace Aidant cyber'
-  | "Charte de l'Aidant cyber";
+  | "Charte de l'Aidant cyber"
+  | 'Guide des Aidants cyber'
+  | 'Promouvoir la communauté des Aidants cyber'
+  | 'Promouvoir le diagnostic cyber';
 
 const metadonneesSelonTitre: Record<Titres, string> = {
   Accueil:
@@ -44,9 +47,16 @@ const metadonneesSelonTitre: Record<Titres, string> = {
   'Mot de passe oublié': '',
   'Réinitialiser mot de passe': '',
   'S‘inscrire': 'S‘inscrire à MonAideCyber.',
-  'Annuaire des Aidants cyber': '',
+  'Annuaire des Aidants cyber':
+    'L‘annuaire des Aidants cyber ayant souhaité y être référencés.',
   'Créer mon espace Aidant cyber': '',
-  "Charte de l'Aidant cyber": '',
+  "Charte de l'Aidant cyber": 'La charte de l‘Aidant cyber',
+  'Guide des Aidants cyber':
+    'Tous les conseils et les ressources pour être un Aidant cyber actif et engagé',
+  'Promouvoir la communauté des Aidants cyber':
+    'Toutes les ressources pour faire la promotion de la communauté des Aidants cyber',
+  'Promouvoir le diagnostic cyber':
+    'Toutes les ressources pour faire la promotion du diagnostic cyber et trouver des entités à accompagner',
 };
 
 export function useDonneesSEO(titre: Titres) {

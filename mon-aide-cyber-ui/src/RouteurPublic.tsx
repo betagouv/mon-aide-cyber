@@ -40,6 +40,7 @@ export const RouteurPublic = () => {
           path="relais-associatifs"
           element={
             <PageCrisp
+              titre="Relais Associatifs"
               idArticle="relais-associatifs"
               key="relais-associatifs"
             />
@@ -54,6 +55,7 @@ export const RouteurPublic = () => {
           path="guide-des-aidants-cyber"
           element={
             <PageCrisp
+              titre="Guide des Aidants cyber"
               idArticle="guide-aidant-cyber"
               key="guide-des-aidants-cyber"
             />
@@ -63,6 +65,7 @@ export const RouteurPublic = () => {
           path="promouvoir-diagnostic-cyber"
           element={
             <PageCrisp
+              titre="Promouvoir le diagnostic cyber"
               idArticle="promouvoir-diagnostic-cyber"
               key="promouvoir-diagnostic-cyber"
             />
@@ -72,6 +75,7 @@ export const RouteurPublic = () => {
           path="promouvoir-communaute-aidants-cyber"
           element={
             <PageCrisp
+              titre="Promouvoir la communauté des Aidants cyber"
               key="promouvoir-communaute-aidants-cyber"
               idArticle="promouvoir-communaute-aidants-cyber"
             />

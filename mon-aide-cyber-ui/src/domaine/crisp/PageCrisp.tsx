@@ -4,8 +4,16 @@ import { ReponseArticle } from './Crisp.types.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { Alerte } from '../../composants/communs/messages/Alerte.tsx';
 import { ArticleCrisp } from './ArticleCrisp.tsx';
+import { Titres, useDonneesSEO } from '../../hooks/useDonneesSEO.ts';
 
-export const PageCrisp = ({ idArticle }: { idArticle: string }) => {
+export const PageCrisp = ({
+  idArticle,
+  titre,
+}: {
+  idArticle: string;
+  titre: Titres;
+}) => {
+  useDonneesSEO(titre);
   const macAPI = useMACAPI();
 
   const {
