@@ -1,8 +1,8 @@
 import { CharteAidant } from './CharteAidant.tsx';
-import { useTitreDePage } from '../hooks/useTitreDePage.ts';
+import { useDonneesSEO } from '../hooks/useDonneesSEO.ts';
 
 export const EcranCharteAidant = () => {
-  useTitreDePage("Charte de l'Aidant cyber");
+  useDonneesSEO("Charte de l'Aidant cyber");
 
   return (
     <main role="main">

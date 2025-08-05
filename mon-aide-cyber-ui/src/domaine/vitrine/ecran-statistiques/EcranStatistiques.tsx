@@ -2,7 +2,7 @@ import { HeroStatistiques } from './composants/HeroStatistiques';
 import './ecran-statistiques.scss';
 import { useMACAPI } from '../../../fournisseurs/api/useMACAPI';
 import { constructeurParametresAPI } from '../../../fournisseurs/api/ConstructeurParametresAPI';
-import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
+import { useDonneesSEO } from '../../../hooks/useDonneesSEO.ts';
 import { useQuery } from '@tanstack/react-query';
 import { useMoteurDeLiens } from '../../../hooks/useMoteurDeLiens.ts';
 import { useRecupereContexteNavigation } from '../../../hooks/useRecupereContexteNavigation.ts';
@@ -17,7 +17,7 @@ export type Statistiques = {
 export type ReponseStatistiques = Statistiques;
 
 export const EcranStatistiques = () => {
-  useTitreDePage('Statistiques');
+  useDonneesSEO('Statistiques');
 
   const macAPI = useMACAPI();
   useRecupereContexteNavigation('afficher-statistiques');

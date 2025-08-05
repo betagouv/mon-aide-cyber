@@ -2,10 +2,10 @@ import { useState } from 'react';
 import illustrationSecuritePostesSvg from '../../../public/images/illustration-securite-des-postes.svg';
 import './ecran-connexion.scss';
 import { FormulaireConnexion } from './composants/FormulaireConnexion.tsx';
-import { useTitreDePage } from '../../hooks/useTitreDePage.ts';
+import { useDonneesSEO } from '../../hooks/useDonneesSEO.ts';
 
 export const EcranConnexion = () => {
-  useTitreDePage('Connexion');
+  useDonneesSEO('Connexion');
 
   const [informationAEteAfficheeUneFois, setInformationAEteAfficheeUneFois] =
     useState(false);

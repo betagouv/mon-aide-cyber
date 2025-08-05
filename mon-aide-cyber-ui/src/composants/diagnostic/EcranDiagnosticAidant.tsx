@@ -58,7 +58,7 @@ import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { Lien } from '../../domaine/Lien.ts';
 import { useRecupereContexteNavigation } from '../../hooks/useRecupereContexteNavigation.ts';
 import Button from '../atomes/Button/Button.tsx';
-import { useTitreDePage } from '../../hooks/useTitreDePage.ts';
+import { useDonneesSEO } from '../../hooks/useDonneesSEO.ts';
 import { liensMesServicesCyber } from '../../infrastructure/mes-services-cyber/liens.ts';
 
 type ProprietesComposantQuestion = {
@@ -706,7 +706,7 @@ export const EcranDiagnosticAidant = ({
 export const EcranDiagnosticLibreAcces = ({
   idDiagnostic,
 }: ProprietesEcranDiagnostic) => {
-  useTitreDePage('Diagnostic');
+  useDonneesSEO('Diagnostic');
 
   const { affiche, ferme } = useModale();
 

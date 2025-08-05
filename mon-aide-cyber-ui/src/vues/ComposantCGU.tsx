@@ -1,4 +1,4 @@
-import { useTitreDePage } from '../hooks/useTitreDePage.ts';
+import { useDonneesSEO } from '../hooks/useDonneesSEO.ts';
 
 const ContenuCGU = () => (
   <div id="content" className="ProseMirror">
@@ -1251,7 +1251,7 @@ export const CorpsCGU = () => {
 };
 
 export const ComposantCGU = () => {
-  useTitreDePage('CGU');
+  useDonneesSEO('CGU');
 
   return (
     <main role="main">

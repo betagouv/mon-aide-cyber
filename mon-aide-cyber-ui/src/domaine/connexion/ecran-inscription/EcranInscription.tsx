@@ -1,11 +1,11 @@
 import illustrationSecuritePostesSvg from '../../../../public/images/illustration-securite-des-postes.svg';
 import { BoutonProConnect } from '../composants/BoutonProConnect.tsx';
 import './ecran-inscription.scss';
-import { useTitreDePage } from '../../../hooks/useTitreDePage.ts';
+import { useDonneesSEO } from '../../../hooks/useDonneesSEO.ts';
 import { TypographieH2 } from '../../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 
 export const EcranInscription = () => {
-  useTitreDePage("S'inscrire");
+  useDonneesSEO('S‘inscrire');
 
   return (
     <main role="main" className="ecran-inscription">
