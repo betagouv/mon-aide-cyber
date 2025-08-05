@@ -69,10 +69,10 @@ export const relaieSurMattermostActivationCompteAidantEchouee = (
       let message: string;
       switch (raisonEchec) {
         case 'AIDANT_DEJA_EXISTANT':
-          message = `#### :dancers: Activation compte Aidant : \n > La personne ayant pour email \`${emailDemande}\` est déjà Aidante !`;
+          message = `#### 🙆‍♂️ Activation compte Aidant : \n > La personne ayant pour email \`${emailDemande}\` est déjà Aidante !`;
           break;
         case 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE':
-          message = `#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : \`${emailDemande}\``;
+          message = `#### ❌ Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : \`${emailDemande}\``;
           break;
       }
 

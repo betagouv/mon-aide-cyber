@@ -227,7 +227,7 @@ describe('Évènements', () => {
       });
 
       expect(messageEnvoye).toStrictEqual(
-        "#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : `mail-inconnu@mail.com`"
+        "#### ❌ Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : `mail-inconnu@mail.com`"
       );
     });
 
@@ -254,7 +254,7 @@ describe('Évènements', () => {
       });
 
       expect(messageEnvoye).toStrictEqual(
-        '#### :dancers: Activation compte Aidant : \n > La personne ayant pour email `mail-deja-aidant@mail.com` est déjà Aidante !'
+        '#### 🙆‍♂️ Activation compte Aidant : \n > La personne ayant pour email `mail-deja-aidant@mail.com` est déjà Aidante !'
       );
     });
 
