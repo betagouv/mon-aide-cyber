@@ -224,6 +224,7 @@ describe('Évènements', () => {
         date: FournisseurHorloge.maintenant(),
         corps: {
           emailDemande: 'mail-inconnu@mail.com',
+          raisonEchec: 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE',
         },
       });
 

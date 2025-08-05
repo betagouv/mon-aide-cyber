@@ -18,6 +18,7 @@ import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
 import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 import { BusCommande } from '../../../src/domaine/commande';
+import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 
 describe('Capteur de saga pour activer le compte Aidant', () => {
   let adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
@@ -121,6 +122,40 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       date: FournisseurHorloge.maintenant(),
       corps: {
         emailDemande: 'mail@noix.fr',
+        raisonEchec: 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE',
+      },
+    });
+    expect(
+      busEvenement.consommateursTestes.get(
+        'ACTIVATION_COMPTE_AIDANT_ECHOUEE'
+      )?.[0].evenementConsomme
+    ).toBeDefined();
+  });
+
+  it('Publie l‘événement ACTIVATION_COMPTE_AIDANT_ECHOUEE pour un utilisateur étant déjà Aidant cyber', async () => {
+    const aidant = unAidant().avecUnEmail('aidant@email.com').construis();
+    await entrepots.aidants().persiste(aidant);
+
+    FournisseurHorlogeDeTest.initialise(new Date());
+    await new CapteurSagaActivationCompteAidant(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      new BusCommandeTest()
+    ).execute({
+      mail: 'aidant@email.com',
+      type: 'SagaActivationCompteAidant',
+    });
+
+    expect(
+      busEvenement.evenementRecu
+    ).toStrictEqual<ActivationCompteAidantEchouee>({
+      identifiant: expect.any(String),
+      type: 'ACTIVATION_COMPTE_AIDANT_ECHOUEE',
+      date: FournisseurHorloge.maintenant(),
+      corps: {
+        emailDemande: 'aidant@email.com',
+        raisonEchec: 'AIDANT_DEJA_EXISTANT',
       },
     });
     expect(
