@@ -41,53 +41,51 @@ export class CapteurSagaActivationCompteAidant
       .demandesDevenirAidant()
       .rechercheDemandeEnCoursParMail(commande.mail);
 
-    if (demande) {
-      await this.busCommande.publie<SagaDemandeAidantCreeEspaceAidant, void>({
-        type: 'SagaDemandeAidantEspaceAidant',
-        idDemande: demande.identifiant,
+    if (!demande) {
+      await this.busEvenement.publie<ActivationCompteAidantEchouee>({
+        identifiant: crypto.randomUUID(),
+        type: 'ACTIVATION_COMPTE_AIDANT_ECHOUEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          emailDemande: commande.mail,
+        },
       });
-      try {
-        await this.envoieMail(demande);
-        try {
-          await this.busEvenement.publie<MailCompteAidantActiveEnvoye>({
-            corps: {
-              identifiantDemande: demande.identifiant,
-            },
-            date: FournisseurHorloge.maintenant(),
-            identifiant: adaptateurUUID.genereUUID(),
-            type: 'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE',
-          });
-          return envoiMailCreationCompte(demande);
-        } catch (__e) {
-          return envoiMailCreationCompte(demande);
-        }
-      } catch (e: unknown | Error) {
-        await this.busEvenement
-          .publie<MailCompteAidantActiveNonEnvoye>({
-            corps: {
-              identifiantDemande: demande.identifiant,
-              erreur: e instanceof Error ? e.message : (e as string),
-            },
-            date: FournisseurHorloge.maintenant(),
-            identifiant: adaptateurUUID.genereUUID(),
-            type: 'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE',
-          })
-          .then(() => {
-            throw new ErreurEnvoiMailCreationCompteAidant(
-              `Une erreur est survenue lors de l’envoi du mail pour la demande de "${demande.mail}"`
-            );
-          });
-      }
+      return undefined;
     }
-    await this.busEvenement.publie<ActivationCompteAidantEchouee>({
-      identifiant: crypto.randomUUID(),
-      type: 'ACTIVATION_COMPTE_AIDANT_ECHOUEE',
-      date: FournisseurHorloge.maintenant(),
-      corps: {
-        emailDemande: commande.mail,
-      },
+
+    await this.busCommande.publie<SagaDemandeAidantCreeEspaceAidant, void>({
+      type: 'SagaDemandeAidantEspaceAidant',
+      idDemande: demande.identifiant,
     });
-    return undefined;
+    try {
+      await this.envoieMail(demande);
+      try {
+        await this.busEvenement.publie<MailCompteAidantActiveEnvoye>({
+          corps: {
+            identifiantDemande: demande.identifiant,
+          },
+          date: FournisseurHorloge.maintenant(),
+          identifiant: adaptateurUUID.genereUUID(),
+          type: 'MAIL_COMPTE_AIDANT_ACTIVE_ENVOYE',
+        });
+        return envoiMailCreationCompte(demande);
+      } catch (__e) {
+        return envoiMailCreationCompte(demande);
+      }
+    } catch (e: unknown | Error) {
+      await this.busEvenement.publie<MailCompteAidantActiveNonEnvoye>({
+        corps: {
+          identifiantDemande: demande.identifiant,
+          erreur: e instanceof Error ? e.message : (e as string),
+        },
+        date: FournisseurHorloge.maintenant(),
+        identifiant: adaptateurUUID.genereUUID(),
+        type: 'MAIL_COMPTE_AIDANT_ACTIVE_NON_ENVOYE',
+      });
+      throw new ErreurEnvoiMailCreationCompteAidant(
+        `Une erreur est survenue lors de l’envoi du mail pour la demande de "${demande.mail}"`
+      );
+    }
   }
 
   private async envoieMail(demande: DemandeDevenirAidant): Promise<void> {
