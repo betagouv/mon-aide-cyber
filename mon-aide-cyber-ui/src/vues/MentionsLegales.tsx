@@ -1,7 +1,7 @@
-import { useTitreDePage } from '../hooks/useTitreDePage.ts';
+import { useDonneesSEO } from '../hooks/useDonneesSEO.ts';
 
 export const MentionsLegales = () => {
-  useTitreDePage('Mentions légales');
+  useDonneesSEO('Mentions légales');
 
   return (
     <main role="main">

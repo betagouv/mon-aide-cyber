@@ -1,11 +1,11 @@
-import { useTitreDePage } from './hooks/useTitreDePage.ts';
+import { useDonneesSEO } from './hooks/useDonneesSEO.ts';
 import { liensMesServicesCyber } from './infrastructure/mes-services-cyber/liens.ts';
 import { EncartDiagnosticCyber } from './composants/landing/EncartDiagnosticCyber.tsx';
 import { EncartRealiserDesDiagnosticsCyber } from './composants/landing/EncartRealiserDesDiagnosticsCyber/EncartRealiserDesDiagnosticsCyber.tsx';
 import { EncartLogosPartenaires } from './composants/landing/EncartLogosPartenaires/EncartLogosPartenaires.tsx';
 
 export const Accueil = () => {
-  useTitreDePage('Accueil');
+  useDonneesSEO('Accueil');
 
   const tuiles = [
     {

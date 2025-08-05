@@ -1,9 +1,9 @@
-import { useTitreDePage } from '../hooks/useTitreDePage.ts';
+import { useDonneesSEO } from '../hooks/useDonneesSEO.ts';
 import { LienMailtoMAC } from '../composants/atomes/LienMailtoMAC.tsx';
 import { TypographieH2 } from '../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
 
 export const EcranAccessibilite = () => {
-  useTitreDePage('Accessibilité');
+  useDonneesSEO('Accessibilité');
 
   return (
     <main role="main">
