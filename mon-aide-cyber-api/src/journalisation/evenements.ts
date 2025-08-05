@@ -10,7 +10,7 @@ import {
 import { Messagerie } from '../infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
 import { adaptateurMessagerie } from '../adaptateurs/adaptateurMessagerie';
 import {
-  DemandeInexistanteRecue,
+  ActivationCompteAidantEchouee,
   MailCompteAidantActiveEnvoye,
   MailCompteAidantActiveNonEnvoye,
 } from '../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
@@ -58,19 +58,17 @@ const consommateurDiagnosticLance =
       }
     })();
 
-const consommateurDemandeDevenirAidantInexsitanteRecue =
-  () =>
-  (messagerie: Messagerie = adaptateurMessagerie()) =>
-    new (class implements ConsommateurEvenement {
-      async consomme<E extends Evenement<unknown>>(
-        evenement: E
-      ): Promise<void> {
-        const demande = evenement as DemandeInexistanteRecue;
-        await messagerie.envoieMessageMarkdown(
-          `#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : ${demande.corps.emailDemande}`
-        );
-      }
-    })();
+export const relaieSurMattermostActivationCompteAidantEchouee = (
+  messagerie: Messagerie = adaptateurMessagerie()
+) =>
+  new (class implements ConsommateurEvenement {
+    async consomme<E extends Evenement<unknown>>(evenement: E): Promise<void> {
+      const demande = evenement as ActivationCompteAidantEchouee;
+      await messagerie.envoieMessageMarkdown(
+        `#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : ${demande.corps.emailDemande}`
+      );
+    }
+  })();
 
 const consommateurCompteAidantActive =
   () =>
@@ -157,9 +155,6 @@ export const utilisateurInscritCree = consommateurEvenement();
 export const aidantMigreEnUtilisateurInscrit = consommateurEvenement();
 
 export const reponseTallyRecue = consommateurEvenement();
-
-export const demandeDevenirAidantInexistanteRecue =
-  consommateurDemandeDevenirAidantInexsitanteRecue();
 
 const genereEvenement = <E extends Evenement<unknown>>(
   evenement: E

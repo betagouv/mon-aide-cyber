@@ -3,10 +3,10 @@ import { FournisseurHorloge } from '../../src/infrastructure/horloge/Fournisseur
 import { FournisseurHorlogeDeTest } from '../infrastructure/horloge/FournisseurHorlogeDeTest';
 import {
   aidantCree,
-  demandeDevenirAidantInexistanteRecue,
   diagnosticLance,
   mailCreationCompteAidantEnvoye,
   mailCreationCompteAidantNonEnvoye,
+  relaieSurMattermostActivationCompteAidantEchouee,
   reponseAjoutee,
   restitutionLancee,
 } from '../../src/journalisation/evenements';
@@ -25,7 +25,7 @@ import { uneRechercheUtilisateursMAC } from '../../src/recherche-utilisateurs-ma
 import { uneDemandeAide } from '../gestion-demandes/aide/ConstructeurDemandeAide';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import {
-  DemandeInexistanteRecue,
+  ActivationCompteAidantEchouee,
   MailCompteAidantActiveEnvoye,
   MailCompteAidantActiveNonEnvoye,
 } from '../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
@@ -216,11 +216,11 @@ describe('Évènements', () => {
       FournisseurHorlogeDeTest.initialise(new Date());
       const identifiant = crypto.randomUUID();
 
-      await demandeDevenirAidantInexistanteRecue(
+      await relaieSurMattermostActivationCompteAidantEchouee(
         messagerie
-      ).consomme<DemandeInexistanteRecue>({
+      ).consomme<ActivationCompteAidantEchouee>({
         identifiant,
-        type: 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
+        type: 'ACTIVATION_COMPTE_AIDANT_ECHOUEE',
         date: FournisseurHorloge.maintenant(),
         corps: {
           emailDemande: 'mail-inconnu@mail.com',

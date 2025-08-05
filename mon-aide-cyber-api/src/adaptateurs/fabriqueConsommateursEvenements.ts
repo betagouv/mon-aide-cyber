@@ -6,7 +6,6 @@ import {
   demandeAidePourvue,
   demandeDevenirAidantCree,
   demandeDevenirAidantespaceAidantCree,
-  demandeDevenirAidantInexistanteRecue,
   demandeDevenirAidantModifiee,
   diagnosticLance,
   diagnosticLibreAccesLance,
@@ -17,6 +16,7 @@ import {
   reinitialisationMotDePasseDemandee,
   reinitialisationMotDePasseErronee,
   reinitialisationMotDePasseFaite,
+  relaieSurMattermostActivationCompteAidantEchouee,
   reponseAjoutee,
   reponseTallyRecue,
   restitutionLancee,
@@ -113,8 +113,8 @@ export const fabriqueConsommateursEvenements = (
       [demandeDevenirAidantespaceAidantCree(entrepotJournalisation)],
     ],
     [
-      'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
-      [demandeDevenirAidantInexistanteRecue()],
+      'ACTIVATION_COMPTE_AIDANT_ECHOUEE',
+      [relaieSurMattermostActivationCompteAidantEchouee()],
     ],
     [
       'PREFERENCES_AIDANT_MODIFIEES',

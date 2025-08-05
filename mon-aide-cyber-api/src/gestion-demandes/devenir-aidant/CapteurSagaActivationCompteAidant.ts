@@ -79,9 +79,9 @@ export class CapteurSagaActivationCompteAidant
           });
       }
     }
-    await this.busEvenement.publie<DemandeInexistanteRecue>({
+    await this.busEvenement.publie<ActivationCompteAidantEchouee>({
       identifiant: crypto.randomUUID(),
-      type: 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
+      type: 'ACTIVATION_COMPTE_AIDANT_ECHOUEE',
       date: FournisseurHorloge.maintenant(),
       corps: {
         emailDemande: commande.mail,
@@ -101,7 +101,7 @@ export type MailCompteAidantActiveEnvoye = Evenement<{
   identifiantDemande: UUID;
 }>;
 
-export type DemandeInexistanteRecue = Evenement<{
+export type ActivationCompteAidantEchouee = Evenement<{
   emailDemande: string;
 }>;
 
