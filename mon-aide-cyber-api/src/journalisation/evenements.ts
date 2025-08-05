@@ -63,10 +63,20 @@ export const relaieSurMattermostActivationCompteAidantEchouee = (
 ) =>
   new (class implements ConsommateurEvenement {
     async consomme<E extends Evenement<unknown>>(evenement: E): Promise<void> {
-      const demande = evenement as ActivationCompteAidantEchouee;
-      await messagerie.envoieMessageMarkdown(
-        `#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : ${demande.corps.emailDemande}`
-      );
+      const { corps } = evenement as ActivationCompteAidantEchouee;
+      const { emailDemande, raisonEchec } = corps;
+
+      let message: string;
+      switch (raisonEchec) {
+        case 'AIDANT_DEJA_EXISTANT':
+          message = `#### :dancers: Activation compte Aidant : \n > La personne ayant pour email "${emailDemande}" est déjà Aidante !`;
+          break;
+        case 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE':
+          message = `#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : ${emailDemande}`;
+          break;
+      }
+
+      await messagerie.envoieMessageMarkdown(message);
     }
   })();
 

@@ -206,13 +206,11 @@ describe('Évènements', () => {
   describe('Activation compte Aidant', () => {
     it("publie sur la messagerie lorsqu'une demande inexistante est reçue", async () => {
       let messageEnvoye: string | null = null;
-
       const messagerie: Messagerie = {
         envoieMessageMarkdown: async (message: string) => {
           messageEnvoye = message;
         },
       };
-
       FournisseurHorlogeDeTest.initialise(new Date());
       const identifiant = crypto.randomUUID();
 
@@ -230,6 +228,33 @@ describe('Évènements', () => {
 
       expect(messageEnvoye).toStrictEqual(
         "#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : mail-inconnu@mail.com"
+      );
+    });
+
+    it('publie sur la messagerie lorsque l‘Aidant existe déjà', async () => {
+      let messageEnvoye: string | null = null;
+      const messagerie: Messagerie = {
+        envoieMessageMarkdown: async (message: string) => {
+          messageEnvoye = message;
+        },
+      };
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const identifiant = crypto.randomUUID();
+
+      await relaieSurMattermostActivationCompteAidantEchouee(
+        messagerie
+      ).consomme<ActivationCompteAidantEchouee>({
+        identifiant,
+        type: 'ACTIVATION_COMPTE_AIDANT_ECHOUEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          emailDemande: 'mail-deja-aidant@mail.com',
+          raisonEchec: 'AIDANT_DEJA_EXISTANT',
+        },
+      });
+
+      expect(messageEnvoye).toStrictEqual(
+        `#### :dancers: Activation compte Aidant : \n > La personne ayant pour email "mail-deja-aidant@mail.com" est déjà Aidante !`
       );
     });
 
