@@ -4,8 +4,8 @@ import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import {
+  ActivationCompteAidantEchouee,
   CapteurSagaActivationCompteAidant,
-  DemandeInexistanteRecue,
   ErreurEnvoiMailCreationCompteAidant,
   MailCompteAidantActiveEnvoye,
   MailCompteAidantActiveNonEnvoye,
@@ -101,7 +101,7 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     expect(adaptateurEnvoiMail.mailNonEnvoye()).toBe(true);
   });
 
-  it('Publie l‘événement DEMANDE_INEXISTANTE_RECUE pour une demande inexistante', async () => {
+  it('Publie l‘événement ACTIVATION_COMPTE_AIDANT_ECHOUEE pour une demande inexistante', async () => {
     FournisseurHorlogeDeTest.initialise(new Date());
     await new CapteurSagaActivationCompteAidant(
       entrepots,
@@ -113,9 +113,11 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       type: 'SagaActivationCompteAidant',
     });
 
-    expect(busEvenement.evenementRecu).toStrictEqual<DemandeInexistanteRecue>({
+    expect(
+      busEvenement.evenementRecu
+    ).toStrictEqual<ActivationCompteAidantEchouee>({
       identifiant: expect.any(String),
-      type: 'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE',
+      type: 'ACTIVATION_COMPTE_AIDANT_ECHOUEE',
       date: FournisseurHorloge.maintenant(),
       corps: {
         emailDemande: 'mail@noix.fr',
@@ -123,7 +125,7 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     });
     expect(
       busEvenement.consommateursTestes.get(
-        'DEMANDE_DEVENIR_AIDANT_INEXISTANTE_RECUE'
+        'ACTIVATION_COMPTE_AIDANT_ECHOUEE'
       )?.[0].evenementConsomme
     ).toBeDefined();
   });
