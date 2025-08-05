@@ -67,7 +67,7 @@ const consommateurDemandeDevenirAidantInexsitanteRecue =
       ): Promise<void> {
         const demande = evenement as DemandeInexistanteRecue;
         await messagerie.envoieMessageMarkdown(
-          `#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : ${demande.corps.emailDemande}`
+          `#### ❌ Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : ${demande.corps.emailDemande}`
         );
       }
     })();
@@ -114,7 +114,7 @@ const consommateurCompteAidantActiveMailNonEnvoye =
           })
         );
         await messagerie.envoieMessageMarkdown(
-          `#### :alert: Activation compte Aidant : \n > Le mail d‘activation n‘ pu être remis pour la demande ${corps.identifiantDemande} (erreur: '${corps.erreur}')`
+          `#### :alert: Activation compte Aidant : \n > Le mail d‘activation n‘ pu être remis pour la demande ${corps.identifiantDemande} \n\n (erreur: '${corps.erreur}')`
         );
       }
     })();

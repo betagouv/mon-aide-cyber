@@ -228,7 +228,7 @@ describe('Évènements', () => {
       });
 
       expect(messageEnvoye).toStrictEqual(
-        "#### Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : mail-inconnu@mail.com"
+        "#### ❌ Activation compte Aidant : \n > Une requête d‘activation de compte Aidant a été faite avec un email inconnu \n\n Email de l'Aidant : mail-inconnu@mail.com"
       );
     });
 
@@ -332,7 +332,7 @@ describe('Évènements', () => {
       });
 
       expect(messageEnvoye).toStrictEqual(
-        `#### :alert: Activation compte Aidant : \n > Le mail d‘activation n‘ pu être remis pour la demande ${identifiant} (erreur: 'Erreur lors de l‘envoi')`
+        `#### :alert: Activation compte Aidant : \n > Le mail d‘activation n‘ pu être remis pour la demande ${identifiant} \n\n (erreur: 'Erreur lors de l‘envoi')`
       );
     });
   });
