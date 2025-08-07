@@ -7,7 +7,9 @@ import { EntrepotRelationPostgres } from '../../../relation/infrastructure/Entre
 const l = console.log;
 
 program
-  .description("Modifie les emails de comptes d'Utilisateurs")
+  .description(
+    'Recréé un compte d‘authentification classique pour un utilisateur MAC (Aidant ou Utilisateur inscrit)'
+  )
   .requiredOption(
     '--emailUtilisateur <emailUtilisateur>',
     'L‘adresse mail de l‘utilisateur'
@@ -28,6 +30,7 @@ program
       confirmationNouveauMotDePasse,
       dryRun,
     } = options;
+    const mailUtilisateurARecreer = emailUtilisateur.toLowerCase().trim();
 
     if (nouveauMotDePasse !== confirmationNouveauMotDePasse) {
       l(
@@ -37,35 +40,31 @@ program
     }
 
     l(
-      `🗒️ Vous avez demandé à créer un compte de connexion à MAC pour ${emailUtilisateur}...`
+      `🗒️ Vous avez demandé à créer un compte de connexion à MAC pour ${mailUtilisateurARecreer}...`
     );
 
-    const dryRunActif = dryRun !== 'false';
     const entrepots = new EntrepotsMAC();
 
-    let compteUtilisateur: Utilisateur | undefined;
-    try {
-      compteUtilisateur = await entrepots
-        .utilisateurs()
-        .rechercheParIdentifiantDeConnexion(emailUtilisateur);
-    } catch (e) {
-      compteUtilisateur = undefined;
-    }
+    const compteExisteDeja = await entrepots
+      .utilisateurs()
+      .rechercheParIdentifiantDeConnexion(mailUtilisateurARecreer)
+      .then(() => true)
+      .catch(() => false);
 
-    if (compteUtilisateur) {
+    if (compteExisteDeja) {
       l(
-        `⛔️  Pas besoin de continuer, le compte utilisateur ayant pour mail ${emailUtilisateur} existe déjà !`
+        `⛔️  Pas besoin de continuer, le compte utilisateur ayant pour mail ${mailUtilisateurARecreer} existe déjà !`
       );
       return process.exit(0);
     }
 
     l(
-      `🔍  Le compte utilisateur de ${emailUtilisateur} n'existe pas, vérifions l'existence de son profil...`
+      `🔍  Le compte utilisateur de ${mailUtilisateurARecreer} n'existe pas, vérifions l'existence de son profil...`
     );
 
     const profilUtilisateur: UtilisateurMAC | undefined = await entrepots
       .utilisateursMAC()
-      .rechercheParMail(emailUtilisateur)
+      .rechercheParMail(mailUtilisateurARecreer)
       .then((profilUtilisateur) => profilUtilisateur)
       .catch(() => undefined);
 
@@ -84,7 +83,7 @@ program
     const entrepotRelation = new EntrepotRelationPostgres();
 
     const relations = await entrepotRelation.trouveObjetsLiesAUtilisateur(
-      profilUtilisateur?.identifiant as string
+      profilUtilisateur.identifiant as string
     );
     const lesDiagnosticsInities = relations.filter(
       (r) => r.relation === 'initiateur'
@@ -102,6 +101,7 @@ program
     l('Lesquels sont...');
     l(lesDiags.map((d) => d.identifiant));
 
+    const dryRunActif = dryRun !== 'false';
     if (dryRunActif) {
       l(`🧪 Le mode dry-run est actif ! On s'arrête là…`);
       return process.exit(0);
@@ -120,7 +120,7 @@ program
       await entrepots.utilisateurs().persiste(utilisateur);
 
       l(
-        `🟢 Le compte de connexion utilisateur pour ${emailUtilisateur} a bien été créé !`
+        `🟢 Le compte de connexion utilisateur pour ${mailUtilisateurARecreer} a bien été créé !`
       );
       return process.exit(0);
     } catch (e) {
