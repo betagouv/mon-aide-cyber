@@ -12,9 +12,29 @@ program
     '--emailUtilisateur <emailUtilisateur>',
     'L‘adresse mail de l‘utilisateur'
   )
+  .requiredOption(
+    '--nouveauMotDePasse <nouveauMotDePasse>',
+    'Le nouveau mot de passe pour le compte utilisateur'
+  )
+  .requiredOption(
+    '--confirmationNouveauMotDePasse <confirmationNouveauMotDePasse>',
+    'La confirmation du nouveau mot de passe pour le compte utilisateur'
+  )
   .option('--dry-run <trueOuFalse>', 'Exécute en mode dry-run', 'true')
   .action(async (options) => {
-    const { emailUtilisateur, dryRun } = options;
+    const {
+      emailUtilisateur,
+      nouveauMotDePasse,
+      confirmationNouveauMotDePasse,
+      dryRun,
+    } = options;
+
+    if (nouveauMotDePasse !== confirmationNouveauMotDePasse) {
+      l(
+        `⛔️  Une erreur est survenue, le mot de passe et sa confirmation ne correspondent pas !`
+      );
+      return process.exit(1);
+    }
 
     l(
       `🗒️ Vous avez demandé à créer un compte de connexion à MAC pour ${emailUtilisateur}...`
@@ -92,7 +112,7 @@ program
         identifiant: profilUtilisateur.identifiant,
         identifiantConnexion: profilUtilisateur.email,
         nomPrenom: profilUtilisateur.nomPrenom,
-        motDePasse: 'password123!',
+        motDePasse: nouveauMotDePasse,
         ...(profilUtilisateur.dateValidationCGU && {
           dateSignatureCGU: profilUtilisateur.dateValidationCGU,
         }),
