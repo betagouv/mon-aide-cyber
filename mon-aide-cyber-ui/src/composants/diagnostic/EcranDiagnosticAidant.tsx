@@ -624,7 +624,7 @@ export const ActionsHeaderDiagnosticLibreAcces = ({
               type="button"
               key="connexion-aidant"
               onClick={() => {
-                window.location.replace('/beneficier-du-dispositif/etre-aide');
+                window.location.replace('/');
               }}
             >
               Quitter le diagnostic
