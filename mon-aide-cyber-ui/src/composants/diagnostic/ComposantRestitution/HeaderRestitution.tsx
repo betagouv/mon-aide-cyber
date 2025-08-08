@@ -76,9 +76,7 @@ export const HeaderRestitution = ({
               key="connexion-aidant"
               onClick={() => {
                 if (typeDiagnostic === 'libre-acces') {
-                  window.location.replace(
-                    '/beneficier-du-dispositif/etre-aide'
-                  );
+                  window.location.replace('/');
                 } else {
                   window.location.replace(
                     `${ROUTE_MON_ESPACE}/tableau-de-bord`
