@@ -4,6 +4,7 @@ import { MenuCrispMobile } from './MenuCrispMobile.tsx';
 import { MenuCrispDesktop } from './MenuCrispDesktop.tsx';
 import './article-crisp.scss';
 import useDefilementFluide from '../../hooks/useDefilementFluide.ts';
+import { ContenuAssaini } from '../../composants/communs/ContenuAssaini.tsx';
 
 const synchroniseMenuEtContenu = () => {
   const observateurDIntersection = new IntersectionObserver(
@@ -35,7 +36,7 @@ const synchroniseMenuEtContenu = () => {
     lesSections.forEach((s) => observateurDIntersection.unobserve(s));
 };
 
-export function ArticleCrisp(props: { article: ReponseArticle }) {
+export const ArticleCrisp = (props: { article: ReponseArticle }) => {
   useDefilementFluide();
   useEffect(() => synchroniseMenuEtContenu(), []);
 
@@ -51,14 +52,12 @@ export function ArticleCrisp(props: { article: ReponseArticle }) {
             tableDesMatieres={props.article?.tableDesMatieres}
           />
 
-          <div
+          <ContenuAssaini
             className="contenu"
-            dangerouslySetInnerHTML={{
-              __html: props.article?.contenu || '',
-            }}
-          ></div>
+            contenu={props.article?.contenu || ''}
+          />
         </div>
       </div>
     </main>
   );
-}
+};
