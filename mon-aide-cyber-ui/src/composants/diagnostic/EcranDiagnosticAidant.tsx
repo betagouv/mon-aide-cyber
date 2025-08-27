@@ -60,6 +60,7 @@ import { useRecupereContexteNavigation } from '../../hooks/useRecupereContexteNa
 import Button from '../atomes/Button/Button.tsx';
 import { useDonneesSEO } from '../../hooks/useDonneesSEO.ts';
 import { liensMesServicesCyber } from '../../infrastructure/mes-services-cyber/liens.ts';
+import { ContenuAssaini } from '../communs/ContenuAssaini.tsx';
 
 type ProprietesComposantQuestion = {
   thematique: string;
@@ -410,13 +411,11 @@ export const EcranDiagnostic = ({
                         <div
                           key={`${question.identifiant}-conteneur-info-bulle`}
                         >
-                          <div
+                          <ContenuAssaini
                             className="info-bulle"
                             key={`${question.identifiant}-info-bulle`}
-                            dangerouslySetInnerHTML={{
-                              __html: infoBulle,
-                            }}
-                          ></div>
+                            contenu={infoBulle}
+                          />
                           <div className="bordure-info-bulle"></div>
                         </div>
                       ))
