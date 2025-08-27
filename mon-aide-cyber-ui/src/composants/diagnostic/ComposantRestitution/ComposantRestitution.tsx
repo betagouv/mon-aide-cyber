@@ -17,6 +17,7 @@ import {
   useRestitution,
 } from './useRestitution.ts';
 import { useToast } from '../../../fournisseurs/ToastProvider/FournisseurDeToast.tsx';
+import { ContenuAssaini } from '../../communs/ContenuAssaini.tsx';
 
 type ProprietesComposantRestitution = {
   idDiagnostic: UUID;
@@ -269,51 +270,40 @@ export const ComposantRestitution = ({
               </div>
               <div className="fr-col-md-9 fr-col-9 section">
                 <h3>Récapitulatif</h3>
-                <div
+                <ContenuAssaini
                   id="informations"
                   className="rubrique"
-                  dangerouslySetInnerHTML={{
-                    __html: etatRestitution.restitution?.informations || '',
-                  }}
-                ></div>
-                <div
+                  contenu={etatRestitution.restitution?.informations || ''}
+                />
+                <ContenuAssaini
                   id="indicateurs"
                   className="rubrique"
-                  dangerouslySetInnerHTML={{
-                    __html: etatRestitution.restitution?.indicateurs || '',
-                  }}
-                ></div>
-                <div
+                  contenu={etatRestitution.restitution?.indicateurs || ''}
+                />
+                <ContenuAssaini
                   id="mesures-prioritaires"
                   className="rubrique"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      etatRestitution.restitution?.mesuresPrioritaires || '',
-                  }}
-                ></div>
-                <div
+                  contenu={
+                    etatRestitution.restitution?.mesuresPrioritaires || ''
+                  }
+                />
+                <ContenuAssaini
                   id="contacts-liens-utiles"
                   className="rubrique"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      etatRestitution.restitution?.contactsEtLiensUtiles || '',
-                  }}
-                ></div>
-                <div
+                  contenu={
+                    etatRestitution.restitution?.contactsEtLiensUtiles || ''
+                  }
+                />
+                <ContenuAssaini
                   id="ressources"
                   className="rubrique"
-                  dangerouslySetInnerHTML={{
-                    __html: etatRestitution.restitution?.ressources || '',
-                  }}
-                ></div>
-
-                <div
+                  contenu={etatRestitution.restitution?.ressources || ''}
+                />
+                <ContenuAssaini
                   id="autres-mesures"
                   className="rubrique fr-pt-md-5w"
-                  dangerouslySetInnerHTML={{
-                    __html: etatRestitution.restitution?.autresMesures || '',
-                  }}
-                ></div>
+                  contenu={etatRestitution.restitution?.autresMesures || ''}
+                />
               </div>
             </div>
           </div>
