@@ -8,7 +8,7 @@ export const BoutonProConnect = () => {
         </a>
         <p>
           <a
-            href="https://proconnect.gouv.fr/"
+            href={import.meta.env['VITE_URL_PRO_CONNECT']}
             target="_blank"
             rel="noopener noreferrer"
             title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
