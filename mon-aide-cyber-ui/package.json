@@ -47,8 +47,7 @@
     "happy-dom": "^15.10.2",
     "prop-types": "^15.8.1",
     "sass": "^1.63.6",
-    "storybook": "^9.0.4",
-    "storybook-addon-remix-react-router": "^3.0.0"
+    "storybook": "^9.0.4"
   },
   "eslintConfig": {
     "extends": [
