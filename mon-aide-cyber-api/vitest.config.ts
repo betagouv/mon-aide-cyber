@@ -1,6 +1,6 @@
-import { defineProject } from 'vitest/config';
+import { defineConfig } from 'vitest/config';
 
-export default defineProject({
+export default defineConfig({
   test: {
     env: {
       URL_SERVEUR_BASE_DONNEES:
@@ -21,7 +21,7 @@ export default defineProject({
     },
     // Sur la CI, on veut un joli rapport de test
     reporters: process.env.GITHUB_ACTIONS ? ['junit'] : ['verbose'],
-    outputFile: process.env.GITHUB_ACTIONS ? './vitest-junit.xml' : null,
+    outputFile: process.env.GITHUB_ACTIONS ? './vitest-junit.xml' : '/dev/null',
     globals: true,
   },
 });
