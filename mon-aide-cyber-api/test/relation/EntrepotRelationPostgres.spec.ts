@@ -26,6 +26,10 @@ class EntrepotRelationPostgresTest extends EntrepotRelationPostgres {
           : Promise.reject(new AggregatNonTrouve(this.typeAggregat()))
       );
   }
+
+  typeAggregat(): string {
+    return 'relation';
+  }
 }
 
 type DefinitionTupleTest = DefinitionTuple & {
