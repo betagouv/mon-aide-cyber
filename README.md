@@ -52,7 +52,7 @@ Les tests sont lancés manuellement et nécessitent une première installation d
 Il faut tout d'abord démarrer un conteneur qui contient une base de données de test :
 
 ```shell
-$ cd mon-aide-cyber-api/tests && docker-compose up
+$ cd mon-aide-cyber-api/test && docker-compose up
 ```
 
 Puis on peut exécuter les tests :
