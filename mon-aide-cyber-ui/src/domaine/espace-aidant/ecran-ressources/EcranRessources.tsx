@@ -55,7 +55,7 @@ const EcranRessources = () => {
         />
         <EncartContenu
           titre="Le diagnostic"
-          paragraphe="Présentation du diagnostic"
+          paragraphe="Cette présentation déroule le diagnostic question par question et répond aux interrogations récurrentes des aidés pour vous donner les bons éléments de langages."
           video={{
             source:
               'https://ressources-mac.cellar-c2.services.clever-cloud.com/Presentation_diagnostic.mp4',
