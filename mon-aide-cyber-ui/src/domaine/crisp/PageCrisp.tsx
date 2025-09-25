@@ -4,7 +4,7 @@ import { ReponseArticle } from './Crisp.types.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { Alerte } from '../../composants/communs/messages/Alerte.tsx';
 import { ArticleCrisp } from './ArticleCrisp.tsx';
-import { Titres, useDonneesSEO } from '../../hooks/useDonneesSEO.ts';
+import { Titres, TitresSEO, useDonneesSEO } from '../../hooks/useDonneesSEO.ts';
 import React from 'react';
 
 export const PageCrisp = ({
@@ -16,7 +16,7 @@ export const PageCrisp = ({
   titre: Titres;
   articleCrisp?: React.ElementType;
 }) => {
-  useDonneesSEO(titre);
+  useDonneesSEO(titre as TitresSEO);
   const macAPI = useMACAPI();
   const ArticleCrispFourni = articleCrisp || 'div';
 
