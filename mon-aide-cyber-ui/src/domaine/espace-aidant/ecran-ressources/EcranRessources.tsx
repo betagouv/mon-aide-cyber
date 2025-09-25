@@ -44,7 +44,7 @@ const EcranRessources = () => {
         />
         <EncartContenu
           titre="Comment trouver des entités bénéficiaires ?"
-          paragraphe="Cette vidéo vous aide à appréhender la prise de contact pour proposer un diagnostic autour de votre réseau."
+          paragraphe="Cette vidéo vous aide à appréhender la prise de contact pour proposer d‘accompagner votre réseau dans la réalisation d‘un diagnostic cyber."
           video={{
             imageCouverture: '/images/video-comment-trouver-des-aides.png',
             source:
