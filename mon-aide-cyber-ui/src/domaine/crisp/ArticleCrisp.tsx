@@ -61,3 +61,29 @@ export const ArticleCrisp = (props: { article: ReponseArticle }) => {
     </main>
   );
 };
+
+export const ArticleCrispAidant = (props: { article: ReponseArticle }) => {
+  useDefilementFluide();
+  useEffect(() => synchroniseMenuEtContenu(), []);
+
+  return (
+    <div className="page-crisp page-crisp-aidant w-100">
+      <section className="chapeau">
+        <h2>{props.article?.titre}</h2>
+      </section>
+      <MenuCrispMobile tableDesMatieres={props.article?.tableDesMatieres} />
+      <section className="article">
+        <div className="contenu-section">
+          <MenuCrispDesktop
+            tableDesMatieres={props.article?.tableDesMatieres}
+          />
+
+          <ContenuAssaini
+            className="contenu"
+            contenu={props.article?.contenu || ''}
+          />
+        </div>
+      </section>
+    </div>
+  );
+};

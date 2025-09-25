@@ -21,6 +21,8 @@ import { EcranMonEspaceDemandeDevenirAidant } from './domaine/parcours-utilisati
 import { EcranDevenirAidant } from './domaine/espace-aidant/ecran-devenir-aidant/EcranDevenirAidant.tsx';
 import EcranMonEspaceInscription from './domaine/espace-aidant/parcours-inscription/ecran-inscription/EcranMonEspaceInscription.tsx';
 import EcranRessources from './domaine/espace-aidant/ecran-ressources/EcranRessources.tsx';
+import { PageCrisp } from './domaine/crisp/PageCrisp.tsx';
+import { ArticleCrispAidant } from './domaine/crisp/ArticleCrisp.tsx';
 
 export const RouteurPrive = () => {
   return (
@@ -100,6 +102,17 @@ export const RouteurPrive = () => {
             <Route path="diagnostics" element={<EcranDiagnostics />}></Route>
             <Route path="devenir-aidant" element={<EcranDevenirAidant />} />
             <Route path="ressources" element={<EcranRessources />} />
+            <Route
+              path="guide-aidant-cyber"
+              element={
+                <PageCrisp
+                  titre="Guide des Aidants cyber"
+                  idArticle="guide-aidant-cyber"
+                  key="guide-des-aidants-cyber"
+                  articleCrisp={ArticleCrispAidant}
+                />
+              }
+            />
             <Route
               path="mes-informations"
               element={<EcranMesInformations />}
