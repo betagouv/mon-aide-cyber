@@ -38,10 +38,6 @@ export const Header = ({
           route: '/relais-associatifs',
           nom: 'Relais associatifs',
         },
-        {
-          route: '/guide-des-aidants-cyber',
-          nom: 'Guide des Aidants cyber',
-        },
       ],
     },
     {
