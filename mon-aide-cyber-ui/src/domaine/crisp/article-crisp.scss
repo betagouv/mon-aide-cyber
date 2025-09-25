@@ -29,6 +29,27 @@ body:has(.page-crisp details[open]) {
   }
 }
 
+.page-crisp-aidant {
+  section {
+    padding: 3rem 7.5rem 3rem 4.25rem !important;
+  }
+
+  .chapeau {
+    background: var(--couleurs-mac-violet-tres-clair);
+
+    h2 {
+      color: var(--couleurs-mac-violet-fonce);
+      font-size: 2rem;
+      line-height: 2.5rem;
+
+      @include a-partir-de(md) {
+        font-size: 2rem;
+        line-height: 2.5rem;
+      }
+    }
+  }
+}
+
 .sommaire-replie {
   padding: 12px var(--gouttiere);
   border: 1px solid #ddd;

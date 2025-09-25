@@ -1,5 +1,6 @@
 import {
   ROUTE_MON_ESPACE,
+  ROUTE_MON_ESPACE_GUIDE_AIDANT_CYBER,
   ROUTE_MON_ESPACE_RESSOURCES,
 } from '../../../../domaine/MoteurDeLiens';
 import { useMoteurDeLiens } from '../../../../hooks/useMoteurDeLiens';
@@ -51,6 +52,11 @@ export const Sidebar = () => {
                     {
                       nom: 'Ressources',
                       route: ROUTE_MON_ESPACE_RESSOURCES,
+                      actif: true,
+                    },
+                    {
+                      nom: 'Guide de l‘Aidant Cyber',
+                      route: ROUTE_MON_ESPACE_GUIDE_AIDANT_CYBER,
                       actif: true,
                     },
                   ]

@@ -5,16 +5,20 @@ import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurPa
 import { Alerte } from '../../composants/communs/messages/Alerte.tsx';
 import { ArticleCrisp } from './ArticleCrisp.tsx';
 import { Titres, useDonneesSEO } from '../../hooks/useDonneesSEO.ts';
+import React from 'react';
 
 export const PageCrisp = ({
   idArticle,
   titre,
+  articleCrisp,
 }: {
   idArticle: string;
   titre: Titres;
+  articleCrisp?: React.ElementType;
 }) => {
   useDonneesSEO(titre);
   const macAPI = useMACAPI();
+  const ArticleCrispFourni = articleCrisp || 'div';
 
   const {
     data: articleJson,
@@ -53,5 +57,9 @@ export const PageCrisp = ({
     return <Alerte className="w-100" type="ERREUR" message={error.message} />;
   }
 
-  return <ArticleCrisp article={articleJson} />;
+  return articleCrisp ? (
+    <ArticleCrispFourni article={articleJson} />
+  ) : (
+    <ArticleCrisp article={articleJson} />
+  );
 };
