@@ -23,7 +23,9 @@ export type Titres =
   | 'Promouvoir la communauté des Aidants cyber'
   | 'Promouvoir le diagnostic cyber';
 
-const metadonneesSelonTitre: Record<Titres, string> = {
+export type TitresSEO = Exclude<Titres, 'Guide des Aidants cyber'>;
+
+const metadonneesSelonTitre: Record<TitresSEO, string> = {
   Accueil:
     'Des Aidants cyber mobilisés pour aider les entités publiques et privées à prendre leur cyberdépart grâce à un diagnostic cybersécurité gratuit.',
   Accessibilité:
@@ -51,20 +53,20 @@ const metadonneesSelonTitre: Record<Titres, string> = {
     'L‘annuaire des Aidants cyber ayant souhaité y être référencés.',
   'Créer mon espace Aidant cyber': '',
   "Charte de l'Aidant cyber": 'La charte de l‘Aidant cyber',
-  'Guide des Aidants cyber':
-    'Tous les conseils et les ressources pour être un Aidant cyber actif et engagé',
   'Promouvoir la communauté des Aidants cyber':
     'Toutes les ressources pour faire la promotion de la communauté des Aidants cyber',
   'Promouvoir le diagnostic cyber':
     'Toutes les ressources pour faire la promotion du diagnostic cyber et trouver des entités à accompagner',
 };
 
-export function useDonneesSEO(titre: Titres) {
+export function useDonneesSEO(titre: TitresSEO | undefined) {
   useEffect(() => {
-    document.title = `${titre} | MonAideCyber`;
-    const descriptionTag = document.querySelector('meta[name="description"]');
-    if (descriptionTag) {
-      descriptionTag.setAttribute('content', metadonneesSelonTitre[titre]);
+    if (titre) {
+      document.title = `${titre} | MonAideCyber`;
+      const descriptionTag = document.querySelector('meta[name="description"]');
+      if (descriptionTag) {
+        descriptionTag.setAttribute('content', metadonneesSelonTitre[titre]);
+      }
     }
   }, [titre]);
 
