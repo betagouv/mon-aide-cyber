@@ -43,6 +43,17 @@ const EcranRessources = () => {
           }}
         />
         <EncartContenu
+          titre="Comment trouver des entités bénéficiaires ?"
+          paragraphe="Cette vidéo vous aide à appréhender la prise de contact pour proposer un diagnostic autour de votre réseau."
+          video={{
+            imageCouverture: '/images/video-comment-trouver-des-aides.png',
+            source:
+              'https://ressources-mac.cellar-c2.services.clever-cloud.com/MSC-comment-trouver-des-aides.mp4',
+            sousTitres:
+              'https://ressources-mac.cellar-c2.services.clever-cloud.com/MSC-comment-trouver-des-aides.vtt',
+          }}
+        />
+        <EncartContenu
           titre="Le diagnostic"
           paragraphe="Présentation du diagnostic"
           video={{
