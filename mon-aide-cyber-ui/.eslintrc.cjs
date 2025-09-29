@@ -17,4 +17,5 @@ module.exports = {
       { varsIgnorePattern: '^__', argsIgnorePattern: '^__' },
     ],
   },
+  ignorePatterns: ['**/*lab-anssi-ui-kit.jsx.d.ts'],
 };
