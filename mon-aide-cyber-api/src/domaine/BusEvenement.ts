@@ -20,6 +20,7 @@ export interface ConsommateurEvenement {
 export type TypeEvenement =
   | 'DIAGNOSTIC_LIBRE_ACCES_LANCE'
   | 'DIAGNOSTIC_LANCE'
+  | 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE'
   | 'REPONSE_AJOUTEE'
   | 'RESTITUTION_LANCEE'
   | 'AIDANT_CREE'

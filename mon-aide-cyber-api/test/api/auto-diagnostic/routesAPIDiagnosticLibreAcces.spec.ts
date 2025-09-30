@@ -20,7 +20,10 @@ import {
   LiensHATEOAS,
   ReponseHATEOASEnErreur,
 } from '../../../src/api/hateoas/hateoas';
-import { CorpsReponseCreerDiagnosticLibreAccesEnErreur } from '../../../src/api/diagnostic-libre-acces/routesAPIDiagnosticLibreAcces';
+import {
+  CorpsReponseCreerDiagnosticLibreAccesEnErreur,
+  RestitutionDiagnosticLibreAccesTelechargee,
+} from '../../../src/api/diagnostic-libre-acces/routesAPIDiagnosticLibreAcces';
 import { unAdaptateurDeRestitutionHTML } from '../../adaptateurs/ConstructeurAdaptateurRestitutionHTML';
 import { uneRestitution } from '../../constructeurs/constructeurRestitution';
 import { unAdaptateurRestitutionPDF } from '../../adaptateurs/ConstructeurAdaptateurRestitutionPDF';
@@ -28,6 +31,7 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
 import { add } from 'date-fns';
 import { SagaAjoutReponse } from '../../../src/diagnostic/CapteurSagaAjoutReponse';
+import { uneMesurePriorisee } from '../../constructeurs/constructeurMesure';
 
 describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
   const testeurMAC = testeurIntegration();
@@ -443,6 +447,78 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
       expect(reponse.statusCode).toBe(200);
       expect(reponse.headers['content-type']).toBe('application/pdf');
       expect(adaptateurPDFAppele).toBe(true);
+    });
+
+    it('Lorsque la restitution au format PDF est demandée, on émet un événement ’RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE’', async () => {
+      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
+      adaptateurRestitutionPDF.genereRestitution = () => {
+        return Promise.resolve(Buffer.from('PDF Mesures généré'));
+      };
+      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .avecMesures([
+          uneMesurePriorisee().construis(),
+          uneMesurePriorisee().construis(),
+        ])
+        .construis();
+      await testeurMAC.entrepots.restitution().persiste(restitution);
+
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
+        undefined,
+        { accept: 'application/pdf' }
+      );
+
+      expect(
+        testeurMAC.busEvenement.evenementRecu
+      ).toStrictEqual<RestitutionDiagnosticLibreAccesTelechargee>({
+        identifiant: expect.any(String),
+        type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          identifiantDiagnostic: diagnostic.identifiant,
+          mesuresGenerees: 2,
+        },
+      });
+    });
+
+    it('Lorsque la restitution au format PDF est demandée, on émet un événement ’RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE’ avec le nombre total de mesures', async () => {
+      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
+      adaptateurRestitutionPDF.genereRestitution = () => {
+        return Promise.resolve(Buffer.from('PDF Mesures généré'));
+      };
+      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .avecMesures([
+          uneMesurePriorisee().construis(),
+          uneMesurePriorisee().construis(),
+          uneMesurePriorisee().construis(),
+          uneMesurePriorisee().construis(),
+          uneMesurePriorisee().construis(),
+          uneMesurePriorisee().construis(),
+          uneMesurePriorisee().construis(),
+        ])
+        .construis();
+      await testeurMAC.entrepots.restitution().persiste(restitution);
+
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
+        undefined,
+        { accept: 'application/pdf' }
+      );
+
+      expect(
+        (
+          testeurMAC.busEvenement
+            .evenementRecu as RestitutionDiagnosticLibreAccesTelechargee
+        ).corps.mesuresGenerees
+      ).toBe(7);
     });
 
     it('Retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {

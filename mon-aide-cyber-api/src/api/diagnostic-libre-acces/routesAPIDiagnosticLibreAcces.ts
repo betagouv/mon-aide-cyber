@@ -35,6 +35,7 @@ import { RepresentationRestitution } from '../routesAPIDiagnostic';
 import { ErreurMAC } from '../../domaine/erreurMAC';
 import { differenceInDays } from 'date-fns';
 import { adaptateurConfigurationLimiteurTraffic } from '../adaptateurLimiteurTraffic';
+import { Evenement } from '../../domaine/BusEvenement';
 
 type CorpsReponseDiagnosticLibreAcces = ReponseHATEOAS &
   RepresentationDiagnostic;
@@ -77,6 +78,7 @@ export const routesAPIDiagnosticLibreAcces = (
     busCommande,
     adaptateurDeVerificationDeRelations: relations,
     entrepots,
+    busEvenement,
   } = configuration;
 
   const envoieReponseDiagnosticNonTrouve = (
@@ -247,10 +249,22 @@ export const routesAPIDiagnosticLibreAcces = (
         );
       }
       const { id } = requete.params;
-      const genereRestitution = (
+      const genereRestitution = async (
         restitution: Restitution
       ): Promise<Buffer | RestitutionHTML> => {
         if (requete.headers.accept === 'application/pdf') {
+          await busEvenement.publie<RestitutionDiagnosticLibreAccesTelechargee>({
+            identifiant: crypto.randomUUID(),
+            type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
+            date: FournisseurHorloge.maintenant(),
+            corps: {
+              identifiantDiagnostic: restitution.identifiant,
+              mesuresGenerees: [
+                ...restitution.mesures.mesuresPrioritaires,
+                ...restitution.mesures.autresMesures,
+              ].length,
+            },
+          });
           return configuration.adaptateursRestitution
             .pdf()
             .genereRestitution(restitution);
@@ -304,3 +318,8 @@ export const routesAPIDiagnosticLibreAcces = (
   );
   return routes;
 };
+
+export type RestitutionDiagnosticLibreAccesTelechargee = Evenement<{
+  identifiantDiagnostic: crypto.UUID;
+  mesuresGenerees: number;
+}>;
