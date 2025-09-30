@@ -19,6 +19,7 @@ import {
   relaieSurMattermostActivationCompteAidantEchouee,
   reponseAjoutee,
   reponseTallyRecue,
+  restitutionDiagnosticLibreAccesTelechargee,
   restitutionLancee,
   utilisateurInscritCree,
 } from '../journalisation/evenements';
@@ -64,6 +65,10 @@ export const fabriqueConsommateursEvenements = (
     [
       'RESTITUTION_ENVOYEE',
       [restitutionEnvoyee(adaptateurRepertoireDeContacts())],
+    ],
+    [
+      'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
+      [restitutionDiagnosticLibreAccesTelechargee(entrepotJournalisation)],
     ],
     [
       'DIAGNOSTIC_LANCE',

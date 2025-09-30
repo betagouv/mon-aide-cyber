@@ -8,6 +8,7 @@ import {
   mailCreationCompteAidantNonEnvoye,
   relaieSurMattermostActivationCompteAidantEchouee,
   reponseAjoutee,
+  restitutionDiagnosticLibreAccesTelechargee,
   restitutionLancee,
 } from '../../src/journalisation/evenements';
 import {
@@ -30,6 +31,7 @@ import {
   MailCompteAidantActiveNonEnvoye,
 } from '../../src/gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
 import { Messagerie } from '../../src/infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
+import { RestitutionDiagnosticLibreAccesTelechargee } from '../../src/api/diagnostic-libre-acces/routesAPIDiagnosticLibreAcces';
 
 describe('Évènements', () => {
   beforeEach(() => {
@@ -56,6 +58,34 @@ describe('Évènements', () => {
           date: FournisseurHorloge.maintenant(),
           type: 'RESTITUTION_LANCEE',
           donnees: { identifiantDiagnostic: identifiant },
+        },
+      ]);
+    });
+  });
+
+  describe('Restitution diagnostic libre accès téléchargé', () => {
+    it("lorsque l'évènement est consommé, il est persisté", async () => {
+      const entrepot = new EntrepotEvenementJournalMemoire();
+      const identifiant = crypto.randomUUID();
+
+      await restitutionDiagnosticLibreAccesTelechargee(
+        entrepot
+      ).consomme<RestitutionDiagnosticLibreAccesTelechargee>({
+        identifiant: identifiant,
+        type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          identifiantDiagnostic: identifiant,
+          mesuresGenerees: 3,
+        },
+      });
+
+      expect(await entrepot.tous()).toStrictEqual<Publication[]>([
+        {
+          identifiant: expect.any(String),
+          date: FournisseurHorloge.maintenant(),
+          type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
+          donnees: { identifiantDiagnostic: identifiant, mesuresGenerees: 3 },
         },
       ]);
     });
