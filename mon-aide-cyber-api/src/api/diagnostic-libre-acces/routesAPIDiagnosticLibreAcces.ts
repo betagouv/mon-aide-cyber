@@ -36,6 +36,8 @@ import { ErreurMAC } from '../../domaine/erreurMAC';
 import { differenceInDays } from 'date-fns';
 import { adaptateurConfigurationLimiteurTraffic } from '../adaptateurLimiteurTraffic';
 import { Evenement } from '../../domaine/BusEvenement';
+import { utilitairesCookies } from '../../adaptateurs/utilitairesDeCookies';
+import { JwtMACPayload } from '../../authentification/GestionnaireDeJeton';
 
 type CorpsReponseDiagnosticLibreAcces = ReponseHATEOAS &
   RepresentationDiagnostic;
@@ -79,6 +81,7 @@ export const routesAPIDiagnosticLibreAcces = (
     adaptateurDeVerificationDeRelations: relations,
     entrepots,
     busEvenement,
+    gestionnaireDeJeton,
   } = configuration;
 
   const envoieReponseDiagnosticNonTrouve = (
@@ -253,18 +256,41 @@ export const routesAPIDiagnosticLibreAcces = (
         restitution: Restitution
       ): Promise<Buffer | RestitutionHTML> => {
         const publieEvenementDiagnosticTelecharge = async () => {
-          await busEvenement.publie<RestitutionDiagnosticLibreAccesTelechargee>({
-            identifiant: crypto.randomUUID(),
-            type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
-            date: FournisseurHorloge.maintenant(),
-            corps: {
-              identifiantDiagnostic: restitution.identifiant,
-              mesuresGenerees: [
-                ...restitution.mesures.mesuresPrioritaires,
-                ...restitution.mesures.autresMesures,
-              ].length,
-            },
-          });
+          let jwtPayload: JwtMACPayload | undefined = undefined;
+          try {
+            const cookies = utilitairesCookies.fabriqueDeCookies(
+              'Demande la restitution',
+              requete,
+              reponse
+            );
+            jwtPayload = utilitairesCookies.jwtPayload(
+              cookies,
+              gestionnaireDeJeton
+            );
+          } catch (e) {
+            console.log(
+              'Aucun problème! On essaie de récupérer la session utilisateur sur une ressource publique seulement si la session existe.'
+            );
+          } finally {
+            await busEvenement.publie<RestitutionDiagnosticLibreAccesTelechargee>(
+              {
+                identifiant: crypto.randomUUID(),
+                type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
+                date: FournisseurHorloge.maintenant(),
+                corps: {
+                  identifiantDiagnostic: restitution.identifiant,
+                  mesuresGenerees: [
+                    ...restitution.mesures.mesuresPrioritaires,
+                    ...restitution.mesures.autresMesures,
+                  ].length,
+                  ...(jwtPayload &&
+                    jwtPayload.identifiant && {
+                      identifiantUtilisateur: jwtPayload.identifiant,
+                    }),
+                },
+              }
+            );
+          }
         };
 
         if (requete.headers.accept === 'application/pdf') {
@@ -326,4 +352,5 @@ export const routesAPIDiagnosticLibreAcces = (
 export type RestitutionDiagnosticLibreAccesTelechargee = Evenement<{
   identifiantDiagnostic: crypto.UUID;
   mesuresGenerees: number;
+  identifiantUtilisateur?: crypto.UUID;
 }>;
