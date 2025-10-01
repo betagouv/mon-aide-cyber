@@ -32,6 +32,7 @@ import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/Fournisse
 import { add } from 'date-fns';
 import { SagaAjoutReponse } from '../../../src/diagnostic/CapteurSagaAjoutReponse';
 import { uneMesurePriorisee } from '../../constructeurs/constructeurMesure';
+import { utilitairesCookies } from '../../../src/adaptateurs/utilitairesDeCookies';
 
 describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
   const testeurMAC = testeurIntegration();
@@ -519,6 +520,83 @@ describe('Le serveur MAC sur les routes /api/diagnostic-libre-acces', () => {
             .evenementRecu as RestitutionDiagnosticLibreAccesTelechargee
         ).corps.mesuresGenerees
       ).toBe(7);
+    });
+
+    it('Lorsque la restitution au format PDF est demandée, on émet un événement ’RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE’ avec l’identifiant de l’utilisateur courant si disponible', async () => {
+      utilitairesCookies.fabriqueDeCookies = () => ({
+        session: 'cookie',
+      });
+      const identifiantUtilisateur = crypto.randomUUID();
+      utilitairesCookies.jwtPayload = () => ({
+        identifiant: identifiantUtilisateur,
+        estProconnect: false,
+      });
+      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
+      adaptateurRestitutionPDF.genereRestitution = () => {
+        return Promise.resolve(Buffer.from('PDF Mesures généré'));
+      };
+      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .construis();
+      await testeurMAC.entrepots.restitution().persiste(restitution);
+
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
+        undefined,
+        { accept: 'application/pdf' }
+      );
+
+      expect(
+        (
+          testeurMAC.busEvenement
+            .evenementRecu as RestitutionDiagnosticLibreAccesTelechargee
+        ).corps.identifiantUtilisateur
+      ).toBe(identifiantUtilisateur);
+    });
+
+    it('Lorsque la restitution au format PDF est demandée, on émet un événement ’RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE’ même si le cookie de session n’est pas présent', async () => {
+      utilitairesCookies.fabriqueDeCookies = () => {
+        throw new Error('Pas de cookie');
+      };
+      utilitairesCookies.jwtPayload = () => {
+        throw new Error('Pas de token JWT');
+      };
+      const adaptateurRestitutionPDF = unAdaptateurRestitutionPDF();
+      adaptateurRestitutionPDF.genereRestitution = () => {
+        return Promise.resolve(Buffer.from('PDF Mesures généré'));
+      };
+      testeurMAC.adaptateursRestitution.pdf = () => adaptateurRestitutionPDF;
+      const restitution = uneRestitution()
+        .avecIdentifiant(diagnostic.identifiant)
+        .avecMesures([
+          uneMesurePriorisee().construis(),
+          uneMesurePriorisee().construis(),
+        ])
+        .construis();
+      await testeurMAC.entrepots.restitution().persiste(restitution);
+
+      await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic-libre-acces/${restitution.identifiant}/restitution`,
+        undefined,
+        { accept: 'application/pdf' }
+      );
+
+      expect(
+        testeurMAC.busEvenement.evenementRecu
+      ).toStrictEqual<RestitutionDiagnosticLibreAccesTelechargee>({
+        identifiant: expect.any(String),
+        type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          identifiantDiagnostic: diagnostic.identifiant,
+          mesuresGenerees: 2,
+        },
+      });
     });
 
     it('Retourne une erreur HTTP 404 si le diagnostic visé n’existe pas', async () => {
