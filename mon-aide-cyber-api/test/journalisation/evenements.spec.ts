@@ -69,7 +69,13 @@ describe('Évènements', () => {
       const identifiant = crypto.randomUUID();
 
       await restitutionDiagnosticLibreAccesTelechargee(
-        entrepot
+        entrepot,
+        uneRechercheUtilisateursMAC(
+          new EntrepotUtilisateurMACMemoire({
+            aidant: new EntrepotAidantMemoire(),
+            utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+          })
+        )
       ).consomme<RestitutionDiagnosticLibreAccesTelechargee>({
         identifiant: identifiant,
         type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
@@ -86,6 +92,46 @@ describe('Évènements', () => {
           date: FournisseurHorloge.maintenant(),
           type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
           donnees: { identifiantDiagnostic: identifiant, mesuresGenerees: 3 },
+        },
+      ]);
+    });
+
+    it("lorsque l'évènement est consommé, il est persisté avec l’identifiant utilisateur et son type si disponible", async () => {
+      const entrepotAidant = new EntrepotAidantMemoire();
+      const aidant = unAidant().construis();
+      await entrepotAidant.persiste(aidant);
+      const entrepotUtilisateurMAC = new EntrepotUtilisateurMACMemoire({
+        aidant: entrepotAidant,
+        utilisateurInscrit: new EntrepotUtilisateurInscritMemoire(),
+      });
+      const entrepotJournal = new EntrepotEvenementJournalMemoire();
+      const identifiant = crypto.randomUUID();
+
+      await restitutionDiagnosticLibreAccesTelechargee(
+        entrepotJournal,
+        uneRechercheUtilisateursMAC(entrepotUtilisateurMAC)
+      ).consomme<RestitutionDiagnosticLibreAccesTelechargee>({
+        identifiant: identifiant,
+        type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
+        date: FournisseurHorloge.maintenant(),
+        corps: {
+          identifiantDiagnostic: identifiant,
+          mesuresGenerees: 3,
+          identifiantUtilisateur: aidant.identifiant,
+        },
+      });
+
+      expect(await entrepotJournal.tous()).toStrictEqual<Publication[]>([
+        {
+          identifiant: expect.any(String),
+          date: FournisseurHorloge.maintenant(),
+          type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
+          donnees: {
+            identifiantDiagnostic: identifiant,
+            mesuresGenerees: 3,
+            identifiantUtilisateur: aidant.identifiant,
+            profil: 'Aidant',
+          },
         },
       ]);
     });
