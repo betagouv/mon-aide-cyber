@@ -252,7 +252,7 @@ export const routesAPIDiagnosticLibreAcces = (
       const genereRestitution = async (
         restitution: Restitution
       ): Promise<Buffer | RestitutionHTML> => {
-        if (requete.headers.accept === 'application/pdf') {
+        const publieEvenementDiagnosticTelecharge = async () => {
           await busEvenement.publie<RestitutionDiagnosticLibreAccesTelechargee>({
             identifiant: crypto.randomUUID(),
             type: 'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
@@ -265,6 +265,10 @@ export const routesAPIDiagnosticLibreAcces = (
               ].length,
             },
           });
+        };
+
+        if (requete.headers.accept === 'application/pdf') {
+          await publieEvenementDiagnosticTelecharge();
           return configuration.adaptateursRestitution
             .pdf()
             .genereRestitution(restitution);
