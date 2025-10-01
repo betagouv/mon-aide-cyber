@@ -68,7 +68,12 @@ export const fabriqueConsommateursEvenements = (
     ],
     [
       'RESTITUTION_DIAGNOSTIC_LIBRE_ACCES_TELECHARGEE',
-      [restitutionDiagnosticLibreAccesTelechargee(entrepotJournalisation)],
+      [
+        restitutionDiagnosticLibreAccesTelechargee(
+          entrepotJournalisation,
+          uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
+        ),
+      ],
     ],
     [
       'DIAGNOSTIC_LANCE',

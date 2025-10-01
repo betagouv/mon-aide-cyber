@@ -2,7 +2,10 @@ import { ConsommateurEvenement, Evenement } from '../domaine/BusEvenement';
 import crypto from 'crypto';
 import { EntrepotEvenementJournal, Publication } from './Publication';
 import { DiagnosticLance } from '../diagnostic/CapteurCommandeLanceDiagnostic';
-import { RechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
+import {
+  RechercheUtilisateursMAC,
+  UtilisateurMACDTO,
+} from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import {
   EntrepotDemandeAide,
   RechercheDemandeAideComplete,
@@ -14,6 +17,7 @@ import {
   MailCompteAidantActiveEnvoye,
   MailCompteAidantActiveNonEnvoye,
 } from '../gestion-demandes/devenir-aidant/CapteurSagaActivationCompteAidant';
+import { RestitutionDiagnosticLibreAccesTelechargee } from '../api/diagnostic-libre-acces/routesAPIDiagnosticLibreAcces';
 
 const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
   new (class implements ConsommateurEvenement {
@@ -23,8 +27,43 @@ const consommateurEvenement = () => (entrepot: EntrepotEvenementJournal) =>
   })();
 
 export const restitutionLancee = consommateurEvenement();
+
+const consommateurRestitutionDiagnosticLibreAccesTelechargee =
+  () =>
+  (
+    entrepotJournal: EntrepotEvenementJournal,
+    rechercheUtilisateurMAC: RechercheUtilisateursMAC
+  ) =>
+    new (class implements ConsommateurEvenement {
+      async consomme<E extends Evenement<unknown>>(
+        evenement: E
+      ): Promise<void> {
+        const { corps } =
+          evenement as RestitutionDiagnosticLibreAccesTelechargee;
+        let utilisateur: UtilisateurMACDTO | undefined;
+        if (corps.identifiantUtilisateur) {
+          utilisateur = await rechercheUtilisateurMAC.rechercheParIdentifiant(
+            corps.identifiantUtilisateur
+          );
+        }
+
+        return entrepotJournal.persiste(
+          genereEvenement({
+            ...evenement,
+            corps: {
+              identifiantDiagnostic: corps.identifiantDiagnostic,
+              mesuresGenerees: corps.mesuresGenerees,
+              ...(utilisateur && {
+                profil: utilisateur.profil,
+                identifiantUtilisateur: utilisateur.identifiant,
+              }),
+            },
+          })
+        );
+      }
+    })();
 export const restitutionDiagnosticLibreAccesTelechargee =
-  consommateurEvenement();
+  consommateurRestitutionDiagnosticLibreAccesTelechargee();
 
 const consommateurDiagnosticLance =
   () =>
