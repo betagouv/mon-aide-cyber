@@ -3,6 +3,7 @@ import { liensMesServicesCyber } from './infrastructure/mes-services-cyber/liens
 import { EncartDiagnosticCyber } from './composants/landing/EncartDiagnosticCyber.tsx';
 import { EncartRealiserDesDiagnosticsCyber } from './composants/landing/EncartRealiserDesDiagnosticsCyber/EncartRealiserDesDiagnosticsCyber.tsx';
 import { EncartLogosPartenaires } from './composants/landing/EncartLogosPartenaires/EncartLogosPartenaires.tsx';
+import { MiseEnAvantTopAidants } from './composants/landing/MiseEnAvantTopAidants.tsx';
 
 export const Accueil = () => {
   useDonneesSEO('Accueil');
@@ -105,6 +106,7 @@ export const Accueil = () => {
 
   return (
     <main role="main" className="page-accueil">
+      <MiseEnAvantTopAidants />
       <lab-anssi-brique-hero
         titre="Mon​Aide​Cyber"
         soustitre="Des Aidants cyber mobilisés pour aider les entités publiques et privées à prendre leur cyberdépart !"
