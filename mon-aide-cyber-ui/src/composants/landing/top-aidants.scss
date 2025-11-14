@@ -1,0 +1,96 @@
+@import "../../assets/styles/couleurs";
+@import "../../assets/styles/points-de-rupture.scss";
+
+.challenge {
+  display: flex;
+  padding: 12px var(--2-w-16-px, 16px);
+  align-items: flex-start;
+  align-self: stretch;
+  background: var(--couleurs-mac-violet-tres-clair);
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .encart {
+    display: flex;
+
+    align-items: flex-start;
+    gap: 8px;
+    flex: 1 0 0;
+
+    .gagnants {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1rem;
+      flex: 1 0 0;
+      align-self: stretch;
+
+      @include a-partir-de(lg) {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
+        gap: 1.5rem var(--Espacements-grid, 1.5rem);
+        flex: 1 0 0;
+        align-self: stretch;
+      }
+
+      .remerciements {
+        gap: 0.25rem;
+      }
+
+      .titre {
+        color: var(--couleurs-mac-violet-fonce);
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 1.5rem;
+      }
+
+      .visuels {
+        display: flex;
+        max-width: 336px;
+        padding: 16px 0;
+        align-items: flex-start;
+        gap: 10px;
+        align-self: stretch;
+
+        @include a-partir-de(md) {
+          img {
+            width: 3.6rem;
+            height: 3.6rem;
+          }
+        }
+
+
+        @include a-partir-de(md){
+          max-width: 100%;
+          align-items: center;
+          justify-content: center;
+        }
+
+      }
+    }
+  }
+
+  .fermeture {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+
+    button {
+      padding: 0 !important;
+
+      &::after {
+        margin: 0 !important;
+      }
+    }
+  }
+}
