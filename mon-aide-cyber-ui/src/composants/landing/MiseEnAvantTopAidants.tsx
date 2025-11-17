@@ -27,19 +27,19 @@ export const MiseEnAvantTopAidants = () => {
             <div className="visuels">
               <img src="/images/top_aidants/laurier_g.svg" alt="" />
               <img
-                src="/images/top_aidants/pierre_borie.svg"
+                src="/images/top_aidants/pierre_borie.png"
                 alt="Top Aidant Pierre Borie"
               />
               <img
-                src="/images/top_aidants/kim_guerin.svg"
+                src="/images/top_aidants/kim_guerin.png"
                 alt="Top Aidante Kim Guerin"
               />
               <img
-                src="/images/top_aidants/benoit_lejeunes.svg"
+                src="/images/top_aidants/benoit_lejeunes.png"
                 alt="Top Aidant Benoît Lejeunes"
               />
               <img
-                src="/images/top_aidants/willy_robert.svg"
+                src="/images/top_aidants/willy_robert.png"
                 alt="Top Aidant Willy Robert"
               />
               <img src="/images/top_aidants/laurier_d.svg" alt="" />

@@ -61,6 +61,11 @@
         gap: 10px;
         align-self: stretch;
 
+        img {
+          width: 2.675rem;
+          height: 2.675rem;
+        }
+
         @include a-partir-de(md) {
           img {
             width: 3.6rem;
