@@ -47,7 +47,7 @@ Optionnellement, forcer le build si nécessaire.
 
 ## Lancement de la suite de tests automatisés
 
-Les tests sont lancés manuellement et nécessitent une première installation des espaces de travail du projet (`npm install`).
+Les tests sont lancés manuellement et nécessitent une première installation des espaces de travail du projet (`npm ci`).
 
 Il faut tout d'abord démarrer un conteneur qui contient une base de données de test :
 
