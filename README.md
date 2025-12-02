@@ -47,11 +47,12 @@ Optionnellement, forcer le build si nécessaire.
 
 ## Lancement de la suite de tests automatisés
 
-Les tests sont lancés manuellement et nécessitent une première installation des espaces de travail du projet (`npm ci`).
-
-Il faut tout d'abord démarrer un conteneur qui contient une base de données de test :
+Les tests sont à lancer manuellement. Ils nécessitent en amont :
+ - une première installation des dépendances `npm` du projet
+ - le démarrage d'un conteneur Postgres dédié aux tests
 
 ```shell
+$ npm ci
 $ cd mon-aide-cyber-api/test && docker-compose up
 ```
 

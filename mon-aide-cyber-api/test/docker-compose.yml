@@ -18,7 +18,8 @@ services:
       - URL_SERVEUR_BASE_DONNEES=postgres://postgres@mon-aide-cyber-bd-test
     volumes:
       - ../:/home/node/app
+      - ../../node_modules/:/home/node/app/node_modules
     working_dir: /home/node/app
-    command: './test/scripts/migrations.sh'
+    command: './node_modules/.bin/knex --knexfile ./src/infrastructure/entrepots/postgres/knexfile.ts migrate:latest'
     depends_on:
       - db
