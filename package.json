@@ -20,8 +20,8 @@
     "test:watch": "npm run test:watch --workspaces",
     "build": "npm run build --workspaces",
     "start": "npm run start -w mon-aide-cyber-api",
-    "format:verifie": "npx prettier --config=./.prettierrc.json -c mon-aide-cyber-api mon-aide-cyber-ui",
-    "format:corrige": "npx prettier --config=./.prettierrc.json -w mon-aide-cyber-api mon-aide-cyber-ui"
+    "format:verifie": "prettier --config=./.prettierrc.json -c mon-aide-cyber-api mon-aide-cyber-ui",
+    "format:corrige": "prettier --config=./.prettierrc.json -w mon-aide-cyber-api mon-aide-cyber-ui"
   },
   "dependencies": {
     "typescript": "^5.1.3",
