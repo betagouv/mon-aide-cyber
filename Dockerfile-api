@@ -4,14 +4,12 @@ ENV PUPPETEER_SKIP_DOWNLOAD=true
 
 RUN apt-get update
 
-RUN npm install -g npm
-
 WORKDIR /usr/src/app
 
 COPY package*.json /usr/src/app/
 COPY mon-aide-cyber-api/package.json /usr/src/app/mon-aide-cyber-api/package.json
 
-RUN npm install
+RUN npm ci
 
 COPY mon-aide-cyber-api/ /usr/src/app/mon-aide-cyber-api/
 
