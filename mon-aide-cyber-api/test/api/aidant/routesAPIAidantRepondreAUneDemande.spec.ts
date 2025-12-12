@@ -129,9 +129,41 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
           code: '29',
           codeRegion: '53',
         },
+        epci: 'Métropole de Bordeaux',
         typeEntite: 'Organisations publiques',
         secteurActivite: 'Administration, Tertiaire',
       });
+    });
+
+    it('Ne renvoie pas l’EPCI si la recherche entreprise ne retourne rien', async () => {
+      testeurMAC.adaptateurDeRechercheEntreprise =
+        unAdaptateurRechercheEntreprise()
+          .neRetournantPasDEntrepise()
+          .construis();
+      donneesServeur = testeurMAC.initialise();
+      const token = tokenAttributionDemandeAide(
+        testeurMAC.serviceDeChiffrement
+      ).chiffre(
+        'entite-aidee@email.com',
+        '11111111-1111-1111-1111-111111111111',
+        crypto.randomUUID()
+      );
+      const demandeAide: DemandeAide = uneDemandeAide()
+        .avecUneDateDeSignatureDesCGU(new Date('2025-04-02T12:37:00.000Z'))
+        .avecUnEmail('entite-aidee@email.com')
+        .avecIdentifiant('11111111-1111-1111-1111-111111111111')
+        .dansLeDepartement(finistere)
+        .avecLeSiret('0987654321')
+        .construis();
+      await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/repondre-a-une-demande/informations-de-demande?token=${token}`
+      );
+
+      expect(reponse.json().epci).toBeUndefined();
     });
 
     it('Rejette la requête avec une erreur 400 si le déchiffrement du token lève une exception', async () => {
