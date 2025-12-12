@@ -15,6 +15,7 @@ type ProprietesEcransAvecToken = {
 export type DemandePourPostuler = {
   dateCreation: string;
   departement: Departement;
+  epci?: string;
   typeEntite: string;
   secteurActivite: string;
 };
