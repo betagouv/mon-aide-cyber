@@ -61,6 +61,7 @@ export const RepondreALaDemande = ({
                         <b>
                           {demandeAide?.departement.nom} (
                           {demandeAide?.departement.code})
+                          {demandeAide?.epci ? ` - ${demandeAide?.epci}` : ''}
                         </b>
                       </p>
                       <p>
