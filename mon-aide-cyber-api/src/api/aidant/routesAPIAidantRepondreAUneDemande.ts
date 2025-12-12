@@ -11,6 +11,10 @@ import {
 } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 import { DemandePourPostuler } from './miseEnRelation';
 import { ErreurMAC } from '../../domaine/erreurMAC';
+import {
+  EPCI,
+  unAdaptateurGeographie,
+} from '../../adaptateurs/AdaptateurGeographie';
 
 type CorpsRequeteRepondreAUneDemande = core.ParamsDictionary & {
   token: string;
@@ -114,9 +118,15 @@ export const routesAPIAidantRepondreAUneDemande = (
         demande.siret
       );
 
+      const epci: EPCI | undefined =
+        entreprise !== undefined
+          ? await unAdaptateurGeographie().epciAvecCode(entreprise.codeEpci)
+          : undefined;
+
       return reponse.json({
         dateCreation: demande.dateSignatureCGU.toISOString(),
         departement: demande.departement,
+        ...(epci && { epci: epci.nom }),
         typeEntite: entreprise?.typeEntite?.nom ?? 'Information indisponible',
         secteurActivite:
           entreprise?.secteursActivite.map((s) => s.nom).join(', ') ??

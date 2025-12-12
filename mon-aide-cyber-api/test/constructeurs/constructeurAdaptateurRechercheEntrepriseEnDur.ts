@@ -74,6 +74,11 @@ class ConstructeurAdaptateurRechercheEntrepriseEnDur
     return this;
   }
 
+  neRetournantPasDEntrepise(): ConstructeurAdaptateurRechercheEntrepriseEnDur {
+    this.reponse = [];
+    return this;
+  }
+
   construis(): AdaptateurRechercheEntreprise {
     return {
       rechercheEntreprise: async (
