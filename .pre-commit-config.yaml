@@ -17,16 +17,24 @@ repos:
           ['stylelint@15.10.3', 'stylelint-config-standard@34.0.0']
         exclude: 'mon-aide-cyber-ui'
 
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: 'v8.43.0'
+  - repo: local
     hooks:
-      - id: eslint
+      - id: eslint-front
+        name: eslint-front
+        entry: ./mon-aide-cyber-ui/node_modules/.bin/eslint
+        language: system
         files: \.[jt]sx?$ # *.js, *.jsx, *.ts and *.tsx
         types: [file]
-        additional_dependencies:
-          - eslint@8.43.0
-          - eslint-config-airbnb@19.0.4
-          - eslint-config-prettier@8.8.0
-          - eslint-plugin-react@7.32.2
-          - eslint-plugin-react-hooks@4.6.0
-          - eslint-plugin-react-refresh@0.3.4
+        args:
+          - --config
+          - ./mon-aide-cyber-ui/eslint.config.cjs
+
+      - id: eslint-back
+        name: eslint-back
+        entry: ./mon-aide-cyber-ui/node_modules/.bin/eslint
+        language: system
+        files: \.[jt]s?$ # *.js, *.ts
+        types: [ file ]
+        args:
+          - --config
+          - ./mon-aide-cyber-api/eslint.config.mjs
