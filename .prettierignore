@@ -5,3 +5,4 @@ mon-aide-cyber-ui/public/lab-anssi-ui-kit/
 **/*.scss
 **/*.css
 **/coverage
+pnpm-lock.yaml

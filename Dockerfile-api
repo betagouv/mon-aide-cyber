@@ -1,16 +1,19 @@
-FROM docker.io/node:22.9.0
+FROM docker.io/node:22.21.1
 
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 
-RUN apt-get update
+RUN apt-get update -y
+RUN apt-get install -y \
+  jq
 
 WORKDIR /usr/src/app
 
-COPY package*.json /usr/src/app/
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /usr/src/app/
 COPY mon-aide-cyber-api/package.json /usr/src/app/mon-aide-cyber-api/package.json
 
-RUN npm ci
+RUN npm install -g "$(jq -r '.packageManager' package.json)"
+RUN pnpm install --frozen-lockfile
 
 COPY mon-aide-cyber-api/ /usr/src/app/mon-aide-cyber-api/
 
-CMD ["npm", "run", "dev", "-w", "mon-aide-cyber-api"]
+CMD ["pnpm", "--dir", "mon-aide-cyber-api", "run", "dev"]
