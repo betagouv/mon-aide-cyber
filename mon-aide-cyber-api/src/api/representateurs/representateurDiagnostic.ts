@@ -76,7 +76,11 @@ const questionTiroirATranscrire = (
           libelle: question.libelle,
         } as RepresentationQuestion;
       }
+
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       const { poids, ...questionSansPoids } = { ...question };
+      /* eslint-enable */
+
       return {
         ...questionSansPoids,
       } as RepresentationQuestion;

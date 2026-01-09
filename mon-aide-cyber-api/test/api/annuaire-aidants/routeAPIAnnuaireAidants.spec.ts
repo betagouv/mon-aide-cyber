@@ -49,7 +49,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
     expect(reponseJson.aidants).toStrictEqual([
       { identifiant: aidant.identifiant, nomPrenom: 'Jean D.' },
     ]);
-    expect(reponseJson.departements).not.empty;
+    expect(reponseJson.departements).not.toHaveLength(0);
   });
 
   it('Retourne la liste des départements', async () => {
@@ -122,7 +122,7 @@ describe('le serveur MAC sur les routes /api/annuaire-aidant', () => {
           { identifiant: aidant.identifiant, nomPrenom: 'Jean D.' },
         ]);
         expect(reponseJson.nombreAidants).toStrictEqual(1);
-        expect(reponseJson.departements).not.empty;
+        expect(reponseJson.departements).not.toHaveLength(0);
       });
 
       it('Retourne les liens HATEOAS dans le corps de la réponse', async () => {

@@ -35,12 +35,35 @@ services:
       - 8081:8081
     volumes:
       - ./mon-aide-cyber-api:/usr/src/app/mon-aide-cyber-api
-      - /usr/src/app/mon-aide-cyber-api/node_modules # on ne veut pas monter le `node_modules` de l'hôte
       - ./mon-aide-cyber-ui/dist/:/usr/src/app/mon-aide-cyber-ui/dist
     depends_on:
       - db
     networks:
       - reseau-mon-aide-cyber
+
+  db-test:
+    container_name: mon-aide-cyber-bd-test
+    image: docker.io/postgres:14
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5434:5432
+    volumes:
+      - /var/lib/postgresql/data
+      - ./mon-aide-cyber-api/test/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
+    depends_on:
+      - api
+
+  migration-test:
+    image: docker.io/node:24
+    environment:
+      - URL_SERVEUR_BASE_DONNEES=postgres://postgres@mon-aide-cyber-bd-test
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    command: 'pnpm -F mon-aide-cyber-api run test:migre-bdd'
+    depends_on:
+      - db-test
 
 networks:
   reseau-mon-aide-cyber:

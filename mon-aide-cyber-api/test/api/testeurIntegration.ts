@@ -153,7 +153,6 @@ class TesteurIntegrationMAC {
       ) => suite(),
     });
     const portEcoute = PORT_DISPONIBLE;
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.serveurDeTest.ecoute(portEcoute, () => {});
     return { portEcoute: portEcoute, app: this.serveurDeTest.app };
   }

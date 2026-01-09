@@ -12,7 +12,6 @@ describe('Réducteur bouton thématique', () => {
     describe('Lors du chargement', () => {
       const etatBoutonInitial: EtatBouton = {
         borneThematique: false,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onClick: (_thematique: string) => {},
         thematiques: [],
         thematiqueCourante: '',
@@ -32,7 +31,7 @@ describe('Réducteur bouton thématique', () => {
           'premiere-thematique',
           'derniere-thematique',
         ]);
-        expect(etatBouton.borneThematique).to.be.false;
+        expect(etatBouton.borneThematique).toBeFalsy();
       });
 
       it('devrait être la dernière thématique', () => {
@@ -44,7 +43,7 @@ describe('Réducteur bouton thématique', () => {
           ])
         );
 
-        expect(etatBouton.borneThematique).to.be.true;
+        expect(etatBouton.borneThematique).toBeTruthy();
         expect(etatBouton.thematiqueCourante).toBe('derniere-thematique');
       });
     });
@@ -80,7 +79,7 @@ describe('Réducteur bouton thématique', () => {
           boutonThematiqueCliquee()
         );
 
-        expect(etatBouton.borneThematique).to.be.true;
+        expect(etatBouton.borneThematique).toBeTruthy();
         expect(etatBouton.thematiqueCourante).toBe('derniere-thematique');
         expect(thematiqueChoisie).toBe('derniere-thematique');
       });
@@ -91,7 +90,6 @@ describe('Réducteur bouton thématique', () => {
     describe('Lors du chargement', () => {
       const etatBoutonInitial: EtatBouton = {
         borneThematique: false,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onClick: (_thematique: string) => {},
         thematiques: [],
         thematiqueCourante: '',
@@ -111,7 +109,6 @@ describe('Réducteur bouton thématique', () => {
           'premiere-thematique',
           'deuxieme-thematique',
         ]);
-        expect(etatBouton.borneThematique).to.be.false;
       });
 
       it('devrait être la première thématique', () => {
@@ -123,7 +120,7 @@ describe('Réducteur bouton thématique', () => {
           ])
         );
 
-        expect(etatBouton.borneThematique).to.be.true;
+        expect(etatBouton.borneThematique).toBeTruthy();
         expect(etatBouton.thematiqueCourante).toBe('premiere-thematique');
       });
     });
@@ -159,7 +156,7 @@ describe('Réducteur bouton thématique', () => {
           boutonThematiqueCliquee()
         );
 
-        expect(etatBouton.borneThematique).to.be.true;
+        expect(etatBouton.borneThematique).toBeTruthy();
         expect(etatBouton.thematiqueCourante).toBe('premiere-thematique');
         expect(thematiqueChoisie).toBe('premiere-thematique');
       });

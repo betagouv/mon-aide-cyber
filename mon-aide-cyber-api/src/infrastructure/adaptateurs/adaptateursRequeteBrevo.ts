@@ -35,7 +35,9 @@ type ReponseCreationContact = Omit<ReponseBrevo, 'json'> & {
 export type CorpsReponseRechercheContact = {
   email: string;
   id: string;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   attributes: any;
+  /* eslint-enable */
 };
 type ReponseRechercheContact = Omit<ReponseBrevo, 'json'> & {
   json: () => Promise<CorpsReponseRechercheContact>;

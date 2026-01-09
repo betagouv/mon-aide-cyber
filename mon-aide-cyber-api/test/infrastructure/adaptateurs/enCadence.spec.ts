@@ -18,12 +18,9 @@ describe('En cadence', () => {
   });
 
   it('respecte l’intervale en millisecondes', async () => {
-    let compteur = 0;
     const debut = performance.now();
 
-    const cadencee = await enCadence(10, async () => {
-      compteur += 1;
-    });
+    const cadencee = await enCadence(10, async () => {});
     await cadencee();
     await cadencee();
     await cadencee();
@@ -35,12 +32,9 @@ describe('En cadence', () => {
   });
 
   it('Peut fonctionner avec un Promise.all()', async () => {
-    let compteur = 0;
     const debut = performance.now();
 
-    const cadencee = await enCadence(10, async () => {
-      compteur += 1;
-    });
+    const cadencee = await enCadence(10, async () => {});
     await Promise.all([
       cadencee(),
       cadencee(),

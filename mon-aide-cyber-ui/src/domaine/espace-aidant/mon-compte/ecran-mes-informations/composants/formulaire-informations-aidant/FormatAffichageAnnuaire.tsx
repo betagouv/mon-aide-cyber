@@ -1,7 +1,7 @@
 import { ChampRadio } from '../../../../../../composants/communs/ChampCaseACocher/ChampCaseACocher.tsx';
 import { TypeAffichage } from '../reducteurProfil.ts';
-import { TypeAffichageAnnuaire } from 'mon-aide-cyber-api/src/espace-aidant/Aidant.ts';
 import './format-affichage-annuaire.scss';
+import { TypeAffichageAnnuaire } from '../../../../../profil/Profil.ts';
 
 export const FormatAffichageAnnuaire = ({
   affichagesAnnuaire,

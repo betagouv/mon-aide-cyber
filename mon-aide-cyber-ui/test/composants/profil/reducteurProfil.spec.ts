@@ -6,7 +6,7 @@ import {
   profilCharge,
   reducteurProfil,
 } from '../../../src/domaine/espace-aidant/mon-compte/ecran-mes-informations/composants/reducteurProfil.ts';
-import { TypeAffichageAnnuaire } from 'mon-aide-cyber-api/src/espace-aidant/Aidant';
+import { TypeAffichageAnnuaire } from '../../../src/domaine/profil/Profil.ts';
 
 describe('reducteur profil', () => {
   const profilVide: EtatProfil = {

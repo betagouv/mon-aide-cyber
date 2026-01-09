@@ -55,7 +55,7 @@ export const EcranRepondreAUneDemande = ({
   const postulerALaDemande = useMutation({
     mutationKey: ['repondre-a-une-demande'],
     mutationFn: async (token: string) => {
-      return await macAPI.execute<any, any, { token: string }>(
+      return await macAPI.execute<unknown, unknown, { token: string }>(
         constructeurParametresAPI<{ token: string }>()
           .url('/api/aidant/repondre-a-une-demande')
           .methode('POST')

@@ -57,7 +57,9 @@ const valitateurUtilisateur = (
   serviceDeChiffrement: ServiceDeChiffrement
 ) => {
   const { body } = new ExpressValidator({
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     utilisateurConnu: async (__: any, { req }: Meta) => {
+      /* eslint-enable */
       const tokenDechiffre = atob(
         serviceDeChiffrement.dechiffre(req.body.token)
       );
@@ -73,7 +75,9 @@ const valitateurUtilisateur = (
 
 const validateurEntite = () => {
   const { body } = new ExpressValidator({
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     entite: async (__: any, { req }: Meta) => {
+      /* eslint-enable */
       const entite: CorpsEntite = req.body.entite;
       if (
         ['ServicePublic', 'ServiceEtat'].includes(entite.type) &&
