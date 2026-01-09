@@ -372,7 +372,6 @@ describe('Réducteur Auto complétion', () => {
           ...etatInitial,
           suggestionsInitiales: ['il', 'île', 'ïloise', 'an', 'encens'],
         },
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         valeurSaisie('i', (_) => {})
       );
 
@@ -604,7 +603,6 @@ describe('Réducteur Auto complétion', () => {
               { a: 'encens', b: 'b', c: 'c' },
             ],
           },
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
           valeurSaisie('i', (_) => {})
         );
 
@@ -691,7 +689,6 @@ describe('Réducteur Auto complétion', () => {
               { a: 'encens', b: 'b', c: 'c' },
             ],
           },
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
           valeurSaisie('í', (_) => {})
         );
 
@@ -733,7 +730,6 @@ describe('Réducteur Auto complétion', () => {
               { a: 'encens', b: 'b', c: 'c' },
             ],
           },
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
           valeurSaisie('ile de', (_) => {})
         );
 

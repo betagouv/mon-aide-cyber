@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig",
+  "include": ["./test", "./src"],
+  "exclude": ["../src/stories", "**/*node_modules"]
+}

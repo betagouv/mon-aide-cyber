@@ -267,7 +267,7 @@ export const routesAPIDiagnosticLibreAcces = (
               cookies,
               gestionnaireDeJeton
             );
-          } catch (e) {
+          } catch (_e) {
             console.log(
               'Aucun problème! On essaie de récupérer la session utilisateur sur une ressource publique seulement si la session existe.'
             );

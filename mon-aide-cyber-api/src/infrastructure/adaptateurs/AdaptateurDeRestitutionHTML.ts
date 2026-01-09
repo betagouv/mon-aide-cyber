@@ -131,7 +131,9 @@ export class AdaptateurDeRestitutionHTML
     });
   }
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   async genereHtml(pugCorps: string, paramsCorps: any): Promise<ContenuHtml> {
+    /* eslint-enable */
     const fonctionInclusionDynamique = (
       cheminTemplatePug: string,
       options = {}

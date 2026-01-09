@@ -59,8 +59,10 @@ export const routesAPIRechercheEntreprise = (
             parametresRecherche
           )
         ).map((entreprise) => {
+          /* eslint-disable @typescript-eslint/no-unused-vars */
           const { typeEntite, secteursActivite, ...rechercheEntreprise } =
             entreprise;
+          /* eslint-enable */
           return rechercheEntreprise;
         });
         return reponse.status(200).json(entreprises);

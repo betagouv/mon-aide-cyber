@@ -10,8 +10,7 @@ import { MACAPIType } from '../../../../../../fournisseurs/api/useMACAPI';
 import { useNavigationMAC } from '../../../../../../fournisseurs/hooks';
 import { Lien, ReponseHATEOAS } from '../../../../../Lien';
 import { MoteurDeLiens } from '../../../../../MoteurDeLiens';
-import { Profil } from '../../../../../profil/Profil';
-import { TypeAffichageAnnuaire } from 'mon-aide-cyber-api/src/espace-aidant/Aidant.ts';
+import { Profil, TypeAffichageAnnuaire } from '../../../../../profil/Profil';
 
 type CorpsModificationProfil = {
   consentementAnnuaire: boolean;

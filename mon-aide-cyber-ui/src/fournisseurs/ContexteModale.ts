@@ -9,9 +9,7 @@ export type ElementModale = {
 };
 
 export const ContexteModale = createContext<ActionsModale>({
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   affiche: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   ferme: () => {},
 });
 

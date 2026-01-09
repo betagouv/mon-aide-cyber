@@ -4,8 +4,8 @@ export const ContexteMatomo = createContext({});
 
 declare global {
   interface Window {
-    _mtm: any;
-    _paq: any;
+    _mtm: unknown[];
+    _paq: [string[]];
   }
 }
 

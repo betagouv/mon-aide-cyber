@@ -18,10 +18,16 @@
   ],
   "scripts": {
     "preinstall": "npx only-allow@1.2.2 pnpm",
-    "test": "npm run test --workspaces",
-    "test:watch": "npm run test:watch --workspaces",
-    "build": "npm run build --workspaces",
-    "start": "npm run start -w mon-aide-cyber-api",
+    "test": "pnpm run test:back && pnpm run test:front",
+    "test:back": "pnpm -F mon-aide-cyber-api run test",
+    "test:front": "pnpm -F mon-aide-cyber-ui run test",
+    "test:watch": "pnpm run @test:watch:back && pnpm run @test:watch:front",
+    "test:watch:back": "pnpm -F mon-aide-cyber-api run test:watch",
+    "test:watch:front": "pnpm -F mon-aide-cyber-ui run test:watch",
+    "build": "pnpm run build @build:back && pnpm run @build:front",
+    "build:back": "pnpm -F mon-aide-cyber-api run build",
+    "build:front": "pnpm -F mon-aide-cyber-ui run build",
+    "start": "pnpm -F mon-aide-cyber-api run start",
     "format:verifie": "prettier --config=./.prettierrc.json -c mon-aide-cyber-api mon-aide-cyber-ui",
     "format:corrige": "prettier --config=./.prettierrc.json -w mon-aide-cyber-api mon-aide-cyber-ui"
   },
@@ -38,6 +44,9 @@
     "jiti": "~2.6.1",
     "prettier": "~3.3.2",
     "typescript-eslint": "~8.51.0",
+    "@typescript-eslint/eslint-plugin": "~8.51.0",
+    "@typescript-eslint/parser": "~8.51.0",
+    "globals": "~17.0.0",
     "vitest": "~3.2.4"
   }
 }

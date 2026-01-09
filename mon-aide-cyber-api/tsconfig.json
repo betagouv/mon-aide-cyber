@@ -20,5 +20,7 @@
     "noImplicitReturns": true,
     "skipLibCheck": true
   },
-  "exclude": ["coverage"]
+  "exclude": ["coverage", "eslint.config.mjs"],
+
+  "include": ["**/*.ts", "eslint.config.mjs"]
 }

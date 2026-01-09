@@ -35,12 +35,14 @@ class RapportExcel implements Rapport<string> {
     });
   }
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   ajoute<
     REPRESENTATION_VALEUR,
     REPRESENTATION_RAPPORT extends RepresentationRapport<
       REPRESENTATION_VALEUR,
       any
     >,
+    /* eslint-enable */
   >(representation: REPRESENTATION_RAPPORT): void {
     const sheet = this.workbookWriter.addWorksheet(representation.intitule);
     if (isArray(representation.valeur)) {

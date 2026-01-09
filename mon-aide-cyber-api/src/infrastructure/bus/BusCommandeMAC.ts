@@ -52,8 +52,10 @@ type ParametresCapteur = {
   adaptateurRelations: AdaptateurRelations;
 };
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type Capteur = {
   capteur: (parametres: ParametresCapteur) => CapteurCommande<Commande, any>;
+  /* eslint-enable */
 };
 
 const capteurs: Map<string, Capteur> = new Map([

@@ -23,18 +23,16 @@ repos:
         name: eslint-front
         entry: ./mon-aide-cyber-ui/node_modules/.bin/eslint
         language: system
-        files: \.[jt]sx?$ # *.js, *.jsx, *.ts and *.tsx
+        files: \.[t]sx?$ # *.ts and *.tsx
         types: [file]
-        args:
-          - --config
-          - ./mon-aide-cyber-ui/eslint.config.cjs
+        exclude: 'mon-aide-cyber-api'
+        args: [--config=./mon-aide-cyber-ui/eslint.config.cjs]
 
       - id: eslint-back
         name: eslint-back
-        entry: ./mon-aide-cyber-ui/node_modules/.bin/eslint
+        entry: ./mon-aide-cyber-api/node_modules/.bin/eslint
         language: system
-        files: \.[jt]s?$ # *.js, *.ts
+        files: \.[t]s?$
         types: [ file ]
-        args:
-          - --config
-          - ./mon-aide-cyber-api/eslint.config.mjs
+        exclude: 'mon-aide-cyber-ui'
+        args: [--config=./mon-aide-cyber-api/eslint.config.mjs]

@@ -55,7 +55,7 @@ export class CapteurCommandeReinitialisationMotDePasse
           identifiant: utilisateur.identifiant,
         })
       );
-    } catch (erreur) {
+    } catch (_erreur) {
       await this.busEvenement.publie<ReinitialisationMotDePasseDemandee>(
         this.genereEvenement({ statut: 'ERREUR', email: commande.email })
       );

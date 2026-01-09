@@ -6,7 +6,7 @@ export const ChampValidationCGUs = ({
   erreur,
 }: {
   sontValidees: boolean;
-  erreur?: any;
+  erreur?: unknown;
   surCguCliquees: () => void;
 }) => {
   return (

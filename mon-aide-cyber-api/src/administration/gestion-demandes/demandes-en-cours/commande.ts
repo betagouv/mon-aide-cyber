@@ -11,7 +11,9 @@ const command = program
     'Une date au format YYYY-MM-DD pour obtenir les demandes pour un mois donné (i.e : 2024-09-01 pour les demandes du mois de Septembre 2024)'
   );
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 command.action(async (...args: any[]) => {
+  /* eslint-enable */
   const dateDebutPeriode: Date = new Date(Date.parse(args[0].toLowerCase()));
 
   const rapport: string[] = ['Date;Email;Nom - Prénom;Département;Statut;\n'];

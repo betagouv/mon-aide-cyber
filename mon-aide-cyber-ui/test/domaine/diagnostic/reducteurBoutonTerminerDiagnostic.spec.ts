@@ -25,7 +25,7 @@ describe('Réducteur bouton terminer le diagnostic', () => {
         'premiere-thematique',
         'derniere-thematique',
       ]);
-      expect(etatBouton.derniereThematique).to.be.false;
+      expect(etatBouton.derniereThematique).toBeFalsy();
     });
 
     it('devrait être sur la dernière thématique', () => {
@@ -37,7 +37,7 @@ describe('Réducteur bouton terminer le diagnostic', () => {
         ])
       );
 
-      expect(etatBouton.derniereThematique).to.be.true;
+      expect(etatBouton.derniereThematique).toBeTruthy();
     });
   });
 });
