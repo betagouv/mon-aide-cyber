@@ -1,15 +1,19 @@
-FROM docker.io/node:22.9.0
+FROM docker.io/node:22.21.1
 
-RUN apt-get update
+RUN apt-get update -y
+RUN apt-get install -y \
+  jq
 
 WORKDIR /usr/src/app
 RUN mkdir -p "/usr/src/app/mon-aide-cyber-ui/public"
 
-COPY package*.json /usr/src/app/
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /usr/src/app/
 COPY mon-aide-cyber-ui/package.json /usr/src/app/mon-aide-cyber-ui/package.json
 
-RUN npm ci
+RUN npm install -g "$(jq -r '.packageManager' package.json)"
+RUN pnpm install --frozen-lockfile
+RUN pnpm rebuild
 
 COPY mon-aide-cyber-ui/ /usr/src/app/mon-aide-cyber-ui/
 
-CMD ["npm", "run", "dev", "-w", "mon-aide-cyber-ui"]
+CMD ["pnpm", "--dir", "mon-aide-cyber-ui", "run", "dev"]

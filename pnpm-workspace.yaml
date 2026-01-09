@@ -1,0 +1,11 @@
+# _c.f._ https://pnpm.io/settings
+
+minimumReleaseAge: 10080 # 7 jours (exprimé en minutes)
+preferFrozenLockfile: true
+
+packages:
+  - 'mon-aide-cyber-api'
+  - 'mon-aide-cyber-ui'
+
+onlyBuiltDependencies:
+  - 'esbuild@0.25.9'
