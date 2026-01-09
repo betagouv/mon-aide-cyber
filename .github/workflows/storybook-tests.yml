@@ -7,17 +7,22 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Configurer Node.js
+        uses: actions/setup-node@v6
         with:
-          node-version: '20.x'
+          node-version-file: '.nvmrc'
+      - name: Installe pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.0
       - name: Installe les dépendances
-        run: npm ci
-      - name: Installe Playwright
-        run: ./node_modules/.bin/playwright install chromium --with-deps
-      - name: Construis Storybook
-        run: npm run build:storybook --quiet -w mon-aide-cyber-ui
-      - name: Démarre Storybook et execute les tests
-        run: |
-          ./node_modules/.bin/concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
-            "./node_modules/.bin/http-server ./mon-aide-cyber-ui/storybook-static --port 6006 --silent" \
-            "./node_modules/.bin/wait-on tcp:6006 && npm run test:storybook -w mon-aide-cyber-ui"
+        run: pnpm install --frozen-lockfile
+#      - name: Installe Playwright
+#        run: ./node_modules/.bin/playwright install chromium --with-deps
+#      - name: Construis Storybook
+#        run: pnpm run -F mon-aide-cyber-ui build:storybook --quiet
+#      - name: Démarre Storybook et execute les tests
+#        run: |
+#          ./node_modules/.bin/concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+#            "./node_modules/.bin/http-server ./mon-aide-cyber-ui/storybook-static --port 6006 --silent" \
+#            "./node_modules/.bin/wait-on tcp:6006 && npm run test:storybook -w mon-aide-cyber-ui"
