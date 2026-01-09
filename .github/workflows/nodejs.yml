@@ -25,15 +25,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Installe Node.js 20
-        uses: actions/setup-node@v2
+      - name: Configurer Node.js
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
-      - run: npm ci
-      - run: npm run build --workspaces
-      - run: npm run ci:initialise -w mon-aide-cyber-api
-      - run: npm run format:verifie
-      - run: npm test
+          node-version-file: '.nvmrc'
+      - name: Installe pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.0
+      - name: (TOUS) Installe les dépendances
+        run: pnpm install --frozen-lockfile
+      - name: Vérifie le prettier du front
+        run: pnpm -F mon-aide-cyber-ui run format:verifie
+      - name: Construis le back
+        run: pnpm -F mon-aide-cyber-api run build
+      - name: Construis le front
+        run: pnpm -F mon-aide-cyber-ui run build
+      - name: Initialise l’environnement de test avec le service Postgres
+        run: pnpm -F mon-aide-cyber-api run ci:initialise
+      - name: Exécute les tests
+        run: pnpm run test
 
       - name: Rapport des tests
         uses: dorny/test-reporter@v2
