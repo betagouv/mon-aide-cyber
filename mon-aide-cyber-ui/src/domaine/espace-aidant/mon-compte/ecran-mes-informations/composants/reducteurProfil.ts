@@ -1,5 +1,4 @@
-import { Profil } from '../../../../profil/Profil';
-import { TypeAffichageAnnuaire } from 'mon-aide-cyber-api/src/espace-aidant/Aidant.ts';
+import { Profil, TypeAffichageAnnuaire } from '../../../../profil/Profil';
 
 export type TypeAffichage = 'PRENOM_NOM' | 'PRENOM_N' | 'P_NOM';
 

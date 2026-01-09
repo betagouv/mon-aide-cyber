@@ -17,7 +17,9 @@ export type ParametreExtraction =
   | 'NOMBRE_DIAGNOSTICS';
 
 const estTypeExport = (
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   valeur: any | ParametreExtraction
+  /* eslint-enable */
 ): valeur is ParametreExtraction => {
   return (
     valeur === 'SANS_DIAGNOSTIC' ||

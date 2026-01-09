@@ -1,5 +1,4 @@
 import { ReponseHATEOAS } from '../Lien.ts';
-import { TypeAffichageAnnuaire } from 'mon-aide-cyber-api/src/espace-aidant/Aidant.ts';
 
 export type Profil = ReponseHATEOAS & {
   nomPrenom: string;
@@ -12,3 +11,8 @@ export type Profil = ReponseHATEOAS & {
     actif?: boolean;
   }[];
 };
+export enum TypeAffichageAnnuaire {
+  PRENOM_NOM = 'PRENOM_NOM',
+  PRENOM_N = 'PRENOM_N',
+  P_NOM = 'P_NOM',
+}

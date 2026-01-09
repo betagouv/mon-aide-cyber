@@ -81,7 +81,9 @@ const consommateurDiagnosticLance =
           await rechercheUtilisateursMAC.rechercheParIdentifiant(
             corps.identifiantUtilisateur
           );
+        /* eslint-disable @typescript-eslint/no-unused-vars */
         const { emailEntite, ...reste } = corps;
+        /* eslint-enable */
         const demandeAide: RechercheDemandeAideComplete =
           (await entrepotDemandeAide.rechercheParEmail(
             corps.emailEntite

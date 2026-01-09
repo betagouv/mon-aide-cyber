@@ -21,7 +21,7 @@ const taillesModale: Map<TailleModale, string> = new Map<TailleModale, string>([
 
 export const Modale = forwardRef(function Modale(
   proprietes: PropsWithChildren<ProprietesElementModale>,
-  referenceDialogue: ForwardedRef<any>
+  referenceDialogue: ForwardedRef<HTMLDivElement | null>
 ) {
   const ref = useRef<HTMLDivElement | null>(null);
 

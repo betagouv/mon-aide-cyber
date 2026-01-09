@@ -78,7 +78,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
 
   routes.post(
     '/',
-    bodyParser.json(),
+    express.json(),
     session.verifie('Lance le diagnostic'),
     aseptisation.aseptise('emailEntiteAidee'),
     body('emailEntiteAidee')

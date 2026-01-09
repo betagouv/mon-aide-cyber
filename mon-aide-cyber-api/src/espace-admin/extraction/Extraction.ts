@@ -28,7 +28,9 @@ export interface Rapport<T> {
     REPRESENTATION_VALEUR,
     REPRESENTATION_RAPPORT extends RepresentationRapport<
       REPRESENTATION_VALEUR,
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       any
+      /* eslint-enable */
     >,
   >(
     representation: REPRESENTATION_RAPPORT

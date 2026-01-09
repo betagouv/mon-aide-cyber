@@ -26,7 +26,9 @@ export class EntrepotJournalisationPostgres
 {
   protected deEntiteADTO(entite: Publication): PublicationDTO {
     const genereLesHashe = (donnee: object): object => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       return Object.entries(donnee).reduce((precedent: any, [clef, valeur]) => {
+        /* eslint-enable */
         if (estUnObjet(valeur)) {
           precedent[clef] = genereLesHashe(valeur);
         } else {

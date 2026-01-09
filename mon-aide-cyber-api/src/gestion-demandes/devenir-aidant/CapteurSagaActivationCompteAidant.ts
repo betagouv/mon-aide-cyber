@@ -34,7 +34,7 @@ export class CapteurSagaActivationCompteAidant
     try {
       await this.entrepots.aidants().rechercheParEmail(email);
       return true;
-    } catch (erreur) {
+    } catch (_erreur) {
       return false;
     }
   }

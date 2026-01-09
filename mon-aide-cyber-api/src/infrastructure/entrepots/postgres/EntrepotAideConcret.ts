@@ -205,7 +205,7 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
         },
         etat: 'COMPLET',
       };
-    } catch (erreur) {
+    } catch (_erreur) {
       return { etat: 'INEXISTANT' };
     }
   }
