@@ -385,7 +385,7 @@ export class EntrepotProfilAidantMemoire
         consentementAnnuaire: aidant.consentementAnnuaire,
         nomAffichageAnnuaire: aidant.preferences.nomAffichageAnnuaire,
       });
-    } catch (erreur) {
+    } catch (_erreur) {
       throw new AggregatNonTrouve('profil Aidant');
     }
   }

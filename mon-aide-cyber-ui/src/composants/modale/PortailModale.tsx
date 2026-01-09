@@ -17,7 +17,7 @@ export const PortailModale = ({ children }: PropsWithChildren) => {
     null
   );
   const [modaleOuverte, setModaleOuverte] = useState<boolean>(false);
-  const ref = useRef<HTMLDialogElement | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const [dialog, setDialog] = useState<React.ReactElement>(
     <dialog aria-labelledby="titre-modale" id="modale" className="fr-modal" />
   );

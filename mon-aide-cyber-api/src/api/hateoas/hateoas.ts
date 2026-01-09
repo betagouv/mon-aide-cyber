@@ -189,7 +189,7 @@ class ConstructeurActionsHATEOAS {
         methode: 'POST',
         url: `/api/diagnostic/${idDiagnostic}/restitution/demande-envoi-mail-restitution`,
       });
-    } catch (e) {
+    } catch (_e) {
       return this;
     }
 

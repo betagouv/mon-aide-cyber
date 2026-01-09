@@ -39,9 +39,11 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
 
     const corpsDeRequete = requete.body;
 
+    /* eslint-disable  no-unsafe-optional-chaining */
     const [payloadTimestamp, payloadSignature] = (
       requete.headers['x-livestorm-signature'] as string
     )?.split(',');
+    /* eslint-enable */
 
     const ageSignatureTolereEnSecondes = 5;
 

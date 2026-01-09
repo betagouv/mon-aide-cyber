@@ -51,7 +51,9 @@ const transcris = (lignes: string): Relation[] =>
       };
     });
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 command.action(async (...args: any[]) => {
+  /* eslint-enable */
   const relations = transcris(fs.readFileSync(args[0], { encoding: 'utf-8' }));
 
   const resultats = await lieDiagnostics(

@@ -19,7 +19,9 @@ const command = program
   .description('Active le compte de l’Aidant et envoie un mail de confirmation')
   .argument('<mailAidant>', 'L’email de l’Aidant');
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 command.action(async (...args: any[]) => {
+  /* eslint-enable */
   const mailAidant = args[0].toLowerCase();
 
   const entrepots = fabriqueEntrepots();

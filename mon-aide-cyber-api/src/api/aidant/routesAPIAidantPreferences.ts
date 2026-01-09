@@ -33,7 +33,9 @@ export type ReponsePreferencesAidantAPI = ReponseHATEOAS & {
 
 const valideLesPreferences = () => {
   const verifieLaValiditeDuChamp = (
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     champsRecu: any,
+    /* eslint-enable */
     listeDeComparaison: string[],
     messageEnCasErreur: string
   ) => {
@@ -51,21 +53,27 @@ const valideLesPreferences = () => {
   };
 
   const { body } = new ExpressValidator({
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     secteursActiviteExistants: (__: any, { req }: Meta) => {
+      /* eslint-enable */
       return verifieLaValiditeDuChamp(
         req.body.preferencesAidant.secteursActivite,
         secteursActivite.map((s) => s.nom),
         "Les secteurs d'activité sont erronés."
       );
     },
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     departementsExistants: (__: any, { req }: Meta) => {
+      /* eslint-enable */
       return verifieLaValiditeDuChamp(
         req.body.preferencesAidant.departements,
         departements.map((d) => d.nom),
         'Les départements sont erronés.'
       );
     },
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     typesEntitesExistants: (__: any, { req }: Meta) => {
+      /* eslint-enable */
       return verifieLaValiditeDuChamp(
         req.body.preferencesAidant.typesEntites,
         typesEntites.map((t) => t.nom),

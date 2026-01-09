@@ -52,7 +52,7 @@ export const lieDiagnostic = async (
         identifiantDiagnostic
       );
       await adaptateurRelations.creeTuple(tuple);
-    } catch (erreur) {
+    } catch (_erreur) {
       return { ...relation, message: 'erreur pendant la persistence' };
     }
   }

@@ -9,7 +9,6 @@ import { MACCookies } from '../../src/adaptateurs/utilitairesDeCookies';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
 
 describe('Adaptateur de vérification de session', () => {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const fausseSuite: NextFunction = () => {};
   const requete: Request = { headers: {} } as Request;
   const reponse = {} as Response;
