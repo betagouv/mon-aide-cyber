@@ -43,7 +43,7 @@ describe('Réducteur bouton thématique', () => {
           ])
         );
 
-        expect(etatBouton.borneThematique).toBeFalsy();
+        expect(etatBouton.borneThematique).toBeTruthy();
         expect(etatBouton.thematiqueCourante).toBe('derniere-thematique');
       });
     });

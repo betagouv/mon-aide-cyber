@@ -12,7 +12,7 @@ declare global {
 export const FournisseurMatomo = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const genereLeTagManager = () => {
-      const matomoTagManager = (window._mtm = window._mtm || []);
+      const matomoTagManager = [];
       matomoTagManager.push({
         'mtm.startTime': new Date().getTime(),
         event: 'mtm.Start',
@@ -26,7 +26,7 @@ export const FournisseurMatomo = ({ children }: PropsWithChildren) => {
     };
 
     const genereLePaquetMatomo = () => {
-      const paquetMatomo = (window._paq = window._paq || []);
+      const paquetMatomo = [];
       paquetMatomo.push(['trackPageView']);
       paquetMatomo.push(['enableLinkTracking']);
       (function () {
