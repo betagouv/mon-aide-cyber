@@ -1,7 +1,6 @@
 import { Evenement } from '../../domaine/BusEvenement';
 import { ConfigurationServeur } from '../../serveur';
 import express, { Request, Response, Router } from 'express';
-import bodyParser from 'body-parser';
 import * as core from 'express-serve-static-core';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 
@@ -38,7 +37,7 @@ export const routesAPITally = (configuration: ConfigurationServeur) => {
 
   routes.post(
     '/',
-    bodyParser.json(),
+    express.json(),
     adaptateurSignatureRequete.verifie('TALLY'),
     async (
       requete: Request<core.ParamsDictionary & ReponseTally>,

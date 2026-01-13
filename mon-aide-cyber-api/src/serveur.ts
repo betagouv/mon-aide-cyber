@@ -140,7 +140,7 @@ const creeApp = (config: ConfigurationServeur) => {
   app.use('/pro-connect', routesProConnect(config));
   app.use('/contact', routeContact(config));
 
-  app.get('*', (_: Request, reponse: Response) =>
+  app.get('{*path}', (_: Request, reponse: Response) =>
     envoieIndexAvecNonce(reponse)
   );
 

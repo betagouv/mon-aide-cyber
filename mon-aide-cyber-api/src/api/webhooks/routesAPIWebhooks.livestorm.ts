@@ -1,6 +1,5 @@
 import { ConfigurationServeur } from '../../serveur';
 import express, { Request, Response, Router } from 'express';
-import bodyParser from 'body-parser';
 import * as core from 'express-serve-static-core';
 import {
   ActivationCompteAidantFaite,
@@ -30,7 +29,7 @@ export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
 
   routes.post(
     '/activation-compte-aidant',
-    bodyParser.json(),
+    express.json(),
     adaptateurSignatureRequete.verifie('LIVESTORM'),
     async (
       requete: Request<
