@@ -4,7 +4,6 @@ import crypto, { UUID } from 'crypto';
 import { ServiceDiagnostic } from '../diagnostic/ServiceDiagnostic';
 import { representeLeDiagnosticPourLeClient } from './representateurs/representateurDiagnostic';
 import { NextFunction } from 'express-serve-static-core';
-import bodyParser from 'body-parser';
 import {
   CorpsReponse,
   SagaAjoutReponse,
@@ -139,7 +138,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     session.verifie('Ajout réponse au diagnostic'),
     cgu.verifie('Ajout réponse au diagnostic'),
     verifieRelations(relations, entrepots),
-    bodyParser.json(),
+    express.json(),
     (
       requete: RequeteUtilisateur<CorpsReponse, { id: UUID }>,
       reponse: Response,

@@ -1,7 +1,6 @@
 import { ConfigurationServeur } from '../serveur';
 import express, { Request, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
-import bodyParser from 'body-parser';
 import { body } from 'express-validator';
 import { authentifie } from '../authentification/authentification';
 import { constructeurActionsHATEOAS, ReponseHATEOAS } from './hateoas/hateoas';
@@ -39,7 +38,7 @@ export const routesAPIAuthentification = (
   routes.post(
     '/',
     limiteurTrafficAuthentification,
-    bodyParser.json(),
+    express.json(),
     body('identifiant').toLowerCase(),
     (
       requete: Request<CorpsRequeteAuthentification>,

@@ -201,7 +201,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
-        '/api/diagnostic'
+        '/api/diagnostic',
+        {
+          emailEntiteAidee: 'jean.dupont@yopmail.com',
+        }
       );
 
       expect(reponse.statusCode).toBe(201);
@@ -218,7 +221,10 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       const reponseCreation = await executeRequete(
         donneesServeur.app,
         'POST',
-        '/api/diagnostic'
+        '/api/diagnostic',
+        {
+          emailEntiteAidee: 'jean.dupont@yopmail.com',
+        }
       );
       const lien = reponseCreation.headers['link'] as string;
 
