@@ -24,7 +24,7 @@
     "test:watch": "pnpm run @test:watch:back && pnpm run @test:watch:front",
     "test:watch:back": "pnpm -F mon-aide-cyber-api run test:watch",
     "test:watch:front": "pnpm -F mon-aide-cyber-ui run test:watch",
-    "build": "pnpm run build @build:back && pnpm run @build:front",
+    "build": "pnpm run build:back && pnpm run build:front",
     "build:back": "pnpm -F mon-aide-cyber-api run build",
     "build:front": "pnpm -F mon-aide-cyber-ui run build",
     "start": "pnpm -F mon-aide-cyber-api run start",
