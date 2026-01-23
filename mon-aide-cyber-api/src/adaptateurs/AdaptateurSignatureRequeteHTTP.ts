@@ -31,6 +31,7 @@ class FournisseurSignatureTally implements FournisseurSignature {
 
 class FournisseurSignatureLivestorm implements FournisseurSignature {
   verifie(requete: Request): boolean {
+    console.log('VÉRIFICATION SIGNATURE LIVESTORM');
     const secretLivestormFinAtelier = adaptateurEnvironnement
       .signatures()
       .livestorm().finAtelier;
@@ -56,6 +57,7 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
       )
       .digest('hex');
 
+    console.log(`SIGNATURE OK ? ${signatureCalculee === payloadSignature}`);
     return (
       payloadSignature === signatureCalculee &&
       FournisseurHorloge.maintenant().getTime() / 1000 -

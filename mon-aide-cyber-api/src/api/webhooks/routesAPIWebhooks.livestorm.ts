@@ -39,6 +39,9 @@ export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
     ) => {
       const corpsParticipantFinAtelierLivestorm: CorpsParticipantFinAtelierLivestorm =
         requete.body;
+      console.log(
+        `APPEL DEPUIS LIVESTORM : ${corpsParticipantFinAtelierLivestorm}`
+      );
 
       const pasNotreWebinaire =
         corpsParticipantFinAtelierLivestorm.data.attributes.registrant_detail
