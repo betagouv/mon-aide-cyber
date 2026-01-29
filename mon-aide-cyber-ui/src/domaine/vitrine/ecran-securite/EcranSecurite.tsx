@@ -33,6 +33,11 @@ export const EcranSecurite = () => {
             alt="Preuve de l'homologation de MonAideCyber sur MonServiceSecurise"
           />
           <lab-anssi-resume-pssi nomService="MonAideCyber"></lab-anssi-resume-pssi>
+          <div>
+            Pour toute question ou suggestion concernant les fonctionnalités de
+            MonAideCyber ou sa sécurité, contactez l'équipe à
+            contact@monaidecyber.beta.gouv.fr
+          </div>
         </div>
       </section>
     </main>
