@@ -191,7 +191,13 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
     }
 
     if (siretAidant) {
-      return new MiseEnRelationParCriteresPourOrganisation();
+      return new MiseEnRelationParCriteresPourOrganisation(
+        this.adaptateurEnvoiMail,
+        this.annuaireCOT,
+        this.entrepots,
+        this.adaptateurGeo,
+        siretAidant
+      );
     }
 
     return new MiseEnRelationParCriteres(

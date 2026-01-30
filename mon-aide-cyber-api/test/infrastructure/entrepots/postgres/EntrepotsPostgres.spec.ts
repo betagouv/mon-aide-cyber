@@ -987,6 +987,43 @@ describe('Tous les entreprôts Postgres', () => {
           ])
         );
       });
+
+      it('Retourne un Aidant correspondant au SIRET', async () => {
+        const unAidantEnGirondeDansLesTransportsAssociatifsAvecUnSiret =
+          unAidant()
+            .ayantPourDepartements([gironde])
+            .ayantPourSecteursActivite([{ nom: 'Transports' }])
+            .ayantPourTypesEntite([associations])
+            .avecUnSiret('09876543210987')
+            .construis();
+        const unAidantEnGirondeDansLesTransportsAssociatifs = unAidant()
+          .ayantPourDepartements([gironde])
+          .ayantPourSecteursActivite([{ nom: 'Transports' }])
+          .ayantPourTypesEntite([associations])
+          .construis();
+        const entrepotAidant = new EntrepotAidantPostgres(
+          new ServiceDeChiffrementClair()
+        );
+        await entrepotAidant.persiste(
+          unAidantEnGirondeDansLesTransportsAssociatifsAvecUnSiret
+        );
+        await entrepotAidant.persiste(
+          unAidantEnGirondeDansLesTransportsAssociatifs
+        );
+
+        const aidantsTrouvesEnGironde =
+          await entrepotAidant.lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
+            {
+              departement: gironde,
+              secteursActivite: [{ nom: 'Transports' }],
+              typeEntite: associations,
+              siret: '09876543210987',
+            }
+          );
+        expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
+          unAidantEnGirondeDansLesTransportsAssociatifsAvecUnSiret,
+        ]);
+      });
     });
   });
 
