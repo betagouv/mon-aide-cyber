@@ -178,3 +178,21 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
     }));
   };
 }
+
+export class MiseEnRelationParCriteresPourOrganisation
+  implements MiseEnRelation
+{
+  async execute(
+    donneesMiseEnRelation: DonneesMiseEnRelation
+  ): Promise<ResultatMiseEnRelation<ParCriteres>> {
+    return {
+      type: 'PAR_CRITERES',
+      resultat: {
+        nombreAidants: 0,
+        departement: '',
+        secteursActivite: [''],
+        typeEntite: '',
+      },
+    };
+  }
+}
