@@ -90,6 +90,7 @@ export interface EntrepotAidant extends EntrepotEcriture<Aidant> {
       | EntitesOrganisationsPubliques
       | EntitesEntreprisesPrivees
       | EntitesAssociations;
+    siret?: string;
   }): Promise<Aidant[]>;
 }
 

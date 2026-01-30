@@ -66,12 +66,13 @@ export class EntrepotAidantPostgres
       | EntitesOrganisationsPubliques
       | EntitesEntreprisesPrivees
       | EntitesAssociations;
+    siret?: string;
   }): Promise<Aidant[]> {
     const departement = `["${criteres.departement.nom}"]`;
     const secteursActivite = `[${criteres.secteursActivite.map((s) => `"${s.nom}"`).join(',')}]`;
     const typeEntite = `["${criteres.typeEntite.nom}"]`;
 
-    const requete = `SELECT id, donnees
+    let requete = `SELECT id, donnees
                      FROM utilisateurs_mac u
                      WHERE u.donnees -> 'preferences' -> 'departements' @> :departement
     AND u.donnees -> 'preferences' -> 'typesEntites' @> :typeEntite
@@ -88,11 +89,16 @@ export class EntrepotAidantPostgres
         WHERE relations.donnees -> 'objet' ->> 'identifiant' = (aides.id)::text
             AND relations.donnees -> 'utilisateur' ->> 'identifiant' = (u.id)::text
             AND (aides.donnees ->> 'dateSignatureCGU')::timestamp with time zone >= ((:maintenant)::timestamp - interval '30 days'))::int < 2;`;
+
+    if (criteres.siret) {
+      requete = `${requete.replace(';', '')} AND u.donnees -> 'entite' ->> 'siret' = :siret;`;
+    }
     const parametres = {
       departement: departement,
       secteursActivite: secteursActivite,
       typeEntite: typeEntite,
       maintenant: FournisseurHorloge.maintenant(),
+      ...(criteres.siret && { siret: criteres.siret }),
     };
 
     return await this.knex
