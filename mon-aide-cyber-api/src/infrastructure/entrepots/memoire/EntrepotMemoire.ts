@@ -154,6 +154,7 @@ export class EntrepotAidantMemoire
       | EntitesOrganisationsPubliques
       | EntitesEntreprisesPrivees
       | EntitesAssociations;
+    siret?: string;
   }): Promise<Aidant[]> {
     const aidantsTrouve = Array.from(this.entites.values()).filter((aidant) => {
       const departementMatche = aidant.preferences.departements.some(
@@ -165,7 +166,14 @@ export class EntrepotAidantMemoire
       const typeEntiteMatche = aidant.preferences.typesEntites.some(
         (t) => t.nom === criteres.typeEntite.nom
       );
-      return departementMatche && secteursActiviteMatchent && typeEntiteMatche;
+      const siretMatch =
+        !criteres.siret || aidant.entite?.siret === criteres.siret;
+      return (
+        departementMatche &&
+        secteursActiviteMatchent &&
+        typeEntiteMatche &&
+        siretMatch
+      );
     });
 
     const lesAidantsQuiMatchent = (
