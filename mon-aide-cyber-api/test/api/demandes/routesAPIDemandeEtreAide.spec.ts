@@ -531,6 +531,29 @@ describe('Le serveur MAC, sur les routes de demande d’aide de la part de l’A
             origine: 'origine',
           });
         });
+
+        it("Peut fournir le SIRET de l'aidant", async () => {
+          const reponse = await executeRequete(
+            donneesServeur.app,
+            'POST',
+            '/api/demandes/etre-aide',
+            {
+              cguValidees: true,
+              email: 'jean.dupont@aide.com',
+              departement: 'Bas-Rhin',
+              raisonSociale: 'NOM ENTITÉ',
+              siret: '12345678901234',
+              origine: 'origine',
+              siretAidant: '09876543210987',
+            }
+          );
+
+          expect(reponse.statusCode).toBe(202);
+          expect(
+            testeurMAC.busCommande.commandesRecues.get('SagaDemandeAide')
+              .siretAidant
+          ).toEqual('09876543210987');
+        });
       });
     });
 

@@ -4,6 +4,7 @@ import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptate
 import {
   AidantMisEnRelation,
   MiseEnRelationParCriteres,
+  MiseEnRelationParCriteresPourOrganisation,
   tokenAttributionDemandeAide,
   TonkenAttributionDemandeAide,
 } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
@@ -473,6 +474,55 @@ describe('Mise en relation par critères', () => {
         expect(aidantsContactes[0].email).toBe('aidant-qui-matche@mail.con');
         expect(aidantsContactes[0].nomPrenom).toBe('Jean MARTIN');
       });
+    });
+  });
+  describe("Matching des aidants d'une organisation", () => {
+    it('Match un aidant selon le siret fourni', async () => {
+      const aidantCible = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .avecUnSiret('09876543210987')
+        .avecUnEmail('aidant-qui-matche@mail.con')
+        .construis();
+      const aidantNonCible = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .avecUnSiret('11113333555566')
+        .construis();
+
+      await entrepots.aidants().persiste(aidantCible);
+      await entrepots.aidants().persiste(aidantNonCible);
+
+      const miseEnRelation = new MiseEnRelationParCriteresPourOrganisation(
+        envoieMail,
+        annuaireCot,
+        entrepots,
+        adaptateurGeo,
+        '09876543210987'
+      );
+
+      const aidantsContactes: AidantMisEnRelation[] = [];
+      envoieMail.envoiToutesLesMisesEnRelation = async (
+        aidants: AidantMisEnRelation[],
+        __donneesMiseEnRelation
+      ) => {
+        aidantsContactes.push(...aidants);
+      };
+
+      const resultatMiseEnRelation = await miseEnRelation.execute({
+        demandeAide: uneDemandeAide().dansLeDepartement(finistere).construis(),
+        secteursActivite: [{ nom: 'Transports' }],
+        typeEntite: entitesPubliques,
+        siret: '12345',
+        codeEPCI: 'Bordeaux Métropole',
+      });
+
+      expect(resultatMiseEnRelation.resultat.nombreAidants).toEqual(1);
+
+      expect(aidantsContactes).toHaveLength(1);
+      expect(aidantsContactes[0].email).toBe('aidant-qui-matche@mail.con');
     });
   });
 });

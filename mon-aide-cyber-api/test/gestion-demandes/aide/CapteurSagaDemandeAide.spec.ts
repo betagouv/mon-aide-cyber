@@ -1,39 +1,22 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
-import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
-import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
+import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
+import { AdaptateurGeographieMemoire } from '../../../src/adaptateurs/AdaptateurGeographie';
+import { BusEvenement } from '../../../src/domaine/BusEvenement';
+import { BusCommande, CapteurCommande } from '../../../src/domaine/commande';
+import { Entrepots } from '../../../src/domaine/Entrepots';
+import { entitesPubliques } from '../../../src/espace-aidant/Aidant';
+import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
+import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
+import { CommandeCreerDemandeAide } from '../../../src/gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
+import { CapteurCommandeRechercheDemandeAideParEmail } from '../../../src/gestion-demandes/aide/CapteurCommandeRechercheDemandeAideParEmail';
 import {
   CapteurSagaDemandeAide,
   DemandeAideCree,
 } from '../../../src/gestion-demandes/aide/CapteurSagaDemandeAide';
-import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
-import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
-import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
-import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
-import { BusCommande, CapteurCommande } from '../../../src/domaine/commande';
-import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
-import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
-import { adaptateursCorpsMessage } from '../../../src/gestion-demandes/aide/adaptateursCorpsMessage';
-import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
-import {
-  allier,
-  Departement,
-  gironde,
-} from '../../../src/gestion-demandes/departements';
 import {
   DemandeAide,
   RechercheDemandeAide,
 } from '../../../src/gestion-demandes/aide/DemandeAide';
-import { CapteurCommandeRechercheDemandeAideParEmail } from '../../../src/gestion-demandes/aide/CapteurCommandeRechercheDemandeAideParEmail';
-import { CommandeCreerDemandeAide } from '../../../src/gestion-demandes/aide/CapteurCommandeCreerDemandeAide';
-import { uneDemandeAide } from './ConstructeurDemandeAide';
-import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
-import {
-  EntrepotAideMemoire,
-  EntrepotUtilisateurMACMemoire,
-} from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
-import { Entrepots } from '../../../src/domaine/Entrepots';
-import { BusEvenement } from '../../../src/domaine/BusEvenement';
 import {
   DirecteAidant,
   DirecteUtilisateurInscrit,
@@ -44,26 +27,46 @@ import {
   ParCriteres,
   ResultatMiseEnRelation,
 } from '../../../src/gestion-demandes/aide/miseEnRelation';
-import { UtilisateurMACDTO } from '../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
-import {
-  desAidants,
-  unAidant,
-  unUtilisateurInscrit,
-} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { MiseEnRelationDirecteAidant } from '../../../src/gestion-demandes/aide/MiseEnRelationDirecteAidant';
 import { MiseEnRelationDirecteUtilisateurInscrit } from '../../../src/gestion-demandes/aide/MiseEnRelationDirecteUtilisateurInscrit';
-import { MiseEnRelationParCriteres } from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
-import { entitesPubliques } from '../../../src/espace-aidant/Aidant';
-import { SecteurActivite } from '../../../src/espace-aidant/preferences/secteursActivite';
+import {
+  MiseEnRelationParCriteres,
+  MiseEnRelationParCriteresPourOrganisation,
+} from '../../../src/gestion-demandes/aide/MiseEnRelationParCriteres';
+import {
+  allier,
+  Departement,
+  gironde,
+} from '../../../src/gestion-demandes/departements';
+import { AdaptateurEnvoiMailMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurEnvoiMailMemoire';
 import {
   AdaptateurRechercheEntreprise,
   adaptateurRechercheEntreprise,
   ReponseAPIRechercheEntreprise,
 } from '../../../src/infrastructure/adaptateurs/adaptateurRechercheEntreprise';
+import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
+import {
+  EntrepotAideMemoire,
+  EntrepotUtilisateurMACMemoire,
+} from '../../../src/infrastructure/entrepots/memoire/EntrepotMemoire';
+import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
+import { FournisseurHorloge } from '../../../src/infrastructure/horloge/FournisseurHorloge';
+import { UtilisateurMACDTO } from '../../../src/recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { AdaptateurDeRequeteHTTPMemoire } from '../../adaptateurs/AdaptateurDeRequeteHTTPMemoire';
+import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
 import { unConstructeurDeReponseAPIEntreprise } from '../../constructeurs/constructeurAPIEntreprise';
-import { AdaptateurGeographieMemoire } from '../../../src/adaptateurs/AdaptateurGeographie';
+import {
+  desAidants,
+  unAidant,
+  unUtilisateurInscrit,
+} from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import { unConstructeurDeServices } from '../../constructeurs/constructeurServices';
+import { BusCommandeTest } from '../../infrastructure/bus/BusCommandeTest';
+import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
+import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+import { unAdaptateurDeCorpsDeMessage } from './ConstructeurAdaptateurDeCorpsDeMessage';
+import { uneDemandeAide } from './ConstructeurDemandeAide';
 
 class FabriqueDeMiseEnRelationDeTest implements FabriqueMiseEnRelation {
   public readonly miseEnRelationDeTest = new MiseEnRelationDeTest();
@@ -696,6 +699,29 @@ describe('Capteur saga demande de validation de CGU Aidé', () => {
       );
     });
 
+    it('Exécute la mise en relation avec les aidants correspondants au SIRET aidant', async () => {
+      const entrepots = new EntrepotsMemoire();
+      const fabriqueDeMiseEnRelationEcoutee =
+        new FabriqueDeMiseEnRelationEcoutee();
+      const capteur = fabriqueCapteur({
+        entrepots,
+        fabriqueMiseEnRelation: fabriqueDeMiseEnRelationEcoutee,
+      });
+
+      await capteur.execute({
+        type: 'SagaDemandeAide',
+        cguValidees: true,
+        email: 'user@example.com',
+        departement: gironde,
+        siret: '12345',
+        siretAidant: '09876543210987',
+      });
+
+      expect(
+        fabriqueDeMiseEnRelationEcoutee.miseEnRelationPromise
+      ).toBeInstanceOf(MiseEnRelationParCriteresPourOrganisation);
+    });
+
     it("Publie l'évènement 'AIDE_CREE' avec le matching des Aidants", async () => {
       const maintenant = new Date();
       FournisseurHorlogeDeTest.initialise(maintenant);
@@ -787,8 +813,11 @@ class FabriqueDeMiseEnRelationEcoutee extends FabriqueMiseEnRelationConcrete {
     );
   }
 
-  fabrique(utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {
-    this.miseEnRelationPromise = super.fabrique(utilisateurMac);
+  fabrique(
+    utilisateurMac: UtilisateurMACDTO | undefined,
+    siretAidant?: string
+  ): MiseEnRelation {
+    this.miseEnRelationPromise = super.fabrique(utilisateurMac, siretAidant);
     return this.miseEnRelationPromise;
   }
 }

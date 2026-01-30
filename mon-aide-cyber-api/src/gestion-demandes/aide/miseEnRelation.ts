@@ -5,7 +5,10 @@ import { Departement } from '../departements';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { adaptateursCorpsMessage } from './adaptateursCorpsMessage';
 import { MiseEnRelationDirecteAidant } from './MiseEnRelationDirecteAidant';
-import { MiseEnRelationParCriteres } from './MiseEnRelationParCriteres';
+import {
+  MiseEnRelationParCriteres,
+  MiseEnRelationParCriteresPourOrganisation,
+} from './MiseEnRelationParCriteres';
 import { MiseEnRelationDirecteUtilisateurInscrit } from './MiseEnRelationDirecteUtilisateurInscrit';
 import { SecteurActivite } from '../../espace-aidant/preferences/secteursActivite';
 import {
@@ -149,7 +152,10 @@ export interface MiseEnRelation {
 }
 
 export interface FabriqueMiseEnRelation {
-  fabrique: (utilisateurMac: UtilisateurMACDTO | undefined) => MiseEnRelation;
+  fabrique: (
+    utilisateurMac: UtilisateurMACDTO | undefined,
+    siretAidant?: string
+  ) => MiseEnRelation;
 }
 
 export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
@@ -162,7 +168,10 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
     private readonly adaptateurGeo: AdaptateurGeographie
   ) {}
 
-  fabrique(utilisateurMac: UtilisateurMACDTO | undefined): MiseEnRelation {
+  fabrique(
+    utilisateurMac: UtilisateurMACDTO | undefined,
+    siretAidant?: string
+  ): MiseEnRelation {
     if (
       utilisateurMac &&
       (utilisateurMac?.profil === 'Aidant' ||
@@ -178,6 +187,16 @@ export class FabriqueMiseEnRelationConcrete implements FabriqueMiseEnRelation {
       return new MiseEnRelationDirecteUtilisateurInscrit(
         this.adaptateurEnvoiMail,
         utilisateurMac
+      );
+    }
+
+    if (siretAidant) {
+      return new MiseEnRelationParCriteresPourOrganisation(
+        this.adaptateurEnvoiMail,
+        this.annuaireCOT,
+        this.entrepots,
+        this.adaptateurGeo,
+        siretAidant
       );
     }
 

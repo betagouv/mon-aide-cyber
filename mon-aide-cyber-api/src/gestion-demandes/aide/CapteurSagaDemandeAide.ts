@@ -48,6 +48,7 @@ export type SagaDemandeAide = Saga & {
   identifiantAidant?: crypto.UUID;
   siret: string;
   origine?: string;
+  siretAidant?: string;
 };
 
 export type DemandeAideCree<
@@ -154,8 +155,10 @@ export class CapteurSagaDemandeAide
       await this.busCommande
         .publie<CommandeCreerDemandeAide, DemandeAide>(commandeCreerAide)
         .then(async (aide: DemandeAide) => {
-          const miseEnRelation =
-            this.fabriqueMiseEnRelation.fabrique(utilisateurMAC);
+          const miseEnRelation = this.fabriqueMiseEnRelation.fabrique(
+            utilisateurMAC,
+            saga.siretAidant
+          );
           const resultat = await miseEnRelation.execute({
             demandeAide: aide,
             siret: entreprise.siret,
