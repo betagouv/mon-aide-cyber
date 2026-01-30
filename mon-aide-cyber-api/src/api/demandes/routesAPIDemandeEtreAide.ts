@@ -32,6 +32,7 @@ type CorpsRequeteDemandeAide = {
   identifiantAidant?: crypto.UUID;
   siret: string;
   origine?: string;
+  siretAidant?: string;
 };
 
 export const routesAPIDemandeEtreAide = (
@@ -90,6 +91,7 @@ export const routesAPIDemandeEtreAide = (
       .trim()
       .notEmpty()
       .withMessage('Veuillez renseigner l’origine de la demande'),
+    body('siretAidant').optional(),
     async (
       requete: RequetePublique<CorpsRequeteDemandeAide>,
       reponse: Response,
@@ -119,6 +121,9 @@ export const routesAPIDemandeEtreAide = (
           }),
           siret: corpsRequete.siret,
           ...(corpsRequete.origine && { origine: corpsRequete.origine }),
+          ...(corpsRequete.siretAidant && {
+            siretAidant: corpsRequete.siretAidant,
+          }),
         };
         return configuration.busCommande
           .publie(saga)
