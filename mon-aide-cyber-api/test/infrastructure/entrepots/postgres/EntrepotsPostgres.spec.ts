@@ -60,6 +60,7 @@ import {
 } from '../../../../src/espace-aidant/Aidant';
 import {
   unAidant,
+  uneEntite,
   unUtilisateur,
   unUtilisateurInscrit,
 } from '../../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
@@ -986,6 +987,60 @@ describe('Tous les entreprôts Postgres', () => {
             'aidant-avec-deux-demandes@mail.con',
           ])
         );
+      });
+
+      it('Retourne un Aidant correspondant au SIRET', async () => {
+        const unAidantEnGirondeDansLesTransportsAssociatifsAvecLeSiretRecherche =
+          unAidant()
+            .ayantPourDepartements([gironde])
+            .ayantPourSecteursActivite([{ nom: 'Transports' }])
+            .ayantPourEntite(
+              uneEntite()
+                .avecLeSiret('09876543210987')
+                .dansLeMilieuAssociatif()
+                .construis()
+            )
+            .ayantPourTypesEntite([associations])
+            .construis();
+        const unAidantEnGirondeDansLesTransportsAssociatifs = unAidant()
+          .ayantPourDepartements([gironde])
+          .ayantPourSecteursActivite([{ nom: 'Transports' }])
+          .ayantPourEntite(
+            uneEntite()
+              .avecLeSiret('09876598235234')
+              .dansLeMilieuAssociatif()
+              .construis()
+          )
+          .ayantPourTypesEntite([associations])
+          .construis();
+        const unAidantSansEntite = unAidant()
+          .ayantPourTypesEntite([associations])
+          .ayantPourSecteursActivite([{ nom: 'Transports' }])
+          .ayantPourDepartements([gironde])
+          .construis();
+        const entrepotAidant = new EntrepotAidantPostgres(
+          new ServiceDeChiffrementClair()
+        );
+        await entrepotAidant.persiste(
+          unAidantEnGirondeDansLesTransportsAssociatifsAvecLeSiretRecherche
+        );
+        await entrepotAidant.persiste(
+          unAidantEnGirondeDansLesTransportsAssociatifs
+        );
+        await entrepotAidant.persiste(unAidantSansEntite);
+
+        const aidantsTrouvesEnGironde =
+          await entrepotAidant.lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
+            {
+              departement: gironde,
+              secteursActivite: [{ nom: 'Transports' }],
+              typeEntite: associations,
+              siret: '09876543210987',
+            }
+          );
+        expect(aidantsTrouvesEnGironde).toStrictEqual<Aidant[]>([
+          unAidantEnGirondeDansLesTransportsAssociatifsAvecLeSiretRecherche,
+        ]);
       });
     });
   });

@@ -68,26 +68,18 @@ export const tokenAttributionDemandeAide = (
 
 export class MiseEnRelationParCriteres implements MiseEnRelation {
   constructor(
-    private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
-    private readonly annuaireCOT: {
+    protected readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    protected readonly annuaireCOT: {
       rechercheEmailParDepartement: (departement: Departement) => string;
     },
-    private readonly entrepots: Entrepots,
-    private readonly adaptateurGeo: AdaptateurGeographie
+    protected readonly entrepots: Entrepots,
+    protected readonly adaptateurGeo: AdaptateurGeographie
   ) {}
 
   async execute(
     donneesMiseEnRelation: DonneesMiseEnRelation
   ): Promise<ResultatMiseEnRelation<ParCriteres>> {
-    const aidants = await this.entrepots
-      .aidants()
-      .lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
-        {
-          departement: donneesMiseEnRelation.demandeAide.departement,
-          secteursActivite: donneesMiseEnRelation.secteursActivite,
-          typeEntite: donneesMiseEnRelation.typeEntite,
-        }
-      );
+    const aidants = await this.lesAidantsCorrespondants(donneesMiseEnRelation);
     const aucunAidantMatche = aidants.length === 0;
     if (aucunAidantMatche) {
       await envoieAuCOTAucunAidantPourLaDemandeAide(
@@ -129,6 +121,20 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
         departement: donneesMiseEnRelation.demandeAide.departement.code,
       },
     };
+  }
+
+  protected async lesAidantsCorrespondants(
+    donneesMiseEnRelation: DonneesMiseEnRelation
+  ) {
+    return await this.entrepots
+      .aidants()
+      .lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
+        {
+          departement: donneesMiseEnRelation.demandeAide.departement,
+          secteursActivite: donneesMiseEnRelation.secteursActivite,
+          typeEntite: donneesMiseEnRelation.typeEntite,
+        }
+      );
   }
 
   private async informeAidantsDeLaDemandeAide(
@@ -179,20 +185,29 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
   };
 }
 
-export class MiseEnRelationParCriteresPourOrganisation
-  implements MiseEnRelation
-{
-  async execute(
-    donneesMiseEnRelation: DonneesMiseEnRelation
-  ): Promise<ResultatMiseEnRelation<ParCriteres>> {
-    return {
-      type: 'PAR_CRITERES',
-      resultat: {
-        nombreAidants: 0,
-        departement: '',
-        secteursActivite: [''],
-        typeEntite: '',
-      },
-    };
+export class MiseEnRelationParCriteresPourOrganisation extends MiseEnRelationParCriteres {
+  constructor(
+    protected readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
+    protected readonly annuaireCOT: {
+      rechercheEmailParDepartement: (departement: Departement) => string;
+    },
+    protected readonly entrepots: Entrepots,
+    protected readonly adaptateurGeo: AdaptateurGeographie,
+    private readonly siretAidant: string
+  ) {
+    super(adaptateurEnvoiMail, annuaireCOT, entrepots, adaptateurGeo);
+  }
+
+  async lesAidantsCorrespondants(donneesMiseEnRelation: DonneesMiseEnRelation) {
+    return await this.entrepots
+      .aidants()
+      .lesAidantsCorrespondantAuxCriteresDeEntiteAMoinsDe2DiagsSur30JoursGlissant(
+        {
+          departement: donneesMiseEnRelation.demandeAide.departement,
+          secteursActivite: donneesMiseEnRelation.secteursActivite,
+          typeEntite: donneesMiseEnRelation.typeEntite,
+          siret: this.siretAidant,
+        }
+      );
   }
 }

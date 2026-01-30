@@ -165,6 +165,11 @@ class ConstructeurAidant implements Constructeur<Aidant> {
     return this;
   }
 
+  ayantPourEntite(entiteAidant: EntiteAidant) {
+    this.entite = entiteAidant;
+    return this;
+  }
+
   construis(): Aidant {
     return {
       identifiant: this.identifiant,
@@ -421,3 +426,29 @@ export const unAidantConnecteInconnu = async (configuration: {
     utilisateur.identifiant
   );
 };
+class ConstructeurEntite implements Constructeur<EntiteAidant> {
+  private siret: string = fakerFR.string.numeric(14);
+  private nom: string = fakerFR.company.name();
+  private type: TypeEntite = 'ServicePublic';
+
+  avecLeSiret(siret: string): ConstructeurEntite {
+    this.siret = siret;
+    return this;
+  }
+
+  dansLeSecteurPublic() {
+    this.type = 'ServicePublic';
+    return this;
+  }
+
+  dansLeMilieuAssociatif() {
+    this.type = 'Association';
+    return this;
+  }
+
+  construis(): EntiteAidant {
+    return { nom: this.nom, siret: this.siret, type: this.type };
+  }
+}
+
+export const uneEntite = (): ConstructeurEntite => new ConstructeurEntite();
