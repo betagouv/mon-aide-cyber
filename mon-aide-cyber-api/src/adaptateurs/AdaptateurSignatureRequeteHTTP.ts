@@ -38,7 +38,7 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
 
     if (!secretLivestormFinAtelier) return false;
 
-    const corpsDeRequete = requete.body;
+    const corpsDeRequete = requete.body.toString();
 
     /* eslint-disable  no-unsafe-optional-chaining */
     const [payloadTimestamp, payloadSignature] = (

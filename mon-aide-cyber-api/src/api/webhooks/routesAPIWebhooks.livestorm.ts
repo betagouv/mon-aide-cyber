@@ -29,8 +29,8 @@ export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
 
   routes.post(
     '/activation-compte-aidant',
+    express.raw(),
     adaptateurSignatureRequete.verifie('LIVESTORM'),
-    express.json(),
     async (
       requete: Request<
         core.ParamsDictionary & CorpsParticipantFinAtelierLivestorm
@@ -38,7 +38,7 @@ export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
       reponse: Response
     ) => {
       const corpsParticipantFinAtelierLivestorm: CorpsParticipantFinAtelierLivestorm =
-        requete.body;
+        JSON.parse(requete.body);
       console.log(
         `APPEL DEPUIS LIVESTORM : ${corpsParticipantFinAtelierLivestorm}`
       );
