@@ -31,7 +31,7 @@ class FournisseurSignatureTally implements FournisseurSignature {
 
 class FournisseurSignatureLivestorm implements FournisseurSignature {
   verifie(requete: Request): boolean {
-    console.log('VÉRIFICATION SIGNATURE LIVESTORM');
+    console.log(`VÉRIFICATION SIGNATURE LIVESTORM ${requete}`);
     const secretLivestormFinAtelier = adaptateurEnvironnement
       .signatures()
       .livestorm().finAtelier;
