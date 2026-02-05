@@ -45,6 +45,9 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
       requete.headers['x-livestorm-signature'] as string
     )?.split(',');
     /* eslint-enable */
+    console.log(
+      `Timestamp : ${payloadTimestamp} - Signature : ${payloadSignature}`
+    );
 
     const ageSignatureTolereEnSecondes = 5;
 
@@ -57,7 +60,9 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
       )
       .digest('hex');
 
-    console.log(`SIGNATURE OK ? ${signatureCalculee === payloadSignature}`);
+    console.log(
+      `SIGNATURE OK (${signatureCalculee}) ? ${signatureCalculee === payloadSignature}`
+    );
     return (
       payloadSignature === signatureCalculee &&
       FournisseurHorloge.maintenant().getTime() / 1000 -
