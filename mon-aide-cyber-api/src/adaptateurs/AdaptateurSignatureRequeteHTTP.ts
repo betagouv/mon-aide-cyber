@@ -51,15 +51,12 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
 
     const ageSignatureTolereEnSecondes = 5;
 
+    const laRequete = JSON.stringify(corpsDeRequete);
     const signatureCalculee = crypto
       .createHash('sha256')
-      .update(
-        payloadTimestamp +
-          secretLivestormFinAtelier +
-          JSON.stringify(corpsDeRequete)
-      )
+      .update(payloadTimestamp + secretLivestormFinAtelier + laRequete)
       .digest('hex');
-
+    console.log(`La requete ${laRequete}`);
     console.log(
       `SIGNATURE OK (${signatureCalculee}) ? ${signatureCalculee === payloadSignature}`
     );
