@@ -37,10 +37,9 @@ export const EcranDevenirAidant = () => {
               Si vous n’êtes pas un représentant de l’État, il est nécessaire
               d’être adhérent à une association pour devenir Aidant cyber. Vous
               êtes déjà membre d’une association ou vous en connaissez une ?
-              Vous souhaitez recevoir une liste des associations reconnues par
-              MonAideCyber ? Contactez l’équipe à l’adresse suivante :{' '}
-              <LienMailtoMAC /> pour que nous puissions prendre en compte votre
-              demande.
+              Rendez-vous sur la page{' '}
+              <Link to="/relais-associatifs">relais associatifs</Link> pour
+              obtenir la liste des partenaires MonAideCyber.
             </p>
             <p>
               Afin de finaliser votre référencement en tant qu’Aidant cyber,
@@ -112,7 +111,8 @@ export const EcranDevenirAidant = () => {
           <div className="fr-col-md-8 fr-col-sm-12">
             <TypographieH4>Les relais associatifs</TypographieH4>
             <p>
-              L’équipe MonAideCyber collabore avec plusieurs associations
+              L’équipe MonAideCyber collabore avec{' '}
+              <Link to="/relais-associatifs">plusieurs associations</Link>{' '}
               ouvertes à l’intégration de nouveaux membres désireux de devenir
               Aidants cyber. Les associations partenaires partagent l’engagement
               en faveur d’un monde numérique plus responsable.
