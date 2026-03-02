@@ -39,7 +39,8 @@
     "overrides": {
       "semver": "~7.7.3",
       "cross-spawn": "~7.0.6",
-      "axios": "~1.13.5"
+      "axios": "~1.13.5",
+      "basic-ftp": "~5.2.0"
     }
   },
   "devDependencies": {
