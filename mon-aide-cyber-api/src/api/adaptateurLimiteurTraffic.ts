@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import rateLimit, { RateLimitRequestHandler } from 'express-rate-limit';
 
 const CINQ_MINUTES = 5 * 60 * 1000;
@@ -76,11 +75,13 @@ const adaptateurLimiteurTraffic = (
       "Vous avez atteint le nombre maximal d'appel à MonAideCyber. Veuillez réessayer ultérieurement.",
     standardHeaders: true,
     legacyHeaders: false,
-    skip: (requete: Request, __) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    skip: (requete: any, __: any) =>
       ['/assets/', '/fontes/', '/images/'].some((req) =>
         requete.path.startsWith(req)
       ),
-    handler: (_requete, reponse, _next, options) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    handler: (_requete: any, reponse: any, _next: any, options: any) =>
       reponse.status(options.statusCode).json({ message: options.message }),
   });
 

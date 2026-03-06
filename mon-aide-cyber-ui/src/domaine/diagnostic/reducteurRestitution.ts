@@ -5,7 +5,7 @@ export type EtatRestitution = {
   nomRubriqueConsultee?: string;
 };
 
-type ActionRestitution =
+export type ActionRestitution =
   | {
       restitution: Restitution;
       type: TypeActionRestitution.RESTITUTION_CHARGEE;
@@ -15,7 +15,7 @@ type ActionRestitution =
       type: TypeActionRestitution.RUBRIQUE_CONSULTEE;
     };
 
-enum TypeActionRestitution {
+export enum TypeActionRestitution {
   RESTITUTION_CHARGEE = 'RESTITUTION_CHARGEE',
   RUBRIQUE_CONSULTEE = 'RUBRIQUE_CONSULTEE',
 }

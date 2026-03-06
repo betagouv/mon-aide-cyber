@@ -7,13 +7,13 @@ export type EtatInformationsAidant = {
   informations: InformationsAidant;
 };
 
-enum TypeActionInformationsAidant {
+export enum TypeActionInformationsAidant {
   CHOIX_TYPE_AIDANT_FAIT = 'CHOIX_TYPE_AIDANT_FAIT',
   CHARTE_AIDANT_SIGNEE = 'CHARTE_AIDANT_SIGNEE',
   VIDE_INFORMATIONS_TYPE_AIDANT = 'VIDE_INFORMATIONS_TYPE_AIDANT',
 }
 
-type ActionInformationsAidant =
+export type ActionInformationsAidant =
   | { type: TypeActionInformationsAidant.CHARTE_AIDANT_SIGNEE }
   | {
       type: TypeActionInformationsAidant.CHOIX_TYPE_AIDANT_FAIT;

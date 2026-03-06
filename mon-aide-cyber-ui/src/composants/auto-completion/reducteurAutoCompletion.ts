@@ -147,12 +147,12 @@ export const reducteurAutoCompletion = <T extends object | string>() => {
           if (etat.clefsFiltrage) {
             return (
               Object.values(etat.clefsFiltrage).filter((clef: keyof T) =>
-                commencePar(val[clef], valeur)
+                commencePar(String(val[clef]), valeur)
               ).length > 0
             );
           }
           return (
-            Object.values(val).filter((val) => commencePar(val, valeur))
+            Object.values(val).filter((val) => commencePar(String(val), valeur))
               .length > 0
           );
         });

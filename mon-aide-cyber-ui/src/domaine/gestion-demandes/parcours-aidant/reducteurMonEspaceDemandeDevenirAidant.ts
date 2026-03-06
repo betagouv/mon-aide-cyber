@@ -8,12 +8,12 @@ export type EtatEtapesDemande = {
   etapeCourante: Etape;
 };
 
-enum TypeActionEtapesDemande {
+export enum TypeActionEtapesDemande {
   AVANCER_ETAPE_SUIVANTE = 'AVANCER_ETAPE_SUIVANTE',
   RETOUR_ETAPE_PRECEDENTE = 'RETOUR_ETAPE_PRECEDENTE',
 }
 
-type ActionEtapesDemande =
+export type ActionEtapesDemande =
   | {
       type: TypeActionEtapesDemande.RETOUR_ETAPE_PRECEDENTE;
     }
