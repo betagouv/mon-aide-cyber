@@ -16,7 +16,7 @@ export type EtatPreferences = {
   enCoursDeChargement: boolean;
 };
 
-enum TypeActionPreferences {
+export enum TypeActionPreferences {
   PREFERENCES_CHARGE = 'PREFERENCES',
   PREFERENCES_CHARGE_EN_ERREUR = 'PREFERENCES_CHARGE_EN_ERREUR',
   PREFERENCES_COCHE = 'PREFERENCES_COCHE',
@@ -29,7 +29,7 @@ export type CibleActionPreference =
   | 'SECTEUR_GEOGRAPHIQUE'
   | 'SECTEUR_ACTIVITE';
 
-type ActionPreferences =
+export type ActionPreferences =
   | {
       type: TypeActionPreferences.PREFERENCES_COCHE;
       saisie: string;

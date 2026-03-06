@@ -12,3 +12,4 @@ onlyBuiltDependencies:
 
 minimumReleaseAgeExclude:
   - immutable@5.1.5
+  - express-rate-limit@8.3.0

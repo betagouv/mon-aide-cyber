@@ -15,6 +15,7 @@ export class AdaptateurDeRequeteHTTPMemoire extends AdaptateurDeRequeteHTTP {
       this.requeteAttendue = _input.toString();
 
       const reponse: Response = {
+        bytes: () => this._reponse,
         json: () => this._reponse,
         headers: {} as Headers,
         status: this._enErreur ? 400 : 200,
