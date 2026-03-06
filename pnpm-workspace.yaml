@@ -9,3 +9,6 @@ packages:
 
 onlyBuiltDependencies:
   - 'esbuild@0.25.9'
+
+minimumReleaseAgeExclude:
+  - immutable@5.1.5

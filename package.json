@@ -42,7 +42,8 @@
       "axios": "~1.13.5",
       "minimatch": "~10.2.1",
       "basic-ftp": "~5.2.0",
-      "rollup": "^4.59.0"
+      "rollup": "^4.59.0",
+      "immutable": "^5.1.5"
     }
   },
   "devDependencies": {
