@@ -16,14 +16,14 @@ export type EtatProfil = {
   }[];
 };
 
-enum TypeActionProfil {
+export enum TypeActionProfil {
   PROFIL_CHARGE = 'PROFIL_CHARGE',
   PROFIL_CHARGE_EN_ERREUR = 'PROFIL_CHARGE_EN_ERREUR',
   COCHE_CONSENTEMENT_ANNUAIRE = 'COCHE_CONSENTEMENT_ANNUAIRE',
   COCHE_TYPE_AFFICHAGE_ANNUAIRE = 'COCHE_TYPE_AFFICHAGE_ANNUAIRE',
 }
 
-type ActionProfil =
+export type ActionProfil =
   | {
       type: TypeActionProfil.PROFIL_CHARGE;
       profil: Profil;

@@ -138,9 +138,7 @@ type ReponseAPIEntreprise = {
   }[];
 };
 
-class ConstructeurAdaptateurDeRequete
-  implements Constructeur<AdaptateurDeRequeteHTTP>
-{
+class ConstructeurAdaptateurDeRequete implements Constructeur<AdaptateurDeRequeteHTTP> {
   private reponseRetournee: ReponseAPIEntreprise = { results: [] };
 
   retournant(reponseRetournee?: {
@@ -176,6 +174,8 @@ class AdaptateurDeRequeteHTTPMemoire extends AdaptateurDeRequeteHTTP {
       this.requeteAttendue = _input.toString();
 
       const reponse: Response = {
+        bytes: () =>
+          this.reponseRetournee as unknown as Promise<Uint8Array<ArrayBuffer>>,
         json: () => this.reponseRetournee as unknown as Promise<REPONSE>,
         headers: {} as Headers,
         status: this._enErreur ? 400 : 200,
