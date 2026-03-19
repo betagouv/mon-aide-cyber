@@ -6,6 +6,7 @@ import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/Entre
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
 import { unAidant } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { Tuple } from '../../src/relation/Tuple';
+import { FauxServiceDeChiffrement } from '../infrastructure/securite/FauxServiceDeChiffrement';
 
 describe('Adaptateur De Relation MAC', () => {
   it("retourne l'identifiant du diagnostic initié par l'aidant", async () => {
@@ -137,5 +138,27 @@ describe('Adaptateur De Relation MAC', () => {
     ).rejects.toThrow(
       `Le diagnostic '${identifiantDiagnostic}' n’est relié à aucune entité Aidée.`
     );
+  });
+
+  it('remonte les demandes ayant un diagnostic initie', async () => {
+    const identifiantDiagnostic1 = crypto.randomUUID();
+    const adaptateurRelationsMAC = new AdaptateurRelationsMAC(
+      new EntrepotRelationMemoire(),
+      new FauxServiceDeChiffrement(
+        new Map([['jean.dujardin@mail.local', 'abcdef']])
+      )
+    );
+    await adaptateurRelationsMAC.creeTupleEntiteAideeBeneficieDiagnostic(
+      identifiantDiagnostic1,
+      'jean.dujardin@mail.local'
+    );
+
+    const tuples =
+      await adaptateurRelationsMAC.toutesLesDemandesAyantUnDiagnosticInitie([
+        'jean.dujardin@mail.local',
+      ]);
+
+    expect(tuples).toHaveLength(1);
+    expect(tuples[0].utilisateur.identifiant).toBe('jean.dujardin@mail.local');
   });
 });

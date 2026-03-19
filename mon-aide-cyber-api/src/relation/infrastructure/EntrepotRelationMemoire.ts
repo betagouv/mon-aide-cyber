@@ -1,4 +1,4 @@
-import { Objet, Relation, Tuple, Utilisateur } from '../Tuple';
+import { Objet, Relation, Tuple, TypeUtilisateur, Utilisateur } from '../Tuple';
 
 import { Entrepot, EntrepotRelation, Relations } from '../EntrepotRelation';
 import crypto from 'crypto';
@@ -76,6 +76,15 @@ export class EntrepotRelationMemoire
       (tuple) =>
         util.isDeepStrictEqual(tuple.objet, objet) &&
         tuple.relation === relation
+    );
+  }
+
+  async trouveLesRelations(
+    relation: Relation,
+    typeUtilisateur: TypeUtilisateur
+  ): Promise<Tuple[]> {
+    return Array.from(this.entites.values()).filter(
+      (e) => e.relation === relation && e.utilisateur.type === typeUtilisateur
     );
   }
 

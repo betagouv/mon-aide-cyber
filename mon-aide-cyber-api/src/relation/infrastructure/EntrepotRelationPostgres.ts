@@ -1,4 +1,4 @@
-import { Objet, Relation, Tuple, Utilisateur } from '../Tuple';
+import { Objet, Relation, Tuple, TypeUtilisateur, Utilisateur } from '../Tuple';
 import { Entrepot, EntrepotRelation, Relations } from '../EntrepotRelation';
 import crypto from 'crypto';
 import { knex, Knex } from 'knex';
@@ -141,5 +141,21 @@ export class EntrepotRelationPostgres
         .delete();
     });
     await Promise.all(suppressionRelations);
+  }
+
+  async trouveLesRelations(
+    relation: Relation,
+    typeUtilisateur: TypeUtilisateur
+  ): Promise<Tuple[]> {
+    return this.knex
+      .from(this.nomTable())
+      .whereRaw("(donnees->>'relation') = ?", relation)
+      .whereRaw("(donnees->'utilisateur'->>'type') = :typeUtilisateur", {
+        typeUtilisateur,
+      })
+      .select(`${this.nomTable()}.*`)
+      .then((lignes: TupleDTO[]) =>
+        lignes.map((ligne) => this.deDTOAEntite(ligne))
+      );
   }
 }

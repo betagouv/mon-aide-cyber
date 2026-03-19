@@ -16,6 +16,7 @@ import {
   rechercheParNomDepartement,
 } from '../../../gestion-demandes/departements';
 import {
+  CriteresDeDemande,
   DemandeAide,
   EntrepotDemandeAide,
   RechercheDemandeAide,
@@ -160,6 +161,10 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
     private readonly entreprotAideBrevo: EntrepotAideDistant = new EntrepotAideBrevo(),
     private readonly entrepotAidePostgres: EntrepotEcriture<AideMAC> = new EntrepotAidePostgres()
   ) {}
+
+  toutes(_criteres: CriteresDeDemande): Promise<DemandeAide[]> {
+    throw new Error('Method not implemented.');
+  }
 
   async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
     let aideBrevo: AideDistantDTO | undefined;

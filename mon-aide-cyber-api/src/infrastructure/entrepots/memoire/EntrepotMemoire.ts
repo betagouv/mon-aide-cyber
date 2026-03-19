@@ -53,6 +53,7 @@ import {
 } from '../../../espace-utilisateur-inscrit/UtilisateurInscrit';
 import { AidantDTO } from '../../../espace-aidant/ServiceAidant';
 import {
+  CriteresDeDemande,
   DemandeAide,
   DemandeAideSimple,
   EntrepotDemandeAide,
@@ -72,9 +73,9 @@ import {
 import { Departement } from '../../../gestion-demandes/departements';
 import { SecteurActivite } from '../../../espace-aidant/preferences/secteursActivite';
 
-export class EntrepotMemoire<T extends Aggregat>
-  implements EntrepotEcriture<T>
-{
+export class EntrepotMemoire<
+  T extends Aggregat,
+> implements EntrepotEcriture<T> {
   protected entites: Map<crypto.UUID, T> = new Map();
 
   async lis(identifiant: string): Promise<T> {
@@ -250,6 +251,15 @@ export class EntrepotAideMemoire
     return Array.from(this.entites.values()).filter(
       (aide) => aide.identifiant === identifiant
     );
+  }
+
+  async toutes(criteres: CriteresDeDemande): Promise<DemandeAide[]> {
+    return Array.from(this.entites.values()).filter((aide) => {
+      if (criteres.dateSignatureCGU) {
+        return aide.dateSignatureCGU > criteres.dateSignatureCGU;
+      }
+      return true;
+    });
   }
 }
 
@@ -503,9 +513,7 @@ export class EntrepotUtilisateurInscritMemoire
   }
 }
 
-export class EntrepotStatistiquesAidantMemoire
-  implements EntrepotStatistiquesAidant
-{
+export class EntrepotStatistiquesAidantMemoire implements EntrepotStatistiquesAidant {
   protected entites: Map<crypto.UUID, StatistiquesAidant> = new Map();
 
   constructor(
