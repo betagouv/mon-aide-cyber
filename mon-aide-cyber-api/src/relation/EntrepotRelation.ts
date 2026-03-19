@@ -1,4 +1,4 @@
-import { Objet, Relation, Tuple, Utilisateur } from './Tuple';
+import { Objet, Relation, Tuple, TypeUtilisateur, Utilisateur } from './Tuple';
 import { Aggregat } from './Aggregat';
 
 export interface Entrepot<T extends Aggregat> {
@@ -29,5 +29,10 @@ export interface EntrepotRelation extends Entrepot<Tuple> {
   trouveLesRelationsPourCetObjet(
     relation: Relation,
     objet: Objet
+  ): Promise<Tuple[]>;
+
+  trouveLesRelations(
+    relation: Relation,
+    typeUtilisateur: TypeUtilisateur
   ): Promise<Tuple[]>;
 }

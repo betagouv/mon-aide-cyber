@@ -132,6 +132,39 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
 
     throw new ErreurDemandeAttribueeNonTrouvee(identifiantDemandeAide);
   }
+
+  async toutesLesDemandesAyantUnDiagnosticInitie(
+    emailsEntites: string[]
+  ): Promise<Tuple[]> {
+    const lesRelations = await this.entrepotRelation.trouveLesRelations(
+      'destinataire',
+      'entiteAidee'
+    );
+    return lesRelations.reduce((precedent, courant) => {
+      const correspondance = emailsEntites.some(
+        (e) =>
+          e ===
+          this.serviceDeChiffrement.dechiffre(courant.utilisateur.identifiant)
+      );
+      if (correspondance) {
+        const utilisateur = {
+          ...courant.utilisateur,
+          identifiant: this.serviceDeChiffrement.dechiffre(
+            courant.utilisateur.identifiant
+          ),
+        };
+        return [
+          ...precedent,
+          {
+            ...courant,
+            utilisateur,
+          },
+        ];
+      } else {
+        return precedent;
+      }
+    }, [] as Tuple[]);
+  }
 }
 
 class ErreurDiagnosticAideNonTrouve extends Error {

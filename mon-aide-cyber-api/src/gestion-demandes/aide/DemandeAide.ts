@@ -21,9 +21,12 @@ export type RechercheDemandeAideNonTrouvee = {
   etat: 'INEXISTANT' | 'INCOMPLET';
 };
 
+export type CriteresDeDemande = { [K in keyof DemandeAide]?: DemandeAide[K] };
+
 export interface EntrepotDemandeAide {
   rechercheParEmail(email: string): Promise<RechercheDemandeAide>;
   persiste(entite: DemandeAide): Promise<void>;
+  toutes(criteres: CriteresDeDemande): Promise<DemandeAide[]>;
 }
 
 export type DemandeAideSimple = Aggregat & {
