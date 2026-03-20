@@ -9,6 +9,7 @@ import {
 import {
   adaptateursRequeteBrevo,
   CorpsReponseRechercheContact,
+  CorpsReponseRechercheContacts,
   ErreurRequeBrevo,
 } from '../../adaptateurs/adaptateursRequeteBrevo';
 import {
@@ -37,10 +38,16 @@ type AideMAC = Omit<
   'email' | 'raisonSociale' | 'departement' | 'siret'
 >;
 
-class EntrepotAidePostgres extends EntrepotEcriturePostgres<
-  AideMAC,
-  AideMACDTO
-> {
+class EntrepotAidePostgres
+  extends EntrepotEcriturePostgres<AideMAC, AideMACDTO>
+  implements EntrepotAideMAC
+{
+  async lesDemandes(identifiantsDemandes: crypto.UUID[]): Promise<AideMAC[]> {
+    return (
+      await this.knex.from(this.nomTable()).whereIn('id', identifiantsDemandes)
+    ).map((aideDTO) => this.deDTOAEntite(aideDTO));
+  }
+
   protected champsAMettreAJour(aideDTO: AideMACDTO): Partial<AideMACDTO> {
     return { donnees: aideDTO.donnees };
   }
@@ -102,6 +109,8 @@ export interface EntrepotAideDistant {
   ): Promise<void>;
 
   rechercheParEmail(email: string): Promise<AideDistantDTO | undefined>;
+
+  rechercheParCriteres(criteres: CriteresDeDemande): Promise<AideDistantDTO[]>;
 }
 
 class EntrepotAideBrevo implements EntrepotAideDistant {
@@ -152,6 +161,49 @@ class EntrepotAideBrevo implements EntrepotAideDistant {
 
     await adaptateursRequeteBrevo().creationContact().execute(laCreation);
   }
+
+  async rechercheParCriteres(
+    criteres: CriteresDeDemande
+  ): Promise<AideDistantDTO[]> {
+    const executeLaRecherche = async (
+      indice: number,
+      contactsDistants: CorpsReponseRechercheContact[]
+    ): Promise<CorpsReponseRechercheContact[]> => {
+      const reponse = await adaptateursRequeteBrevo()
+        .rechercheContacts({
+          depuisDate: criteres.dateSignatureCGU!,
+          segment: 3,
+          indice: indice,
+          limite: 1000,
+        })
+        .execute(unConstructeurRechercheDeContact().construis());
+
+      const corpsReponse: CorpsReponseRechercheContacts =
+        (await reponse.json()) as CorpsReponseRechercheContacts;
+      contactsDistants.push(...corpsReponse.contacts);
+      if (contactsDistants.length < corpsReponse.count) {
+        return executeLaRecherche(indice + 1000, contactsDistants);
+      }
+      return contactsDistants;
+    };
+
+    try {
+      const contactsDistants = await executeLaRecherche(0, []);
+      return contactsDistants.map((contact) => ({
+        email: contact.email,
+        metaDonnees: contact.attributes.METADONNEES,
+      }));
+    } catch (erreur: unknown | ErreurRequeBrevo) {
+      if (erreur instanceof ErreurRequeBrevo && erreur.status === 404) {
+        return [];
+      }
+      throw erreur;
+    }
+  }
+}
+
+interface EntrepotAideMAC extends EntrepotEcriture<AideMAC> {
+  lesDemandes(identifiantsDemandes: crypto.UUID[]): Promise<AideMAC[]>;
 }
 
 export class EntrepotAideConcret implements EntrepotDemandeAide {
@@ -159,11 +211,51 @@ export class EntrepotAideConcret implements EntrepotDemandeAide {
     private readonly serviceChiffrement: ServiceDeChiffrement,
     private readonly repertoireDeContacts: RepertoireDeContacts,
     private readonly entreprotAideBrevo: EntrepotAideDistant = new EntrepotAideBrevo(),
-    private readonly entrepotAidePostgres: EntrepotEcriture<AideMAC> = new EntrepotAidePostgres()
+    private readonly entrepotAidePostgres: EntrepotAideMAC = new EntrepotAidePostgres()
   ) {}
 
-  toutes(_criteres: CriteresDeDemande): Promise<DemandeAide[]> {
-    throw new Error('Method not implemented.');
+  async toutes(criteres: CriteresDeDemande): Promise<DemandeAide[]> {
+    const aidesDistants: AideDistantDTO[] =
+      await this.entreprotAideBrevo.rechercheParCriteres(criteres);
+
+    const aides = aidesDistants.map((aideBrevo) => {
+      const metadonnees: {
+        identifiantMAC: crypto.UUID;
+        departement: string;
+        raisonSociale: string;
+        siret: string;
+      } = JSON.parse(this.serviceChiffrement.dechiffre(aideBrevo.metaDonnees));
+
+      return {
+        email: aideBrevo.email,
+        raisonSociale: metadonnees.raisonSociale,
+        departement: rechercheParNomDepartement(metadonnees.departement),
+        identifiantMAC: metadonnees.identifiantMAC,
+        siret: metadonnees.siret ?? 'NON_DISPONIBLE',
+      };
+    });
+
+    const demandes: AideMAC[] = await this.entrepotAidePostgres.lesDemandes(
+      aides.map((a) => a.identifiantMAC)
+    );
+
+    return aides.reduce((precedent, courant) => {
+      const demandeCorrespondante = demandes.find(
+        (d) => d.identifiant === courant.identifiantMAC
+      );
+      if (demandeCorrespondante) {
+        precedent.push({
+          ...demandeCorrespondante,
+          departement: courant.departement,
+          ...(courant.raisonSociale && {
+            raisonSociale: courant.raisonSociale,
+          }),
+          email: courant.email,
+          siret: courant.siret,
+        });
+      }
+      return precedent;
+    }, [] as DemandeAide[]);
   }
 
   async rechercheParEmail(email: string): Promise<RechercheDemandeAide> {
