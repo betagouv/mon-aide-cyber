@@ -165,6 +165,25 @@ export class AdaptateurRelationsMAC implements AdaptateurRelations {
       }
     }, [] as Tuple[]);
   }
+
+  async toutesLesDemandesAyantUnAidant(
+    identifiantsDemandeAide: crypto.UUID[]
+  ): Promise<Tuple[]> {
+    const lesRelations = await this.entrepotRelation.trouveLesRelations(
+      'demandeAttribuee',
+      'aidant'
+    );
+    return lesRelations.reduce((precedent, courant) => {
+      const correspondance = identifiantsDemandeAide.some(
+        (e) => e === courant.objet.identifiant
+      );
+      if (correspondance) {
+        return [...precedent, courant];
+      } else {
+        return precedent;
+      }
+    }, [] as Tuple[]);
+  }
 }
 
 class ErreurDiagnosticAideNonTrouve extends Error {
