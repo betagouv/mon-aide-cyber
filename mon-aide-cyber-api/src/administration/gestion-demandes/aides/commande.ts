@@ -21,6 +21,9 @@ command.action(async () => {
   console.log(
     `- ${aidesNonPourvues.demandesSansDiagnostic.length} demandes sans diagnostic`
   );
+  console.log(
+    `- ${aidesNonPourvues.demandesSansAidant.length} demandes sans Aidant`
+  );
   const cheminFichier = path.join(
     process.cwd(),
     'tmp',

@@ -104,4 +104,37 @@ describe('Pour les demandes d’aides non pourvues', () => {
       expect(demandesAidesNonPourvues.demandesSansDiagnostic).toHaveLength(1);
     });
   });
+
+  describe('en ce qui concerne les demandes sans Aidants', () => {
+    it('retourne les demandes d’aides non encore affectées', async () => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-12-07T10:00:00+01:00'))
+      );
+      const entrepots = new EntrepotsMemoire();
+      const demandeAide = uneDemandeAide()
+        .avecUneDateDeSignatureDesCGU(
+          new Date(Date.parse('2025-07-07T10:00:00+01:00'))
+        )
+        .construis();
+      await entrepots.demandesAides().persiste(demandeAide);
+      await entrepots.demandesAides().persiste(
+        uneDemandeAide()
+          .avecUneDateDeSignatureDesCGU(
+            new Date(Date.parse('2026-02-04T10:00:00+01:00'))
+          )
+          .construis()
+      );
+      await adaptateurRelationsMAC.attribueDemandeAAidant(
+        demandeAide.identifiant,
+        crypto.randomUUID()
+      );
+
+      const demandesAidesNonPourvues = await lesAidesNonPourvues(
+        entrepots,
+        adaptateurRelationsMAC
+      ).recherche();
+
+      expect(demandesAidesNonPourvues.demandesSansAidant).toHaveLength(1);
+    });
+  });
 });

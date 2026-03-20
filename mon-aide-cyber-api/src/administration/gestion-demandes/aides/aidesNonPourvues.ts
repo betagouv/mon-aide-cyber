@@ -8,6 +8,7 @@ type DetailsDemande = {
 };
 type DemandeAidesNonPourvues = {
   demandesSansDiagnostic: DetailsDemande[];
+  demandesSansAidant: DetailsDemande[];
 };
 
 class RechercheDemandesAidesNonPourvues {
@@ -25,13 +26,28 @@ class RechercheDemandesAidesNonPourvues {
         toutesLesDemandes.map((demande) => demande.email)
       );
 
-    const demandesSansDiagnostic = toutesLesDemandes.reduce(
+    const toutesLesDemandesAyantUnAidant =
+      await this.adaptateurRelationsMAC.toutesLesDemandesAyantUnAidant(
+        toutesLesDemandes.map((demande) => demande.identifiant)
+      );
+
+    return toutesLesDemandes.reduce(
       (precedent, courant) => {
-        const correspondance = toutesLesDemandesAvecDiagnostic.some(
+        const demandeSansDiagnostic = toutesLesDemandesAvecDiagnostic.some(
           (d) => d.utilisateur.identifiant === courant.email
         );
-        if (!correspondance) {
-          precedent.push({
+        if (!demandeSansDiagnostic) {
+          precedent.demandesSansDiagnostic.push({
+            entite: courant.email,
+            departement: courant.departement.nom,
+            dateDeDemande: courant.dateSignatureCGU,
+          });
+        }
+        const demandeSansAidant = toutesLesDemandesAyantUnAidant.some(
+          (d) => d.objet.identifiant === courant.identifiant
+        );
+        if (!demandeSansAidant) {
+          precedent.demandesSansAidant.push({
             entite: courant.email,
             departement: courant.departement.nom,
             dateDeDemande: courant.dateSignatureCGU,
@@ -39,9 +55,11 @@ class RechercheDemandesAidesNonPourvues {
         }
         return precedent;
       },
-      [] as DetailsDemande[]
+      {
+        demandesSansAidant: [],
+        demandesSansDiagnostic: [],
+      } as DemandeAidesNonPourvues
     );
-    return { demandesSansDiagnostic };
   }
 }
 
