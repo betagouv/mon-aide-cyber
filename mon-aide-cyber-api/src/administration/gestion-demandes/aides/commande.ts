@@ -16,4 +16,7 @@ command.action(async () => {
   ).recherche();
 
   console.log(JSON.stringify(aidesNonPourvues, undefined, 2));
+  process.exit(0);
 });
+
+program.parse();
