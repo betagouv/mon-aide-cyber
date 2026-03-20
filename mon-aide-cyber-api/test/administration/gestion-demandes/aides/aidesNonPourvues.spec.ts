@@ -18,88 +18,90 @@ describe('Pour les demandes d’aides non pourvues', () => {
     );
   });
 
-  it('retourne les demandes d’aides', async () => {
-    FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2025-12-07T10:00:00+01:00'))
-    );
-    const entrepots = new EntrepotsMemoire();
-    const dateDeDemande = new Date(Date.parse('2025-07-07T10:00:00+01:00'));
-    const demandeAide = uneDemandeAide()
-      .avecUneDateDeSignatureDesCGU(dateDeDemande)
-      .construis();
-    await entrepots.demandesAides().persiste(demandeAide);
+  describe('en ce qui concerne les demandes sans diagnostic', () => {
+    it('retourne les demandes d’aides', async () => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-12-07T10:00:00+01:00'))
+      );
+      const entrepots = new EntrepotsMemoire();
+      const dateDeDemande = new Date(Date.parse('2025-07-07T10:00:00+01:00'));
+      const demandeAide = uneDemandeAide()
+        .avecUneDateDeSignatureDesCGU(dateDeDemande)
+        .construis();
+      await entrepots.demandesAides().persiste(demandeAide);
 
-    const demandesAidesNonPourvues = await lesAidesNonPourvues(
-      entrepots,
-      adaptateurRelationsMAC
-    ).recherche();
+      const demandesAidesNonPourvues = await lesAidesNonPourvues(
+        entrepots,
+        adaptateurRelationsMAC
+      ).recherche();
 
-    expect(demandesAidesNonPourvues).toStrictEqual([
-      {
-        entite: demandeAide.email,
-        departement: demandeAide.departement.nom,
-        dateDeDemande,
-      },
-    ]);
-  });
+      expect(demandesAidesNonPourvues.demandesSansDiagnostic).toStrictEqual([
+        {
+          entite: demandeAide.email,
+          departement: demandeAide.departement.nom,
+          dateDeDemande,
+        },
+      ]);
+    });
 
-  it('retourne les demandes d’aides après le 4 juin 2025', async () => {
-    FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2025-12-07T10:00:00+01:00'))
-    );
-    const entrepots = new EntrepotsMemoire();
-    await entrepots.demandesAides().persiste(
-      uneDemandeAide()
+    it('retourne les demandes d’aides après le 4 juin 2025', async () => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-12-07T10:00:00+01:00'))
+      );
+      const entrepots = new EntrepotsMemoire();
+      await entrepots.demandesAides().persiste(
+        uneDemandeAide()
+          .avecUneDateDeSignatureDesCGU(
+            new Date(Date.parse('2025-07-07T10:00:00+01:00'))
+          )
+          .construis()
+      );
+      await entrepots.demandesAides().persiste(
+        uneDemandeAide()
+          .avecUneDateDeSignatureDesCGU(
+            new Date(Date.parse('2025-06-03T10:00:00+01:00'))
+          )
+          .construis()
+      );
+
+      const demandesAidesNonPourvues = await lesAidesNonPourvues(
+        entrepots,
+        adaptateurRelationsMAC
+      ).recherche();
+
+      expect(demandesAidesNonPourvues.demandesSansDiagnostic).toHaveLength(1);
+    });
+
+    it('retourne les demandes d’aides pour lesquelles aucun diagnostic n’a été effectué', async () => {
+      FournisseurHorlogeDeTest.initialise(
+        new Date(Date.parse('2025-12-07T10:00:00+01:00'))
+      );
+      const entrepots = new EntrepotsMemoire();
+      const demandeAide = uneDemandeAide()
         .avecUneDateDeSignatureDesCGU(
           new Date(Date.parse('2025-07-07T10:00:00+01:00'))
         )
-        .construis()
-    );
-    await entrepots.demandesAides().persiste(
-      uneDemandeAide()
-        .avecUneDateDeSignatureDesCGU(
-          new Date(Date.parse('2025-06-03T10:00:00+01:00'))
-        )
-        .construis()
-    );
+        .construis();
+      await entrepots.demandesAides().persiste(demandeAide);
+      await entrepots.demandesAides().persiste(
+        uneDemandeAide()
+          .avecUneDateDeSignatureDesCGU(
+            new Date(Date.parse('2026-02-04T10:00:00+01:00'))
+          )
+          .construis()
+      );
+      const diagnostic = unDiagnostic().construis();
+      await adaptateurRelationsMAC.creeTupleEntiteAideeBeneficieDiagnostic(
+        diagnostic.identifiant,
+        demandeAide.email
+      );
 
-    const demandesAidesNonPourvues = await lesAidesNonPourvues(
-      entrepots,
-      adaptateurRelationsMAC
-    ).recherche();
+      const demandesAidesNonPourvues = await lesAidesNonPourvues(
+        entrepots,
+        adaptateurRelationsMAC
+      ).recherche();
 
-    expect(demandesAidesNonPourvues).toHaveLength(1);
-  });
-
-  it('retourne les demandes d’aides pour lesquelles aucun diagnostic n’a été effectué', async () => {
-    FournisseurHorlogeDeTest.initialise(
-      new Date(Date.parse('2025-12-07T10:00:00+01:00'))
-    );
-    const entrepots = new EntrepotsMemoire();
-    const demandeAide = uneDemandeAide()
-      .avecUneDateDeSignatureDesCGU(
-        new Date(Date.parse('2025-07-07T10:00:00+01:00'))
-      )
-      .construis();
-    await entrepots.demandesAides().persiste(demandeAide);
-    await entrepots.demandesAides().persiste(
-      uneDemandeAide()
-        .avecUneDateDeSignatureDesCGU(
-          new Date(Date.parse('2026-02-04T10:00:00+01:00'))
-        )
-        .construis()
-    );
-    const diagnostic = unDiagnostic().construis();
-    await adaptateurRelationsMAC.creeTupleEntiteAideeBeneficieDiagnostic(
-      diagnostic.identifiant,
-      demandeAide.email
-    );
-
-    const demandesAidesNonPourvues = await lesAidesNonPourvues(
-      entrepots,
-      adaptateurRelationsMAC
-    ).recherche();
-
-    expect(demandesAidesNonPourvues).toHaveLength(1);
+      expect(demandesAidesNonPourvues.demandesSansDiagnostic).toHaveLength(1);
+    });
   });
 });
