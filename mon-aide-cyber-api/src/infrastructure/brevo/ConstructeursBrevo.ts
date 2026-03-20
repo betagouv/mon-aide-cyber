@@ -13,7 +13,7 @@ import { PieceJointe } from '../../adaptateurs/AdaptateurEnvoiMail';
 import { TypeEvenement } from '../../contacts/RepertoireDeContacts';
 
 abstract class ConstructeurBrevo<T> {
-  constructor(private readonly methode: 'POST' | 'GET' | 'PUT') {}
+  protected constructor(private readonly methode: 'POST' | 'GET' | 'PUT') {}
 
   protected abstract construisCorps(): T;
 
@@ -120,7 +120,6 @@ class ConstructeurBrevoRequeteBrute extends ConstructeurBrevo<RecordRecursif> {
   ) {
     super(methode);
   }
-
   protected construisCorps(): RecordRecursif {
     return this.corps;
   }
@@ -210,7 +209,6 @@ export class ConstructeurBrevoEnvoiMailAvecTemplate extends ConstructeurBrevo<En
 class ConstructeurBrevoCreationContact extends ConstructeurBrevo<CreationContactBrevo> {
   private email: Email = '';
   private attributs: Record<string, string> = {} as Record<string, string>;
-
   constructor(methode: 'POST' | 'GET' = 'POST') {
     super(methode);
   }

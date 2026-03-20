@@ -5,10 +5,10 @@ import {
   AideDistantDTO,
   EntrepotAideDistant,
 } from '../../../../../src/infrastructure/entrepots/postgres/EntrepotAideConcret';
+import { CriteresDeDemande } from '../../../../../src/gestion-demandes/aide/DemandeAide';
 export class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
   protected entites: Map<string, AideDistantBrevoDTO> = new Map();
   private avecMetaDonnees = true;
-
   async persiste(
     entite: AideDistant,
     chiffrement: (
@@ -45,6 +45,12 @@ export class EntrepotAideBrevoMemoire implements EntrepotAideDistant {
       email: aideDistantDTO.email,
       metaDonnees: aideDistantDTO.attributes.METADONNEES,
     };
+  }
+
+  rechercheParCriteres(
+    _criteres: CriteresDeDemande
+  ): Promise<AideDistantDTO[]> {
+    throw new Error('Method not implemented.');
   }
 
   sansMetadonnees(): EntrepotAideBrevoMemoire {

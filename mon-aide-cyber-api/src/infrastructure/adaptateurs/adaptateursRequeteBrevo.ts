@@ -42,6 +42,13 @@ export type CorpsReponseRechercheContact = {
 type ReponseRechercheContact = Omit<ReponseBrevo, 'json'> & {
   json: () => Promise<CorpsReponseRechercheContact>;
 };
+export type CorpsReponseRechercheContacts = {
+  count: number;
+  contacts: CorpsReponseRechercheContact[];
+};
+type ReponseRechercheContacts = Omit<ReponseBrevo, 'json'> & {
+  json: () => Promise<CorpsReponseRechercheContacts>;
+};
 
 interface AdaptateurRequeteBrevo<REQUETE, REPONSE extends Response> {
   execute(requete: REQUETE): Promise<REPONSE>;
@@ -86,6 +93,12 @@ export type CreationContactBrevo = {
 };
 
 export type RechercheContactBrevo = string;
+export type RechercheContactsBrevo = {
+  limit?: number;
+  offset?: number;
+  createdSince?: Date;
+  segmentId: number;
+};
 
 export type CreationEvenement = {
   identifiers: {
@@ -139,6 +152,20 @@ export class AdaptateursRequeteBrevo {
     ReponseRechercheContact | ReponseBrevoEnErreur
   > {
     return this.adaptateur(`https://api.brevo.com/v3/contacts/${email}`);
+  }
+
+  rechercheContacts(criteres: {
+    depuisDate: Date;
+    segment: number;
+    indice: number;
+    limite: number;
+  }): AdaptateurRequeteBrevo<
+    RequeteBrevo<RechercheContactBrevo>,
+    ReponseRechercheContacts | ReponseBrevoEnErreur
+  > {
+    return this.adaptateur(
+      `https://api.brevo.com/v3/contacts?createdSince=${criteres.depuisDate.toISOString()}&segmentId=${criteres.segment}&limit=${criteres.limite}&offset=${criteres.indice}`
+    );
   }
 
   creationEvenement(): AdaptateurRequeteBrevo<
