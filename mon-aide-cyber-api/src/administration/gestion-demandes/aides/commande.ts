@@ -18,7 +18,9 @@ command.action(async () => {
   ).recherche();
 
   console.log(`Obtention des aides non pourvues terminée :`);
-  console.log(`- ${aidesNonPourvues.length} demandes d’aides non pourvues`);
+  console.log(
+    `- ${aidesNonPourvues.demandesSansDiagnostic.length} demandes sans diagnostic`
+  );
   const cheminFichier = path.join(
     process.cwd(),
     'tmp',
