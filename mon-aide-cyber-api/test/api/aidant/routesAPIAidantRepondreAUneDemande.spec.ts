@@ -12,6 +12,10 @@ import { tokenAttributionDemandeAide } from '../../../src/gestion-demandes/aide/
 import { DemandePourPostuler } from '../../../src/api/aidant/miseEnRelation';
 import crypto from 'crypto';
 import { unAdaptateurRechercheEntreprise } from '../../constructeurs/constructeurAdaptateurRechercheEntrepriseEnDur';
+import {
+  AdaptateurGeographieMemoire,
+  unAdaptateurGeographie,
+} from '../../../src/adaptateurs/AdaptateurGeographie';
 
 describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
   const testeurMAC = testeurIntegration();
@@ -23,6 +27,7 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
         .dansAdministration()
         .dansLeServicePublic()
         .construis();
+    testeurMAC.adaptateurGeographie = unAdaptateurGeographie();
     donneesServeur = testeurMAC.initialise();
   });
 
@@ -164,6 +169,45 @@ describe('Le serveur MAC, sur  les routes de réponse à une demande', () => {
       );
 
       expect(reponse.json().epci).toBeUndefined();
+    });
+
+    it('Ne renvoie pas l’epci si on ne peut pas l’obtenir', async () => {
+      testeurMAC.adaptateurGeographie =
+        new AdaptateurGeographieMemoire().sansCodeEPCI();
+      donneesServeur = testeurMAC.initialise();
+      const token = tokenAttributionDemandeAide(
+        testeurMAC.serviceDeChiffrement
+      ).chiffre(
+        'entite-aidee@email.com',
+        '11111111-1111-1111-1111-111111111111',
+        crypto.randomUUID()
+      );
+      const demandeAide: DemandeAide = uneDemandeAide()
+        .avecUneDateDeSignatureDesCGU(new Date('2025-04-02T12:37:00.000Z'))
+        .avecUnEmail('entite-aidee@email.com')
+        .avecIdentifiant('11111111-1111-1111-1111-111111111111')
+        .dansLeDepartement(finistere)
+        .avecLeSiret('0987654321')
+        .construis();
+      await testeurMAC.entrepots.demandesAides().persiste(demandeAide);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/aidant/repondre-a-une-demande/informations-de-demande?token=${token}`
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(reponse.json()).toStrictEqual<DemandePourPostuler>({
+        dateCreation: '2025-04-02T12:37:00.000Z',
+        departement: {
+          nom: 'Finistère',
+          code: '29',
+          codeRegion: '53',
+        },
+        typeEntite: 'Organisations publiques',
+        secteurActivite: 'Administration, Tertiaire',
+      });
     });
 
     it('Rejette la requête avec une erreur 400 si le déchiffrement du token lève une exception', async () => {

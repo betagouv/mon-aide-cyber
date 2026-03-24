@@ -282,6 +282,41 @@ describe('Mise en relation par critères', () => {
       expect(informationsDuMail!.epci).toBe('Bordeaux Métropole');
     });
 
+    it("Ne mentionne pas, dans le mail vers l'Aidant, les informations d'EPCI si on ne peut le récupérer", async () => {
+      const premierAidant = unAidant()
+        .ayantPourDepartements([finistere])
+        .ayantPourSecteursActivite([{ nom: 'Transports' }])
+        .ayantPourTypesEntite([entitesPubliques])
+        .construis();
+      await entrepots.aidants().persiste(premierAidant);
+
+      let informationsDuMail: InformationEntitePourMiseEnRelation;
+      envoieMail.envoiToutesLesMisesEnRelation = async (
+        __aidants: AidantMisEnRelation[],
+        informations: InformationEntitePourMiseEnRelation
+      ) => {
+        informationsDuMail = informations;
+      };
+      adaptateurGeo.epciAvecCode = async (__codeEpci: string) => undefined;
+      const miseEnRelation = laMiseEnRelation();
+
+      const demandeAide = uneDemandeAide()
+        .avecIdentifiant('11111111-1111-1111-1111-111111111111')
+        .avecUnEmail('demandeur@societe.fr')
+        .dansLeDepartement(finistere)
+        .construis();
+
+      await miseEnRelation.execute({
+        demandeAide,
+        secteursActivite: [{ nom: 'Transports' }],
+        typeEntite: entitesPubliques,
+        siret: '12345',
+        codeEPCI: '888999',
+      });
+
+      expect(informationsDuMail!.epci).toBeUndefined();
+    });
+
     it('Envoie un mail aux Aidants qui matchent', async () => {
       const premierAidant = unAidant()
         .avecUnEmail('aidant-qui-matche@mail.con')
