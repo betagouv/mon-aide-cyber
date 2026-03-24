@@ -37,6 +37,10 @@ import { AdaptateurSignatureRequeteDeTest } from '../adaptateurs/AdaptateurSigna
 import { BusCommandeMACIntercepte } from '../infrastructure/bus/BusCommandeMACIntercepte';
 import { Messagerie } from '../../src/infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
 import { AdaptateurMessagerieMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurMessagerieMemoire';
+import {
+  AdaptateurGeographie,
+  unAdaptateurGeographie,
+} from '../../src/adaptateurs/AdaptateurGeographie';
 
 const PORT_DISPONIBLE = 0;
 
@@ -83,6 +87,7 @@ class TesteurIntegrationMAC {
     public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
     public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
     public adaptateurDeRechercheEntreprise = unAdaptateurRechercheEntreprise().construis(),
+    public adaptateurGeographie: AdaptateurGeographie = unAdaptateurGeographie(),
     public adaptateurCmsCrisp: AdaptateurCmsCrispMAC = new AdaptateurCmsCrispMACMemoire(),
     public adaptateurSignatureRequete: AdaptateurSignatureRequeteDeTest = new AdaptateurSignatureRequeteDeTest(),
     public busCommande: BusCommandeMACIntercepte = new BusCommandeMACIntercepte(
@@ -143,6 +148,7 @@ class TesteurIntegrationMAC {
       repertoireDeContacts: this.repertoireDeContacts,
       adaptateurProConnect: this.adaptateurProConnect,
       adaptateurRechercheEntreprise: this.adaptateurDeRechercheEntreprise,
+      adaptateurGeographie: this.adaptateurGeographie,
       adaptateurCmsCrisp: this.adaptateurCmsCrisp,
       adaptateurSignatureRequete: this.adaptateurSignatureRequete,
       estEnMaintenance: false,

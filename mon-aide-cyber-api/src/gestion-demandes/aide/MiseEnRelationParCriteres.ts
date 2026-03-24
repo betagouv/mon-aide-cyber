@@ -161,7 +161,7 @@ export class MiseEnRelationParCriteres implements MiseEnRelation {
       matchingAidants,
       {
         departement: donneesMiseEnRelation.demandeAide.departement.nom,
-        epci: epci.nom,
+        ...(epci && { epci: epci.nom }),
         typeEntite: donneesMiseEnRelation.typeEntite.nom,
         secteursActivite: donneesMiseEnRelation.secteursActivite
           .map((s) => s.nom)

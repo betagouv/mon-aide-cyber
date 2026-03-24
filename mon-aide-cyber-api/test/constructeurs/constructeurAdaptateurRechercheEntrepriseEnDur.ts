@@ -8,9 +8,7 @@ import {
   entitesPubliques,
 } from '../../src/espace-aidant/Aidant';
 
-class ConstructeurAdaptateurRechercheEntrepriseEnDur
-  implements Constructeur<AdaptateurRechercheEntreprise>
-{
+class ConstructeurAdaptateurRechercheEntrepriseEnDur implements Constructeur<AdaptateurRechercheEntreprise> {
   private reponse: Entreprise[] = [
     {
       siret: '12345678912345',

@@ -43,6 +43,7 @@ import { interdisLaMiseEnCache } from './infrastructure/middlewares/middlewares'
 
 import { AdaptateurSignatureRequete } from './adaptateurs/AdaptateurSignatureRequete';
 import { Messagerie } from './infrastructure/adaptateurs/AdaptateurMessagerieMattermost';
+import { AdaptateurGeographie } from './adaptateurs/AdaptateurGeographie';
 
 const ENDPOINTS_SANS_CSRF = ['/api/token'];
 
@@ -75,6 +76,7 @@ export type ConfigurationServeur = {
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
   adaptateurMetabase: AdaptateurMetabase;
   adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise;
+  adaptateurGeographie: AdaptateurGeographie;
   adaptateurCmsCrisp: AdaptateurCmsCrispMAC;
   adaptateurSignatureRequete: AdaptateurSignatureRequete;
   estEnMaintenance: boolean;

@@ -11,10 +11,7 @@ import {
 } from '../../gestion-demandes/aide/MiseEnRelationParCriteres';
 import { DemandePourPostuler } from './miseEnRelation';
 import { ErreurMAC } from '../../domaine/erreurMAC';
-import {
-  EPCI,
-  unAdaptateurGeographie,
-} from '../../adaptateurs/AdaptateurGeographie';
+import { EPCI } from '../../adaptateurs/AdaptateurGeographie';
 
 type CorpsRequeteRepondreAUneDemande = core.ParamsDictionary & {
   token: string;
@@ -47,6 +44,7 @@ export const routesAPIAidantRepondreAUneDemande = (
     entrepots,
     adaptateurRechercheEntreprise,
     serviceDeChiffrement,
+    adaptateurGeographie,
   } = configuration;
 
   routes.post(
@@ -120,7 +118,7 @@ export const routesAPIAidantRepondreAUneDemande = (
 
       const epci: EPCI | undefined =
         entreprise !== undefined
-          ? await unAdaptateurGeographie().epciAvecCode(entreprise.codeEpci)
+          ? await adaptateurGeographie.epciAvecCode(entreprise.codeEpci)
           : undefined;
 
       return reponse.json({

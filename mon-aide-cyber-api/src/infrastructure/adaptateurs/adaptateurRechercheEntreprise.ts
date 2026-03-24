@@ -48,9 +48,7 @@ export interface AdaptateurRechercheEntreprise {
   rechercheParSiret(siret: string): Promise<Entreprise | undefined>;
 }
 
-class AdaptateurRechercheEntrepriseHTTP
-  implements AdaptateurRechercheEntreprise
-{
+class AdaptateurRechercheEntrepriseHTTP implements AdaptateurRechercheEntreprise {
   constructor(
     private readonly adaptateurDeRequeteHTTP: AdaptateurDeRequeteHTTP
   ) {}

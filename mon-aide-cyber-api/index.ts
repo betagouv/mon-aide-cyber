@@ -31,6 +31,7 @@ import { adaptateurRechercheEntreprise } from './src/infrastructure/adaptateurs/
 import { unAdaptateurCmsCrisp } from './src/adaptateurs/AdaptateurCmsCrispMAC';
 import { AdaptateurSignatureRequeteHTTP } from './src/adaptateurs/AdaptateurSignatureRequeteHTTP';
 import { adaptateurMessagerie } from './src/adaptateurs/adaptateurMessagerie';
+import { unAdaptateurGeographie } from './src/adaptateurs/AdaptateurGeographie';
 
 const gestionnaireDeJeton = new GestionnaireDeJetonJWT(
   process.env.CLEF_SECRETE_SIGNATURE_JETONS_SESSIONS || 'clef-par-defaut'
@@ -102,6 +103,7 @@ const serveurMAC = serveur.creeServeur({
   adaptateurProConnect: adaptateurProConnect,
   estEnMaintenance: adaptateurEnvironnement.modeMaintenance().estActif(),
   adaptateurRechercheEntreprise: unAdaptateurRechercheEntreprise,
+  adaptateurGeographie: unAdaptateurGeographie(),
   adaptateurCmsCrisp: unAdaptateurCmsCrisp(),
   adaptateurSignatureRequete: new AdaptateurSignatureRequeteHTTP(),
   redirigeVersUrlBase: redirigeVersUrlBase,
