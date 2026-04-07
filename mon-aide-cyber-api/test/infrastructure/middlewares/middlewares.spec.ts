@@ -97,7 +97,6 @@ describe('Les middlewares', () => {
       { ressource: '/fichiers', statusCode: 301 },
       { ressource: '/fontes', statusCode: 301 },
       { ressource: '/images', statusCode: 301 },
-      { ressource: '/lab-anssi-ui-kit', statusCode: 301 },
     ])(
       'Vérifie que la ressource $ressource peut être mise en cache',
       async ({ ressource, statusCode }) => {
