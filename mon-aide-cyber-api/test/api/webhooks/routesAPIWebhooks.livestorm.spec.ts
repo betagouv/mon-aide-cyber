@@ -185,6 +185,19 @@ describe('Route Webhook livestorm', () => {
         expect(reponse.statusCode).toBe(204);
       });
 
+      it('renvoie une réponse HTTP 400 si la requête Livestorm est trop grosse', async () => {
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/webhooks/livestorm/activation-compte-aidant`,
+          {
+            contenu : 'x'.repeat(10_241),
+          }
+        );
+
+        expect(reponse.statusCode).toBe(500);
+      });
+
       });
   });
 });
