@@ -71,7 +71,7 @@ export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
   const { busCommande, adaptateurSignatureRequete } = configuration;
   routes.post(
     '/activation-compte-aidant',
-    express.json(),
+    express.json({limit: '10kb'}),
     valideLaCoherenceDuCorps(
       schemaLivestorm,
       { statut: 204 }
