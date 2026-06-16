@@ -14,3 +14,4 @@ minimumReleaseAgeExclude:
   - axios@1.15.0
   - immutable@5.1.5
   - express-rate-limit@8.3.0
+  - dompurify@3.4.11
