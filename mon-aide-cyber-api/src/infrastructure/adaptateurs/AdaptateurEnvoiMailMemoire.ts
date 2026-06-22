@@ -57,26 +57,24 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
 
   async envoieMailMiseAJourParticipationAUnAtelier(
     demandeDevenirAidant: DemandeDevenirAidant,
-    emailCOT: string,
-    emailMAC: string
+    emailCOT: string
   ): Promise<void> {
     this._envoieMailMiseAJourParticipationAUnAtelier = true;
     if (this._genereErreur) {
       throw new Error('Erreur');
     }
-    this.destinataires.push(...[demandeDevenirAidant.mail, emailCOT, emailMAC]);
+    this.destinataires.push(...[demandeDevenirAidant.mail, emailCOT]);
   }
 
   async envoieMailParticipationAUnAtelier(
     demande: DemandeDevenirAidant,
-    emailCOT: string,
-    emailMAC: string
+    emailCOT: string
   ): Promise<void> {
     this._envoieMailParticipationAUnAtelier = true;
     if (this._genereErreur) {
       throw new Error('Erreur');
     }
-    this.destinataires.push(...[demande.mail, emailCOT, emailMAC]);
+    this.destinataires.push(...[demande.mail, emailCOT]);
   }
 
   async envoieActivationCompteAidantFaite(mail: string): Promise<void> {

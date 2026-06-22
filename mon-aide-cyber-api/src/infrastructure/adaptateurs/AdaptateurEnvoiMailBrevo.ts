@@ -83,8 +83,7 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
 
   async envoieMailMiseAJourParticipationAUnAtelier(
     demandeDevenirAidant: DemandeDevenirAidant,
-    emailCOT: string,
-    emailMAC: string
+    emailCOT: string
   ): Promise<void> {
     const futurAidant: Destinataire = {
       email: demandeDevenirAidant.mail,
@@ -92,7 +91,6 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     const cot: Destinataire = {
       email: emailCOT,
     };
-    const mac: Destinataire = { email: emailMAC };
 
     const constructeurBrevoEnvoiMailAvecTemplate =
       unConstructeurEnvoiDeMailAvecTemplate().ayantPourTemplate(
@@ -100,18 +98,12 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
           .brevo()
           .templateMiseAJourParticipationAtelierAidant()
       );
-    await this.envoieParticipationAtelierAidant(
-      constructeurBrevoEnvoiMailAvecTemplate,
-      futurAidant,
-      cot,
-      mac
-    );
+    await this.envoieParticipationAtelierAidant(constructeurBrevoEnvoiMailAvecTemplate, futurAidant, cot);
   }
 
   async envoieMailParticipationAUnAtelier(
     demande: DemandeDevenirAidant,
-    emailCOT: string,
-    emailMAC: string
+    emailCOT: string
   ): Promise<void> {
     const futurAidant: Destinataire = {
       email: demande.mail,
@@ -119,7 +111,6 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     const cot: Destinataire = {
       email: emailCOT,
     };
-    const mac: Destinataire = { email: emailMAC };
 
     const constructeurBrevoEnvoiMailAvecTemplate =
       unConstructeurEnvoiDeMailAvecTemplate().ayantPourTemplate(
@@ -128,22 +119,19 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
     await this.envoieParticipationAtelierAidant(
       constructeurBrevoEnvoiMailAvecTemplate,
       futurAidant,
-      cot,
-      mac
+      cot
     );
   }
 
   private async envoieParticipationAtelierAidant(
     constructeurBrevoEnvoiMailAvecTemplate: ConstructeurBrevoEnvoiMailAvecTemplate,
     futurAidant: Destinataire,
-    cot: Destinataire,
-    mac: Destinataire
+    cot: Destinataire
   ) {
     await this.envoieMailAvecTemplate(
       constructeurBrevoEnvoiMailAvecTemplate
         .ayantPourDestinataires([[futurAidant.email, futurAidant.nom]])
         .ayantPourDestinatairesEnCopie([[cot.email, cot.nom]])
-        .ayantPourDestinatairesEnCopieInvisible([[mac.email, mac.nom]])
         .ayantPourParametres({
           urls: {
             connexion: new URL(

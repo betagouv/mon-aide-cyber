@@ -218,25 +218,6 @@ describe('Capteur de commande demande devenir aidant', () => {
       ).toBe(true);
     });
 
-    it('Envoie le mail récapitulatif en copie invisible à MonAideCyber', async () => {
-      adaptateurEnvironnement.messagerie = () =>
-        adaptateursEnvironnementDeTest.messagerie();
-      const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
-      const entrepots = new EntrepotsMemoire();
-
-      await new CapteurCommandeDevenirAidant(
-        entrepots,
-        new BusEvenementDeTest(),
-        adaptateurEnvoiMail,
-        annuaireCot,
-        unServiceAidant(entrepots.aidants())
-      ).execute(uneCommandeDevenirAidant());
-
-      expect(
-        adaptateurEnvoiMail.mailDeParticipationAUnAtelierEnvoye('mac@email.com')
-      ).toBe(true);
-    });
-
     it('Remonte une erreur en cas d’échec de l’envoi du mail de mise en relation', async () => {
       adaptateurEnvironnement.messagerie = () =>
         adaptateursEnvironnementDeTest.messagerie();
