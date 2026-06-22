@@ -135,8 +135,7 @@ export class CapteurCommandeDevenirAidant
         demandeDevenirAidant,
         this.annuaireCOT().rechercheEmailParDepartement(
           demandeDevenirAidant.departement
-        ),
-        adaptateurEnvironnement.messagerie().brevo().emailMAC()
+        )
       );
       return;
     }
@@ -144,8 +143,7 @@ export class CapteurCommandeDevenirAidant
       demandeDevenirAidant,
       this.annuaireCOT().rechercheEmailParDepartement(
         demandeDevenirAidant.departement
-      ),
-      adaptateurEnvironnement.messagerie().brevo().emailMAC()
+      )
     );
   }
 

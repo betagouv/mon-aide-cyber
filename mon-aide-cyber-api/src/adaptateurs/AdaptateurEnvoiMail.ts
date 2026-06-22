@@ -59,14 +59,12 @@ export interface AdaptateurEnvoiMail {
 
   envoieMailParticipationAUnAtelier(
     demande: DemandeDevenirAidant,
-    emailCOT: string,
-    emailMAC: string
+    emailCOT: string
   ): Promise<void>;
 
   envoieMailMiseAJourParticipationAUnAtelier(
     demandeDevenirAidant: DemandeDevenirAidant,
-    emailCOT: string,
-    emailMAC: string
+    emailCOT: string
   ): Promise<void>;
 
   envoieConfirmationUtilisateurInscritCree(utilisateurInscrit: {
