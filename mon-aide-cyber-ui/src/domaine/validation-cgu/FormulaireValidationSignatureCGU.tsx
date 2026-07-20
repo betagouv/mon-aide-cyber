@@ -2,9 +2,10 @@ import { FormEvent, useCallback, useReducer } from 'react';
 import {
   cguCliquees,
   initialiseReducteur,
-  reducteurValidationCGU,
+  pixelDeSuiviClique,
+  reducteurValidationConditionsMAC,
   validationCGUInvalidee,
-} from './reducteurValidationCGU.tsx';
+} from './reducteurValidationConditionsMAC.tsx';
 import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../MoteurDeLiens.ts';
@@ -21,7 +22,7 @@ export const ComposantValidationSignatureCGU = ({
   macAPI,
 }: ProprietesComposantCreationEspaceAidant) => {
   const [etatCreationEspaceAidant, envoie] = useReducer(
-    reducteurValidationCGU,
+    reducteurValidationConditionsMAC,
     initialiseReducteur()
   );
   const navigationMAC = useNavigationMAC();
@@ -39,6 +40,7 @@ export const ComposantValidationSignatureCGU = ({
                 .methode(lien.methode!)
                 .corps({
                   cguValidees: etatCreationEspaceAidant.cguSignees,
+                  pixelDeSuiviAutorise: etatCreationEspaceAidant.pixelDeSuiviAutorise,
                 })
                 .construis();
             macAPI
@@ -70,6 +72,9 @@ export const ComposantValidationSignatureCGU = ({
     envoie(cguCliquees());
   }, []);
 
+  const surPixelDeSuivi = useCallback(() => {
+    envoie(pixelDeSuiviClique())
+  }, []);
   return (
     <>
       <div className="texte-centre">
@@ -103,6 +108,20 @@ export const ComposantValidationSignatureCGU = ({
                 &nbsp; de MonAideCyber
               </label>
               {etatCreationEspaceAidant.erreur?.cguSignees?.texteExplicatif}
+            </div>
+            <div className="fr-checkbox-group mac-radio-group">
+              <input
+                type="checkbox"
+                id="pixel-de-suivi"
+                name="pixel-de-suivi"
+                onChange={surPixelDeSuivi}
+                checked={etatCreationEspaceAidant.pixelDeSuiviAutorise}
+              />
+              <label className="fr-label" htmlFor="pixel-de-suivi">
+                J&apos;accepte que l&apos;ouverture des emails qui me sont
+                adressés puisse être mesurée afin d&apos;en améliorer la
+                pertinence.
+              </label>
             </div>
             <div className="fr-grid-row fr-grid-row--right">
               <button

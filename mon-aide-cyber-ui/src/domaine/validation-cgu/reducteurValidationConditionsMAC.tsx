@@ -9,31 +9,36 @@ type ErreurCreationEspaceAidant = {
   cguSignees?: PresentationErreur;
 };
 
-export type EtatValidationCGU = {
+export type EtatValidationConditionsMAC = {
   cguSignees: boolean;
+  pixelDeSuiviAutorise : boolean;
   champsErreur?: ReactElement;
   erreur?: ErreurCreationEspaceAidant;
   saisieValide: () => boolean;
 };
 
-enum TypeActionValidationCGU {
+enum TypeActionValidationConditionsMAC {
   CGU_CLIQUEES = 'CGU_CLIQUEES',
   CREATION_ESPACE_AIDANT_INVALIDEE = 'CREATION_ESPACE_AIDANT_INVALIDEE',
+  PIXEL_DE_SUIVI_CLIQUE = 'PIXEL_DE_SUIVI_CLIQUE',
 }
 
 type ActionCreationEspaceAidant =
   | {
-      type: TypeActionValidationCGU.CGU_CLIQUEES;
+      type: TypeActionValidationConditionsMAC.CGU_CLIQUEES;
+    }
+    | {
+      type: TypeActionValidationConditionsMAC.PIXEL_DE_SUIVI_CLIQUE;
     }
   | {
       erreur: Error;
-      type: TypeActionValidationCGU.CREATION_ESPACE_AIDANT_INVALIDEE;
+      type: TypeActionValidationConditionsMAC.CREATION_ESPACE_AIDANT_INVALIDEE;
     };
 
-export const reducteurValidationCGU = (
-  etat: EtatValidationCGU,
+export const reducteurValidationConditionsMAC = (
+  etat: EtatValidationConditionsMAC,
   action: ActionCreationEspaceAidant
-): EtatValidationCGU => {
+): EtatValidationConditionsMAC => {
   const construisErreurCGU = () =>
     construisErreur('cguSignees', {
       texte: 'Veuillez accepter les CGU.',
@@ -41,7 +46,13 @@ export const reducteurValidationCGU = (
     });
 
   switch (action.type) {
-    case TypeActionValidationCGU.CREATION_ESPACE_AIDANT_INVALIDEE: {
+    case TypeActionValidationConditionsMAC.PIXEL_DE_SUIVI_CLIQUE:
+      return {
+        ...etat,
+        pixelDeSuiviAutorise: !etat.pixelDeSuiviAutorise,
+        saisieValide: () => etat.cguSignees,
+    };
+    case TypeActionValidationConditionsMAC.CREATION_ESPACE_AIDANT_INVALIDEE: {
       const etatCourant = { ...etat };
       return {
         ...etatCourant,
@@ -50,7 +61,7 @@ export const reducteurValidationCGU = (
         saisieValide: () => false,
       };
     }
-    case TypeActionValidationCGU.CGU_CLIQUEES: {
+    case TypeActionValidationConditionsMAC.CGU_CLIQUEES: {
       const cguSignees = !etat.cguSignees;
       const erreur = { ...etat.erreur };
       delete erreur['cguSignees'];
@@ -68,16 +79,20 @@ export const reducteurValidationCGU = (
 };
 
 export const cguCliquees = (): ActionCreationEspaceAidant => ({
-  type: TypeActionValidationCGU.CGU_CLIQUEES,
+  type: TypeActionValidationConditionsMAC.CGU_CLIQUEES,
 });
 export const validationCGUInvalidee = (
   erreur: Error
 ): ActionCreationEspaceAidant => ({
   erreur,
-  type: TypeActionValidationCGU.CREATION_ESPACE_AIDANT_INVALIDEE,
+  type: TypeActionValidationConditionsMAC.CREATION_ESPACE_AIDANT_INVALIDEE,
 });
-export const initialiseReducteur = (): EtatValidationCGU => ({
+export const pixelDeSuiviClique = (): ActionCreationEspaceAidant => ({
+  type: TypeActionValidationConditionsMAC.PIXEL_DE_SUIVI_CLIQUE,
+});
+export const initialiseReducteur = (): EtatValidationConditionsMAC => ({
   cguSignees: false,
+  pixelDeSuiviAutorise: false,
   saisieValide: () => false,
   erreur: {},
 });
