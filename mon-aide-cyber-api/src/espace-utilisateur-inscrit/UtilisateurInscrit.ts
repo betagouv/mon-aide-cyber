@@ -18,10 +18,14 @@ export type UtilisateurInscrit = Aggregat & {
 export type EntrepotUtilisateurInscrit = EntrepotEcriture<UtilisateurInscrit>;
 
 export interface ServiceUtilisateurInscrit {
-  valideLesCGU(identifiantUtilisateur: crypto.UUID): Promise<void>;
+  valideLesConditionsMAC(
+    identifiantUtilisateur: crypto.UUID,
+    pixelDeSuiviAutorise: boolean
+  ): Promise<void>;
 
   valideProfil(
     identifiantUtilisateurInscrit: crypto.UUID,
+    pixelDeSuiviAutorise: boolean,
     adaptateurDeRelations: AdaptateurRelations,
     busEvenement: BusEvenement
   ): Promise<void>;

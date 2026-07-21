@@ -72,6 +72,7 @@ import {
 } from '../../../statistiques/utilisateur-inscrit/StatistiquesUtilisateurInscrit';
 import { Departement } from '../../../gestion-demandes/departements';
 import { SecteurActivite } from '../../../espace-aidant/preferences/secteursActivite';
+import { AdaptateurRepertoireDeContactsMemoire } from '../../adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 export class EntrepotMemoire<
   T extends Aggregat,
@@ -427,9 +428,7 @@ export class EntrepotUtilisateurMACMemoire
   }
 
   async rechercheParMail(email: string): Promise<UtilisateurMAC> {
-    const aidant = await unServiceAidant(
-      this.entrepots.aidant
-    ).rechercheParMail(email);
+    const aidant = await unServiceAidant(this.entrepots.aidant, new AdaptateurRepertoireDeContactsMemoire()).rechercheParMail(email);
     if (aidant) {
       return this.mappeAidant(aidant);
     }
@@ -446,9 +445,10 @@ export class EntrepotUtilisateurMACMemoire
   async rechercheParIdentifiant(
     identifiant: crypto.UUID
   ): Promise<UtilisateurMAC> {
-    const aidant = await unServiceAidant(this.entrepots.aidant).parIdentifiant(
-      identifiant
-    );
+    const aidant = await unServiceAidant(
+      this.entrepots.aidant,
+      new AdaptateurRepertoireDeContactsMemoire()
+    ).parIdentifiant(identifiant);
     if (aidant) {
       return this.mappeAidant(aidant);
     }

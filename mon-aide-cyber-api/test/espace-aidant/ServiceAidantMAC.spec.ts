@@ -10,6 +10,9 @@ import { adaptateurCorpsMessage } from '../../src/espace-aidant/adaptateurCorpsM
 import { gironde } from '../../src/gestion-demandes/departements';
 import { adaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement';
 import { adaptateursEnvironnementDeTest } from '../adaptateurs/adaptateursEnvironnementDeTest';
+import {
+  AdaptateurRepertoireDeContactsMemoire
+} from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 describe('Service Aidant', () => {
   describe('Recherche par mail', () => {
@@ -22,8 +25,10 @@ describe('Service Aidant', () => {
       const entrepotAidant = new EntrepotAidantMemoire();
       await entrepotAidant.persiste(aidant);
 
-      const aidantCherche: AidantDTO | undefined =
-        await unServiceAidant(entrepotAidant).rechercheParMail(mailAidant);
+      const aidantCherche: AidantDTO | undefined = await unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ).rechercheParMail(mailAidant);
 
       expect(aidantCherche).toStrictEqual<AidantDTO>({
         identifiant: aidant.identifiant,
@@ -37,10 +42,10 @@ describe('Service Aidant', () => {
     it("Retourne undefined si l'aidant n'est pas trouvé", async () => {
       const entrepotAidant = new EntrepotAidantMemoire();
 
-      const aidantCherche =
-        await unServiceAidant(entrepotAidant).rechercheParMail(
-          'aidant@mail.tld'
-        );
+      const aidantCherche = await unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ).rechercheParMail('aidant@mail.tld');
 
       expect(aidantCherche).toStrictEqual(undefined);
     });
@@ -54,9 +59,10 @@ describe('Service Aidant', () => {
       await entrepot.persiste(jean);
       await entrepot.persiste(martin);
 
-      const aidantRetourne = await unServiceAidant(entrepot).parIdentifiant(
-        martin.identifiant
-      );
+      const aidantRetourne = await unServiceAidant(
+        entrepot,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ).parIdentifiant(martin.identifiant);
 
       expect(aidantRetourne).toStrictEqual<AidantDTO>({
         nomUsage: 'Martin D.',
@@ -71,7 +77,8 @@ describe('Service Aidant', () => {
       const entrepotAidant = new EntrepotAidantMemoire();
 
       const aidantCherche = await unServiceAidant(
-        entrepotAidant
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
       ).parIdentifiant(crypto.randomUUID());
 
       expect(aidantCherche).toStrictEqual(undefined);
@@ -91,7 +98,10 @@ describe('Service Aidant', () => {
         .construis();
       await entrepotAidant.persiste(jean);
 
-      await unServiceAidant(entrepotAidant).valideProfilAidant(
+      await unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ).valideProfilAidant(
         jean.identifiant,
         {
           entite: {
@@ -123,7 +133,10 @@ describe('Service Aidant', () => {
 
       await entrepotAidant.persiste(jean);
 
-      await unServiceAidant(entrepotAidant).valideProfilAidant(
+      await unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ).valideProfilAidant(
         jean.identifiant,
         {
           entite: {
@@ -157,7 +170,10 @@ describe('Service Aidant', () => {
 
       await entrepotAidant.persiste(jean);
 
-      await unServiceAidant(entrepotAidant).valideProfilAidant(
+      await unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ).valideProfilAidant(
         jean.identifiant,
         {
           entite: {
@@ -187,7 +203,10 @@ describe('Service Aidant', () => {
         .construis();
       await entrepotAidant.persiste(jean);
 
-      await unServiceAidant(entrepotAidant).valideProfilAidant(
+      await unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ).valideProfilAidant(
         jean.identifiant,
         {
           entite: {

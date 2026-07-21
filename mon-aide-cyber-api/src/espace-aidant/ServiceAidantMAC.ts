@@ -7,9 +7,13 @@ import { adaptateurCorpsMessage } from './adaptateurCorpsMessage';
 import { fabriqueAnnuaireCOT } from '../infrastructure/adaptateurs/fabriqueAnnuaireCOT';
 import { Departement } from '../gestion-demandes/departements';
 import { adaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement';
+import { RepertoireDeContacts } from '../contacts/RepertoireDeContacts';
 
 class ServiceAidantMAC implements ServiceAidant {
-  constructor(private readonly entrepotAidant: EntrepotAidant) {}
+  constructor(
+    private readonly entrepotAidant: EntrepotAidant,
+    private readonly repertoireDeContacts: RepertoireDeContacts
+  ) {}
 
   async rechercheParMail(mailAidant: string): Promise<AidantDTO | undefined> {
     return this.entrepotAidant
@@ -27,11 +31,14 @@ class ServiceAidantMAC implements ServiceAidant {
       .catch(() => undefined);
   }
 
-  valideLesCGU(identifiantAidant: crypto.UUID): Promise<void> {
-    return this.entrepotAidant.lis(identifiantAidant).then(async (aidant) => {
-      aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
-      return await this.entrepotAidant.persiste(aidant);
-    });
+  async valideLesConditionsMAC(
+    identifiantAidant: crypto.UUID,
+    pixelDeSuiviAutorise: boolean
+  ): Promise<void> {
+    const aidant = await this.entrepotAidant.lis(identifiantAidant);
+    await this.repertoireDeContacts.creeAidant(aidant.email, pixelDeSuiviAutorise);
+    aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
+    return this.entrepotAidant.persiste(aidant);
   }
 
   valideProfilAidant(
@@ -95,5 +102,6 @@ class ServiceAidantMAC implements ServiceAidant {
 }
 
 export const unServiceAidant = (
-  entrepotAidant: EntrepotAidant
-): ServiceAidant => new ServiceAidantMAC(entrepotAidant);
+  entrepotAidant: EntrepotAidant,
+  repertoireDeContacts: RepertoireDeContacts
+): ServiceAidant => new ServiceAidantMAC(entrepotAidant, repertoireDeContacts);

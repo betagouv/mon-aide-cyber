@@ -52,6 +52,11 @@ export type ReponseReinitialisationMotDePasseEnErreur = ReponseHATEOAS & {
   message: string;
 };
 
+type CorpsValidationConditionsMAC = {
+  cguValidees: boolean;
+  pixelDeSuiviAutorise: boolean;
+};
+
 const valitateurUtilisateur = (
   entrepotUtilisateur: EntrepotUtilisateur,
   serviceDeChiffrement: ServiceDeChiffrement
@@ -273,7 +278,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       .custom((value: boolean) => value)
       .withMessage('Veuillez valider les CGU'),
     async (
-      requete: RequeteUtilisateur,
+      requete: RequeteUtilisateur<CorpsValidationConditionsMAC>,
       reponse: Response<ReponseHATEOAS | ReponseHATEOASEnErreur>,
       suite: NextFunction
     ) => {
@@ -300,8 +305,11 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             );
           }
           if (PROFILS_AIDANT.includes(utilisateur.profil)) {
-            return unServiceAidant(entrepots.aidants())
-              .valideLesCGU(identifiantUtilisateur)
+            return unServiceAidant(entrepots.aidants(), repertoireDeContacts)
+              .valideLesConditionsMAC(
+                identifiantUtilisateur,
+                requete.body.pixelDeSuiviAutorise
+              )
               .then(() =>
                 reponse.status(200).json({
                   ...constructeurActionsHATEOAS()
@@ -316,10 +324,10 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
           }
           return unServiceUtilisateurInscrit(
             entrepots.utilisateursInscrits(),
-            unServiceAidant(entrepots.aidants()),
+            unServiceAidant(entrepots.aidants(), repertoireDeContacts),
             repertoireDeContacts
           )
-            .valideLesCGU(identifiantUtilisateur)
+            .valideLesConditionsMAC(identifiantUtilisateur, requete.body.pixelDeSuiviAutorise)
             .then(() =>
               reponse.status(200).json({
                 ...constructeurActionsHATEOAS()
@@ -375,7 +383,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             .construis(),
         });
       }
-      return unServiceAidant(entrepots.aidants())
+      return unServiceAidant(entrepots.aidants(), repertoireDeContacts)
         .valideProfilAidant(
           requete.identifiantUtilisateurCourant!,
           {
@@ -428,11 +436,12 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
 
       return unServiceUtilisateurInscrit(
         entrepots.utilisateursInscrits(),
-        unServiceAidant(entrepots.aidants()),
+        unServiceAidant(entrepots.aidants(), repertoireDeContacts),
         repertoireDeContacts
       )
         .valideProfil(
           requete.identifiantUtilisateurCourant!,
+          requete.body.pixelDeSuiviAutorise,
           adaptateurRelations,
           busEvenement
         )
@@ -467,4 +476,5 @@ type CorpsValiderProfilAidant = {
 
 type CorpsValiderProfilUtilisateurInscrit = {
   cguValidees: boolean;
+  pixelDeSuiviAutorise: boolean;
 };
