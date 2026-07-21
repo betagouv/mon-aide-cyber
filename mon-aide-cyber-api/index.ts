@@ -49,6 +49,8 @@ const unAdaptateurRechercheEntreprise = adaptateurRechercheEntreprise(
   new AdaptateurDeRequeteHTTP()
 );
 
+const repertoireDeContacts = adaptateurRepertoireDeContacts();
+
 const serveurMAC = serveur.creeServeur({
   adaptateurRelations: adaptateurRelations,
   adaptateursRestitution: {
@@ -64,7 +66,7 @@ const serveurMAC = serveur.creeServeur({
     busEvenementMAC,
     adaptateurEnvoiMessage,
     {
-      aidant: unServiceAidant(entrepots.aidants()),
+      aidant: unServiceAidant(entrepots.aidants(), repertoireDeContacts),
       referentiels: {
         diagnostic: new AdaptateurReferentielMAC(),
         mesures: new AdaptateurMesures(),
@@ -93,7 +95,7 @@ const serveurMAC = serveur.creeServeur({
   ),
   adaptateurDeVerificationDeRelations:
     new AdaptateurDeVerificationDeTypeDeRelationMAC(adaptateurRelations),
-  repertoireDeContacts: adaptateurRepertoireDeContacts(),
+  repertoireDeContacts: repertoireDeContacts,
   messagerie: adaptateurMessagerie(),
   avecProtectionCsrf: process.env.AVEC_PROTECTION_CSRF === 'true',
   adaptateurEnvoiMessage: adaptateurEnvoiMessage,

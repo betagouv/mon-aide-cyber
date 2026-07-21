@@ -14,6 +14,7 @@ import { AdaptateurMesures } from '../../../infrastructure/adaptateurs/Adaptateu
 import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
 import { adaptateurRechercheEntreprise } from '../../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurDeRequeteHTTP } from '../../../infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
+import { adaptateurRepertoireDeContacts } from '../../../adaptateurs/adaptateurRepertoireDeContacts';
 
 const command = program
   .description('Active le compte de l’Aidant et envoie un mail de confirmation')
@@ -25,6 +26,7 @@ command.action(async (...args: any[]) => {
   const mailAidant = args[0].toLowerCase();
 
   const entrepots = fabriqueEntrepots();
+  const repertoireDeContacts = adaptateurRepertoireDeContacts();
   const busCommandeMAC = new BusCommandeMAC(
     entrepots,
     new BusEvenementMAC(
@@ -32,7 +34,7 @@ command.action(async (...args: any[]) => {
     ),
     fabriqueAdaptateurEnvoiMail(),
     {
-      aidant: unServiceAidant(entrepots.aidants()),
+      aidant: unServiceAidant(entrepots.aidants(), repertoireDeContacts),
       referentiels: {
         diagnostic: new AdaptateurReferentielMAC(),
         mesures: new AdaptateurMesures(),

@@ -3,15 +3,19 @@ import {
   RepertoireDeContacts,
 } from '../../contacts/RepertoireDeContacts';
 
-export class AdaptateurRepertoireDeContactsMemoire
-  implements RepertoireDeContacts
-{
+export class AdaptateurRepertoireDeContactsMemoire implements RepertoireDeContacts {
   public aidants: string[] = [];
   public aides: string[] = [];
   public utilisateursInscrits: string[] = [];
   public evenements: Evenement[] = [];
+  private _creeAidantAppeleAvecPixelDeSuiviAutorise: boolean = false;
+  private _creeUtilisateurInscritAppeleAvecPixelDeSuiviAutorise: boolean = false;
 
-  async creeAidant(email: string): Promise<void> {
+  async creeAidant(
+    email: string,
+    pixelDeSuiviAutorise: boolean
+  ): Promise<void> {
+    this._creeAidantAppeleAvecPixelDeSuiviAutorise = pixelDeSuiviAutorise;
     this.aidants.push(email);
   }
 
@@ -19,7 +23,11 @@ export class AdaptateurRepertoireDeContactsMemoire
     this.aides.push(email);
   }
 
-  async creeUtilisateurInscrit(email: string): Promise<void> {
+  async creeUtilisateurInscrit(
+    email: string,
+    pixelDeSuiviAutorise: boolean
+  ): Promise<void> {
+    this._creeUtilisateurInscritAppeleAvecPixelDeSuiviAutorise = pixelDeSuiviAutorise;
     this.utilisateursInscrits.push(email);
   }
 
@@ -32,5 +40,13 @@ export class AdaptateurRepertoireDeContactsMemoire
     __nouvelEmail: string
   ): Promise<void> {
     throw new Error('Method not implemented.');
+  }
+
+  creeAidantAppeleAvecPixelDeSuiviAutorise() {
+    return this._creeAidantAppeleAvecPixelDeSuiviAutorise;
+  }
+
+  creeUtilisateurInscritAppeleAvecPixelDeSuiviAutorise() {
+    return this._creeUtilisateurInscritAppeleAvecPixelDeSuiviAutorise;
   }
 }

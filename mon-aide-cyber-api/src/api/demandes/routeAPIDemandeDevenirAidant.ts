@@ -245,9 +245,9 @@ export const routesAPIDemandesDevenirAidant = (
       const valideLesCGUDeLUtilisateurConnecte = async () => {
         await unServiceUtilisateurInscrit(
           entrepots.utilisateursInscrits(),
-          unServiceAidant(entrepots.aidants()),
+          unServiceAidant(entrepots.aidants(), repertoireDeContacts),
           repertoireDeContacts
-        ).valideLesCGU(requete.identifiantUtilisateurCourant!);
+        ).valideLesConditionsMAC(requete.identifiantUtilisateurCourant!, false);
       };
 
       try {

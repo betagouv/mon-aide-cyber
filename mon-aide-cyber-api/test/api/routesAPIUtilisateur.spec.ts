@@ -712,6 +712,30 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         );
       });
 
+      it('Ajoute le consentement au pixel de suivi', async () => {
+        FournisseurHorlogeDeTest.initialise(new Date());
+        await unCompteAidantConnecte({
+          entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+          constructeurAidant: unAidant().sansCGUSignees(),
+          entrepotAidant: testeurMAC.entrepots.aidants(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
+        });
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-signature-cgu`,
+          {
+            cguValidees: true,
+            pixelDeSuiviAutorise: true,
+          }
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect(testeurMAC.repertoireDeContacts.creeAidantAppeleAvecPixelDeSuiviAutorise()).toBe(true);
+      });
+
       it("Accepte la requête et renvoie les actions possibles pour l'Aidant", async () => {
         await unCompteAidantConnecte({
           entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
@@ -842,6 +866,33 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         expect(utilisateurInscritModifie.dateSignatureCGU).toStrictEqual(
           FournisseurHorloge.maintenant()
         );
+      });
+
+      it('Ajoute le consentement au pixel de suivi', async () => {
+        FournisseurHorlogeDeTest.initialise(new Date());
+          await unCompteUtilisateurInscritConnecteViaProConnect({
+            constructeurUtilisateur:
+              unUtilisateurInscrit().sansValidationDeCGU(),
+            entrepotUtilisateurInscrit:
+              testeurMAC.entrepots.utilisateursInscrits(),
+            adaptateurDeVerificationDeSession:
+              testeurMAC.adaptateurDeVerificationDeSession,
+          });
+
+        const reponse = await executeRequete(
+          donneesServeur.app,
+          'POST',
+          `/api/utilisateur/valider-signature-cgu`,
+          {
+            cguValidees: true,
+            pixelDeSuiviAutorise: true,
+          }
+        );
+
+        expect(reponse.statusCode).toBe(200);
+        expect(
+          testeurMAC.repertoireDeContacts.creeUtilisateurInscritAppeleAvecPixelDeSuiviAutorise()
+        ).toBe(true);
       });
 
       it("Accepte la requête et renvoie les actions possibles pour l'Utilisateur Inscrit", async () => {
@@ -1314,6 +1365,31 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
           },
         },
       });
+    });
+
+    it('Prends en compte l‘autorisation du pixel de suivi', async () => {
+      await unCompteAidantConnecte({
+        entrepotAidant: testeurMAC.entrepots.aidants(),
+        entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
+        constructeurAidant: unAidant().sansCGUSignees(),
+        adaptateurDeVerificationDeSession:
+          testeurMAC.adaptateurDeVerificationDeSession,
+      });
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        `/api/utilisateur/valider-profil-utilisateur-inscrit`,
+        {
+          cguValidees: true,
+          pixelDeSuiviAutorise: true,
+        }
+      );
+
+      expect(reponse.statusCode).toBe(200);
+      expect(
+        testeurMAC.repertoireDeContacts.creeUtilisateurInscritAppeleAvecPixelDeSuiviAutorise()
+      ).toBe(true);
     });
 
     it('Transforme un Aidant en Utilisateur Inscrit', async () => {
