@@ -12,6 +12,9 @@ import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { utilitairesCookies } from '../../../src/adaptateurs/utilitairesDeCookies';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
+import {
+  AdaptateurRepertoireDeContactsMemoire
+} from '../../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 const enObjet = <T extends { [clef: string]: string }>(cookie: string): T =>
   cookie.split('; ').reduce((acc: T, v: string) => {
@@ -256,7 +259,8 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         );
 
         const aidantTrouve = await unServiceAidant(
-          testeurMAC.entrepots.aidants()
+          testeurMAC.entrepots.aidants(),
+          new AdaptateurRepertoireDeContactsMemoire()
         ).rechercheParMail(aidant.email);
         expect(aidantTrouve).toBeDefined();
         expect(aidantTrouve!.siret).toStrictEqual('12345');
@@ -280,7 +284,8 @@ describe('Le serveur MAC, sur les routes de connexion ProConnect', () => {
         );
 
         const aidantTrouve = await unServiceAidant(
-          testeurMAC.entrepots.aidants()
+          testeurMAC.entrepots.aidants(),
+          new AdaptateurRepertoireDeContactsMemoire()
         ).rechercheParMail('jean.pierre@yomail.com');
         expect(aidantTrouve).toBeDefined();
       });

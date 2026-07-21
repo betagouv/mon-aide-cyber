@@ -24,6 +24,9 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
+import {
+  AdaptateurRepertoireDeContactsMemoire
+} from '../../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 const uneCommandeDevenirAidant = (commande?: {
   departement?: Departement;
@@ -65,7 +68,10 @@ describe('Capteur de commande demande devenir aidant', () => {
       new BusEvenementDeTest(),
       new AdaptateurEnvoiMailMemoire(),
       annuaireCot,
-      unServiceAidant(entrepots.aidants())
+      unServiceAidant(
+        entrepots.aidants(),
+        new AdaptateurRepertoireDeContactsMemoire()
+      )
     ).execute(
       uneCommandeDevenirAidant({
         departement: departements[1],
@@ -101,7 +107,10 @@ describe('Capteur de commande demande devenir aidant', () => {
       busEvenementDeTest,
       new AdaptateurEnvoiMailMemoire(),
       annuaireCot,
-      unServiceAidant(entrepots.aidants())
+      unServiceAidant(
+        entrepots.aidants(),
+        new AdaptateurRepertoireDeContactsMemoire()
+      )
     ).execute(
       uneCommandeDevenirAidant({
         departement: departements[1],
@@ -141,7 +150,10 @@ describe('Capteur de commande demande devenir aidant', () => {
         new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
-        unServiceAidant(entrepots.aidants())
+        unServiceAidant(
+          entrepots.aidants(),
+          new AdaptateurRepertoireDeContactsMemoire()
+        )
       ).execute(
         uneCommandeDevenirAidant({
           departement: departements[0],
@@ -167,7 +179,10 @@ describe('Capteur de commande demande devenir aidant', () => {
         new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
-        unServiceAidant(entrepots.aidants())
+        unServiceAidant(
+          entrepots.aidants(),
+          new AdaptateurRepertoireDeContactsMemoire()
+        )
       ).execute(
         uneCommandeDevenirAidant({
           departement: departements[0],
@@ -188,7 +203,10 @@ describe('Capteur de commande demande devenir aidant', () => {
         new BusEvenementDeTest(),
         adaptateurEnvoiMail,
         annuaireCot,
-        unServiceAidant(entrepots.aidants())
+        unServiceAidant(
+          entrepots.aidants(),
+          new AdaptateurRepertoireDeContactsMemoire()
+        )
       ).execute(uneCommandeDevenirAidant());
 
       expect(
@@ -208,7 +226,10 @@ describe('Capteur de commande demande devenir aidant', () => {
           rechercheEmailParDepartement: (__departement) =>
             'hauts-de-france@ssi.gouv.fr',
         }),
-        unServiceAidant(entrepots.aidants())
+        unServiceAidant(
+          entrepots.aidants(),
+          new AdaptateurRepertoireDeContactsMemoire()
+        )
       ).execute(uneCommandeDevenirAidant());
 
       expect(
@@ -231,7 +252,10 @@ describe('Capteur de commande demande devenir aidant', () => {
           new BusEvenementDeTest(),
           adaptateurEnvoiMail,
           annuaireCot,
-          unServiceAidant(entrepots.aidants())
+          unServiceAidant(
+            entrepots.aidants(),
+            new AdaptateurRepertoireDeContactsMemoire()
+          )
         ).execute(uneCommandeDevenirAidant())
       ).rejects.toThrowError('Le mail de mise en relation n’a pu être remis.');
     });
@@ -252,7 +276,10 @@ describe('Capteur de commande demande devenir aidant', () => {
         new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
-        unServiceAidant(entrepots.aidants())
+        unServiceAidant(
+          entrepots.aidants(),
+          new AdaptateurRepertoireDeContactsMemoire()
+        )
       ).execute(uneCommandeDevenirAidant());
 
       expect(demandeDevenirAidant).toStrictEqual<DemandeDevenirAidant>({
@@ -280,7 +307,7 @@ describe('Capteur de commande demande devenir aidant', () => {
         busEvenementDeTest,
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
-        unServiceAidant(entrepots.aidants())
+        unServiceAidant(entrepots.aidants(), new AdaptateurRepertoireDeContactsMemoire())
       ).execute({
         departement: departements[1],
         mail: 'email',
@@ -325,7 +352,10 @@ describe('Capteur de commande demande devenir aidant', () => {
           new BusEvenementDeTest(),
           new AdaptateurEnvoiMailMemoire(),
           annuaireCot,
-          unServiceAidant(entrepots.aidants())
+          unServiceAidant(
+            entrepots.aidants(),
+            new AdaptateurRepertoireDeContactsMemoire()
+          )
         ).execute(
           uneCommandeDevenirAidant({
             departement: ardennes,
@@ -367,7 +397,10 @@ describe('Capteur de commande demande devenir aidant', () => {
           new BusEvenementDeTest(),
           adaptateurEnvoiMail,
           annuaireCot,
-          unServiceAidant(entrepots.aidants())
+          unServiceAidant(
+            entrepots.aidants(),
+            new AdaptateurRepertoireDeContactsMemoire()
+          )
         ).execute(
           uneCommandeDevenirAidant({
             departement: departements[1],
@@ -403,7 +436,10 @@ describe('Capteur de commande demande devenir aidant', () => {
           busEvenementDeTest,
           new AdaptateurEnvoiMailMemoire(),
           annuaireCot,
-          unServiceAidant(entrepots.aidants())
+          unServiceAidant(
+            entrepots.aidants(),
+            new AdaptateurRepertoireDeContactsMemoire()
+          )
         ).execute(
           uneCommandeDevenirAidant({
             departement: departements[1],
@@ -443,7 +479,10 @@ describe('Capteur de commande demande devenir aidant', () => {
         busEvenementDeTest,
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
-        unServiceAidant(entrepots.aidants())
+        unServiceAidant(
+          entrepots.aidants(),
+          new AdaptateurRepertoireDeContactsMemoire()
+        )
       ).execute(
         uneCommandeDevenirAidant({
           departement: departements[1],

@@ -33,10 +33,14 @@ describe('ServiceUtilisateurInscrit', () => {
 
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
-      unServiceAidant(entrepotAidant),
+      unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ),
       new AdaptateurRepertoireDeContactsMemoire()
     ).valideProfil(
       aidant.identifiant,
+      false,
       new AdaptateurRelationsMAC(),
       new BusEvenementDeTest()
     );
@@ -65,10 +69,14 @@ describe('ServiceUtilisateurInscrit', () => {
 
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
-      unServiceAidant(entrepotAidant),
+      unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ),
       repertoire
     ).valideProfil(
       aidant.identifiant,
+      false,
       new AdaptateurRelationsMAC(),
       new BusEvenementDeTest()
     );
@@ -92,10 +100,14 @@ describe('ServiceUtilisateurInscrit', () => {
 
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
-      unServiceAidant(entrepotAidant),
+      unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ),
       new AdaptateurRepertoireDeContactsMemoire()
     ).valideProfil(
       aidant.identifiant,
+      false,
       adaptateurRelations,
       new BusEvenementDeTest()
     );
@@ -121,10 +133,14 @@ describe('ServiceUtilisateurInscrit', () => {
 
     await unServiceUtilisateurInscrit(
       entrepotUtilisateurInscrit,
-      unServiceAidant(entrepotAidant),
+      unServiceAidant(
+        entrepotAidant,
+        new AdaptateurRepertoireDeContactsMemoire()
+      ),
       new AdaptateurRepertoireDeContactsMemoire()
     ).valideProfil(
       aidant.identifiant,
+      false,
       new AdaptateurRelationsMAC(),
       busEvenement
     );

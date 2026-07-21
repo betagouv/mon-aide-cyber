@@ -93,7 +93,7 @@ class TesteurIntegrationMAC {
       busEvenement,
       adaptateurEnvoieMessage,
       {
-        aidant: unServiceAidant(entrepots.aidants()),
+        aidant: unServiceAidant(entrepots.aidants(), repertoireDeContacts),
         referentiels: {
           diagnostic: adaptateurReferentiel,
           mesures: adaptateurMesures,
@@ -110,7 +110,7 @@ class TesteurIntegrationMAC {
       this.busEvenement,
       this.adaptateurEnvoieMessage,
       {
-        aidant: unServiceAidant(this.entrepots.aidants()),
+        aidant: unServiceAidant(this.entrepots.aidants(), this.repertoireDeContacts),
         referentiels: {
           diagnostic: this.adaptateurReferentiel,
           mesures: this.adaptateurMesures,
