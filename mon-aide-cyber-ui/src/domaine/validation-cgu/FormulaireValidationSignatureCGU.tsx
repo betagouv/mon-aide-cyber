@@ -13,6 +13,7 @@ import { Lien, ReponseHATEOAS } from '../Lien.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ValidationSignatureCGU } from '../espace-aidant/EspaceAidant.ts';
 import { TypographieH2 } from '../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
+import { AutorisationPixelDeSuivi } from '../../composants/formulaires/AutorisationPixelDeSuivi.tsx';
 
 type ProprietesComposantCreationEspaceAidant = {
   macAPI: MACAPIType;
@@ -40,7 +41,8 @@ export const ComposantValidationSignatureCGU = ({
                 .methode(lien.methode!)
                 .corps({
                   cguValidees: etatCreationEspaceAidant.cguSignees,
-                  pixelDeSuiviAutorise: etatCreationEspaceAidant.pixelDeSuiviAutorise,
+                  pixelDeSuiviAutorise:
+                    etatCreationEspaceAidant.pixelDeSuiviAutorise,
                 })
                 .construis();
             macAPI
@@ -73,8 +75,9 @@ export const ComposantValidationSignatureCGU = ({
   }, []);
 
   const surPixelDeSuivi = useCallback(() => {
-    envoie(pixelDeSuiviClique())
+    envoie(pixelDeSuiviClique());
   }, []);
+
   return (
     <>
       <div className="texte-centre">
@@ -109,20 +112,10 @@ export const ComposantValidationSignatureCGU = ({
               </label>
               {etatCreationEspaceAidant.erreur?.cguSignees?.texteExplicatif}
             </div>
-            <div className="fr-checkbox-group mac-radio-group">
-              <input
-                type="checkbox"
-                id="pixel-de-suivi"
-                name="pixel-de-suivi"
-                onChange={surPixelDeSuivi}
-                checked={etatCreationEspaceAidant.pixelDeSuiviAutorise}
-              />
-              <label className="fr-label" htmlFor="pixel-de-suivi">
-                J&apos;accepte que l&apos;ouverture des emails qui me sont
-                adressés puisse être mesurée afin d&apos;en améliorer la
-                pertinence.
-              </label>
-            </div>
+            <AutorisationPixelDeSuivi
+              onChange={surPixelDeSuivi}
+              estChecked={etatCreationEspaceAidant.pixelDeSuiviAutorise}
+            />
             <div className="fr-grid-row fr-grid-row--right">
               <button
                 type="submit"

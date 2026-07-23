@@ -12,6 +12,7 @@ type RequeteDemandeDevenirAidant = {
   cguValidees: boolean;
   signatureCharte?: boolean;
   entite: { type: TypeEntite; nom: string; siret: string };
+  pixelDeSuiviAutorise: boolean;
 };
 
 class ConstructeurRequeteDemandeDevenirAidant
@@ -30,6 +31,7 @@ class ConstructeurRequeteDemandeDevenirAidant
     nom: fakerFR.company.name(),
     siret: fakerFR.number.int(10).toString(),
   };
+  private pixelDeSuiviAutorise: boolean = false;
 
   dansLeDepartement(
     departement: string
@@ -71,6 +73,11 @@ class ConstructeurRequeteDemandeDevenirAidant
     return this;
   }
 
+  autorisantLePixelDeSuivi(): ConstructeurRequeteDemandeDevenirAidant {
+    this.pixelDeSuiviAutorise = true;
+    return this;
+  }
+
   depuisUnCompteUtilisateurInscrit(
     utilisateur: UtilisateurInscrit
   ): ConstructeurRequeteDemandeDevenirAidant {
@@ -94,6 +101,7 @@ class ConstructeurRequeteDemandeDevenirAidant
         signatureCharte: this.signatureCharte,
       }),
       entite: this.entite,
+      pixelDeSuiviAutorise: this.pixelDeSuiviAutorise,
     };
   }
 }

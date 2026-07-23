@@ -19,6 +19,7 @@ export type EtatDemande = {
   mail: string;
   departement: string | Departement;
   erreurs?: ErreursSaisieDemande;
+  pixelDeSuiviAutorise: boolean;
   pretPourEnvoi: boolean;
 };
 
@@ -28,6 +29,7 @@ enum TypeAction {
   MAIL_SAISI = 'MAIL_SAISI',
   DEPARTEMENT_SAISI = 'DEPARTEMENT_SAISI',
   CGU_CLIQUEES = 'CGU_CLIQUEES',
+  PIXEL_DE_SUIVI_CLIQUE = 'PIXEL_DE_SUIVI_CLIQUE',
 }
 
 type Action =
@@ -35,7 +37,7 @@ type Action =
   | { type: TypeAction.NOM_SAISI; saisie: string }
   | { type: TypeAction.MAIL_SAISI; saisie: string }
   | { type: TypeAction.DEPARTEMENT_SAISI; saisie: string | Departement }
-  | { type: TypeAction.CGU_CLIQUEES };
+  | { type: TypeAction.CGU_CLIQUEES }| { type: TypeAction.PIXEL_DE_SUIVI_CLIQUE };
 
 const construisErreurPrenom = (prenomValide: boolean) => {
   return !prenomValide
@@ -139,6 +141,16 @@ const regenereEtatFormulaire = (
 
 export const reducteurDevenirAidant = (etat: EtatDemande, action: Action) => {
   switch (action.type) {
+    case TypeAction.PIXEL_DE_SUIVI_CLIQUE:{
+      return regenereEtatFormulaire(etat, {
+        ajouteAuNouvelEtat: () => ({
+          pixelDeSuiviAutorise: !etat.pixelDeSuiviAutorise,
+        }),
+        champ: 'prenom',
+        champValide: () => true,
+        construisErreurChamp: () => undefined,
+      });
+    }
     case TypeAction.PRENOM_SAISI: {
       return regenereEtatFormulaire(etat, {
         ajouteAuNouvelEtat: () => ({ prenom: action.saisie }),
@@ -194,6 +206,7 @@ export const initialiseFormulaire = (
   departement: '',
   pretPourEnvoi: false,
   cguValidees: false,
+  pixelDeSuiviAutorise: false,
 });
 
 export const saisiPrenom = (saisie: string): Action => ({
@@ -214,4 +227,8 @@ export const saisieDepartement = (saisie: Departement | string): Action => ({
 });
 export const cguCliquees = (): Action => ({
   type: TypeAction.CGU_CLIQUEES,
+});
+
+export const pixelDeSuiviClique = (): Action => ({
+  type: TypeAction.PIXEL_DE_SUIVI_CLIQUE,
 });
