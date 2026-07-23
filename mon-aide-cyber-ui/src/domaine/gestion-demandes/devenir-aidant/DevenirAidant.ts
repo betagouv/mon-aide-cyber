@@ -20,6 +20,7 @@ export type CorpsDemandeDevenirAidant = {
   mail: string;
   departement: string;
   cguValidees: boolean;
+  pixelDeSuiviAutorise: boolean;
   signatureCharte?: boolean;
   entite?: Entite;
 };

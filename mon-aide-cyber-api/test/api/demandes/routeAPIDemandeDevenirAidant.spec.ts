@@ -266,6 +266,32 @@ describe('Le serveur MAC, sur  les routes de demande pour devenir Aidant', () =>
       ).toStrictEqual(FournisseurHorloge.maintenant());
     });
 
+    it('Prends en compte l‘autorisation du pisxel de suivi', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const utilisateur = await creeEtConnecteUnUtilisateurInscrit(
+        unUtilisateurInscrit()
+          .avecUnEmail('jean.dupont@email.com')
+          .avecUnNomPrenom('Jean Dupont')
+          .sansValidationDeCGU()
+      );
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'POST',
+        '/api/demandes/devenir-aidant',
+        uneRequeteDemandeDevenirAidant()
+          .autorisantLePixelDeSuivi()
+          .depuisUnCompteUtilisateurInscrit(utilisateur)
+          .dansUneEntite('Asso', 'SIRET', 'Association')
+          .construis()
+      );
+
+      expect(reponse.statusCode).toStrictEqual(200);
+      expect(
+        testeurMAC.repertoireDeContacts.creeUtilisateurInscritAppeleAvecPixelDeSuiviAutorise()
+      ).toBe(true);
+    });
+
     describe('Valide les paramètres de la requête', () => {
       const testeurMAC = testeurIntegration();
       let donneesServeur: { app: Express };
