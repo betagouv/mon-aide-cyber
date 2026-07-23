@@ -10,6 +10,7 @@ import { AutoCompletion } from '../../../../composants/auto-completion/AutoCompl
 import {
   cguCliquees,
   initialiseFormulaire,
+  pixelDeSuiviClique,
   reducteurDevenirAidant,
   saisieDepartement,
   saisieMail,
@@ -19,6 +20,7 @@ import {
 import { Input } from '../../../../composants/atomes/Input/Input.tsx';
 import { ChampValidationCGUs } from '../../../../composants/formulaires/ChampValidationCGUs.tsx';
 import { ReponseDemandeInitiee } from '../DevenirAidant.ts';
+import { AutorisationPixelDeSuivi } from '../../../../composants/formulaires/AutorisationPixelDeSuivi.tsx';
 
 export type ChampsFormulaireDevenirAidant = {
   nom: string;
@@ -26,17 +28,12 @@ export type ChampsFormulaireDevenirAidant = {
   mail: string;
   departement: string;
   cguValidees: boolean;
+  pixelDeSuiviAutorise: boolean;
 };
 
 type ProprietesFormulaireDevenirAidant = PropsWithChildren<{
   informationsLieesALaDemande?: ReponseDemandeInitiee;
-  surSoumission: ({
-    nom,
-    prenom,
-    mail,
-    departement,
-    cguValidees,
-  }: ChampsFormulaireDevenirAidant) => void;
+  surSoumission: (champs: ChampsFormulaireDevenirAidant) => void;
   devientValide: (estValide: boolean) => void;
 }>;
 
@@ -77,6 +74,7 @@ const FormulaireDevenirAidantFormulaire = ({
         ? etatDemande.departement.nom
         : etatDemande.departement,
       cguValidees: etatDemande.cguValidees,
+      pixelDeSuiviAutorise: etatDemande.pixelDeSuiviAutorise,
     });
   };
 
@@ -102,6 +100,10 @@ const FormulaireDevenirAidantFormulaire = ({
 
   const surCGUValidees = useCallback(() => {
     envoie(cguCliquees());
+  }, []);
+
+  const surPixelDeSuivi = useCallback(() => {
+    envoie(pixelDeSuiviClique());
   }, []);
 
   return (
@@ -230,6 +232,9 @@ const FormulaireDevenirAidantFormulaire = ({
                 {etatDemande.erreurs?.cguValidees}
               </p>
             ) : null}
+          </div>
+          <div className="fr-col-12 champs">
+            <AutorisationPixelDeSuivi onChange={surPixelDeSuivi} estChecked={etatDemande.pixelDeSuiviAutorise} />
           </div>
         </div>
         <div className="fr-grid-row fr-grid-row--right fr-pt-3w">

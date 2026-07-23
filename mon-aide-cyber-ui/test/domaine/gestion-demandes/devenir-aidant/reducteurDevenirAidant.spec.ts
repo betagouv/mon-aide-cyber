@@ -3,6 +3,7 @@ import {
   cguCliquees,
   EtatDemande,
   initialiseFormulaire,
+  pixelDeSuiviClique,
   reducteurDevenirAidant,
   saisieDepartement,
   saisieMail,
@@ -28,6 +29,7 @@ describe('Formulaire devenir Aidant', () => {
           mail: '',
           departement: '',
           pretPourEnvoi: false,
+          pixelDeSuiviAutorise: false,
         });
       });
 
@@ -54,6 +56,7 @@ describe('Formulaire devenir Aidant', () => {
           erreurs: {
             prenom: 'Veuillez saisir un prénom valide',
           },
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -75,6 +78,7 @@ describe('Formulaire devenir Aidant', () => {
           nom: '',
           mail: '',
           departement: '',
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -93,6 +97,7 @@ describe('Formulaire devenir Aidant', () => {
           nom: 'Dujardin',
           mail: '',
           departement: '',
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -120,6 +125,7 @@ describe('Formulaire devenir Aidant', () => {
           erreurs: {
             nom: 'Veuillez saisir un nom valide',
           },
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -141,6 +147,7 @@ describe('Formulaire devenir Aidant', () => {
           nom: 'Dujardin',
           mail: '',
           departement: '',
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -159,6 +166,7 @@ describe('Formulaire devenir Aidant', () => {
           nom: '',
           mail: 'email@email.com',
           departement: '',
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -186,6 +194,7 @@ describe('Formulaire devenir Aidant', () => {
           erreurs: {
             mail: 'Veuillez saisir un mail valide',
           },
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -207,6 +216,7 @@ describe('Formulaire devenir Aidant', () => {
           nom: '',
           mail: 'email@email.com',
           departement: '',
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -227,6 +237,7 @@ describe('Formulaire devenir Aidant', () => {
           nom: '',
           mail: '',
           departement: { nom: 'Ain', code: '01' },
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -254,6 +265,7 @@ describe('Formulaire devenir Aidant', () => {
           erreurs: {
             departement: 'Veuillez sélectionner un département dans la liste',
           },
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -275,6 +287,7 @@ describe('Formulaire devenir Aidant', () => {
           nom: '',
           mail: '',
           departement: { nom: 'Ain', code: '01' },
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -290,6 +303,7 @@ describe('Formulaire devenir Aidant', () => {
           nom: '',
           mail: '',
           departement: '',
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -317,6 +331,7 @@ describe('Formulaire devenir Aidant', () => {
           erreurs: {
             cguValidees: 'Veuillez valider les CGU.',
           },
+          pixelDeSuiviAutorise: false,
           pretPourEnvoi: false,
         });
       });
@@ -338,6 +353,58 @@ describe('Formulaire devenir Aidant', () => {
           nom: '',
           mail: '',
           departement: '',
+          pixelDeSuiviAutorise: false,
+          pretPourEnvoi: false,
+        });
+      });
+    });
+
+    describe('En ce qui concern le pixel de suivi', () => {
+      it('Le suivi est autorisé', () => {
+        const etatDemande = reducteurDevenirAidant(
+          {
+            ...etatInitial,
+            cguValidees: true,
+            prenom: 'Jean',
+            nom: 'DUPONT',
+            mail: 'email',
+            departement: { nom: 'Ain', code: '01' },
+            pretPourEnvoi: true,
+          },
+          pixelDeSuiviClique()
+        );
+
+        expect(etatDemande).toStrictEqual<EtatDemande>({
+          cguValidees: true,
+          pixelDeSuiviAutorise: true,
+          prenom: 'Jean',
+          nom: 'DUPONT',
+          mail: 'email',
+          departement: { nom: 'Ain', code: '01' },
+          pretPourEnvoi: true,
+        });
+      });
+
+      it('La saisie est invalide tant que les CGU ne sont pas validées', () => {
+        const etatValidationCGU = reducteurDevenirAidant(
+          {
+            ...etatInitial,
+            prenom: 'Jean',
+            nom: 'DUPONT',
+            mail: 'email',
+            departement: { nom: 'Ain', code: '01' },
+            cguValidees: false,
+          },
+          pixelDeSuiviClique()
+        );
+
+        expect(etatValidationCGU).toStrictEqual<EtatDemande>({
+          cguValidees: false,
+          prenom: 'Jean',
+          nom: 'DUPONT',
+          mail: 'email',
+          departement: { nom: 'Ain', code: '01' },
+          pixelDeSuiviAutorise: true,
           pretPourEnvoi: false,
         });
       });
