@@ -25,19 +25,24 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
     private readonly repertoire: RepertoireDeContacts
   ) {}
 
-  valideLesCGU(identifiantUtilisateur: crypto.UUID): Promise<void> {
-    return this.entrepotUtilisateurInscrit
-      .lis(identifiantUtilisateur)
-      .then(async (utilisateurInscrit) => {
-        utilisateurInscrit.dateSignatureCGU = FournisseurHorloge.maintenant();
-        return await this.entrepotUtilisateurInscrit.persiste(
-          utilisateurInscrit
-        );
-      });
+  async valideLesConditionsMAC(
+    identifiantUtilisateur: crypto.UUID,
+    pixelDeSuiviAutorise: boolean
+  ): Promise<void> {
+    const utilisateurInscrit = await this.entrepotUtilisateurInscrit.lis(
+      identifiantUtilisateur
+    );
+    utilisateurInscrit.dateSignatureCGU = FournisseurHorloge.maintenant();
+    this.repertoire.creeUtilisateurInscrit(
+      utilisateurInscrit.email,
+      pixelDeSuiviAutorise
+    );
+    return this.entrepotUtilisateurInscrit.persiste(utilisateurInscrit);
   }
 
   async valideProfil(
     identifiantUtilisateurInscrit: crypto.UUID,
+    pixelDeSuiviAutorise: boolean,
     adaptateurDeRelations: AdaptateurRelations,
     busEvenement: BusEvenement
   ): Promise<void> {
@@ -73,7 +78,10 @@ class ServiceUtilisateurInscritMAC implements ServiceUtilisateurInscrit {
     }, [] as Promise<void>[]);
     await Promise.all(tuples);
 
-    await this.repertoire.creeUtilisateurInscrit(utilisateur.email);
+    await this.repertoire.creeUtilisateurInscrit(
+      utilisateur.email,
+      pixelDeSuiviAutorise
+    );
 
     await busEvenement.publie<AidantMigreEnUtilisateurInscrit>({
       identifiant: adaptateurUUID.genereUUID(),

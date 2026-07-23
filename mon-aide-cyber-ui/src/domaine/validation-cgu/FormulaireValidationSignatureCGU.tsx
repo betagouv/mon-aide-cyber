@@ -2,9 +2,10 @@ import { FormEvent, useCallback, useReducer } from 'react';
 import {
   cguCliquees,
   initialiseReducteur,
-  reducteurValidationCGU,
+  pixelDeSuiviClique,
+  reducteurValidationConditionsMAC,
   validationCGUInvalidee,
-} from './reducteurValidationCGU.tsx';
+} from './reducteurValidationConditionsMAC.tsx';
 import { MACAPIType, useMACAPI } from '../../fournisseurs/api/useMACAPI.ts';
 import { useNavigationMAC } from '../../fournisseurs/hooks.ts';
 import { MoteurDeLiens, ROUTE_MON_ESPACE } from '../MoteurDeLiens.ts';
@@ -12,6 +13,7 @@ import { Lien, ReponseHATEOAS } from '../Lien.ts';
 import { constructeurParametresAPI } from '../../fournisseurs/api/ConstructeurParametresAPI.ts';
 import { ValidationSignatureCGU } from '../espace-aidant/EspaceAidant.ts';
 import { TypographieH2 } from '../../composants/communs/typographie/TypographieH2/TypographieH2.tsx';
+import { AutorisationPixelDeSuivi } from '../../composants/formulaires/AutorisationPixelDeSuivi.tsx';
 
 type ProprietesComposantCreationEspaceAidant = {
   macAPI: MACAPIType;
@@ -21,7 +23,7 @@ export const ComposantValidationSignatureCGU = ({
   macAPI,
 }: ProprietesComposantCreationEspaceAidant) => {
   const [etatCreationEspaceAidant, envoie] = useReducer(
-    reducteurValidationCGU,
+    reducteurValidationConditionsMAC,
     initialiseReducteur()
   );
   const navigationMAC = useNavigationMAC();
@@ -39,6 +41,8 @@ export const ComposantValidationSignatureCGU = ({
                 .methode(lien.methode!)
                 .corps({
                   cguValidees: etatCreationEspaceAidant.cguSignees,
+                  pixelDeSuiviAutorise:
+                    etatCreationEspaceAidant.pixelDeSuiviAutorise,
                 })
                 .construis();
             macAPI
@@ -68,6 +72,10 @@ export const ComposantValidationSignatureCGU = ({
 
   const surCGUSignees = useCallback(() => {
     envoie(cguCliquees());
+  }, []);
+
+  const surPixelDeSuivi = useCallback(() => {
+    envoie(pixelDeSuiviClique());
   }, []);
 
   return (
@@ -104,6 +112,10 @@ export const ComposantValidationSignatureCGU = ({
               </label>
               {etatCreationEspaceAidant.erreur?.cguSignees?.texteExplicatif}
             </div>
+            <AutorisationPixelDeSuivi
+              onChange={surPixelDeSuivi}
+              estChecked={etatCreationEspaceAidant.pixelDeSuiviAutorise}
+            />
             <div className="fr-grid-row fr-grid-row--right">
               <button
                 type="submit"

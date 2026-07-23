@@ -166,6 +166,7 @@ type CorpsDemandeDevenirAidant = {
   mail: string;
   departement: string;
   cguValidees: boolean;
+  pixelDeSuiviAutorise: boolean;
   entite: {
     nom: string;
     siret: string;
@@ -245,9 +246,9 @@ export const routesAPIDemandesDevenirAidant = (
       const valideLesCGUDeLUtilisateurConnecte = async () => {
         await unServiceUtilisateurInscrit(
           entrepots.utilisateursInscrits(),
-          unServiceAidant(entrepots.aidants()),
+          unServiceAidant(entrepots.aidants(), repertoireDeContacts),
           repertoireDeContacts
-        ).valideLesCGU(requete.identifiantUtilisateurCourant!);
+        ).valideLesConditionsMAC(requete.identifiantUtilisateurCourant!, requete.body.pixelDeSuiviAutorise);
       };
 
       try {

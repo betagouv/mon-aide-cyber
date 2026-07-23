@@ -24,7 +24,10 @@ export interface ServiceAidant {
 
   parIdentifiant(identifiant: crypto.UUID): Promise<AidantDTO | undefined>;
 
-  valideLesCGU(identifiantAidant: crypto.UUID): Promise<void>;
+  valideLesConditionsMAC(
+    identifiantAidant: crypto.UUID,
+    pixelDeSuiviAutorise: boolean
+  ): Promise<void>;
 
   valideProfilAidant(
     identifiantAidant: crypto.UUID,
