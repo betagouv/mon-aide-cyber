@@ -21,11 +21,6 @@ export const LiensFooter = () => (
       </a>
     </li>
     <li className="fr-footer__bottom-item">
-      <a className="fr-footer__bottom-link" href="/statistiques-utilisation">
-        Statistiques d‘utilisation
-      </a>
-    </li>
-    <li className="fr-footer__bottom-item">
       <a className="fr-footer__bottom-link" href="/diagnostic-libre-acces">
         Diagnostic cyber en accès libre
       </a>

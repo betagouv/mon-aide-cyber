@@ -7,7 +7,6 @@ export type Titres =
   | "Charte de l'Aidant"
   | 'Relais Associatifs'
   | 'Annuaire des Aidants'
-  | 'Statistiques'
   | 'Kit de Communication'
   | 'Mentions légales'
   | 'Connexion'
@@ -36,8 +35,6 @@ const metadonneesSelonTitre: Record<TitresSEO, string> = {
   'Relais Associatifs':
     'Découvrez les relais associatifs qui collaborent avec MonAideCyber.',
   'Annuaire des Aidants': '',
-  Statistiques:
-    'Consultez les données d’usage de MonAideCyber : nombre d’Aidants cyber accompagnées, diagnostics réalisés,…',
   'Kit de Communication': '',
   'Mentions légales':
     "Découvrez les mentions légales de MonAideCyber. Consultez nos conditions d'utilisation, notre politique de confidentialité et nos engagements en matière de sécurité numérique. Protégez-vous en toute transparence.",
