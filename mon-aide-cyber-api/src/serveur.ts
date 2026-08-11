@@ -25,7 +25,6 @@ import { AdaptateurRelations } from './relation/AdaptateurRelations';
 import CookieSession from 'cookie-session';
 import { AdaptateurDeVerificationDesAcces } from './adaptateurs/AdaptateurDeVerificationDesAcces';
 import { ServiceDeChiffrement } from './securite/ServiceDeChiffrement';
-import { AdaptateurMetabase } from './adaptateurs/AdaptateurMetabase';
 import { adaptateurConfigurationLimiteurTraffic } from './api/adaptateurLimiteurTraffic';
 import { AdaptateurDeVerificationDeTypeDeRelation } from './adaptateurs/AdaptateurDeVerificationDeTypeDeRelation';
 import { AdaptateurProConnect } from './adaptateurs/pro-connect/adaptateurProConnect';
@@ -74,7 +73,6 @@ export type ConfigurationServeur = {
   entrepots: Entrepots;
   gestionnaireDeJeton: GestionnaireDeJeton;
   gestionnaireErreurs: AdaptateurGestionnaireErreurs;
-  adaptateurMetabase: AdaptateurMetabase;
   adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise;
   adaptateurGeographie: AdaptateurGeographie;
   adaptateurCmsCrisp: AdaptateurCmsCrispMAC;

@@ -84,18 +84,6 @@ export const lesContextesUtilisateursNouveauParcoursExistants: ContextesUtilisat
       },
     },
     {
-      contexte: 'Afficher les statistiques',
-      informationContexte: {
-        contexte: 'afficher-statistiques',
-      },
-      liens: {
-        'afficher-statistiques': {
-          url: '/api/statistiques',
-          methode: 'GET',
-        },
-      },
-    },
-    {
       contexte: 'Afficher l’annuaire Aidants',
       informationContexte: {
         contexte: 'afficher-annuaire-aidants',

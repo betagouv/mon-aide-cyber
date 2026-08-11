@@ -20,7 +20,6 @@ import { EntrepotRelationMemoire } from '../../src/relation/infrastructure/Entre
 import { AdaptateurDeVerificationDesAccesDeTest } from '../adaptateurs/AdaptateurDeVerificationDesAccesDeTest';
 import { ServiceDeChiffrement } from '../../src/securite/ServiceDeChiffrement';
 import { ServiceDeChiffrementClair } from '../infrastructure/securite/ServiceDeChiffrementClair';
-import { AdaptateurMetabaseMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurMetabaseMemoire';
 import { unServiceAidant } from '../../src/espace-aidant/ServiceAidantMAC';
 import { AdaptateurDeVerificationDuTypeDeRelationDeTest } from '../adaptateurs/AdaptateurDeVerificationDuTypeDeRelationDeTest';
 import { AdaptateurProConnect } from '../../src/adaptateurs/pro-connect/adaptateurProConnect';
@@ -84,7 +83,6 @@ class TesteurIntegrationMAC {
         return unAdaptateurRestitutionPDF();
       },
     },
-    public adaptateurMetabase: AdaptateurMetabaseMemoire = new AdaptateurMetabaseMemoire(),
     public adaptateurProConnect: AdaptateurProConnect = new AdaptateurProConnectDeTest(),
     public adaptateurDeRechercheEntreprise = unAdaptateurRechercheEntreprise().construis(),
     public adaptateurGeographie: AdaptateurGeographie = unAdaptateurGeographie(),
@@ -142,7 +140,6 @@ class TesteurIntegrationMAC {
       adaptateurEnvoiMessage: this.adaptateurEnvoieMessage,
       messagerie: this.messagerie,
       serviceDeChiffrement: this.serviceDeChiffrement,
-      adaptateurMetabase: this.adaptateurMetabase,
       adaptateurDeVerificationDeRelations:
         this.adaptateurDeVerificationDeRelations,
       repertoireDeContacts: this.repertoireDeContacts,

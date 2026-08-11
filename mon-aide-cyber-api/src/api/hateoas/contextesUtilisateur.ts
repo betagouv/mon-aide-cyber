@@ -11,7 +11,6 @@ import {
   seDeconnecter,
   seDeconnecterDeProConnect,
 } from './connexion';
-import { afficherStatistiques } from './afficherStatistiques';
 import { afficherAnnuaireAidants } from './annuaireAidants';
 import {
   reinitialisationMotDePasse,
@@ -38,7 +37,6 @@ type ClefContexte =
   | 'se-connecter'
   | 'se-deconnecter'
   | 'se-deconnecter-avec-pro-connect'
-  | 'afficher-statistiques'
   | 'afficher-annuaire-aidants'
   | 'reinitialisation-mot-de-passe'
   | 'utiliser-outil-diagnostic'
@@ -67,9 +65,6 @@ export const contextesUtilisateur: () => ContextesUtilisateur = () => ({
   },
   'se-deconnecter': { ...seDeconnecter },
   'se-deconnecter-avec-pro-connect': { ...seDeconnecterDeProConnect },
-  'afficher-statistiques': {
-    ...afficherStatistiques,
-  },
   'afficher-annuaire-aidants': {
     ...afficherAnnuaireAidants,
   },

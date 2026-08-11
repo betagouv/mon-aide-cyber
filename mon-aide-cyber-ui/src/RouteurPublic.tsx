@@ -9,7 +9,6 @@ import { LayoutPublic } from './composants/layout/LayoutPublic.tsx';
 import { CapteurEcranCreationEspaceAidant } from './domaine/espace-aidant/demande-aidant-creation-espace-aidant/EcranCreationEspaceAidant.tsx';
 import { LayoutCreationEspaceAidant } from './composants/layout/LayoutCreationEspaceAidant.tsx';
 import { EcranAccessibilite } from './vues/EcranAccessibilite.tsx';
-import { EcranStatistiques } from './domaine/vitrine/ecran-statistiques/EcranStatistiques.tsx';
 import { EcranAnnuaire } from './domaine/vitrine/ecran-annuaire/EcranAnnuaire.tsx';
 import { EcranConnexion } from './domaine/connexion/EcranConnexion.tsx';
 import { EcranMotDePasseOublie } from './domaine/vitrine/mot-de-passe-oublie/EcranMotDePasseOublie.tsx';
@@ -29,10 +28,7 @@ export const RouteurPublic = () => {
       <Route path="/" element={<LayoutPublic />}>
         <Route index element={<Accueil />} />
         <Route path="accessibilite" element={<EcranAccessibilite />} />
-        <Route
-          path="statistiques-utilisation"
-          element={<EcranStatistiques />}
-        />
+        <Route path="statistiques-utilisation" element={<Navigate to="/" />} />
         <Route path="cgu" element={<ComposantCGU />} />
         <Route path="securite" element={<EcranSecurite />} />
         <Route path="charte-aidant" element={<EcranCharteAidant />} />
