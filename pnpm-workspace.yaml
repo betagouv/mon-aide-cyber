@@ -15,3 +15,5 @@ minimumReleaseAgeExclude:
   - immutable@5.1.5
   - express-rate-limit@8.3.0
   - dompurify@3.4.11
+  # Renovate security update: qs@6.15.2
+  - qs@6.15.2
