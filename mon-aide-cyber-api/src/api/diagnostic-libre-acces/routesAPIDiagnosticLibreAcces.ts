@@ -251,7 +251,7 @@ export const routesAPIDiagnosticLibreAcces = (
           "La restitution demandée n'existe pas."
         );
       }
-      const { id } = requete.params;
+      const { id } = requete.params as { id: string };
       const genereRestitution = async (
         restitution: Restitution
       ): Promise<Buffer | RestitutionHTML> => {
