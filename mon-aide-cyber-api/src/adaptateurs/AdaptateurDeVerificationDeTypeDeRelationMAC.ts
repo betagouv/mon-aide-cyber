@@ -12,7 +12,7 @@ export class AdaptateurDeVerificationDeTypeDeRelationMAC
     definition: DEFINITION
   ): RequestHandler {
     return (requete: Request, reponse: Response, suite: NextFunction) => {
-      const { id } = requete.params;
+      const { id } = requete.params as { id: string };
       return this.adaptateurRelations
         .typeRelationExiste(definition.relation, {
           type: definition.typeObjet,

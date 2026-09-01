@@ -57,6 +57,10 @@ type CorpsValidationConditionsMAC = {
   pixelDeSuiviAutorise: boolean;
 };
 
+type ReponseValidationConditionsMAC = Response<
+  ReponseHATEOAS | ReponseHATEOASEnErreur
+>;
+
 const valitateurUtilisateur = (
   entrepotUtilisateur: EntrepotUtilisateur,
   serviceDeChiffrement: ServiceDeChiffrement
@@ -298,7 +302,7 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
       const identifiantUtilisateur = requete.identifiantUtilisateurCourant!;
       return uneRechercheUtilisateursMAC(entrepots.utilisateursMAC())
         .rechercheParIdentifiant(identifiantUtilisateur)
-        .then((utilisateur) => {
+        .then<ReponseValidationConditionsMAC | void>((utilisateur) => {
           if (!utilisateur) {
             return suite(
               ErreurMAC.cree('Valide les CGU', new ErreurValidationCGU())

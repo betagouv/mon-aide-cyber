@@ -175,7 +175,11 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     session.verifie('Demande la restitution'),
     cgu.verifie('Demande la restitution'),
     verifieRelations(relations, entrepots),
-    (requete: RequeteUtilisateur, reponse: Response, suite: NextFunction) => {
+    (
+      requete: RequeteUtilisateur<void, { id: string }>,
+      reponse: Response,
+      suite: NextFunction
+    ) => {
       const { id } = requete.params;
 
       const genereRestitution = (
@@ -231,7 +235,7 @@ export const routesAPIDiagnostic = (configuration: ConfigurationServeur) => {
     session.verifie('Envoi la restitution à l’entité Aidée'),
     verifieRelations(relations, entrepots),
     async (
-      requete: RequeteUtilisateur,
+      requete: RequeteUtilisateur<void, { id: string }>,
       reponse: Response,
       suite: NextFunction
     ) => {

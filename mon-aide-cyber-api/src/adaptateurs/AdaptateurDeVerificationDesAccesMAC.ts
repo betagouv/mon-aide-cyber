@@ -35,7 +35,7 @@ export class AdaptateurDeVerificationDesAccesMAC
       reponse: Response,
       suite: NextFunction
     ) => {
-      const { id } = requete.params;
+      const { id } = requete.params as { id: string };
       const relationExiste = await this.adaptateurRelation.relationExiste(
         definition.relation,
         {

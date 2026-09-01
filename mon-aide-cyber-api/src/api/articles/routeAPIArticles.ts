@@ -27,7 +27,7 @@ export const routesAPIArticles = (configuration: ConfigurationServeur) => {
       reponse: Response<ReponseArticle | { message: string }>
     ) => {
       const appelCrisp: (() => Promise<Article>) | undefined =
-        articlesCrisp.get(requete.params.article);
+        articlesCrisp.get((requete.params as { article: string }).article);
 
       if (typeof appelCrisp !== 'function') {
         return reponse.status(404).json({
