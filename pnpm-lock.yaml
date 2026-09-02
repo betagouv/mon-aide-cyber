@@ -192,7 +192,7 @@ importers:
         version: 7.29.7
       '@gouvfr/dsfr':
         specifier: ^1.11.0
-        version: 1.11.2
+        version: 1.15.2
       '@tanstack/query-core':
         specifier: ^5.90.15
         version: 5.90.16
@@ -1097,9 +1097,9 @@ packages:
   '@fast-csv/parse@4.3.6':
     resolution: {integrity: sha512-uRsLYksqpbDmWaSmzvJcuApSEe38+6NQZBUsuAyMZKqHxH0g1wcJgsKUvN3WC8tewaqFjBMMGrkHmC+T7k8LvA==}
 
-  '@gouvfr/dsfr@1.11.2':
-    resolution: {integrity: sha512-S7idT4rCCw6M1pqxJS8y4nUSq/Rus+Kucoifmv0CrZD/eoBA34HWqWYzR9GIxvtAX/TQ1XC7Hz+54THtVzMeqQ==}
-    engines: {node: '>=18.16.1'}
+  '@gouvfr/dsfr@1.15.2':
+    resolution: {integrity: sha512-IrV/a/eV6KE06Az8Ky3wN2h0INka+ntk5UWuJg/T+ST7/tMUvIWC8fZi9azx+2YsqMFGgAkocIHxeVbPoLHAUQ==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
 
   '@hapi/address@5.1.1':
     resolution: {integrity: sha512-A+po2d/dVoY7cYajycYI43ZbYMXukuopIsqCjh5QzsBCipDtdofHntljDlpccMjIfTy6UOkg+5KPriwYch2bXA==}
@@ -6884,7 +6884,7 @@ snapshots:
       lodash.isundefined: 3.0.1
       lodash.uniq: 4.5.0
 
-  '@gouvfr/dsfr@1.11.2': {}
+  '@gouvfr/dsfr@1.15.2': {}
 
   '@hapi/address@5.1.1':
     dependencies:
