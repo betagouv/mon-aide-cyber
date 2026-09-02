@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile-ui
     volumes:
       - ./mon-aide-cyber-ui:/usr/src/app/mon-aide-cyber-ui
+      - /usr/src/app/node_modules
+      - /usr/src/app/mon-aide-cyber-ui/node_modules
     networks:
       - reseau-mon-aide-cyber
 
@@ -36,6 +38,8 @@ services:
     volumes:
       - ./mon-aide-cyber-api:/usr/src/app/mon-aide-cyber-api
       - ./mon-aide-cyber-ui/dist/:/usr/src/app/mon-aide-cyber-ui/dist
+      - /usr/src/app/node_modules
+      - /usr/src/app/mon-aide-cyber-api/node_modules
     depends_on:
       - db
     networks:
