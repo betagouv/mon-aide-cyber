@@ -65,7 +65,7 @@ importers:
     dependencies:
       '@lab-anssi/lib':
         specifier: ^1.3.1
-        version: 1.3.1
+        version: 1.5.0(express@5.2.1)
       '@sentry/node':
         specifier: ^7.77.0
         version: 7.77.0
@@ -1285,8 +1285,10 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@lab-anssi/lib@1.3.1':
-    resolution: {integrity: sha512-Zacm1AFhx9SMOhaCqjgNutmX2I+G3lm7hegmbapC4tK2k6yz8mmHPIIyRVa4aPBbuGhkXM36961pc38NerT5dw==}
+  '@lab-anssi/lib@1.5.0':
+    resolution: {integrity: sha512-DgqZmEd/vc0DpS+fFRYzn7fVfQ8ByXXBQFuIfrVbqQkD0E7wq0WEN1M5VGwT1vtGFhR/DNWLCcE0mB934BV4Kw==}
+    peerDependencies:
+      express: ^4.21.2
 
   '@mole-inc/bin-wrapper@8.0.1':
     resolution: {integrity: sha512-sTGoeZnjI8N4KS+sW2AN95gDBErhAguvkw/tWdCjeM8bvxpz5lqrnd0vOJABA1A+Ic3zED7PYoLP/RANLgVotA==}
@@ -2494,6 +2496,9 @@ packages:
   axios@1.15.0:
     resolution: {integrity: sha512-wWyJDlAatxk30ZJer+GeCWS209sA42X+N5jU2jy6oHTp7ufw8uzUTVFBX9+wTfAlhiJXGS0Bq7X6efruWjuK9Q==}
 
+  axios@1.20.0:
+    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
+
   b4a@1.7.3:
     resolution: {integrity: sha512-5Q2mfq2WfGuFp3uS//0s6baOJLMoVduPYVeNmDYxu5OUA1/cBfvr2RIS7vi62LdNj/urk1hfmj867I3qt6uZ7Q==}
     peerDependencies:
@@ -3397,6 +3402,12 @@ packages:
     resolution: {integrity: sha512-Q6+ufo30/gLk7DTe3HEPTkx1LGNyWAt8I5wN8w3W4OIhhzoyNokBp5U4SSjFFcyVZ4USYvMeFNs49v4gBV9U/A==}
     engines: {node: '>=8.9.0'}
 
+  express-rate-limit@7.5.1:
+    resolution: {integrity: sha512-7iN8iPMDzOMHPUYllBEsQdWVB6fPDMPqwjBaFrgr4Jgr/+okjvzAy+UHlYYL/Vs0OsOrMkwS6PJDkFlJwoxUnw==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      express: '>= 4.11'
+
   express-rate-limit@8.3.0:
     resolution: {integrity: sha512-KJzBawY6fB9FiZGdE/0aftepZ91YlaGIrV8vgblRM3J8X+dHx/aiowJWwkx6LIGyuqGiANsjSwwrbb8mifOJ4Q==}
     engines: {node: '>= 16'}
@@ -3537,6 +3548,15 @@ packages:
       debug:
         optional: true
 
+  follow-redirects@1.16.0:
+    resolution: {integrity: sha512-y5rN/uOsadFT/JfYwhxRS5R7Qce+g3zG97+JrtFZlC9klX/W5hD7iiLzScI4nZqUS7DNUdhPgw4xI8W2LuXlUw==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+
   for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
     engines: {node: '>= 0.4'}
@@ -3551,6 +3571,10 @@ packages:
 
   form-data@4.0.5:
     resolution: {integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==}
+    engines: {node: '>= 6'}
+
+  form-data@4.0.6:
+    resolution: {integrity: sha512-vKatAh4SlVfgbv+YtmhiRjhEMJsYpsG1Y2rMQtR+SVSbytsSD1YGzDIcrAJmdFec88u/+VoGmxnl+80gL1tRCQ==}
     engines: {node: '>= 6'}
 
   forwarded@0.2.0:
@@ -7153,13 +7177,17 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lab-anssi/lib@1.3.1':
+  '@lab-anssi/lib@1.5.0(express@5.2.1)':
     dependencies:
-      axios: 1.15.0
+      axios: 1.20.0
+      express: 5.2.1
+      express-ipfilter: 1.4.0
+      express-rate-limit: 7.5.1(express@5.2.1)
       html-entities: 2.6.0
       marked: 13.0.3
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   '@mole-inc/bin-wrapper@8.0.1':
     dependencies:
@@ -8428,6 +8456,16 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  axios@1.20.0:
+    dependencies:
+      follow-redirects: 1.16.0
+      form-data: 4.0.6
+      https-proxy-agent: 5.0.1
+      proxy-from-env: 2.1.0
+    transitivePeerDependencies:
+      - debug
+      - supports-color
+
   b4a@1.7.3: {}
 
   babel-jest@30.4.1(@babel/core@7.28.5):
@@ -9499,6 +9537,10 @@ snapshots:
       proxy-addr: 2.0.7
       range_check: 2.0.4
 
+  express-rate-limit@7.5.1(express@5.2.1):
+    dependencies:
+      express: 5.2.1
+
   express-rate-limit@8.3.0(express@5.2.1):
     dependencies:
       express: 5.2.1
@@ -9683,6 +9725,8 @@ snapshots:
 
   follow-redirects@1.15.11: {}
 
+  follow-redirects@1.16.0: {}
+
   for-each@0.3.5:
     dependencies:
       is-callable: 1.2.7
@@ -9703,6 +9747,14 @@ snapshots:
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
       hasown: 2.0.2
+      mime-types: 2.1.35
+
+  form-data@4.0.6:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.4
       mime-types: 2.1.35
 
   forwarded@0.2.0: {}
@@ -12609,13 +12661,14 @@ snapshots:
 
   wait-on@7.2.0:
     dependencies:
-      axios: 1.15.0
+      axios: 1.20.0
       joi: 17.13.3
       lodash: 4.18.1
       minimist: 1.2.8
       rxjs: 7.8.2
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   wait-on@9.0.3:
     dependencies:
