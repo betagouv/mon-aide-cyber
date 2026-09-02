@@ -261,8 +261,8 @@ importers:
         specifier: ^7.0.0
         version: 7.0.1(eslint@9.39.5(jiti@2.6.1))
       eslint-plugin-react-refresh:
-        specifier: ^0.4.25
-        version: 0.4.26(eslint@9.39.5(jiti@2.6.1))
+        specifier: ^0.5.0
+        version: 0.5.5(eslint@9.39.5(jiti@2.6.1))
       eslint-plugin-storybook:
         specifier: ^9.0.4
         version: 9.0.18(eslint@9.39.5(jiti@2.6.1))(storybook@9.1.19(@testing-library/dom@10.4.1)(prettier@3.8.1)(vite@7.3.6(@types/node@26.3.0)(jiti@2.6.1)(sass@1.92.1)(tsx@4.21.0)(yaml@2.8.3)))(typescript@5.9.3)
@@ -1885,9 +1885,6 @@ packages:
   '@types/express@4.17.25':
     resolution: {integrity: sha512-dVd04UKsfpINUnK0yBoYHDF3xu7xVH4BuDotC/xGuycx4CgbP48X/KF/586bcObxT0HENHXEU8Nqtu6NR+eKhw==}
 
-  '@types/express@5.0.6':
-    resolution: {integrity: sha512-sKYVuV7Sv9fbPIt/442koC7+IIwK5olP1KWeD88e/idgoJqDm3JV/YUiPwkoKK92ylff2MGxSz1CSjsXelx0YA==}
-
   '@types/http-cache-semantics@4.0.4':
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
 
@@ -3276,10 +3273,10 @@ packages:
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
 
-  eslint-plugin-react-refresh@0.4.26:
-    resolution: {integrity: sha512-1RETEylht2O6FM/MvgnyvT+8K21wLqDNg4qD51Zj3guhjt433XbnnkVttHMyaVyAFD03QSV4LPS5iE3VQmO7XQ==}
+  eslint-plugin-react-refresh@0.5.5:
+    resolution: {integrity: sha512-vG7yLURXNvCHy0FBdbZRwIu0BLPJMlUUJS2Ep7ud9w1YCLftFZtuEjyjhym0Qq9yuZ6LJUitNlu/hMk0gakXAw==}
     peerDependencies:
-      eslint: '>=8.40'
+      eslint: ^9 || ^10
 
   eslint-plugin-react@7.37.5:
     resolution: {integrity: sha512-Qteup0SqU15kdocexFNAJMvCJEfa2xUKNV4CC1xsVMrIIqEy3SQ/rqyxCWNzfrd3/ldy6HMlD2e0JDVpDg2qIA==}
@@ -7745,16 +7742,6 @@ snapshots:
       '@types/qs': 6.14.0
       '@types/serve-static': 1.15.10
 
-  '@types/express@5.0.6':
-    dependencies:
-      '@types/body-parser': 1.19.6
-      '@types/express-serve-static-core': 5.1.1
-      '@types/serve-static': 2.2.0
-
-  '@types/graceful-fs@4.1.9':
-    dependencies:
-      '@types/node': 26.3.0
-
   '@types/http-cache-semantics@4.0.4': {}
 
   '@types/http-errors@2.0.5': {}
@@ -9361,7 +9348,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-react-refresh@0.4.26(eslint@9.39.5(jiti@2.6.1)):
+  eslint-plugin-react-refresh@0.5.5(eslint@9.39.5(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.5(jiti@2.6.1)
 
@@ -10282,16 +10269,6 @@ snapshots:
   istanbul-lib-instrument@4.0.3:
     dependencies:
       '@babel/core': 7.28.5
-      '@istanbuljs/schema': 0.1.6
-      istanbul-lib-coverage: 3.2.2
-      semver: 7.8.5
-    transitivePeerDependencies:
-      - supports-color
-
-  istanbul-lib-instrument@5.2.1:
-    dependencies:
-      '@babel/core': 7.28.5
-      '@babel/parser': 7.29.8
       '@istanbuljs/schema': 0.1.6
       istanbul-lib-coverage: 3.2.2
       semver: 7.8.5
