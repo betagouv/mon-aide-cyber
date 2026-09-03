@@ -9,9 +9,10 @@ import { Referentiel } from './Referentiel';
 import crypto from 'crypto';
 import { ReferentielDeMesures } from './ReferentielDeMesures';
 
-export class CapteurCommandeLanceDiagnostic
-  implements CapteurCommande<CommandeLanceDiagnostic, Diagnostic>
-{
+export class CapteurCommandeLanceDiagnostic implements CapteurCommande<
+  CommandeLanceDiagnostic,
+  Diagnostic
+> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,

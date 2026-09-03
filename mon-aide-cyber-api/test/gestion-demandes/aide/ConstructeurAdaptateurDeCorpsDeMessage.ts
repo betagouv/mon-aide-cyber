@@ -7,9 +7,7 @@ import { DemandeAide } from '../../../src/gestion-demandes/aide/DemandeAide';
 import { Aidant } from '../../../src/espace-aidant/Aidant';
 import { DonneesMiseEnRelation } from '../../../src/gestion-demandes/aide/miseEnRelation';
 
-class ConstructeurAdaptateurDeCorpsDeMessage
-  implements Constructeur<AdaptateurCorpsDeMessageAide>
-{
+class ConstructeurAdaptateurDeCorpsDeMessage implements Constructeur<AdaptateurCorpsDeMessageAide> {
   private _recapitulatifDemandeAide: (
     _aide: DemandeAide,
     _aidants: Aidant[]

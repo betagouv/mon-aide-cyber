@@ -36,7 +36,10 @@ class ServiceAidantMAC implements ServiceAidant {
     pixelDeSuiviAutorise: boolean
   ): Promise<void> {
     const aidant = await this.entrepotAidant.lis(identifiantAidant);
-    await this.repertoireDeContacts.creeAidant(aidant.email, pixelDeSuiviAutorise);
+    await this.repertoireDeContacts.creeAidant(
+      aidant.email,
+      pixelDeSuiviAutorise
+    );
     aidant.dateSignatureCGU = FournisseurHorloge.maintenant();
     return this.entrepotAidant.persiste(aidant);
   }

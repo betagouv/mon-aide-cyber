@@ -27,9 +27,10 @@ export class DemandeAideDejaPourvue extends Error {
   }
 }
 
-export class CapteurCommandeAttribueDemandeAide
-  implements CapteurCommande<CommandeAttribueDemandeAide, void>
-{
+export class CapteurCommandeAttribueDemandeAide implements CapteurCommande<
+  CommandeAttribueDemandeAide,
+  void
+> {
   constructor(
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly relations: AdaptateurRelations,

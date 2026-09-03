@@ -2,9 +2,7 @@ import { DefinitionTuple } from '../../src/relation/Tuple';
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { AdaptateurDeVerificationDeTypeDeRelation } from '../../src/adaptateurs/AdaptateurDeVerificationDeTypeDeRelation';
 
-export class AdaptateurDeVerificationDuTypeDeRelationDeTest
-  implements AdaptateurDeVerificationDeTypeDeRelation
-{
+export class AdaptateurDeVerificationDuTypeDeRelationDeTest implements AdaptateurDeVerificationDeTypeDeRelation {
   private verifieLaRelation = false;
 
   verifieRelationExiste(): boolean {

@@ -5,8 +5,7 @@ import { constructeurParametresAPI } from '../fournisseurs/api/ConstructeurParam
 import { useMACAPI } from '../fournisseurs/api/useMACAPI.ts';
 
 export const useRecupereLesInformationsLieesALaDemande = ():
-  | ReponseDemandeInitiee
-  | undefined => {
+  ReponseDemandeInitiee | undefined => {
   const macAPI = useMACAPI();
 
   const {

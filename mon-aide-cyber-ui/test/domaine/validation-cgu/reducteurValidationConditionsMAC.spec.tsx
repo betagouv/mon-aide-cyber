@@ -13,7 +13,8 @@ import {
 } from '../../../src/domaine/validation-cgu/reducteurValidationConditionsMAC.tsx';
 
 describe('Réducteur de validation des conditions d‘utilisation de MAC', () => {
-  const etatInitialValidationCGU: EtatValidationConditionsMAC = initialiseReducteur();
+  const etatInitialValidationCGU: EtatValidationConditionsMAC =
+    initialiseReducteur();
 
   describe("Lorsque l'on clique sur la case à cocher des CGU", () => {
     it('Elles sont signées', () => {
@@ -149,5 +150,5 @@ describe('Réducteur de validation des conditions d‘utilisation de MAC', () =>
       });
       expect(etatValidationCGU.saisieValide()).toBe(false);
     });
-  })
+  });
 });

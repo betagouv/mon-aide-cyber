@@ -10,9 +10,7 @@ import { Contexte, ErreurMAC } from '../domaine/erreurMAC';
 import { MACCookies, utilitairesCookies } from './utilitairesDeCookies';
 import { RequeteUtilisateur } from '../api/routesAPI';
 
-export class AdaptateurDeVerificationDeSessionHttp
-  implements AdaptateurDeVerificationDeSession
-{
+export class AdaptateurDeVerificationDeSessionHttp implements AdaptateurDeVerificationDeSession {
   constructor(private readonly gestionnaireDeJeton: GestionnaireDeJeton) {}
 
   verifie(

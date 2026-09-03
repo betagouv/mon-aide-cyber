@@ -10,9 +10,7 @@ import crypto from 'crypto';
 import { fakerFR } from '@faker-js/faker';
 import { TypeEntite } from '../../src/espace-aidant/Aidant';
 
-class ConstructeurDemandeDevenirAidant
-  implements Constructeur<DemandeDevenirAidant>
-{
+class ConstructeurDemandeDevenirAidant implements Constructeur<DemandeDevenirAidant> {
   private date: Date = FournisseurHorloge.maintenant();
   private departement: Departement = gironde;
   private identifiant: crypto.UUID = crypto.randomUUID();

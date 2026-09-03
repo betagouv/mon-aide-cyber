@@ -14,9 +14,10 @@ export type CommandeReinitialisationMotDePasse = Commande & {
   email: string;
 };
 
-export class CapteurCommandeReinitialisationMotDePasse
-  implements CapteurCommande<CommandeReinitialisationMotDePasse, void>
-{
+export class CapteurCommandeReinitialisationMotDePasse implements CapteurCommande<
+  CommandeReinitialisationMotDePasse,
+  void
+> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,

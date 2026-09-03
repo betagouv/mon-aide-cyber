@@ -90,9 +90,10 @@ const rechercheUtilisateurMAC = async (
   return utilisateurMAC;
 };
 
-export class CapteurSagaDemandeAide
-  implements CapteurSaga<SagaDemandeAide, void>
-{
+export class CapteurSagaDemandeAide implements CapteurSaga<
+  SagaDemandeAide,
+  void
+> {
   constructor(
     private readonly busCommande: BusCommande,
     private readonly busEvenement: BusEvenement,

@@ -16,13 +16,10 @@ export type ActivationCompteAidantFaite = {
   identifiantDemande: UUID;
 };
 
-export class CapteurSagaActivationCompteAidant
-  implements
-    CapteurSaga<
-      SagaActivationCompteAidant,
-      ActivationCompteAidantFaite | undefined
-    >
-{
+export class CapteurSagaActivationCompteAidant implements CapteurSaga<
+  SagaActivationCompteAidant,
+  ActivationCompteAidantFaite | undefined
+> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,

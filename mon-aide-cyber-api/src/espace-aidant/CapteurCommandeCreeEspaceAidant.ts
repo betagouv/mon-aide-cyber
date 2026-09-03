@@ -50,9 +50,10 @@ export type AidantCree = Evenement<{
   typeAidant: 'Gendarme' | 'Aidant';
 }>;
 
-export class CapteurCommandeCreeEspaceAidant
-  implements CapteurCommande<CommandeCreeEspaceAidant, EspaceAidantCree>
-{
+export class CapteurCommandeCreeEspaceAidant implements CapteurCommande<
+  CommandeCreeEspaceAidant,
+  EspaceAidantCree
+> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
@@ -107,10 +108,7 @@ export class CapteurCommandeCreeEspaceAidant
 
       await this.entrepots.aidants().persiste(aidant);
       await this.promeutUtilisateurInscritEnAidant(identifiant);
-      await this.repertoireDeContacts.creeAidant(
-        aidant.email,
-        false
-      );
+      await this.repertoireDeContacts.creeAidant(aidant.email, false);
 
       await this.busEvenement.publie<AidantCree>({
         corps: {

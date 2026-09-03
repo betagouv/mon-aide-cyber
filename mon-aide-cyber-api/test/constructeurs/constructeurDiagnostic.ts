@@ -120,9 +120,7 @@ class ConstructeurReponseDonnee implements Constructeur<ReponseDonnee> {
   }
 }
 
-class ConstructeurQuestionDiagnostic
-  implements Constructeur<QuestionDiagnostic>
-{
+class ConstructeurQuestionDiagnostic implements Constructeur<QuestionDiagnostic> {
   private libelle = fakerFR.word.words(5);
   private reponsesPossibles: ReponsePossible[] = [];
   private identifiant = fakerFR.string.alpha(10);

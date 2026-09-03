@@ -65,9 +65,7 @@ class FournisseurSignatureLivestorm implements FournisseurSignature {
   }
 }
 
-export class AdaptateurSignatureRequeteHTTP
-  implements AdaptateurSignatureRequete
-{
+export class AdaptateurSignatureRequeteHTTP implements AdaptateurSignatureRequete {
   private readonly fournisseursDeSignature: Map<
     NomFournisseur,
     FournisseurSignature

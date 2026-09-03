@@ -37,7 +37,8 @@ type Action =
   | { type: TypeAction.NOM_SAISI; saisie: string }
   | { type: TypeAction.MAIL_SAISI; saisie: string }
   | { type: TypeAction.DEPARTEMENT_SAISI; saisie: string | Departement }
-  | { type: TypeAction.CGU_CLIQUEES }| { type: TypeAction.PIXEL_DE_SUIVI_CLIQUE };
+  | { type: TypeAction.CGU_CLIQUEES }
+  | { type: TypeAction.PIXEL_DE_SUIVI_CLIQUE };
 
 const construisErreurPrenom = (prenomValide: boolean) => {
   return !prenomValide
@@ -141,7 +142,7 @@ const regenereEtatFormulaire = (
 
 export const reducteurDevenirAidant = (etat: EtatDemande, action: Action) => {
   switch (action.type) {
-    case TypeAction.PIXEL_DE_SUIVI_CLIQUE:{
+    case TypeAction.PIXEL_DE_SUIVI_CLIQUE: {
       return regenereEtatFormulaire(etat, {
         ajouteAuNouvelEtat: () => ({
           pixelDeSuiviAutorise: !etat.pixelDeSuiviAutorise,

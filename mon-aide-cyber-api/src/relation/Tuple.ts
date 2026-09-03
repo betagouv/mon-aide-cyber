@@ -70,9 +70,9 @@ class ConstructeurObjet implements Constructeur<Objet> {
   }
 }
 
-class ConstructeurTuple<DEFINITION_TUPLE extends DefinitionTuple>
-  implements Constructeur<Tuple>
-{
+class ConstructeurTuple<
+  DEFINITION_TUPLE extends DefinitionTuple,
+> implements Constructeur<Tuple> {
   constructor(private readonly dsl: DSL<DEFINITION_TUPLE>) {}
 
   private utilisateur = {} as Utilisateur;

@@ -10,9 +10,7 @@ import { constructeurActionsHATEOAS } from '../api/hateoas/hateoas';
 import { uneRechercheUtilisateursMAC } from '../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { Contexte } from '../domaine/erreurMAC';
 
-export class AdaptateurDeVerificationDeCGUMAC
-  implements AdaptateurDeVerificationDeCGU
-{
+export class AdaptateurDeVerificationDeCGUMAC implements AdaptateurDeVerificationDeCGU {
   constructor(private readonly entrepots: Entrepots) {}
 
   verifie<T>(contexte: Contexte): RequestHandler {

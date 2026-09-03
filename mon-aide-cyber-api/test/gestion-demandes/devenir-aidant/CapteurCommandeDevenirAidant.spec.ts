@@ -24,9 +24,7 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import { adaptateursEnvironnementDeTest } from '../../adaptateurs/adaptateursEnvironnementDeTest';
 import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { unAidant } from '../../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
-import {
-  AdaptateurRepertoireDeContactsMemoire
-} from '../../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { AdaptateurRepertoireDeContactsMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 const uneCommandeDevenirAidant = (commande?: {
   departement?: Departement;
@@ -307,7 +305,10 @@ describe('Capteur de commande demande devenir aidant', () => {
         busEvenementDeTest,
         new AdaptateurEnvoiMailMemoire(),
         annuaireCot,
-        unServiceAidant(entrepots.aidants(), new AdaptateurRepertoireDeContactsMemoire())
+        unServiceAidant(
+          entrepots.aidants(),
+          new AdaptateurRepertoireDeContactsMemoire()
+        )
       ).execute({
         departement: departements[1],
         mail: 'email',

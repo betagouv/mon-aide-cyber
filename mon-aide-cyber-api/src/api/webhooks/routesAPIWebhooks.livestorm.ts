@@ -65,17 +65,13 @@ const schemaLivestorm = z.object({
 });
 
 export const routesAPILiveStorm = (configuration: ConfigurationServeur) => {
-
   const routes: Router = express.Router();
 
   const { busCommande, adaptateurSignatureRequete } = configuration;
   routes.post(
     '/activation-compte-aidant',
-    express.json({limit: '10kb'}),
-    valideLaCoherenceDuCorps(
-      schemaLivestorm,
-      { statut: 204 }
-    ),
+    express.json({ limit: '10kb' }),
+    valideLaCoherenceDuCorps(schemaLivestorm, { statut: 204 }),
     adaptateurSignatureRequete.verifie('LIVESTORM'),
     async (
       requete: Request<

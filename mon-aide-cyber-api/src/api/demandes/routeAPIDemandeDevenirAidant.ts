@@ -248,7 +248,10 @@ export const routesAPIDemandesDevenirAidant = (
           entrepots.utilisateursInscrits(),
           unServiceAidant(entrepots.aidants(), repertoireDeContacts),
           repertoireDeContacts
-        ).valideLesConditionsMAC(requete.identifiantUtilisateurCourant!, requete.body.pixelDeSuiviAutorise);
+        ).valideLesConditionsMAC(
+          requete.identifiantUtilisateurCourant!,
+          requete.body.pixelDeSuiviAutorise
+        );
       };
 
       try {

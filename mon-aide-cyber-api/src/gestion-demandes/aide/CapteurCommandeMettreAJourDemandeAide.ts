@@ -12,9 +12,10 @@ export type CommandeMettreAJourDemandeAide = Commande & {
   raisonSociale?: string;
 };
 
-export class CapteurCommandeMettreAJourDemandeAide
-  implements CapteurCommande<CommandeMettreAJourDemandeAide, void>
-{
+export class CapteurCommandeMettreAJourDemandeAide implements CapteurCommande<
+  CommandeMettreAJourDemandeAide,
+  void
+> {
   constructor(private readonly entrepotDemandeAide: EntrepotDemandeAide) {}
 
   execute(commande: CommandeMettreAJourDemandeAide): Promise<void> {

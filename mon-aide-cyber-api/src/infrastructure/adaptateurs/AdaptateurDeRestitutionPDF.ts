@@ -39,9 +39,7 @@ const generationPdfExterne = (): GenerationPDFExterne => {
   };
 };
 
-export class AdaptateurDeRestitutionPDF
-  implements AdaptateurDeRestitution<Buffer>
-{
+export class AdaptateurDeRestitutionPDF implements AdaptateurDeRestitution<Buffer> {
   async genereRestitution(restitution: Restitution): Promise<Buffer> {
     const indicateursRestitution = trieLesIndicateurs(restitution);
     const identifiant = forgeIdentifiant(restitution.identifiant);

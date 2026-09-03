@@ -98,7 +98,11 @@ export class AdaptateurEnvoiMailBrevo implements AdaptateurEnvoiMail {
           .brevo()
           .templateMiseAJourParticipationAtelierAidant()
       );
-    await this.envoieParticipationAtelierAidant(constructeurBrevoEnvoiMailAvecTemplate, futurAidant, cot);
+    await this.envoieParticipationAtelierAidant(
+      constructeurBrevoEnvoiMailAvecTemplate,
+      futurAidant,
+      cot
+    );
   }
 
   async envoieMailParticipationAUnAtelier(

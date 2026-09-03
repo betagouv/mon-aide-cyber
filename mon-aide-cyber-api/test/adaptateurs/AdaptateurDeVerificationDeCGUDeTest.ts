@@ -4,9 +4,7 @@ import { RequeteUtilisateur } from '../../src/api/routesAPI';
 import { NextFunction } from 'express-serve-static-core';
 import { Contexte } from '../../src/domaine/erreurMAC';
 
-export class AdapatateurDeVerificationDeCGUDeTest
-  implements AdaptateurDeVerificationDeCGU
-{
+export class AdapatateurDeVerificationDeCGUDeTest implements AdaptateurDeVerificationDeCGU {
   private verificationFaite = false;
 
   verifie(__contexte: Contexte): RequestHandler {

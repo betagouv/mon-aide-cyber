@@ -11,9 +11,10 @@ export type CommandeLanceRestitution = Omit<Commande, 'type'> & {
   idDiagnostic: string;
 };
 
-export class CapteurCommandeLanceRestitution
-  implements CapteurCommande<CommandeLanceRestitution, void>
-{
+export class CapteurCommandeLanceRestitution implements CapteurCommande<
+  CommandeLanceRestitution,
+  void
+> {
   constructor(
     public readonly entrepots: Entrepots,
     public readonly busEvenement: BusEvenement

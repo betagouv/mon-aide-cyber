@@ -10,9 +10,7 @@ import {
 } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 
-export class AdaptateurGestionnaireErreursMemoire
-  implements AdaptateurGestionnaireErreurs
-{
+export class AdaptateurGestionnaireErreursMemoire implements AdaptateurGestionnaireErreurs {
   initialise(_applicationExpress: Express): void {
     console.log('Initialise le gestionnaire d’erreur');
   }

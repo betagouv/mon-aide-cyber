@@ -2,9 +2,9 @@ export interface Constructeur<T> {
   construis(): T;
 }
 
-export abstract class ConstructeurDeTableau<T extends { [q: string]: any }>
-  implements Constructeur<T>
-{
+export abstract class ConstructeurDeTableau<
+  T extends { [q: string]: any },
+> implements Constructeur<T> {
   protected tableau: T[] = [];
 
   construis(): T {

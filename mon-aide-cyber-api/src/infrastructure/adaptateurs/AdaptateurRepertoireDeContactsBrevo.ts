@@ -32,21 +32,21 @@ export class AdaptateurRepertoireDeContactsBrevo implements RepertoireDeContacts
     profil: 'AIDANT' | 'AIDE' | 'UTILISATEUR_INSCRIT',
     attributs?: Record<string, unknown>
   ) {
-    await this.brevo
-      .creationContact()
-      .execute(
-        unConstructeurCreationDeContact()
-          .ayantPourEmail(email)
-          .ayantPourAttributs({...attributs, MAC_PROFIL: profil })
-          .construis()
-      );
+    await this.brevo.creationContact().execute(
+      unConstructeurCreationDeContact()
+        .ayantPourEmail(email)
+        .ayantPourAttributs({ ...attributs, MAC_PROFIL: profil })
+        .construis()
+    );
   }
 
   async creeAidant(
     email: string,
     pixelDeSuiviAutorise: boolean
   ): Promise<void> {
-    await this.creeContact(email, 'AIDANT', {'_PIXEL_TRACKING_CONSENT': pixelDeSuiviAutorise});
+    await this.creeContact(email, 'AIDANT', {
+      _PIXEL_TRACKING_CONSENT: pixelDeSuiviAutorise,
+    });
   }
 
   async creeAide(email: string): Promise<void> {

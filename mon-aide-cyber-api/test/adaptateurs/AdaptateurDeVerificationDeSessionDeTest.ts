@@ -9,9 +9,7 @@ import { Contexte, ErreurMAC } from '../../src/domaine/erreurMAC';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
 import crypto from 'crypto';
 
-export class AdaptateurDeVerificationDeSessionDeTest
-  implements AdaptateurDeVerificationDeSession
-{
+export class AdaptateurDeVerificationDeSessionDeTest implements AdaptateurDeVerificationDeSession {
   private _utilisateurConnecte?: crypto.UUID | undefined;
   private _estProConnect?: boolean | undefined;
 

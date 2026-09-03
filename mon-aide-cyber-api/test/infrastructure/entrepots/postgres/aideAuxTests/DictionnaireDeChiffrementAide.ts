@@ -5,9 +5,7 @@ import {
 import { DemandeAide } from '../../../../../src/gestion-demandes/aide/DemandeAide';
 import { fakerFR } from '@faker-js/faker';
 
-export class DictionnaireDeChiffrementAide
-  implements DictionnaireDeChiffrement<DemandeAide>
-{
+export class DictionnaireDeChiffrementAide implements DictionnaireDeChiffrement<DemandeAide> {
   private _dictionnaire: Dictionnaire = new Map();
   private _avecSIRET = true;
   private aide: DemandeAide | undefined = undefined;

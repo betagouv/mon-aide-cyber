@@ -8,7 +8,8 @@ export interface EntrepotLecture<T> {
   typeAggregat(): string;
 }
 
-export interface EntrepotEcriture<T extends Aggregat>
-  extends EntrepotLecture<T> {
+export interface EntrepotEcriture<
+  T extends Aggregat,
+> extends EntrepotLecture<T> {
   persiste(entite: T): Promise<void>;
 }

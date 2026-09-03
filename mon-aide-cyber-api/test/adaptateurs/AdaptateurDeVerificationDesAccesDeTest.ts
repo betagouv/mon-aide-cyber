@@ -5,9 +5,7 @@ import { RequeteUtilisateur } from '../../src/api/routesAPI';
 import { NextFunction } from 'express-serve-static-core';
 import { isEqual } from 'lodash';
 
-export class AdaptateurDeVerificationDesAccesDeTest
-  implements AdaptateurDeVerificationDesAcces
-{
+export class AdaptateurDeVerificationDesAccesDeTest implements AdaptateurDeVerificationDesAcces {
   private verifieLaRelation = false;
   private definitionRecue: any | undefined = undefined;
 

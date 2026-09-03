@@ -65,9 +65,7 @@ class ConstructeurRestitution implements Constructeur<Restitution> {
   }
 }
 
-class ConstructeurInformationsRestitution
-  implements Constructeur<InformationsRestitution>
-{
+class ConstructeurInformationsRestitution implements Constructeur<InformationsRestitution> {
   private dateCreation: Date = FournisseurHorloge.maintenant();
   private dateDerniereModification: Date = add(this.dateCreation, { days: 1 });
   private secteurActivite: string = fakerFR.commerce.department();

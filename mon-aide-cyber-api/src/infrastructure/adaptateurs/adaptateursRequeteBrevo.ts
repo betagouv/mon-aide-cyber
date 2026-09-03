@@ -180,7 +180,10 @@ export class AdaptateursRequeteBrevo {
   ) {
     return new (class implements AdaptateurRequeteBrevo<RequeteBrevo<T>, R> {
       async execute(requete: RequeteBrevo<T>): Promise<R> {
-        console.log(`INITIE APPEL BREVO en ${requete.methode} - ${requete.corps}`, url);
+        console.log(
+          `INITIE APPEL BREVO en ${requete.methode} - ${requete.corps}`,
+          url
+        );
         const reponse = (await fetch(url, {
           method: requete.methode,
           headers: requete.headers,

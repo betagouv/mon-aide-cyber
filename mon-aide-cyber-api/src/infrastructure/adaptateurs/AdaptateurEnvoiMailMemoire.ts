@@ -20,8 +20,7 @@ export class AdaptateurEnvoiMailMemoire implements AdaptateurEnvoiMail {
   private confirmation: ConfirmationDemandeAideAttribuee | undefined =
     undefined;
   private _envoiRestitutionEntiteAideeEffectue:
-    | { pdfs: Buffer[]; emailEntiteAidee: string }
-    | undefined = undefined;
+    { pdfs: Buffer[]; emailEntiteAidee: string } | undefined = undefined;
   private _envoieMailParticipationAUnAtelier = false;
   private _envoieMailMiseAJourParticipationAUnAtelier = false;
   private _envoieConfirmationUtilisateurInscritCree = false;

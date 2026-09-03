@@ -9,9 +9,7 @@ import { FournisseurHorloge } from '../../../src/infrastructure/horloge/Fourniss
 import crypto from 'crypto';
 import { departements } from '../../../src/gestion-demandes/departements';
 
-class ConstructeurDemandeDevenirAidant
-  implements Constructeur<DemandeDevenirAidant>
-{
+class ConstructeurDemandeDevenirAidant implements Constructeur<DemandeDevenirAidant> {
   private email: string = fakerFR.internet.email();
   private statut: StatutDemande = StatutDemande.EN_COURS;
   private entite: EntiteDemande = {

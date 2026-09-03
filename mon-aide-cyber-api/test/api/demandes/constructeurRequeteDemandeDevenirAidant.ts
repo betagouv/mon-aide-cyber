@@ -15,9 +15,7 @@ type RequeteDemandeDevenirAidant = {
   pixelDeSuiviAutorise: boolean;
 };
 
-class ConstructeurRequeteDemandeDevenirAidant
-  implements Constructeur<RequeteDemandeDevenirAidant>
-{
+class ConstructeurRequeteDemandeDevenirAidant implements Constructeur<RequeteDemandeDevenirAidant> {
   private cguValidees = true;
   private mail: string = fakerFR.internet.email();
   private nom: string = fakerFR.person.lastName();

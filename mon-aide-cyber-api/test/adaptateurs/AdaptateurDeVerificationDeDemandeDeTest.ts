@@ -4,9 +4,7 @@ import { CorpsRequeteLanceDiagnostic } from '../../src/api/routesAPIDiagnostic';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
 import { AdaptateurDeVerificationDeDemande } from '../../src/adaptateurs/AdaptateurDeVerificationDeDemande';
 
-export class AdaptateurDeVerificationDeDemandeDeTest
-  implements AdaptateurDeVerificationDeDemande
-{
+export class AdaptateurDeVerificationDeDemandeDeTest implements AdaptateurDeVerificationDeDemande {
   private emailEntiteAidee = '';
 
   verifie(): RequestHandler {

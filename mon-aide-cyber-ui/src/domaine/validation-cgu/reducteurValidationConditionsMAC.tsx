@@ -11,7 +11,7 @@ type ErreurCreationEspaceAidant = {
 
 export type EtatValidationConditionsMAC = {
   cguSignees: boolean;
-  pixelDeSuiviAutorise : boolean;
+  pixelDeSuiviAutorise: boolean;
   champsErreur?: ReactElement;
   erreur?: ErreurCreationEspaceAidant;
   saisieValide: () => boolean;
@@ -27,7 +27,7 @@ type ActionCreationEspaceAidant =
   | {
       type: TypeActionValidationConditionsMAC.CGU_CLIQUEES;
     }
-    | {
+  | {
       type: TypeActionValidationConditionsMAC.PIXEL_DE_SUIVI_CLIQUE;
     }
   | {
@@ -51,7 +51,7 @@ export const reducteurValidationConditionsMAC = (
         ...etat,
         pixelDeSuiviAutorise: !etat.pixelDeSuiviAutorise,
         saisieValide: () => etat.cguSignees,
-    };
+      };
     case TypeActionValidationConditionsMAC.CREATION_ESPACE_AIDANT_INVALIDEE: {
       const etatCourant = { ...etat };
       return {

@@ -822,9 +822,10 @@ class FabriqueDeMiseEnRelationEcoutee extends FabriqueMiseEnRelationConcrete {
   }
 }
 
-class CapteurCommandeCreerAideQuiEchoue
-  implements CapteurCommande<CommandeCreerDemandeAide, any>
-{
+class CapteurCommandeCreerAideQuiEchoue implements CapteurCommande<
+  CommandeCreerDemandeAide,
+  any
+> {
   execute(_commande: CommandeCreerDemandeAide): Promise<any> {
     throw new Error('une erreur est survenue');
   }

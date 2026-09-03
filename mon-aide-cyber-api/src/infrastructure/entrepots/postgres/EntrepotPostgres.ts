@@ -11,9 +11,10 @@ export type Predicat = {
   valeur: string;
 };
 
-export abstract class EntrepotLecturePostgres<T extends Aggregat, D extends DTO>
-  implements EntrepotLecture<T>
-{
+export abstract class EntrepotLecturePostgres<
+  T extends Aggregat,
+  D extends DTO,
+> implements EntrepotLecture<T> {
   protected readonly knex: Knex;
 
   constructor(configuration: Knex.Config = knexfile) {
@@ -58,9 +59,9 @@ export abstract class EntrepotLecturePostgres<T extends Aggregat, D extends DTO>
 }
 
 export abstract class EntrepotEcriturePostgres<
-    T extends Aggregat,
-    D extends DTO,
-  >
+  T extends Aggregat,
+  D extends DTO,
+>
   extends EntrepotLecturePostgres<T, D>
   implements EntrepotEcriture<T>
 {

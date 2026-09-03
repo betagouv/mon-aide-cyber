@@ -74,8 +74,7 @@ type RepresentationRecommandationPriorisee = Omit<
 > & {
   noteObtenue?: Valeur;
   valeurObtenue:
-    | { theorique?: Valeur; poids?: Poids; indice?: Valeur }
-    | Valeur;
+    { theorique?: Valeur; poids?: Poids; indice?: Valeur } | Valeur;
 };
 
 type RepresentationRecommandations = {

@@ -82,8 +82,6 @@ describe('Route Webhook livestorm', () => {
       ).toBeDefined();
     });
 
-
-
     it('La route est protégée', async () => {
       await executeRequete(
         donneesServeur.app,
@@ -107,11 +105,11 @@ describe('Route Webhook livestorm', () => {
           `/api/webhooks/livestorm/activation-compte-aidant`,
           {
             data: {
-              type: "session",
+              type: 'session',
               attributes: {
                 registrant_detail: {
-                  event_id: "12345",
-                  fields: [{id: "email", "value": "email-aidant@email.com"}],
+                  event_id: '12345',
+                  fields: [{ id: 'email', value: 'email-aidant@email.com' }],
                 },
               },
             },
@@ -132,7 +130,7 @@ describe('Route Webhook livestorm', () => {
               attributes: {
                 registrant_detail: {
                   event_id: 'faux-id',
-                  fields: [{ id: "email", value: 'email-aidant@email.com' }],
+                  fields: [{ id: 'email', value: 'email-aidant@email.com' }],
                 },
               },
             },
@@ -153,7 +151,9 @@ describe('Route Webhook livestorm', () => {
               attributes: {
                 registrant_detail: {
                   event_id: '12345',
-                  fields: [{ id: "champ-inconnu", value: 'email-aidant@email.com' }],
+                  fields: [
+                    { id: 'champ-inconnu', value: 'email-aidant@email.com' },
+                  ],
                 },
               },
             },
@@ -162,7 +162,6 @@ describe('Route Webhook livestorm', () => {
 
         expect(reponse.statusCode).toBe(204);
       });
-
 
       it('renvoie une réponse HTTP 204 si la requête Livestorm contient un email invalide', async () => {
         const reponse = await executeRequete(
@@ -191,13 +190,12 @@ describe('Route Webhook livestorm', () => {
           'POST',
           `/api/webhooks/livestorm/activation-compte-aidant`,
           {
-            contenu : 'x'.repeat(10_241),
+            contenu: 'x'.repeat(10_241),
           }
         );
 
         expect(reponse.statusCode).toBe(500);
       });
-
-      });
+    });
   });
 });

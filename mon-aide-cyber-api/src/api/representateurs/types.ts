@@ -59,11 +59,7 @@ type ChoixOptions = {
   champsAAfficher: (keyof Omit<RepresentationReponsePossible, 'questions'>)[];
 };
 export type TypeDeSaisie =
-  | 'choixMultiple'
-  | 'choixUnique'
-  | 'liste'
-  | 'saisieLibre'
-  | ChoixOptions;
+  'choixMultiple' | 'choixUnique' | 'liste' | 'saisieLibre' | ChoixOptions;
 export type ReponseATranscrire = {
   identifiant: string;
   question?: QuestionATranscrire | undefined;
