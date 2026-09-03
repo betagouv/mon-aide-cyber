@@ -37,8 +37,8 @@ jobs:
           version: 10.34.5
       - name: (TOUS) Installe les dépendances
         run: pnpm install --frozen-lockfile
-      - name: Vérifie le prettier du front
-        run: pnpm -F mon-aide-cyber-ui run format:verifie
+      - name: Vérifie le prettier
+        run: pnpm run format:verifie
       - name: Construis le back
         run: pnpm -F mon-aide-cyber-api run build
       - name: Construis le front
