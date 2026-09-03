@@ -1,4 +1,4 @@
-FROM docker.io/node:22.21.1
+FROM docker.io/node:22.23.2
 
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 
