@@ -12,9 +12,7 @@ import { unServiceAidant } from '../../../src/espace-aidant/ServiceAidantMAC';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { utilitairesCookies } from '../../../src/adaptateurs/utilitairesDeCookies';
 import { FournisseurHorlogeDeTest } from '../../infrastructure/horloge/FournisseurHorlogeDeTest';
-import {
-  AdaptateurRepertoireDeContactsMemoire
-} from '../../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { AdaptateurRepertoireDeContactsMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 const enObjet = <T extends { [clef: string]: string }>(cookie: string): T =>
   cookie.split('; ').reduce((acc: T, v: string) => {

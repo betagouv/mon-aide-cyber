@@ -8,9 +8,9 @@ import { EntrepotRelation } from '../../src/relation/EntrepotRelation';
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
 import { gironde } from '../../src/gestion-demandes/departements';
 
-export class ConstructeurStatistiqueAidant
-  implements Constructeur<Promise<StatistiquesAidant>>
-{
+export class ConstructeurStatistiqueAidant implements Constructeur<
+  Promise<StatistiquesAidant>
+> {
   private nombreDeDiagnostics = 0;
   private nomPrenom: string = fakerFR.person.fullName();
   private email: string = fakerFR.internet.email();

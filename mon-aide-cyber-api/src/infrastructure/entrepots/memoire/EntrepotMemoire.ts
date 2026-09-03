@@ -428,7 +428,10 @@ export class EntrepotUtilisateurMACMemoire
   }
 
   async rechercheParMail(email: string): Promise<UtilisateurMAC> {
-    const aidant = await unServiceAidant(this.entrepots.aidant, new AdaptateurRepertoireDeContactsMemoire()).rechercheParMail(email);
+    const aidant = await unServiceAidant(
+      this.entrepots.aidant,
+      new AdaptateurRepertoireDeContactsMemoire()
+    ).rechercheParMail(email);
     if (aidant) {
       return this.mappeAidant(aidant);
     }

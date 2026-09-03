@@ -190,9 +190,7 @@ class ConstructeurAidant implements Constructeur<Aidant> {
   }
 }
 
-export class ConstructeurUtilisateurInscrit
-  implements Constructeur<UtilisateurInscrit>
-{
+export class ConstructeurUtilisateurInscrit implements Constructeur<UtilisateurInscrit> {
   private dateSignatureCGU: Date | undefined = fakerFR.date.anytime();
   private email: string = fakerFR.internet.email().toLowerCase();
   private entite: EntiteUtilisateurInscrit | undefined = {};

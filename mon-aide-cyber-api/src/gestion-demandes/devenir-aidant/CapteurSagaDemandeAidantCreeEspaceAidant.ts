@@ -17,9 +17,10 @@ export type SagaDemandeAidantCreeEspaceAidant = Omit<Saga, 'type'> & {
   idDemande: crypto.UUID;
 };
 
-export class CapteurSagaDemandeAidantCreeEspaceAidant
-  implements CapteurSaga<SagaDemandeAidantCreeEspaceAidant, void>
-{
+export class CapteurSagaDemandeAidantCreeEspaceAidant implements CapteurSaga<
+  SagaDemandeAidantCreeEspaceAidant,
+  void
+> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busCommande: BusCommande,

@@ -234,7 +234,10 @@ const FormulaireDevenirAidantFormulaire = ({
             ) : null}
           </div>
           <div className="fr-col-12 champs">
-            <AutorisationPixelDeSuivi onChange={surPixelDeSuivi} estChecked={etatDemande.pixelDeSuiviAutorise} />
+            <AutorisationPixelDeSuivi
+              onChange={surPixelDeSuivi}
+              estChecked={etatDemande.pixelDeSuiviAutorise}
+            />
           </div>
         </div>
         <div className="fr-grid-row fr-grid-row--right fr-pt-3w">

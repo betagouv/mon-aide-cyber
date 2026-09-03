@@ -14,9 +14,10 @@ export type CommandeCreerDemandeAide = Omit<Commande, 'type'> & {
   siret: string;
 };
 
-export class CapteurCommandeCreerDemandeAide
-  implements CapteurCommande<CommandeCreerDemandeAide, DemandeAide>
-{
+export class CapteurCommandeCreerDemandeAide implements CapteurCommande<
+  CommandeCreerDemandeAide,
+  DemandeAide
+> {
   constructor(private readonly entrepots: Entrepots) {}
 
   async execute(commande: CommandeCreerDemandeAide): Promise<DemandeAide> {

@@ -55,9 +55,9 @@ class ConstructeurReferentiel implements Constructeur<Referentiel> {
   }
 }
 
-class ConstructeurQuestion
-  implements Constructeur<QuestionChoixUnique | QuestionChoixMultiple>
-{
+class ConstructeurQuestion implements Constructeur<
+  QuestionChoixUnique | QuestionChoixMultiple
+> {
   private type: 'choixUnique' | 'choixMultiple' = 'choixUnique';
   private identifiant: string | undefined = undefined;
   private libelle = 'Quelle est la réponse?';
@@ -138,9 +138,9 @@ class ConstructeurQuestion
   }
 }
 
-class ConstructeurListeDeQuestions
-  implements Constructeur<(QuestionChoixUnique | QuestionChoixMultiple)[]>
-{
+class ConstructeurListeDeQuestions implements Constructeur<
+  (QuestionChoixUnique | QuestionChoixMultiple)[]
+> {
   private libellesReponsesPossibles: {
     libelle: string;
     association?: Association;
@@ -334,8 +334,7 @@ export const uneQuestionATiroir = (): ConstructeurQuestionATiroir =>
 export const uneReponsePossible = (): ConstructeurReponsePossible =>
   new ConstructeurReponsePossible();
 export const uneListeDe7QuestionsToutesAssociees = (): (
-  | QuestionChoixUnique
-  | QuestionChoixMultiple
+  QuestionChoixUnique | QuestionChoixMultiple
 )[] =>
   uneListeDeQuestions()
     .dontLesLabelsSont(['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'])

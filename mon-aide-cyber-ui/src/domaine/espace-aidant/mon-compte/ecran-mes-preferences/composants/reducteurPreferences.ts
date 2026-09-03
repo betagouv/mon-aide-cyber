@@ -25,9 +25,7 @@ export enum TypeActionPreferences {
 }
 
 export type CibleActionPreference =
-  | 'TYPE_ENTITE'
-  | 'SECTEUR_GEOGRAPHIQUE'
-  | 'SECTEUR_ACTIVITE';
+  'TYPE_ENTITE' | 'SECTEUR_GEOGRAPHIQUE' | 'SECTEUR_ACTIVITE';
 
 export type ActionPreferences =
   | {

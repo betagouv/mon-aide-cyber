@@ -27,7 +27,8 @@ export class AdaptateurRepertoireDeContactsMemoire implements RepertoireDeContac
     email: string,
     pixelDeSuiviAutorise: boolean
   ): Promise<void> {
-    this._creeUtilisateurInscritAppeleAvecPixelDeSuiviAutorise = pixelDeSuiviAutorise;
+    this._creeUtilisateurInscritAppeleAvecPixelDeSuiviAutorise =
+      pixelDeSuiviAutorise;
     this.utilisateursInscrits.push(email);
   }
 

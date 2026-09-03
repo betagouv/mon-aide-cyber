@@ -16,8 +16,7 @@ export type DemandeDevenirAidant = Aggregat & {
   statut: StatutDemande;
   entite: EntiteDemande;
 };
-export interface EntrepotDemandeDevenirAidant
-  extends EntrepotEcriture<DemandeDevenirAidant> {
+export interface EntrepotDemandeDevenirAidant extends EntrepotEcriture<DemandeDevenirAidant> {
   demandeExiste(mail: string): Promise<boolean>;
 
   rechercheDemandeEnCoursParMail(

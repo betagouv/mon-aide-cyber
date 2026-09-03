@@ -3,9 +3,7 @@ import { DefinitionTuple } from '../relation/Tuple';
 import { AdaptateurDeVerificationDeTypeDeRelation } from './AdaptateurDeVerificationDeTypeDeRelation';
 import { AdaptateurRelationsMAC } from '../relation/AdaptateurRelationsMAC';
 
-export class AdaptateurDeVerificationDeTypeDeRelationMAC
-  implements AdaptateurDeVerificationDeTypeDeRelation
-{
+export class AdaptateurDeVerificationDeTypeDeRelationMAC implements AdaptateurDeVerificationDeTypeDeRelation {
   constructor(private readonly adaptateurRelations: AdaptateurRelationsMAC) {}
 
   verifie<DEFINITION extends DefinitionTuple>(

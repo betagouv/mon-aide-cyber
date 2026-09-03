@@ -733,7 +733,9 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
         );
 
         expect(reponse.statusCode).toBe(200);
-        expect(testeurMAC.repertoireDeContacts.creeAidantAppeleAvecPixelDeSuiviAutorise()).toBe(true);
+        expect(
+          testeurMAC.repertoireDeContacts.creeAidantAppeleAvecPixelDeSuiviAutorise()
+        ).toBe(true);
       });
 
       it("Accepte la requête et renvoie les actions possibles pour l'Aidant", async () => {
@@ -870,14 +872,13 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
 
       it('Ajoute le consentement au pixel de suivi', async () => {
         FournisseurHorlogeDeTest.initialise(new Date());
-          await unCompteUtilisateurInscritConnecteViaProConnect({
-            constructeurUtilisateur:
-              unUtilisateurInscrit().sansValidationDeCGU(),
-            entrepotUtilisateurInscrit:
-              testeurMAC.entrepots.utilisateursInscrits(),
-            adaptateurDeVerificationDeSession:
-              testeurMAC.adaptateurDeVerificationDeSession,
-          });
+        await unCompteUtilisateurInscritConnecteViaProConnect({
+          constructeurUtilisateur: unUtilisateurInscrit().sansValidationDeCGU(),
+          entrepotUtilisateurInscrit:
+            testeurMAC.entrepots.utilisateursInscrits(),
+          adaptateurDeVerificationDeSession:
+            testeurMAC.adaptateurDeVerificationDeSession,
+        });
 
         const reponse = await executeRequete(
           donneesServeur.app,

@@ -11,8 +11,7 @@ export type DemandeAide = Aggregat & {
 };
 
 export type RechercheDemandeAide =
-  | RechercheDemandeAideComplete
-  | RechercheDemandeAideNonTrouvee;
+  RechercheDemandeAideComplete | RechercheDemandeAideNonTrouvee;
 export type RechercheDemandeAideComplete = {
   demandeAide: DemandeAide;
   etat: 'COMPLET';

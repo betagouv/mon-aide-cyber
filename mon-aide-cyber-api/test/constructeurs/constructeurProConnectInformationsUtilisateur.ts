@@ -4,9 +4,7 @@ import { Aidant } from '../../src/espace-aidant/Aidant';
 import { fakerFR } from '@faker-js/faker';
 import { UtilisateurInscrit } from '../../src/espace-utilisateur-inscrit/UtilisateurInscrit';
 
-class ConstructeurProConnectInformationsUtilisateur
-  implements Constructeur<InformationsUtilisateur>
-{
+class ConstructeurProConnectInformationsUtilisateur implements Constructeur<InformationsUtilisateur> {
   private prenom = fakerFR.person.firstName();
   private nom = fakerFR.person.lastName();
   private email = fakerFR.internet.email();

@@ -6,9 +6,9 @@ import { StatistiquesUtilisateurInscrit } from '../../src/statistiques/utilisate
 import { unTupleAidantInitieDiagnostic } from '../../src/diagnostic/tuples';
 import crypto from 'crypto';
 
-class ConstructeurStatistiqueUtilisateurInscrit
-  implements Constructeur<Promise<StatistiquesUtilisateurInscrit>>
-{
+class ConstructeurStatistiqueUtilisateurInscrit implements Constructeur<
+  Promise<StatistiquesUtilisateurInscrit>
+> {
   private identifiant: crypto.UUID = crypto.randomUUID();
   private nombreDeDiagnostics = 0;
   private nomPrenom: string = fakerFR.person.fullName();

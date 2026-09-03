@@ -18,9 +18,10 @@ export type UtilisateurCree = {
   nomPrenom: string;
 };
 
-export class CapteurCommandeCreeUtilisateur
-  implements CapteurCommande<CommandeCreeUtilisateur, UtilisateurCree>
-{
+export class CapteurCommandeCreeUtilisateur implements CapteurCommande<
+  CommandeCreeUtilisateur,
+  UtilisateurCree
+> {
   constructor(private readonly entrepots: Entrepots) {}
 
   execute(commande: CommandeCreeUtilisateur): Promise<UtilisateurCree> {

@@ -42,9 +42,7 @@ class ConstructeurDeCorpsDeReponse implements Constructeur<CorpsReponse> {
   }
 }
 
-class ConstructeurDeCorpsDeReponseQuestionATiroir
-  implements Constructeur<CorpsReponseQuestionATiroir>
-{
+class ConstructeurDeCorpsDeReponseQuestionATiroir implements Constructeur<CorpsReponseQuestionATiroir> {
   private questions: { identifiant: string; reponses: string[] }[] = [];
   private reponse = '';
 

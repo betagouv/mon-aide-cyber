@@ -18,9 +18,7 @@ export type RestitutionHTML = {
   mesuresPrioritaires: string;
 };
 
-export class AdaptateurDeRestitutionHTML
-  implements AdaptateurDeRestitution<RestitutionHTML>
-{
+export class AdaptateurDeRestitutionHTML implements AdaptateurDeRestitution<RestitutionHTML> {
   genereAnnexe(__restitution: Restitution): Promise<RestitutionHTML> {
     throw new Error("Le HTML ne génère pas d'annexes");
   }

@@ -12,9 +12,7 @@ import {
   videLesInformationsDuTypeAidant,
 } from '../../../../src/domaine/parcours-utilisation-service/parcours-mon-espace-demande-devenir-aidant/ecran-mon-espace-demande-devenir-aidant/reducteurInformationsAidant';
 
-class ConstructeurChoixTypeAidant
-  implements Constructeur<InformationsTypeAidant>
-{
+class ConstructeurChoixTypeAidant implements Constructeur<InformationsTypeAidant> {
   private typeAidant: TypeAidant = 'AgentPublic';
   private siret = '1234567890';
   private commune: string = fakerFR.location.city();

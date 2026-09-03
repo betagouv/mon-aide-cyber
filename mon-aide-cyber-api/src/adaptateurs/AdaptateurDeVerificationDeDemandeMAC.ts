@@ -8,9 +8,7 @@ import {
   validationResult,
 } from 'express-validator';
 
-export class AdaptateurDeVerificationDeDemandeMAC
-  implements AdaptateurDeVerificationDeDemande
-{
+export class AdaptateurDeVerificationDeDemandeMAC implements AdaptateurDeVerificationDeDemande {
   constructor(private readonly entrepotAide: EntrepotDemandeAide) {}
 
   verifie(): RequestHandler {

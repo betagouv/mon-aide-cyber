@@ -17,10 +17,7 @@ export type Suggestions = {
   champsAAfficher: (keyof Omit<ReponsePossible, 'questions'>)[];
 };
 export type TypeDeSaisie =
-  | 'choixMultiple'
-  | 'choixUnique'
-  | 'liste'
-  | Suggestions;
+  'choixMultiple' | 'choixUnique' | 'liste' | Suggestions;
 export type Format = 'texte' | 'nombre' | undefined;
 export type ReponseMultiple = { identifiant: string; reponses: Set<string> };
 export type ReponseDonnee = {

@@ -20,13 +20,10 @@ export type EspaceUtilisateurInscritCree = {
   nomPrenom: string;
 };
 
-export class CapteurCommandeCreerEspaceUtilisateurInscrit
-  implements
-    CapteurCommande<
-      CommandeCreerEspaceUtilisateurInscrit,
-      EspaceUtilisateurInscritCree
-    >
-{
+export class CapteurCommandeCreerEspaceUtilisateurInscrit implements CapteurCommande<
+  CommandeCreerEspaceUtilisateurInscrit,
+  EspaceUtilisateurInscritCree
+> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,

@@ -19,9 +19,7 @@ export type ReponseVerificationRelationEnErreur = ReponseHATEOAS & {
   message: string;
 };
 
-export class AdaptateurDeVerificationDesAccesMAC
-  implements AdaptateurDeVerificationDesAcces
-{
+export class AdaptateurDeVerificationDesAccesMAC implements AdaptateurDeVerificationDesAcces {
   constructor(
     private readonly adaptateurRelation: AdaptateurRelations,
     private readonly entrepotUtilisateurMAC: EntrepotUtilisateursMAC

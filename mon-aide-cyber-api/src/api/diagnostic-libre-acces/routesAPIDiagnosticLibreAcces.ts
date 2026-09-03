@@ -123,10 +123,10 @@ export const routesAPIDiagnosticLibreAcces = (
         });
       }
       return busCommande
-        .publie<
-          SagaLanceDiagnosticLibreAcces,
-          crypto.UUID
-        >({ type: 'SagaLanceDiagnosticLibreAcces', dateSignatureCGU: FournisseurHorloge.maintenant() })
+        .publie<SagaLanceDiagnosticLibreAcces, crypto.UUID>({
+          type: 'SagaLanceDiagnosticLibreAcces',
+          dateSignatureCGU: FournisseurHorloge.maintenant(),
+        })
         .then((idDiagnostic) =>
           reponse
             .status(201)

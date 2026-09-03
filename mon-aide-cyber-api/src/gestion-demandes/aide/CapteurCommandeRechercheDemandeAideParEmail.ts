@@ -7,10 +7,10 @@ export type CommandeRechercheAideParEmail = Omit<Commande, 'type'> & {
   email: string;
 };
 
-export class CapteurCommandeRechercheDemandeAideParEmail
-  implements
-    CapteurCommande<CommandeRechercheAideParEmail, RechercheDemandeAide>
-{
+export class CapteurCommandeRechercheDemandeAideParEmail implements CapteurCommande<
+  CommandeRechercheAideParEmail,
+  RechercheDemandeAide
+> {
   constructor(private readonly entrepots: Entrepots) {}
 
   execute(

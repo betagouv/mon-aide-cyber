@@ -26,9 +26,7 @@ type RepresentationGroupes = {
   questions: RepresentationQuestion[];
 }[];
 export type RepresentationTypeDeSaisie =
-  | 'choixMultiple'
-  | 'choixUnique'
-  | 'liste';
+  'choixMultiple' | 'choixUnique' | 'liste';
 type RepresentationThematique = {
   groupes: RepresentationGroupes;
 };

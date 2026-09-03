@@ -43,9 +43,7 @@ class ConstructeurDeReponseTally implements Constructeur<ReponseTally> {
   }
 }
 
-class ConstructeurDeParticipantFinAtelierLivestorm
-  implements Constructeur<CorpsParticipantFinAtelierLivestorm>
-{
+class ConstructeurDeParticipantFinAtelierLivestorm implements Constructeur<CorpsParticipantFinAtelierLivestorm> {
   private type = 'people' as const;
   private fields: { id: string; value: string }[] = [];
   private event_id = '12345';

@@ -31,8 +31,7 @@ export type ReponseAPIAnnuaireAidantsErreur = ReponseHATEOAS & {
   message: string;
 };
 export type ReponseAPIAnnuaireAidants =
-  | ReponseAPIAnnuaireAidantsSucces
-  | ReponseAPIAnnuaireAidantsErreur;
+  ReponseAPIAnnuaireAidantsSucces | ReponseAPIAnnuaireAidantsErreur;
 
 export const routesAPIAnnuaireAidants = (
   configuration: ConfigurationServeur

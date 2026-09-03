@@ -3,9 +3,7 @@ import { RequestHandler, Response } from 'express';
 import { RequeteUtilisateur } from '../../src/api/routesAPI';
 import { AdaptateurSignatureRequete } from '../../src/adaptateurs/AdaptateurSignatureRequete';
 
-export class AdaptateurSignatureRequeteDeTest
-  implements AdaptateurSignatureRequete
-{
+export class AdaptateurSignatureRequeteDeTest implements AdaptateurSignatureRequete {
   private estPassee = false;
   private fournisseurAppele: 'TALLY' | 'LIVESTORM' | undefined = undefined;
 

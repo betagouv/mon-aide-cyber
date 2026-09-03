@@ -1,11 +1,7 @@
 import { PropsWithChildren } from 'react';
 
 export type ButtonVariants =
-  | 'default'
-  | 'primary'
-  | 'secondary'
-  | 'link'
-  | 'text';
+  'default' | 'primary' | 'secondary' | 'link' | 'text';
 export type Theme = 'dark' | 'light';
 
 export type ButtonProps = PropsWithChildren<

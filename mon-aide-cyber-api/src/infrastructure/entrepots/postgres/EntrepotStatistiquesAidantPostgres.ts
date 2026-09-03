@@ -29,9 +29,7 @@ type AidantDTO = {
   nb: string;
 };
 
-export class EntrepotStatistiquesAidantPostgres
-  implements EntrepotStatistiquesAidant
-{
+export class EntrepotStatistiquesAidantPostgres implements EntrepotStatistiquesAidant {
   protected readonly knex: Knex;
 
   constructor(

@@ -16,9 +16,10 @@ export type TupleDTO = DTO & {
 
 export type DTO = { id: crypto.UUID };
 
-export abstract class EntrepotPostgres<T extends Aggregat, D extends DTO>
-  implements Entrepot<T>
-{
+export abstract class EntrepotPostgres<
+  T extends Aggregat,
+  D extends DTO,
+> implements Entrepot<T> {
   protected readonly knex: Knex;
 
   constructor(configuration: Knex.Config = knexfile) {

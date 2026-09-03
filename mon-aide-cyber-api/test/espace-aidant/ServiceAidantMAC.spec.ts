@@ -10,9 +10,7 @@ import { adaptateurCorpsMessage } from '../../src/espace-aidant/adaptateurCorpsM
 import { gironde } from '../../src/gestion-demandes/departements';
 import { adaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement';
 import { adaptateursEnvironnementDeTest } from '../adaptateurs/adaptateursEnvironnementDeTest';
-import {
-  AdaptateurRepertoireDeContactsMemoire
-} from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
+import { AdaptateurRepertoireDeContactsMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurRepertoireDeContactsMemoire';
 
 describe('Service Aidant', () => {
   describe('Recherche par mail', () => {

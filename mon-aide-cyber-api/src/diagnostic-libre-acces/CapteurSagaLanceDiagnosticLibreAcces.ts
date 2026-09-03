@@ -29,9 +29,10 @@ type CommandeDemandeDiagnosticLibreAcces = Commande & {
   dateSignatureCGU: Date;
 };
 
-export class CapteurCommandeDemandeDiagnosticLibreAcces
-  implements CapteurCommande<CommandeDemandeDiagnosticLibreAcces, crypto.UUID>
-{
+export class CapteurCommandeDemandeDiagnosticLibreAcces implements CapteurCommande<
+  CommandeDemandeDiagnosticLibreAcces,
+  crypto.UUID
+> {
   constructor(private readonly entrepots: Entrepots) {}
 
   execute(commande: CommandeDemandeDiagnosticLibreAcces): Promise<crypto.UUID> {
@@ -51,9 +52,10 @@ export type SagaLanceDiagnosticLibreAcces = Saga & {
   dateSignatureCGU: Date;
 };
 
-export class CapteurSagaLanceDiagnosticLibreAcces
-  implements CapteurSaga<SagaLanceDiagnosticLibreAcces, crypto.UUID>
-{
+export class CapteurSagaLanceDiagnosticLibreAcces implements CapteurSaga<
+  SagaLanceDiagnosticLibreAcces,
+  crypto.UUID
+> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busCommande: BusCommande,

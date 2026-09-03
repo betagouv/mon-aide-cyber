@@ -331,7 +331,10 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
             unServiceAidant(entrepots.aidants(), repertoireDeContacts),
             repertoireDeContacts
           )
-            .valideLesConditionsMAC(identifiantUtilisateur, requete.body.pixelDeSuiviAutorise)
+            .valideLesConditionsMAC(
+              identifiantUtilisateur,
+              requete.body.pixelDeSuiviAutorise
+            )
             .then(() =>
               reponse.status(200).json({
                 ...constructeurActionsHATEOAS()

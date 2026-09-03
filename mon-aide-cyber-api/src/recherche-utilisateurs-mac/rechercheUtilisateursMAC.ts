@@ -32,8 +32,7 @@ export interface RechercheUtilisateursMAC {
   rechercheParMail(email: string): Promise<UtilisateurMACDTO | undefined>;
 }
 
-export interface EntrepotUtilisateursMAC
-  extends EntrepotEcriture<UtilisateurMAC> {
+export interface EntrepotUtilisateursMAC extends EntrepotEcriture<UtilisateurMAC> {
   rechercheParIdentifiant(identifiant: crypto.UUID): Promise<UtilisateurMAC>;
 
   rechercheParMail(email: string): Promise<UtilisateurMAC>;

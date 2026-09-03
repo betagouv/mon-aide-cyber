@@ -2,9 +2,7 @@ import { AdaptateurDeGestionDeCookies } from '../../src/adaptateurs/AdaptateurDe
 import { RequestHandler, Request, Response } from 'express';
 import { NextFunction } from 'express-serve-static-core';
 
-export class AdaptateurDeGestionDeCookiesDeTest
-  implements AdaptateurDeGestionDeCookies
-{
+export class AdaptateurDeGestionDeCookiesDeTest implements AdaptateurDeGestionDeCookies {
   aSupprime = false;
 
   supprime(): RequestHandler {

@@ -32,9 +32,10 @@ class ErreurDemandeDevenirAidant extends Error {
   }
 }
 
-export class CapteurCommandeDevenirAidant
-  implements CapteurCommande<CommandeDevenirAidant, DemandeDevenirAidant>
-{
+export class CapteurCommandeDevenirAidant implements CapteurCommande<
+  CommandeDevenirAidant,
+  DemandeDevenirAidant
+> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,

@@ -16,9 +16,7 @@ type UtilisateurInscritDTO = {
   nb: string;
 };
 
-export class EntrepotStatistiquesUtilisateursInscritsPostgres
-  implements EntrepotStatistiquesUtilisateurInscrit
-{
+export class EntrepotStatistiquesUtilisateursInscritsPostgres implements EntrepotStatistiquesUtilisateurInscrit {
   protected readonly knex: Knex;
 
   constructor(

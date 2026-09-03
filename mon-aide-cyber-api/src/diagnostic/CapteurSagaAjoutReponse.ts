@@ -7,9 +7,10 @@ import { ErreurMAC } from '../domaine/erreurMAC';
 import { BusCommande, CapteurSaga, Saga } from '../domaine/commande';
 import { CommandeLanceRestitution } from './CapteurCommandeLanceRestitution';
 
-class CapteurSagaAjoutReponse
-  implements CapteurSaga<SagaAjoutReponse, Diagnostic>
-{
+class CapteurSagaAjoutReponse implements CapteurSaga<
+  SagaAjoutReponse,
+  Diagnostic
+> {
   constructor(
     private readonly entrepots: Entrepots,
     private readonly busCommande: BusCommande,
