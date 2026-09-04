@@ -799,14 +799,6 @@ export const donneesContexte: QuestionsThematique = {
           regle: {
             reponses: [
               {
-                identifiantQuestion: 'acces-liste-compte-utilisateurs',
-                reponseDonnee: 'acces-liste-compte-utilisateurs-na',
-              },
-              {
-                identifiantQuestion: 'acces-droits-acces-utilisateurs-limites',
-                reponseDonnee: 'acces-droits-acces-utilisateurs-limites-na',
-              },
-              {
                 identifiantQuestion:
                   'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
                 reponseDonnee:
