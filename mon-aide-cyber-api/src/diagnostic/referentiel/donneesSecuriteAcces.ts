@@ -55,84 +55,30 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-liste-compte-utilisateurs',
+      identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf',
       libelle:
-        'La liste des comptes utilisateurs (prestataires inclus) est-elle maintenue à jour ?',
+        'Les droits des utilisateurs sont-ils restreints sur les postes de travail ?',
       poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'acces-liste-compte-utilisateurs-na',
+          identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant: 'acces-liste-compte-utilisateurs-nsp',
+          identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant: 'acces-liste-compte-utilisateurs-non',
+          identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'acces-liste-compte-utilisateurs',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant: 'acces-liste-compte-utilisateurs-revue-reguliere',
-          libelle:
-            'Les comptes des utilisateurs et leurs accès sont régulièrement revus (ex : liste du personnel vs liste des comptes)',
-          resultat: {
-            indice: { valeur: 2 },
-            mesures: [
-              {
-                identifiant: 'acces-liste-compte-utilisateurs',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 3,
-        },
-        {
-          identifiant: 'acces-liste-compte-utilisateurs-revue-en-continu',
-          libelle:
-            "La liste des comptes des utilisateurs est mise à jour en continu dans le cadre d'un processus de désactivation systématique des comptes inactifs. Une revue annuelle est également réalisée",
-          resultat: { indice: { valeur: 3 } },
-          ordre: 4,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant: 'acces-droits-acces-utilisateurs-limites',
-      libelle:
-        'Les droits des utilisateurs sont-ils limités à leurs besoins métiers ?',
-      poids: 1,
-      reponsesPossibles: [
-        {
-          identifiant: 'acces-droits-acces-utilisateurs-limites-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
-        {
-          identifiant: 'acces-droits-acces-utilisateurs-limites-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant: 'acces-droits-acces-utilisateurs-limites-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant: 'acces-droits-acces-utilisateurs-limites',
+                identifiant:
+                  'acces-postes-droits-utilisateurs-restreints-recyf',
                 niveau: 1,
               },
             ],
@@ -141,15 +87,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-droits-acces-utilisateurs-limites-restrictions-ponctuelles',
+            'acces-postes-droits-utilisateurs-restreints-recyf-un-peu',
           libelle:
-            'Des restrictions d’accès à certaines données sont ponctuellement mises en place',
+            "Sur les postes de travail, les utilisateurs travaillent avec un compte standard, sans droits d'administration locale. Les postes faisant exception (logiciel métier exigeant des droits élevés, poste de développement) sont identifiés.",
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
-                identifiant: 'acces-droits-acces-utilisateurs-limites',
-                niveau: 2,
+                identifiant:
+                  'acces-postes-droits-utilisateurs-restreints-recyf',
+                niveau: 1,
               },
             ],
           },
@@ -157,9 +104,9 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-droits-acces-utilisateurs-limites-restrictions-limitees',
+            'acces-postes-droits-utilisateurs-restreints-recyf-limites',
           libelle:
-            'L’accès des utilisateurs aux données, aux systèmes et aux applications sont limités aux seuls accès nécessaires à leur activité',
+            "Aucun utilisateur ne dispose de droits d'administration locale sur son poste, sur l'ensemble du parc ; les exceptions sont documentées, justifiées et revues au moins une fois par an. Les processus automatiques installés sur les postes (sauvegarde, supervision, télédistribution, antivirus) ne fonctionnent qu'avec les droits nécessaires à leur fonction.",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
