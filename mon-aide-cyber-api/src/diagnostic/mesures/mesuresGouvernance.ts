@@ -48,22 +48,14 @@ export const mesuresGouvernance = {
     },
     priorisation: 20,
   },
-  'gouvernance-exigence-cyber-securite-presta': {
+  'gouvernance-exigence-cyber-securite-presta-recyf': {
     niveau1: {
-      titre: 'Fixer des exigences de cybersécurité aux prestataires',
+      titre: 'Fixer les engagements des prestataires en matière de sécurité',
       pourquoi:
-        '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau1-pourquoi.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau1-comment.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        "Vérifier l'application et imposer des pénalités aux prestataires en cas de non-respect des exigences de cybersécurité",
-      pourquoi:
-        '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/gouvernance/gouvernance-exigence-cyber-securite-presta-niveau2-comment.pug',
-    },
-    priorisation: 24,
+    priorisation: 10,
   },
 };

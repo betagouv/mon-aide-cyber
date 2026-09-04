@@ -223,31 +223,31 @@ export const donneesGouvernance: QuestionsThematique = {
       ],
     },
     {
-      identifiant: 'gouvernance-exigence-cyber-securite-presta',
+      identifiant: 'gouvernance-exigence-cyber-securite-presta-recyf',
       libelle:
         "Des exigences de cybersécurité sont-elles intégrées aux contrats des prestataires disposant d'accès informatiques ?",
-      poids: 2,
+      poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
         {
-          identifiant: 'gouvernance-exigence-cyber-securite-presta-na',
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant: 'gouvernance-exigence-cyber-securite-presta-nsp',
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant: 'gouvernance-exigence-cyber-securite-presta-non',
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-recyf-non',
           libelle:
             'Non, aucune exigence ne figure dans nos contrats de prestation',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'gouvernance-exigence-cyber-securite-presta',
+                identifiant: 'gouvernance-exigence-cyber-securite-presta-recyf',
                 niveau: 1,
               },
             ],
@@ -256,24 +256,27 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant:
-            'gouvernance-exigence-cyber-securite-presta-oui-formalisee',
+            'gouvernance-exigence-cyber-securite-presta-recyf-oui-formalisee',
           libelle:
-            'Oui, des exigences de cybersécurité sont formalisées et fixées aux prestataires',
+            'Une annexe sécurité ou des clause sont incluse dans le contrat des prestataires critiques ' +
+            '(intervenant sur les activités à protéger en priorité de l’entité ou sur des fonctions critiques ex. hébergeur, exploitant)',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
               {
-                identifiant: 'gouvernance-exigence-cyber-securite-presta',
-                niveau: 2,
+                identifiant: 'gouvernance-exigence-cyber-securite-presta-recyf',
+                niveau: 1,
               },
             ],
           },
           ordre: 3,
         },
         {
-          identifiant: 'gouvernance-exigence-cyber-securite-presta-oui-fixee',
+          identifiant:
+            'gouvernance-exigence-cyber-securite-presta-recyf-oui-fixee',
           libelle:
-            'Oui, des exigences de cybersécurité avec pénalités sont formalisées et fixées aux prestataires',
+            'Une annexe sécurité ou des clauses sont incluses dans l’ensemble des contrats de prestation ' +
+            'comprenant pénalités, conformités, obligations, maintient à niveau de sécurité',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
