@@ -23,6 +23,14 @@ export const transcripteurGouvernance: Thematique = {
     {
       questions: [
         {
+          identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf',
+          'info-bulles': ['recyf/gouvernance/infos-et-activites-a-proteger.pug'],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'gouvernance-schema-si-a-jour',
           'info-bulles': [
             'gouvernance/schema-si-interconnexions-exterieur.pug',
