@@ -106,5 +106,16 @@ export const transcripteurGouvernance: Thematique = {
         },
       ],
     },
+    {
+      questions: [
+        {
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-recyf',
+          'info-bulles': [
+            'recyf/gouvernance/contrat-prestataires.pug',
+            'recyf/gouvernance/contrat-prestataires-si-industriels.pug',
+          ],
+        },
+      ],
+    },
   ],
 };
