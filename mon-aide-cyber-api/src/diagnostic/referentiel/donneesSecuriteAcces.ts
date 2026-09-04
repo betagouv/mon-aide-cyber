@@ -3,42 +3,50 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesSecuriteAcces: QuestionsThematique = {
   questions: [
     {
-      identifiant: 'acces-outil-gestion-des-comptes',
+      identifiant: 'acces-comptes-privileges-recyf',
       libelle:
-        "Un outil de gestion des comptes et des politiques de sécurité centralisé (ex : Active Directory, Samba-AD, Entra ID, scripts d'administration automatisés, etc.) est-il mis en œuvre ?",
-      poids: 0.5,
+        'Les comptes à privilèges (ex. administrateurs, comptes de service) inactifs et/ou non nécessaires sont-ils désactivés?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'acces-outil-gestion-des-comptes-na',
-          libelle: 'Non applicable',
+          identifiant: 'acces-comptes-privileges-recyf-nsp',
+          libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'acces-outil-gestion-des-comptes-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant: 'acces-outil-gestion-des-comptes-non',
+          identifiant: 'acces-comptes-privileges-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'acces-outil-gestion-des-comptes',
+                identifiant: 'acces-comptes-privileges-recyf',
                 niveau: 1,
               },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant: 'acces-comptes-privileges-recyf-un-peu',
+          libelle:
+            "Les comptes à privilèges sont désactivés au fil de l'eau sans délais clairs de désactivation.",
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              { identifiant: 'acces-comptes-privileges-recyf', niveau: 1 },
             ],
           },
           ordre: 2,
         },
         {
-          identifiant: 'acces-outil-gestion-des-comptes-oui',
-          libelle: 'Oui',
+          identifiant: 'acces-comptes-privileges-recyf-oui',
+          libelle:
+            'Des délais clairs de désactivation des comptes comptes à privilèges inactifs ou non nécessaires sont formalisés, appliqués et tracés.',
           resultat: {
             indice: { valeur: 3 },
             mesures: [
-              { identifiant: 'acces-outil-gestion-des-comptes', niveau: 2 },
+              { identifiant: 'acces-comptes-privileges-recyf', niveau: 1 },
             ],
           },
           ordre: 3,
