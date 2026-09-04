@@ -24,7 +24,9 @@ export const transcripteurGouvernance: Thematique = {
       questions: [
         {
           identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf',
-          'info-bulles': ['recyf/gouvernance/infos-et-activites-a-proteger.pug'],
+          'info-bulles': [
+            'recyf/gouvernance/infos-et-activites-a-proteger.pug',
+          ],
         },
       ],
     },
@@ -43,6 +45,10 @@ export const transcripteurGouvernance: Thematique = {
         {
           identifiant: 'gouvernance-schema-si-industriel-a-jour',
           'info-bulles': ['gouvernance/schema-si-composants.pug'],
+          perimetre: 'SYSTEME-INDUSTRIEL',
+        },
+        {
+          identifiant: 'gouvernance-schema-si-industriel-a-jour-recyf',
           perimetre: 'SYSTEME-INDUSTRIEL',
         },
       ],

@@ -866,8 +866,10 @@ export const donneesContexte: QuestionsThematique = {
           regle: {
             reponses: [
               {
-                identifiantQuestion: 'gouvernance-schema-si-industriel-a-jour',
-                reponseDonnee: 'gouvernance-schema-si-industriel-a-jour-na',
+                identifiantQuestion:
+                  'gouvernance-schema-si-industriel-a-jour-recyf',
+                reponseDonnee:
+                  'gouvernance-schema-si-industriel-a-jour-recyf-na',
               },
               {
                 identifiantQuestion:
