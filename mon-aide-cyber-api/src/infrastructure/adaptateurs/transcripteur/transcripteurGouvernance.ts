@@ -38,6 +38,10 @@ export const transcripteurGouvernance: Thematique = {
           ],
         },
         {
+          identifiant: 'gouvernance-schema-si-a-jour-recyf',
+          'info-bulles': ['recyf/gouvernance/schema-si.pug'],
+        },
+        {
           identifiant: 'gouvernance-schema-si-industriel-a-jour',
           'info-bulles': ['gouvernance/schema-si-composants.pug'],
           perimetre: 'SYSTEME-INDUSTRIEL',

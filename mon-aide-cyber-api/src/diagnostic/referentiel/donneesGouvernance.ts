@@ -44,7 +44,8 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf-oui-precise',
+          identifiant:
+            'gouvernance-infos-et-activites-a-proteger-recyf-oui-precise',
           libelle:
             "Les activités à protéger en priorité sont listées, avec les systèmes d'information sur lesquels elles reposent.",
           resultat: {
@@ -55,24 +56,24 @@ export const donneesGouvernance: QuestionsThematique = {
       ],
     },
     {
-      identifiant: 'gouvernance-schema-si-a-jour',
+      identifiant: 'gouvernance-schema-si-a-jour-recyf',
       libelle: 'Existe-t-il un plan du système d’information de l’entité ?',
       poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
         {
-          identifiant: 'gouvernance-schema-si-a-jour-nsp',
+          identifiant: 'gouvernance-schema-si-a-jour-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'gouvernance-schema-si-a-jour-non',
+          identifiant: 'gouvernance-schema-si-a-jour-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'gouvernance-schema-si-a-jour',
+                identifiant: 'gouvernance-schema-si-a-jour-recyf',
                 niveau: 1,
               },
             ],
@@ -81,13 +82,14 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant:
-            'gouvernance-schema-si-a-jour-non-plan-historique-obsolete',
-          libelle: "Nous avons un plan historique qui n'est pas à jour",
+            'gouvernance-schema-si-a-jour-recyf-inventaire-formalise',
+          libelle:
+            'Un inventaire des systèmes exposés / interconnectés (services exposés sur internet, adresses publiques, accès distants, interconnexions partenaires) est formalisé.',
           resultat: {
             indice: { valeur: 0.5 },
             mesures: [
               {
-                identifiant: 'gouvernance-schema-si-a-jour',
+                identifiant: 'gouvernance-schema-si-a-jour-recyf',
                 niveau: 1,
               },
             ],
@@ -95,28 +97,13 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant: 'gouvernance-schema-si-a-jour-oui-macro',
+          identifiant: 'gouvernance-schema-si-a-jour-recyf-schema-complet',
           libelle:
-            'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour',
+            "Un schéma complet est formalisé, permettant d'assurer le maintien en condition opérationnelle et de sécurité des systèmes et de réagir sans retard injustifié à un incident de sécurité.",
           resultat: {
             indice: { valeur: 1 },
-            mesures: [
-              {
-                identifiant: 'gouvernance-schema-si-a-jour',
-                niveau: 2,
-              },
-            ],
           },
           ordre: 3,
-        },
-        {
-          identifiant: 'gouvernance-schema-si-a-jour-oui-detaille',
-          libelle:
-            "Il existe un schéma détaillé à jour, incluant la liste exhaustive des interconnexions vers l'extérieur",
-          resultat: {
-            indice: { valeur: 3 },
-          },
-          ordre: 4,
         },
       ],
     },
