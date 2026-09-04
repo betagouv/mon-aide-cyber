@@ -20,6 +20,16 @@ export const transcripteurSecuriteAcces: Thematique = {
     {
       questions: [
         {
+          identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf',
+          'info-bulles': [
+            'recyf/acces/acces-postes-droits-utilisateurs-restreints.pug',
+          ],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'acces-outil-gestion-des-comptes',
           'info-bulles': [
             'acces/gestion-comptes-entites-publiques.pug',
