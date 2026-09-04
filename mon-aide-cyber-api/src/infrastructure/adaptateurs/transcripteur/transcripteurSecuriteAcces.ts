@@ -13,6 +13,13 @@ export const transcripteurSecuriteAcces: Thematique = {
     {
       questions: [
         {
+          identifiant: 'acces-comptes-privileges-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'acces-outil-gestion-des-comptes',
           'info-bulles': [
             'acces/gestion-comptes-entites-publiques.pug',
@@ -55,6 +62,7 @@ export const transcripteurSecuriteAcces: Thematique = {
         },
       ],
     },
+
     {
       questions: [
         {
