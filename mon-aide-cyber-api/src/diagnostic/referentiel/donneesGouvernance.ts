@@ -168,25 +168,41 @@ export const donneesGouvernance: QuestionsThematique = {
       ],
     },
     {
-      identifiant: 'gouvernance-connaissance-rgpd-1',
+      identifiant: 'gouvernance-suivi-alertes-securite-recyf',
       libelle:
-        'Avez-vous listé les données personnelles traitées au sein de votre entité ?',
-      type: 'choixUnique',
+        'Un suivi des alertes de cybersécurité et des vulnérabilités publiées pouvant vous affecter est-il réalisé ?',
       poids: 1,
+      type: 'choixUnique',
       reponsesPossibles: [
         {
-          identifiant: 'gouvernance-connaissance-rgpd-1-nsp',
+          identifiant: 'gouvernance-suivi-alertes-securite-recyf-nsp',
           libelle: 'Je ne sais pas',
-          ordre: 1,
+          ordre: 0,
         },
         {
-          identifiant: 'gouvernance-connaissance-rgpd-1-non',
+          identifiant: 'gouvernance-suivi-alertes-securite-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'gouvernance-connaissance-rgpd-1',
+                identifiant: 'gouvernance-suivi-alertes-securite-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant: 'gouvernance-suivi-alertes-securite-recyf-oui-partiel',
+          libelle:
+            'Une personne est désignée pour effectuer la veille de cybersécurité et est abonnée aux bulletins du CERT-FR ' +
+            'et des principaux éditeurs. Les alertes sont traitées selon la sévérité sur le périmètre.',
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant: 'gouvernance-suivi-alertes-securite-recyf',
                 niveau: 1,
               },
             ],
@@ -194,73 +210,15 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant: 'gouvernance-connaissance-rgpd-1-oui-liste-données',
+          identifiant: 'gouvernance-suivi-alertes-securite-recyf-oui-traite',
           libelle:
-            "Oui, nous avons listé l'ensemble des données personnelles traitées au sein de mon entité",
-          ordre: 3,
-          resultat: {
-            indice: { valeur: 2 },
-            mesures: [
-              { identifiant: 'gouvernance-connaissance-rgpd-1', niveau: 2 },
-            ],
-          },
-        },
-        {
-          identifiant: 'gouvernance-connaissance-rgpd-1-oui-registre',
-          libelle: 'Oui, nous tenons à jour un registre des traitements',
-          ordre: 4,
+            'Une personne est désignée pour effectuer cette veille et est abonnée aux bulletins du CERT-FR et des ' +
+            'principaux éditeurs. Chaque alerte est croisée avec la cartographie des systèmes pour en identifier l’impact ' +
+            'puis traitées selon la sévérité. Des traces du traitement de ces alertes sont conservées.',
           resultat: {
             indice: { valeur: 3 },
           },
-        },
-      ],
-    },
-    {
-      identifiant: 'gouvernance-connaissance-rgpd-2',
-      libelle:
-        "Informez-vous les personnes concernées sur l'utilisation de leurs données personnelles et leurs droits ? ",
-      type: 'choixUnique',
-      poids: 1,
-      reponsesPossibles: [
-        {
-          identifiant: 'gouvernance-connaissance-rgpd-2-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant: 'gouvernance-connaissance-rgpd-2-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant: 'gouvernance-connaissance-rgpd-2',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant: 'gouvernance-connaissance-rgpd-2-oui-liste-données',
-          libelle:
-            "Oui, j'informe les personnes concernées sur l’utilisation de leurs données personnelles",
           ordre: 3,
-          resultat: {
-            indice: { valeur: 2 },
-            mesures: [
-              { identifiant: 'gouvernance-connaissance-rgpd-2', niveau: 2 },
-            ],
-          },
-        },
-        {
-          identifiant: 'gouvernance-connaissance-rgpd-2-oui-registre',
-          libelle:
-            'Oui, j’informe les personnes concernées et j’ai mis en place les moyens nécessaires leur permettant d’exercer leurs droits (ex : accès, rectification, opposition, suppression)',
-          ordre: 4,
-          resultat: {
-            indice: { valeur: 3 },
-          },
         },
       ],
     },
