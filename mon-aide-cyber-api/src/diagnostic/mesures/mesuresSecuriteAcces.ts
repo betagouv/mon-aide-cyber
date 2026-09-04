@@ -1,22 +1,14 @@
 export const mesuresSecuriteAcces = {
-  'acces-outil-gestion-des-comptes': {
+  'acces-comptes-privileges-recyf': {
     niveau1: {
       titre:
-        'Mettre en œuvre un outil de gestion des politiques de sécurité centralisées (ex : Active Directory, Samba-AD) et en évaluer/améliorer son niveau de sécurité annuellement',
+        'Désactiver et supprimer les comptes à privilèges (ex. administrateurs et comptes de service) non nécessaires dans un délai formalisé',
       pourquoi:
-        '../../mesures/acces/acces-outil-gestion-des-comptes-niveau1-pourquoi.pug',
+        '../../mesures/recyf/acces/acces-comptes-privileges-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/acces/acces-outil-gestion-des-comptes-niveau1-comment.pug',
+        '../../mesures/recyf/acces/acces-comptes-privileges-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        'Contrôler régulièrement le niveau de sécurité de son outil de gestion de politiques de sécurité centralisé',
-      pourquoi:
-        '../../mesures/acces/acces-outil-gestion-des-comptes-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/acces/acces-outil-gestion-des-comptes-niveau2-comment.pug',
-    },
-    priorisation: 14,
+    priorisation: 19,
   },
   'acces-liste-compte-utilisateurs': {
     niveau1: {
