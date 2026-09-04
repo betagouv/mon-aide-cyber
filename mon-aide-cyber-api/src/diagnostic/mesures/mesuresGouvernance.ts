@@ -9,24 +9,16 @@ export const mesuresGouvernance = {
     },
     priorisation: 6,
   },
-  'gouvernance-schema-si-a-jour': {
+  'gouvernance-schema-si-a-jour-recyf': {
     niveau1: {
       titre:
         'Disposer d’un schéma global du réseau informatique et de la liste des interconnexions vers l’extérieur à jour',
       pourquoi:
-        '../../mesures/gouvernance/gouvernance-schema-si-a-jour-niveau1-pourquoi.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-schema-si-a-jour-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/gouvernance/gouvernance-schema-si-a-jour-niveau1-comment.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-schema-si-a-jour-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        'Disposer de la liste des équipements et applicatifs concourant au fonctionnement du système d’information',
-      pourquoi:
-        '../../mesures/gouvernance/gouvernance-schema-si-a-jour-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/gouvernance/gouvernance-schema-si-a-jour-niveau2-comment.pug',
-    },
-    priorisation: 20,
+    priorisation: 14,
   },
   'gouvernance-schema-si-industriel-a-jour': {
     niveau1: {
