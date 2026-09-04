@@ -109,30 +109,30 @@ export const donneesGouvernance: QuestionsThematique = {
       ],
     },
     {
-      identifiant: 'gouvernance-schema-si-industriel-a-jour',
+      identifiant: 'gouvernance-schema-si-industriel-a-jour-recyf',
       libelle:
         "Existe-t-il un plan et un inventaire des systèmes d'informations industriels de l'entité ?",
       poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-na',
+          identifiant: 'gouvernance-schema-si-industriel-a-jour-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-nsp',
+          identifiant: 'gouvernance-schema-si-industriel-a-jour-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-non',
+          identifiant: 'gouvernance-schema-si-industriel-a-jour-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'gouvernance-schema-si-industriel-a-jour',
+                identifiant: 'gouvernance-schema-si-industriel-a-jour-recyf',
                 niveau: 1,
               },
             ],
@@ -140,14 +140,15 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-partiel',
+          identifiant:
+            'gouvernance-schema-si-industriel-a-jour-recyf-oui-partiel',
           libelle:
             'Il existe un plan "macro" non détaillé ou partiellement détaillé à jour',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
-                identifiant: 'gouvernance-schema-si-industriel-a-jour',
+                identifiant: 'gouvernance-schema-si-industriel-a-jour-recyf',
                 niveau: 2,
               },
             ],
@@ -155,7 +156,8 @@ export const donneesGouvernance: QuestionsThematique = {
           ordre: 3,
         },
         {
-          identifiant: 'gouvernance-schema-si-industriel-a-jour-oui-detaille',
+          identifiant:
+            'gouvernance-schema-si-industriel-a-jour-recyf-oui-detaille',
           libelle:
             'Il existe un plan détaillé, incluant la liste détaillée des composants du système d’information et la liste exhaustive des interconnexions vers l’extérieur',
           resultat: {

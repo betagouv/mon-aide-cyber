@@ -20,24 +20,22 @@ export const mesuresGouvernance = {
     },
     priorisation: 14,
   },
-  'gouvernance-schema-si-industriel-a-jour': {
+  'gouvernance-schema-si-industriel-a-jour-recyf': {
     niveau1: {
-      titre:
-        'Disposer d’un schéma global du réseau industriel et de la liste des interconnexions vers l’extérieur à jour',
+      titre: 'TODO',
       pourquoi:
-        '../../mesures/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau1-pourquoi.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau1-comment.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau1-comment.pug',
     },
     niveau2: {
-      titre:
-        'Disposer de la liste des équipements et applicatifs concourant au fonctionnement des systèmes industriels',
+      titre: 'TODO',
       pourquoi:
-        '../../mesures/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau2-pourquoi.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau2-pourquoi.pug',
       comment:
-        '../../mesures/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau2-comment.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-schema-si-industriel-a-jour-niveau2-comment.pug',
     },
-    priorisation: 20,
+    priorisation: 14,
   },
   'gouvernance-connaissance-rgpd-1': {
     niveau1: {
