@@ -754,10 +754,6 @@ export const donneesContexte: QuestionsThematique = {
           regle: {
             reponses: [
               {
-                identifiantQuestion: 'acces-outil-gestion-des-comptes',
-                reponseDonnee: 'acces-outil-gestion-des-comptes-na',
-              },
-              {
                 identifiantQuestion:
                   'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
                 reponseDonnee: '',
@@ -802,14 +798,6 @@ export const donneesContexte: QuestionsThematique = {
           ordre: 1,
           regle: {
             reponses: [
-              {
-                identifiantQuestion: 'acces-liste-compte-utilisateurs',
-                reponseDonnee: 'acces-liste-compte-utilisateurs-na',
-              },
-              {
-                identifiantQuestion: 'acces-droits-acces-utilisateurs-limites',
-                reponseDonnee: 'acces-droits-acces-utilisateurs-limites-na',
-              },
               {
                 identifiantQuestion:
                   'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
@@ -866,8 +854,10 @@ export const donneesContexte: QuestionsThematique = {
           regle: {
             reponses: [
               {
-                identifiantQuestion: 'gouvernance-schema-si-industriel-a-jour',
-                reponseDonnee: 'gouvernance-schema-si-industriel-a-jour-na',
+                identifiantQuestion:
+                  'gouvernance-schema-si-industriel-a-jour-recyf',
+                reponseDonnee:
+                  'gouvernance-schema-si-industriel-a-jour-recyf-na',
               },
               {
                 identifiantQuestion:

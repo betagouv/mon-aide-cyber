@@ -23,6 +23,16 @@ export const transcripteurGouvernance: Thematique = {
     {
       questions: [
         {
+          identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf',
+          'info-bulles': [
+            'recyf/gouvernance/infos-et-activites-a-proteger.pug',
+          ],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'gouvernance-schema-si-a-jour',
           'info-bulles': [
             'gouvernance/schema-si-interconnexions-exterieur.pug',
@@ -30,9 +40,24 @@ export const transcripteurGouvernance: Thematique = {
           ],
         },
         {
+          identifiant: 'gouvernance-schema-si-a-jour-recyf',
+        },
+        {
           identifiant: 'gouvernance-schema-si-industriel-a-jour',
           'info-bulles': ['gouvernance/schema-si-composants.pug'],
           perimetre: 'SYSTEME-INDUSTRIEL',
+        },
+        {
+          identifiant: 'gouvernance-schema-si-industriel-a-jour-recyf',
+          perimetre: 'SYSTEME-INDUSTRIEL',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'gouvernance-suivi-alertes-securite-recyf',
+          'info-bulles': ['recyf/gouvernance/suivi-alertes-securite.pug'],
         },
       ],
     },
@@ -78,6 +103,17 @@ export const transcripteurGouvernance: Thematique = {
         {
           identifiant:
             'gouvernance-exigence-cyber-securite-presta-si-industriel',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'gouvernance-exigence-cyber-securite-presta-recyf',
+          'info-bulles': [
+            'recyf/gouvernance/contrat-prestataires.pug',
+            'recyf/gouvernance/contrat-prestataires-si-industriels.pug',
+          ],
         },
       ],
     },
