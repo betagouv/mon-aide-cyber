@@ -51,6 +51,6 @@ jobs:
         with:
           persist-credentials: false
       - name: zizmor GitHub Action
-        uses: zizmorcore/zizmor-action@e639db99335bc9038abc0e066dfcd72e23d26fb4 # v0.3.0
+        uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054 # v0.6.2
         with:
           advanced-security: true
