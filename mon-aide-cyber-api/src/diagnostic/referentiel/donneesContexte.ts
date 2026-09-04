@@ -754,10 +754,6 @@ export const donneesContexte: QuestionsThematique = {
           regle: {
             reponses: [
               {
-                identifiantQuestion: 'acces-outil-gestion-des-comptes',
-                reponseDonnee: 'acces-outil-gestion-des-comptes-na',
-              },
-              {
                 identifiantQuestion:
                   'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
                 reponseDonnee: '',
