@@ -3,25 +3,25 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesGouvernance: QuestionsThematique = {
   questions: [
     {
-      identifiant: 'gouvernance-infos-et-activites-a-proteger',
+      identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf',
       libelle:
-        'Avez-vous déterminé les activités et les données à protéger en priorité ?',
-      poids: 2,
+        "Avez-vous identifié les activités à protéger en priorité et les systèmes d'information associés ?",
+      poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
         {
-          identifiant: 'gouvernance-infos-et-activites-a-proteger-nsp',
+          identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'gouvernance-infos-et-activites-a-proteger-non',
+          identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'gouvernance-infos-et-activites-a-proteger',
+                identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf',
                 niveau: 1,
               },
             ],
@@ -30,24 +30,24 @@ export const donneesGouvernance: QuestionsThematique = {
         },
         {
           identifiant:
-            'gouvernance-infos-et-activites-a-proteger-oui-idee-generale',
+            'gouvernance-infos-et-activites-a-proteger-recyf-oui-idee-generale',
           libelle:
-            'Nous avons une idée générale de nos activités et données à protéger en priorité',
+            'Une liste des activités à protéger en priorité de mon entité est formalisée',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
               {
-                identifiant: 'gouvernance-infos-et-activites-a-proteger',
-                niveau: 2,
+                identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf',
+                niveau: 1,
               },
             ],
           },
           ordre: 2,
         },
         {
-          identifiant: 'gouvernance-infos-et-activites-a-proteger-oui-precise',
+          identifiant: 'gouvernance-infos-et-activites-a-proteger-recyf-oui-precise',
           libelle:
-            'Il existe une liste précise et maintenue à jour de toutes les activités et données métiers à protéger en priorité à l’échelle de l’entité',
+            "Une liste des activités à protéger en priorité de mon entité et des systèmes d'information sur lesquels elles reposent est formalisée.",
           resultat: {
             indice: { valeur: 3 },
           },

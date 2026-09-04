@@ -1,22 +1,13 @@
 export const mesuresGouvernance = {
-  'gouvernance-infos-et-activites-a-proteger': {
+  'gouvernance-infos-et-activites-a-proteger-recyf': {
     niveau1: {
-      titre:
-        'Établir la liste des activités et des données à protéger en priorité',
+      titre: 'Lister les activités et les systèmes à protéger en priorité',
       pourquoi:
-        '../../mesures/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau1-pourquoi.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau1-comment.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        'Établir la liste exhaustive et à jour des activités métiers et des informations à protéger en priorité',
-      pourquoi:
-        '../../mesures/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/gouvernance/gouvernance-infos-et-processus-a-proteger-niveau2-comment.pug',
-    },
-    priorisation: 1,
+    priorisation: 6,
   },
   'gouvernance-schema-si-a-jour': {
     niveau1: {
