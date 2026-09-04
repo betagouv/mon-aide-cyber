@@ -56,6 +56,14 @@ export const transcripteurGouvernance: Thematique = {
     {
       questions: [
         {
+          identifiant: 'gouvernance-suivi-alertes-securite-recyf',
+          'info-bulles': ['recyf/gouvernance/suivi-alertes-securite.pug'],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'gouvernance-connaissance-rgpd',
           'info-bulles': [
             'gouvernance/cnil.pug',

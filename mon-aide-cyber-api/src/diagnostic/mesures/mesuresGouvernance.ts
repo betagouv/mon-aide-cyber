@@ -37,43 +37,16 @@ export const mesuresGouvernance = {
     },
     priorisation: 14,
   },
-  'gouvernance-connaissance-rgpd-1': {
+  'gouvernance-suivi-alertes-securite-recyf': {
     niveau1: {
       titre:
-        'Établir la liste des données personnelles traitées au sein de votre entité',
+        "Réaliser une veille régulière des vulnérabilités, des campagnes de compromission, des correctifs et des mesures d'atténuation",
       pourquoi:
-        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-pourquoi.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-suivi-alertes-securite-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-comment.pug',
+        '../../mesures/recyf/gouvernance/gouvernance-suivi-alertes-securite-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        'Établir votre registre des activités de traitement de données personnelles et le tenir à jour',
-      pourquoi:
-        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-comment.pug',
-    },
-    priorisation: 15,
-  },
-  'gouvernance-connaissance-rgpd-2': {
-    niveau1: {
-      titre:
-        "Fournir des informations aux personnes concernées sur l'utilisation de leurs données personnelles",
-      pourquoi:
-        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau2-comment.pug',
-    },
-    niveau2: {
-      titre:
-        "Mettre en place les modalités permettant aux personnes d'exercer de leurs droits",
-      pourquoi:
-        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau2-comment.pug',
-    },
-    priorisation: 16,
+    priorisation: 20,
   },
   'gouvernance-exigence-cyber-securite-presta': {
     niveau1: {
