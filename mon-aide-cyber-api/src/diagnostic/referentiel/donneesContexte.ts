@@ -799,10 +799,6 @@ export const donneesContexte: QuestionsThematique = {
           regle: {
             reponses: [
               {
-                identifiantQuestion: 'securite-poste-r-et-d-disques-chiffres',
-                reponseDonnee: 'securite-poste-r-et-d-disques-chiffres-na',
-              },
-              {
                 identifiantQuestion:
                   'securite-infrastructure-acces-wifi-securises',
                 reponseDonnee:
