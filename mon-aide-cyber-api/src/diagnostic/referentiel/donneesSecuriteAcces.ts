@@ -376,33 +376,29 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-teletravail-acces-distants-mesures-particulieres',
+      identifiant: 'acces-teletravail-acces-distants-recyf',
       libelle:
         'Le télétravail et les accès distants (cloud inclus) sont-ils protégés par une authentification multifacteur ?',
-      poids: 2,
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-na',
+          identifiant: 'acces-teletravail-acces-distants-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-nsp',
+          identifiant: 'acces-teletravail-acces-distants-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-non',
+          identifiant: 'acces-teletravail-acces-distants-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant:
-                  'acces-teletravail-acces-distants-mesures-particulieres',
+                identifiant: 'acces-teletravail-acces-distants-recyf',
                 niveau: 1,
               },
             ],
@@ -410,16 +406,14 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-mfa',
+          identifiant: 'acces-teletravail-acces-distants-recyf-mfa',
           libelle:
-            'Certaines connexions à distance sont protégées par une authentification multifacteur',
+            "Un mécanisme d'authentification multifacteur est activé sur les principaux accès exposés sur Internet (ex. SaaS fournis par un tiers, ou SI internes exposés sur Internet).",
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
-                identifiant:
-                  'acces-teletravail-acces-distants-mesures-particulieres',
+                identifiant: 'acces-teletravail-acces-distants-recyf',
                 niveau: 1,
               },
             ],
@@ -427,10 +421,9 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 3,
         },
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-vpn',
+          identifiant: 'acces-teletravail-acces-distants-recyf-vpn',
           libelle:
-            'Toutes les connexions à distance sont protégées par une authentification multifacteur',
+            "Un mécanisme d'authentification multifacteur (basé sur le facteur de connaissance ainsi que sur un second facteur) est activé sur l'ensemble des accès distants (dont la messagerie, les services exposés, le télétravail, la télémaintenance ainsi que les accès VPN) pour tous les utilisateurs.",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
