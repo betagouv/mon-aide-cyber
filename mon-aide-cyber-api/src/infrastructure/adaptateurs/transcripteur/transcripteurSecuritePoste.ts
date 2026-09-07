@@ -39,6 +39,11 @@ export const transcripteurSecuritePoste: Thematique = {
     },
     {
       questions: [
+        { identifiant: 'securite-poste-correctifs-securite-annuaire-recyf' },
+      ],
+    },
+    {
+      questions: [
         {
           identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees',
