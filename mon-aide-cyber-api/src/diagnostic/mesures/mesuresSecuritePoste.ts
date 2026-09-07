@@ -72,14 +72,15 @@ export const mesuresSecuritePoste = {
     },
     priorisation: 13,
   },
-  'securite-poste-r-et-d-disques-chiffres': {
+  'securite-poste-filtre-flux-recyf': {
     niveau1: {
-      titre: 'Chiffrer les disques durs des matériels nomades',
+      titre:
+        'Utilisez un pare-feu pour bloquer les connexions suspectes avec internet',
       pourquoi:
-        '../../mesures/postes/securite-poste-r-et-d-disques-chiffres-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-filtre-flux-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-r-et-d-disques-chiffres-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-filtre-flux-recyf-niveau1-comment.pug',
     },
-    priorisation: 26,
+    priorisation: 11,
   },
 };

@@ -45,6 +45,14 @@ export const transcripteurSecuritePoste: Thematique = {
     {
       questions: [
         {
+          identifiant: 'securite-poste-filtre-flux-recyf',
+          'info-bulles': ['recyf/postes/securite-poste-filtre-flux-recyf.pug'],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees',
           'info-bulles': [
