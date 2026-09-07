@@ -31,6 +31,14 @@ export const transcripteurSecuritePoste: Thematique = {
     {
       questions: [
         {
+          identifiant:
+            'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'securite-poste-antivirus-deploye',
           'info-bulles': [
             'postes/maj-antivirus-installees.pug',
