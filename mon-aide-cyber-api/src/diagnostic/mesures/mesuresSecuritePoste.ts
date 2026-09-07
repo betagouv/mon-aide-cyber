@@ -61,23 +61,16 @@ export const mesuresSecuritePoste = {
     },
     priorisation: 2,
   },
-  'securite-poste-outils-complementaires-securisation': {
+  'securite-poste-correctifs-securite-annuaire-recyf': {
     niveau1: {
       titre:
-        'Mettre en œuvre une solution de type EDR (Endpoint Detection & Response)',
+        'Appliquer sans retard injustifié les correctifs sur les annuaires',
       pourquoi:
-        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-correctifs-securite-annuaire-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-correctifs-securite-annuaire-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre: "Traiter systématiquement les alertes générées par l'EDR",
-      pourquoi:
-        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau2-comment.pug',
-    },
-    priorisation: 25,
+    priorisation: 13,
   },
   'securite-poste-r-et-d-disques-chiffres': {
     niveau1: {

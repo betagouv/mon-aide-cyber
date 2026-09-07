@@ -287,25 +287,25 @@ export const donneesSecuritePoste: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'securite-poste-outils-complementaires-securisation',
+      identifiant: 'securite-poste-correctifs-securite-annuaire-recyf',
       libelle:
-        "En complément de l'antivirus, un outil de type EDR a-t-il été mis en place ?",
-      poids: 2,
+        'Si vous avez un annuaire technique, appliquez-vous les correctifs de sécurité sur cet annuaire ?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'securite-poste-outils-complementaires-securisation-nsp',
+          identifiant: 'securite-poste-correctifs-securite-annuaire-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'securite-poste-outils-complementaires-securisation-non',
+          identifiant: 'securite-poste-correctifs-securite-annuaire-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
                 identifiant:
-                  'securite-poste-outils-complementaires-securisation',
+                  'securite-poste-correctifs-securite-annuaire-recyf',
                 niveau: 1,
               },
             ],
@@ -314,26 +314,26 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-poste-outils-complementaires-securisation-oui-outil-complementaire-type-edr',
+            'securite-poste-correctifs-securite-annuaire-recyf-mensuel',
           libelle:
-            'Oui, un outil de type EDR a été mis en place mais ses alertes ne sont pas toujours traitées',
+            'Les correctifs de sécurité de l’annuaire sont appliqués mensuellement.',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
                 identifiant:
-                  'securite-poste-outils-complementaires-securisation',
-                niveau: 2,
+                  'securite-poste-correctifs-securite-annuaire-recyf',
+                niveau: 1,
               },
             ],
           },
           ordre: 2,
         },
         {
-          identifiant:
-            'securite-poste-outils-complementaires-securisation-oui-systematique-outil-complementaire-type-edr',
+          identifiant: 'securite-poste-correctifs-securite-annuaire-recyf-oui',
           libelle:
-            'Oui, un outil de type EDR a été mis en place et ses alertes sont systématiquement traitées',
+            'Les correctifs sont appliqués en priorité et sans délai sur l’annuaire, via un processus défini (veille, test, sauvegarde préalable, déploiement, vérification) et tracé. ' +
+            '(Cette réponse est aussi valable si aucun annuaire n’est utilisé par votre entité.)',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
