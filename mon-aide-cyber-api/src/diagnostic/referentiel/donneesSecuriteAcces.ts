@@ -431,34 +431,33 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant:
-        'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+      identifiant: 'acces-si-industriel-teletravail-acces-distants-recyf',
       libelle:
         'Les accès distants aux systèmes industriels sont-ils protégés par une authentification multifacteur ?',
       poids: 1,
       reponsesPossibles: [
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-na',
+            'acces-si-industriel-teletravail-acces-distants-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-nsp',
+            'acces-si-industriel-teletravail-acces-distants-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-non',
+            'acces-si-industriel-teletravail-acces-distants-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
                 identifiant:
-                  'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+                  'acces-si-industriel-teletravail-acces-distants-recyf',
                 niveau: 1,
               },
             ],
@@ -467,7 +466,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-mfa',
+            'acces-si-industriel-teletravail-acces-distants-recyf-mfa',
           libelle:
             'Certaines connexions à distance sont protégées par une authentification multifacteur',
           resultat: {
@@ -475,7 +474,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             mesures: [
               {
                 identifiant:
-                  'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+                  'acces-si-industriel-teletravail-acces-distants-recyf',
                 niveau: 1,
               },
             ],
@@ -484,7 +483,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-vpn',
+            'acces-si-industriel-teletravail-acces-distants-recyf-vpn',
           libelle:
             'Toutes les connexions à distance sont protégées par une authentification multifacteur',
           resultat: { indice: { valeur: 3 } },
