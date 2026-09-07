@@ -3,27 +3,28 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesSecuritePoste: QuestionsThematique = {
   questions: [
     {
-      identifiant: 'securite-poste-maj-fonctionnelles-et-securite-deployees',
+      identifiant:
+        'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf',
       libelle:
-        'Les mises à jour fonctionnelles et de sécurité des logiciels utilisés sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs ?',
-      poids: 3,
+        'Les mises à jour fonctionnelles et de sécurité des logiciels utilisés sont-elles déployées ?',
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant:
-            'securite-poste-maj-fonctionnelles-et-securite-deployees-nsp',
+            'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
           identifiant:
-            'securite-poste-maj-fonctionnelles-et-securite-deployees-non',
+            'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
                 identifiant:
-                  'securite-poste-maj-fonctionnelles-et-securite-deployees',
+                  'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf',
                 niveau: 1,
               },
             ],
@@ -32,16 +33,16 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions',
+            'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-systematiquement-un-peu',
           libelle:
-            'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement',
+            'Les équipements de sécurité (ex. pare-feux), les postes de travail et serveurs exposés à internet sont mis à jour mensuellement.',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
               {
                 identifiant:
-                  'securite-poste-maj-fonctionnelles-et-securite-deployees',
-                niveau: 2,
+                  'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf',
+                niveau: 1,
               },
             ],
           },
@@ -49,9 +50,9 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-poste-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles',
+            'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-systematiquement-des-que-disponibles',
           libelle:
-            "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires",
+            "Les mises à jour sont déployées dès que possible sur l'ensemble des équipements de sécurité (ex. pare-feux), les postes de travail et serveurs exposés à internet.",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
