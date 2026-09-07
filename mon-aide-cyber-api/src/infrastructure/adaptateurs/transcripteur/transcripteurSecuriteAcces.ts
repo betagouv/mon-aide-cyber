@@ -30,6 +30,39 @@ export const transcripteurSecuriteAcces: Thematique = {
     {
       questions: [
         {
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'acces-teletravail-acces-distants-recyf',
+          'info-bulles': [
+            'recyf/acces/teletravail-acces-distants-mfa.pug',
+            'recyf/acces/teletravail-acces-distants-precisions.pug',
+          ],
+        },
+        {
+          identifiant: 'acces-si-industriel-teletravail-acces-distants-recyf',
+          'info-bulles': [
+            'recyf/acces/teletravail-acces-distants-mfa.pug',
+            'recyf/acces/teletravail-acces-distants-precisions.pug',
+          ],
+          perimetre: 'SYSTEME-INDUSTRIEL',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'acces-outil-gestion-des-comptes',
           'info-bulles': [
             'acces/gestion-comptes-entites-publiques.pug',
@@ -64,25 +97,12 @@ export const transcripteurSecuriteAcces: Thematique = {
         },
       ],
     },
-    {
-      questions: [
-        {
-          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
-        },
-      ],
-    },
+
     {
       questions: [
         {
           identifiant: 'acces-mesures-securite-robustesse-mdp',
           'info-bulles': ['acces/robustesse-mot-de-passe.pug'],
-        },
-      ],
-    },
-    {
-      questions: [
-        {
-          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
         },
       ],
     },
@@ -134,25 +154,6 @@ export const transcripteurSecuriteAcces: Thematique = {
         {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
-          perimetre: 'SYSTEME-INDUSTRIEL',
-        },
-      ],
-    },
-    {
-      questions: [
-        {
-          identifiant: 'acces-teletravail-acces-distants-recyf',
-          'info-bulles': [
-            'recyf/acces/teletravail-acces-distants-mfa.pug',
-            'recyf/acces/teletravail-acces-distants-precisions.pug',
-          ],
-        },
-        {
-          identifiant: 'acces-si-industriel-teletravail-acces-distants-recyf',
-          'info-bulles': [
-            'recyf/acces/teletravail-acces-distants-mfa.pug',
-            'recyf/acces/teletravail-acces-distants-precisions.pug',
-          ],
           perimetre: 'SYSTEME-INDUSTRIEL',
         },
       ],
