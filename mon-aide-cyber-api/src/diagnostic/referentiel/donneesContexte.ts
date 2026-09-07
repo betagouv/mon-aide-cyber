@@ -799,12 +799,6 @@ export const donneesContexte: QuestionsThematique = {
           regle: {
             reponses: [
               {
-                identifiantQuestion:
-                  'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
-                reponseDonnee:
-                  'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-na',
-              },
-              {
                 identifiantQuestion: 'securite-poste-r-et-d-disques-chiffres',
                 reponseDonnee: 'securite-poste-r-et-d-disques-chiffres-na',
               },
