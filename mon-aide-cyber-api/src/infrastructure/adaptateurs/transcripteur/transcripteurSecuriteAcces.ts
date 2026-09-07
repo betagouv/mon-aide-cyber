@@ -131,5 +131,16 @@ export const transcripteurSecuriteAcces: Thematique = {
         },
       ],
     },
+    {
+      questions: [
+        {
+          identifiant: 'acces-teletravail-acces-distants-recyf',
+          'info-bulles': [
+            'recyf/acces/teletravail-acces-distants-mfa.pug',
+            'recyf/acces/teletravail-acces-distants-precisions.pug',
+          ],
+        },
+      ],
+    },
   ],
 };
