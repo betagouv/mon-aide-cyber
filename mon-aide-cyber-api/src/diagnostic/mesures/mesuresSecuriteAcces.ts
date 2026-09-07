@@ -69,24 +69,16 @@ export const mesuresSecuriteAcces = {
     },
     priorisation: 12,
   },
-  'acces-mesures-securite-robustesse-mdp': {
+  'acces-mesures-securite-robustesse-mdp-recyf': {
     niveau1: {
       titre:
-        'Fixer des critères de longueur et complexité des mots de passe et encourager l’usage d’un coffre-fort de mots de passe',
+        'Utiliser des mots de passe robustes et renforcer l’accès aux comptes sensibles',
       pourquoi:
-        '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-pourquoi.pug',
+        '../../mesures/recyf/acces/acces-mesures-securite-robustesse-mdp-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau2-comment.pug',
+        '../../mesures/recyf/acces/acces-mesures-securite-robustesse-mdp-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        'Mettre à disposition des utilisateurs une coffre fort de mots de passe et les former régulièrement à la création de mots de passe robustes',
-      pourquoi:
-        '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/acces/acces-mesures-securite-robustesse-mdp-niveau1-comment.pug',
-    },
-    priorisation: 19,
+    priorisation: 9,
   },
   'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles': {
     niveau1: {
