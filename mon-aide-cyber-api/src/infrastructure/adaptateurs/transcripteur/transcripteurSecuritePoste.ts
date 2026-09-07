@@ -24,6 +24,10 @@ export const transcripteurSecuritePoste: Thematique = {
           identifiant: 'securite-poste-antivirus-deploye-recyf',
           'info-bulles': ['recyf/postes/windows-defender.pug'],
         },
+        {
+          identifiant: 'securite-poste-si-industriel-antivirus-deploye-recyf',
+          perimetre: 'SYSTEME-INDUSTRIEL',
+        },
       ],
     },
     {
