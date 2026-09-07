@@ -123,25 +123,25 @@ export const donneesSecuritePoste: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'securite-poste-antivirus-deploye',
+      identifiant: 'securite-poste-antivirus-deploye-recyf',
       libelle:
-        'Un antivirus à jour est-il déployé sur chaque poste de travail ?',
-      poids: 3,
+        'Un antivirus et/ou EDR est-il déployé sur l’ensemble des équipements et services ?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'securite-poste-antivirus-deploye-nsp',
+          identifiant: 'securite-poste-antivirus-deploye-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
 
         {
-          identifiant: 'securite-poste-antivirus-deploye-non',
+          identifiant: 'securite-poste-antivirus-deploye-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'securite-poste-antivirus-deploye',
+                identifiant: 'securite-poste-antivirus-deploye-recyf',
                 niveau: 1,
               },
             ],
@@ -150,14 +150,15 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-poste-antivirus-deploye-oui-alertes-pas-toujours-traitees',
-          libelle: 'Oui, mais ses alertes ne sont pas toujours traitées',
+            'securite-poste-antivirus-deploye-recyf-oui-alertes-hebdomadaires',
+          libelle:
+            "Une protection antivirus ou/et un EDR est active et à jour sur l'ensemble des postes de travail. Les alertes générées par ces outils sont traitées de façon hebdomadaire.",
           resultat: {
             indice: { valeur: 2 },
             mesures: [
               {
-                identifiant: 'securite-poste-antivirus-deploye',
-                niveau: 2,
+                identifiant: 'securite-poste-antivirus-deploye-recyf',
+                niveau: 1,
               },
             ],
           },
@@ -165,8 +166,10 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-poste-antivirus-deploye-oui-alertes-toujours-traitees',
-          libelle: 'Oui et ses alertes sont systématiquement traitées',
+            'securite-poste-antivirus-deploye-recyf-oui-alertes-toujours-traitees',
+          libelle:
+            'Une protection antivirus ou/et un EDR est active et à jour sur l’ensemble des équipements traitant des données provenant de l’extérieur (poste de travail, téléphones, serveurs exposés, etc.). ' +
+            'Les alertes générées par ces outils sont traitées a minima quotidiennement (en interne ou par un sous-traitant).',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },

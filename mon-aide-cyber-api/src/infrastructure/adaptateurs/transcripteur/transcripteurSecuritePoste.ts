@@ -14,6 +14,22 @@ export const transcripteurSecuritePoste: Thematique = {
       questions: [
         {
           identifiant:
+            'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'securite-poste-antivirus-deploye-recyf',
+          'info-bulles': ['recyf/postes/windows-defender.pug'],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees',
           'info-bulles': [
             'postes/maj-fonctionnelles-installees.pug',
@@ -25,14 +41,6 @@ export const transcripteurSecuritePoste: Thematique = {
           identifiant:
             'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
           perimetre: 'SYSTEME-INDUSTRIEL',
-        },
-      ],
-    },
-    {
-      questions: [
-        {
-          identifiant:
-            'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf',
         },
       ],
     },
