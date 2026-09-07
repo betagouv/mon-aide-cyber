@@ -58,16 +58,16 @@ export const mesuresSecuriteAcces = {
     },
     priorisation: 11,
   },
-  'acces-utilisateurs-administrateurs-poste': {
+  'acces-utilisateurs-administrateurs-poste-recyf': {
     niveau1: {
       titre:
         'Limiter drastiquement le nombre d’utilisateurs disposant du privilège d’administration local sur leur machine',
       pourquoi:
-        '../../mesures/acces/acces-utilisateurs-administrateurs-poste-niveau1-pourquoi.pug',
+        '../../mesures/recyf/acces/acces-utilisateurs-administrateurs-poste-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/acces/acces-utilisateurs-administrateurs-poste-niveau1-comment.pug',
+        '../../mesures/recyf/acces/acces-utilisateurs-administrateurs-poste-recyf-niveau1-comment.pug',
     },
-    priorisation: 7,
+    priorisation: 12,
   },
   'acces-mesures-securite-robustesse-mdp': {
     niveau1: {
