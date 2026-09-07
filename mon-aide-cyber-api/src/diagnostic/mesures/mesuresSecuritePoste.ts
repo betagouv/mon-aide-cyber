@@ -28,23 +28,16 @@ export const mesuresSecuritePoste = {
     },
     priorisation: 5,
   },
-  'securite-poste-antivirus-deploye': {
+  'securite-poste-antivirus-deploye-recyf': {
     niveau1: {
       titre:
         'Installer de manière systématique un antivirus sur les postes de travail',
       pourquoi:
-        '../../mesures/postes/securite-poste-antivirus-deploye-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-antivirus-deploye-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-antivirus-deploye-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-antivirus-deploye-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre: "Traiter systématiquement les alertes générées par l'antivirus",
-      pourquoi:
-        '../../mesures/postes/securite-poste-antivirus-deploye-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-antivirus-deploye-niveau2-comment.pug',
-    },
-    priorisation: 4,
+    priorisation: 5,
   },
   'securite-poste-si-industriel-antivirus-deploye': {
     niveau1: {
