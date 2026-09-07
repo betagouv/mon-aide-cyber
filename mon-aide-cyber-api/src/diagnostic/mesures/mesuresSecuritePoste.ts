@@ -50,16 +50,16 @@ export const mesuresSecuritePoste = {
     },
     priorisation: 5,
   },
-  'securite-poste-pare-feu-local-active': {
+  'securite-poste-mdp-par-defaut-recyf': {
     niveau1: {
       titre:
-        'Activer systématiquement le pare-feu local sur les postes de travail',
+        'Modifiez les mots de passe par défaut des équipements et logiciels avant de les utiliser',
       pourquoi:
-        '../../mesures/postes/securite-poste-pare-feu-local-active-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-mdp-par-defaut-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-pare-feu-local-active-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-mdp-par-defaut-recyf-niveau1-comment.pug',
     },
-    priorisation: 27,
+    priorisation: 2,
   },
   'securite-poste-outils-complementaires-securisation': {
     niveau1: {

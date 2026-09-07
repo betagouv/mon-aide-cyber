@@ -33,6 +33,13 @@ export const transcripteurSecuritePoste: Thematique = {
     {
       questions: [
         {
+          identifiant: 'securite-poste-mdp-par-defaut-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees',
           'info-bulles': [

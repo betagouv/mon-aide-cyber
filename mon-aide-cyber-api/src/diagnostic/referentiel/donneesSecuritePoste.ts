@@ -237,23 +237,24 @@ export const donneesSecuritePoste: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'securite-poste-pare-feu-local-active',
-      libelle: 'Un pare-feu local est-il activé sur les postes de travail ?',
-      poids: 2,
+      identifiant: 'securite-poste-mdp-par-defaut-recyf',
+      libelle:
+        'Modifiez-vous systématiquement les mots de passe et autre secrets par défaut des équipements et logiciels ?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'securite-poste-pare-feu-local-active-nsp',
+          identifiant: 'securite-poste-mdp-par-defaut-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'securite-poste-pare-feu-local-active-non',
+          identifiant: 'securite-poste-mdp-par-defaut-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'securite-poste-pare-feu-local-active',
+                identifiant: 'securite-poste-mdp-par-defaut-recyf',
                 niveau: 1,
               },
             ],
@@ -261,10 +262,26 @@ export const donneesSecuritePoste: QuestionsThematique = {
           ordre: 1,
         },
         {
-          identifiant: 'securite-poste-pare-feu-local-active-oui',
-          libelle: 'Oui, et les flux entrants et sortants sont filtrés',
-          resultat: { indice: { valeur: 3 } },
+          identifiant: 'securite-poste-mdp-par-defaut-recyf-un-peu',
+          libelle:
+            'Les mots de passe et secrets par défaut ont été modifiés en priorité sur les équipements de sécurité (ex. pare-feu), les équipements exposés sur internet, les équipements réseau (ex. box internet) et les équipements supportant les systèmes d’information liés aux activités à protéger en priorité.',
+          resultat: {
+            indice: { valeur: 1.5 },
+            mesures: [
+              {
+                identifiant: 'securite-poste-mdp-par-defaut-recyf',
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
+        },
+        {
+          identifiant: 'securite-poste-mdp-par-defaut-recyf-oui',
+          libelle:
+            'Les mots de passe et secrets par défaut sont systématiquement modifiés sur l’ensemble des équipements et logiciels avant mise en service, et cette vérification est intégrée au processus d’installation/déploiement.',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
         },
       ],
       type: 'choixUnique',
