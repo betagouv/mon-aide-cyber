@@ -39,24 +39,16 @@ export const mesuresSecuritePoste = {
     },
     priorisation: 5,
   },
-  'securite-poste-si-industriel-antivirus-deploye': {
+  'securite-poste-si-industriel-antivirus-deploye-recyf': {
     niveau1: {
       titre:
         'Installer de manière systématique un antivirus sur les postes de travail des systèmes industriels, vérifier régulièrement leur bon fonctionnement et leurs mises à jour',
       pourquoi:
-        '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-si-industriel-antivirus-deploye-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-si-industriel-antivirus-deploye-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        "Traiter systématiquement les alertes générées par l'antivirus des postes de travail des systèmes industriels",
-      pourquoi:
-        '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau2-comment.pug',
-    },
-    priorisation: 4,
+    priorisation: 5,
   },
   'securite-poste-pare-feu-local-active': {
     niveau1: {

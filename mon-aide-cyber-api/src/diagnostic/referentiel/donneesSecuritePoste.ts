@@ -177,29 +177,33 @@ export const donneesSecuritePoste: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'securite-poste-si-industriel-antivirus-deploye',
+      identifiant: 'securite-poste-si-industriel-antivirus-deploye-recyf',
       libelle:
         'Un antivirus à jour est-il déployé sur chaque poste de travail des systèmes industriels ?',
-      poids: 2,
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'securite-poste-si-industriel-antivirus-deploye-na',
+          identifiant:
+            'securite-poste-si-industriel-antivirus-deploye-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant: 'securite-poste-si-industriel-antivirus-deploye-nsp',
+          identifiant:
+            'securite-poste-si-industriel-antivirus-deploye-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant: 'securite-poste-si-industriel-antivirus-deploye-non',
+          identifiant:
+            'securite-poste-si-industriel-antivirus-deploye-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'securite-poste-si-industriel-antivirus-deploye',
+                identifiant:
+                  'securite-poste-si-industriel-antivirus-deploye-recyf',
                 niveau: 1,
               },
             ],
@@ -208,14 +212,15 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-poste-si-industriel-antivirus-deploye-oui-alertes-pas-toujours-traitees',
+            'securite-poste-si-industriel-antivirus-deploye-recyf-oui-alertes-pas-toujours-traitees',
           libelle: 'Oui, mais ses alertes ne sont pas toujours traitées',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
               {
-                identifiant: 'securite-poste-si-industriel-antivirus-deploye',
-                niveau: 2,
+                identifiant:
+                  'securite-poste-si-industriel-antivirus-deploye-recyf',
+                niveau: 1,
               },
             ],
           },
@@ -223,7 +228,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         },
         {
           identifiant:
-            'securite-poste-si-industriel-antivirus-deploye-oui-alertes-toujours-traitees',
+            'securite-poste-si-industriel-antivirus-deploye-recyf-oui-alertes-toujours-traitees',
           libelle: 'Oui et ses alertes sont systématiquement traitées',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
