@@ -164,24 +164,24 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-mesures-securite-robustesse-mdp',
+      identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
       libelle:
         'Des exigences de complexité sont-elles imposées sur les mots de passe de session des utilisateurs ?',
       poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'acces-mesures-securite-robustesse-mdp-nsp',
+          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'acces-mesures-securite-robustesse-mdp-non',
+          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'acces-mesures-securite-robustesse-mdp',
+                identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
                 niveau: 1,
               },
             ],
@@ -189,12 +189,28 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 1,
         },
         {
-          identifiant:
-            'acces-mesures-securite-robustesse-mdp-contraintes-par-defaut',
+          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf-un-peu',
           libelle:
-            "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte",
-          resultat: { indice: { valeur: 3 } },
+            'Les comptes des utilisateurs sur des systèmes d’information important et/ou sensibles (ex. messagerie) et les comptes des administrateurs sont protégés par des mots de passe composés a minima de 12 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux ou ou repose sur un token physique déverrouillé par un code PIN. ' +
+            'Les comptes des administrateurs sont protégés par des mots de passe composés a minima de 15 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux ou repose sur un token physique déverrouillé par un code PIN.',
+          resultat: {
+            indice: { valeur: 1.5 },
+            mesures: [
+              {
+                identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 2,
+        },
+        {
+          identifiant:
+            'acces-mesures-securite-robustesse-mdp-recyf-respect-contraintes',
+          libelle:
+            'L’ensemble des comptes respectent les contraintes de complexité, de robustesse et de rotation de mots de passe définies dans le guide ANSSI « Authentification multifacteur et mots de passe » (https://messervices.cyber.gouv.fr/documents-guides/anssi-guide-authentification_multifacteur_et_mots_de_passe.pdf) selon la sensibilité des ressources accessibles.',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
         },
       ],
       type: 'choixUnique',
