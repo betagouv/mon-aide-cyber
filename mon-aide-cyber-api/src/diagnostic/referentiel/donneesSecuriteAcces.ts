@@ -114,24 +114,24 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-utilisateurs-administrateurs-poste',
-      libelle: 'Les utilisateurs sont-ils administrateurs de leur poste ?',
-      poids: 3,
+      identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
+      libelle:
+        "Les administrateurs disposent-ils de compte dédiés aux tâches d'administration et sont-ils les seuls à pouvoir les utiliser?",
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'acces-utilisateurs-administrateurs-poste-nsp',
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'acces-utilisateurs-administrateurs-poste-oui',
-          libelle:
-            'Oui, les comptes d’accès des utilisateurs disposent des privilèges d’administration du poste de travail',
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf-non',
+          libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'acces-utilisateurs-administrateurs-poste',
+                identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
                 niveau: 1,
               },
             ],
@@ -139,15 +139,14 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 1,
         },
         {
-          identifiant:
-            'acces-utilisateurs-administrateurs-poste-suppression-privilege-en-cours',
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf-un-peu',
           libelle:
-            'La suppression de ce privilège est en cours de traitement, plusieurs utilisateurs sont toujours administrateurs de leur poste',
+            "Chaque administrateur dispose d'un compte d'administration distinct de son compte utilisateur courant. Ces comptes ne sont utilisés ni pour la messagerie, ni pour la navigation Internet, ni pour la bureautique.",
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
-                identifiant: 'acces-utilisateurs-administrateurs-poste',
+                identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
                 niveau: 1,
               },
             ],
@@ -155,9 +154,9 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant:
-            'acces-utilisateurs-administrateurs-poste-non-exceptions-justifiees',
-          libelle: 'Non, et les rares exceptions sont justifiées',
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf-oui',
+          libelle:
+            "Les comptes utilisateurs et d'administration sont dissociés sur l'ensemble des équipements, y compris les outils et services en ligne. Les comptes d'administration sont dédiés à l'administration, et seules les personnes autorisées en disposent.",
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
