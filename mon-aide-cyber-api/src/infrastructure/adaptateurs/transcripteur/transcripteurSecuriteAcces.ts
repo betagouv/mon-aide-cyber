@@ -67,6 +67,13 @@ export const transcripteurSecuriteAcces: Thematique = {
     {
       questions: [
         {
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'acces-mesures-securite-robustesse-mdp',
           'info-bulles': ['acces/robustesse-mot-de-passe.pug'],
         },
