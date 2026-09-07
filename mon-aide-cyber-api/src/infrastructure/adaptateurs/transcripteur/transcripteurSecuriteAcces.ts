@@ -140,6 +140,14 @@ export const transcripteurSecuriteAcces: Thematique = {
             'recyf/acces/teletravail-acces-distants-precisions.pug',
           ],
         },
+        {
+          identifiant: 'acces-si-industriel-teletravail-acces-distants-recyf',
+          'info-bulles': [
+            'recyf/acces/teletravail-acces-distants-mfa.pug',
+            'recyf/acces/teletravail-acces-distants-precisions.pug',
+          ],
+          perimetre: 'SYSTEME-INDUSTRIEL',
+        },
       ],
     },
   ],
