@@ -1,22 +1,13 @@
 export const mesuresSecuritePoste = {
-  'securite-poste-maj-fonctionnelles-et-securite-deployees': {
+  'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf': {
     niveau1: {
-      titre:
-        'Déployer systématiquement toutes les mises à jour sur les postes de travail dès que celles-ci sont disponibles',
+      titre: 'Maintenir à jour les logiciels',
       pourquoi:
-        '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes ne pouvant pas bénéficier des mises à jour',
-      pourquoi:
-        '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau2-comment.pug',
-    },
-    priorisation: 5,
+    priorisation: 7,
   },
   'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees': {
     niveau1: {
