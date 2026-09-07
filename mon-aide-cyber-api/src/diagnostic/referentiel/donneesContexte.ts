@@ -867,9 +867,9 @@ export const donneesContexte: QuestionsThematique = {
               },
               {
                 identifiantQuestion:
-                  'securite-poste-si-industriel-antivirus-deploye',
+                  'securite-poste-si-industriel-antivirus-deploye-recyf',
                 reponseDonnee:
-                  'securite-poste-si-industriel-antivirus-deploye-na',
+                  'securite-poste-si-industriel-antivirus-deploye-recyf-na',
               },
               {
                 identifiantQuestion:
