@@ -117,24 +117,16 @@ export const mesuresSecuriteAcces = {
     },
     priorisation: 1,
   },
-  'acces-si-industriel-teletravail-acces-distants-mesures-particulieres': {
+  'acces-si-industriel-teletravail-acces-distants-recyf': {
     niveau1: {
       titre:
         'Mettre en place pour tous les accès distants des systèmes industriels des mécanismes de double authentification',
       pourquoi:
-        '../../mesures/acces/acces-si-industriel-teletravail-acces-distants-mesures-particulieres-niveau1-pourquoi.pug',
+        '../../mesures/recyf/acces/acces-si-industriel-teletravail-acces-distants-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/acces/acces-si-industriel-teletravail-acces-distants-mesures-particulieres-niveau1-comment.pug',
+        '../../mesures/recyf/acces/acces-si-industriel-teletravail-acces-distants-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        'Gérer tous les accès distants des systèmes industriels via un VPN, lui même authentifié à double facteur',
-      pourquoi:
-        '../../mesures/acces/acces-si-industriel-teletravail-acces-distants-mesures-particulieres-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/acces/acces-si-industriel-teletravail-acces-distants-mesures-particulieres-niveau2-comment.pug',
-    },
-    priorisation: 12,
+    priorisation: 1,
   },
   'acces-administrateurs-si-mesures-specifiques': {
     niveau1: {
