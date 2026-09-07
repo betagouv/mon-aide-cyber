@@ -341,28 +341,28 @@ export const donneesSecuritePoste: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'securite-poste-r-et-d-disques-chiffres',
-      libelle: 'Les disques durs des matériels nomades sont-ils chiffrés ?',
-      poids: 2,
+      identifiant: 'securite-poste-filtre-flux-recyf',
+      libelle: 'Filtrez-vous les flux entre vos systèmes et Internet ?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'securite-poste-r-et-d-disques-chiffres-na',
+          identifiant: 'securite-poste-filtre-flux-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant: 'securite-poste-r-et-d-disques-chiffres-nsp',
+          identifiant: 'securite-poste-filtre-flux-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant: 'securite-poste-r-et-d-disques-chiffres-non',
+          identifiant: 'securite-poste-filtre-flux-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'securite-poste-r-et-d-disques-chiffres',
+                identifiant: 'securite-poste-filtre-flux-recyf',
                 niveau: 1,
               },
             ],
@@ -370,10 +370,27 @@ export const donneesSecuritePoste: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant: 'securite-poste-r-et-d-disques-chiffres-oui',
-          libelle: 'Oui',
-          resultat: { indice: { valeur: 3 } },
+          identifiant: 'securite-poste-filtre-flux-recyf-un-peu',
+          libelle:
+            'Le pare-feu local est activé sur les postes de travail et interdit les communications poste-à-poste.',
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant: 'securite-poste-filtre-flux-recyf',
+                niveau: 1,
+              },
+            ],
+          },
           ordre: 3,
+        },
+        {
+          identifiant: 'securite-poste-filtre-flux-recyf-oui',
+          libelle:
+            '"Le pare-feu local est activé sur les postes de travail et interdit les communications poste-à-poste.' +
+            'Un (ou plusieurs) pare-feux dédiés filtrent les flux entre les systèmes de l’entité (ex. SI bureautiques) et l’extérieur (ex. internet), n’autorisant que les connexions nécessaires, avec journalisation des flux.',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 4,
         },
       ],
       type: 'choixUnique',
