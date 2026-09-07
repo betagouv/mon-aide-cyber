@@ -79,6 +79,13 @@ export const transcripteurSecuriteAcces: Thematique = {
         },
       ],
     },
+    {
+      questions: [
+        {
+          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
+        },
+      ],
+    },
 
     {
       questions: [
