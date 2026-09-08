@@ -217,6 +217,56 @@ export const donneesReaction: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
+      identifiant: 'reaction-bons-reflexes-recyf',
+      libelle:
+        'Êtes-vous entrainé aux bons reflexes pour réagir en cas de cyberattaque ?',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant: 'reaction-bons-reflexes-recyf-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
+        {
+          identifiant: 'reaction-bons-reflexes-recyf-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant: 'reaction-bons-reflexes-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant: 'reaction-bons-reflexes-recyf-oui-premier-exercice',
+          libelle:
+            "Un premier exercice de crise sur table a été réalisé à partir d'un scénario prêt à l'emploi.",
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant: 'reaction-bons-reflexes-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant: 'reaction-bons-reflexes-recyf-oui-regulierement',
+          libelle:
+            'Des exercices de crise cyber sont organisés régulièrement, associant les personnes-clés (direction, IT/prestataire, communication, métier).',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
       identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
       libelle: 'Savez-vous comment réagir en cas de cyberattaque ?',
       poids: 3,
