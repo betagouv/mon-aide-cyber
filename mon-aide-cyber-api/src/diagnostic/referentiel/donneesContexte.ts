@@ -782,30 +782,6 @@ export const donneesContexte: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'contexte-activites-recherche-et-developpement',
-      libelle:
-        'Estimez-vous que votre entité, du fait de ses activités, puisse faire l’objet d’espionnage industriel ou de vol de données ciblé ?',
-      poids: 0,
-      reponsesPossibles: [
-        {
-          identifiant: 'contexte-activites-recherche-et-developpement-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant: 'contexte-activites-recherche-et-developpement-non',
-          libelle: 'Non',
-          ordre: 1,
-        },
-        {
-          identifiant: 'contexte-activites-recherche-et-developpement-oui',
-          libelle: 'Oui',
-          ordre: 2,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
       identifiant: 'contexte-opere-systemes-information-industriels',
       libelle: 'Votre entité opère-t-elle des systèmes industriels ?',
       poids: 0,
