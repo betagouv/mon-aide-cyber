@@ -10,17 +10,6 @@ export const mesuresSensibilisation = {
     },
     priorisation: 8,
   },
-  'sensibilisation-risque-espionnage-industriel-r-et-d': {
-    niveau1: {
-      titre:
-        'Mener des actions de sensibilisation ciblée auprès du personnel effectuant des déplacements',
-      pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-comment.pug',
-    },
-    priorisation: 18,
-  },
   'sensibilisation-personnel-utilisation-charte-recyf': {
     niveau1: {
       titre:
