@@ -1,21 +1,14 @@
 export const mesuresSensibilisation = {
-  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques': {
+  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf': {
     niveau1: {
-      titre: 'Mettre en œuvre des bonnes pratiques de sensibilisation',
-      pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau1-comment.pug',
-    },
-    niveau2: {
       titre:
-        'En complément des pratiques déjà en œuvre, mettre en place des actions de sensibilisation additionnelles',
+        'Sensibiliser les équipes aux risques et bonnes pratiques de cybersécurité',
       pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau2-pourquoi.pug',
+        '../../mesures/recyf/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau2-comment.pug',
+        '../../mesures/recyf/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-niveau1-comment.pug',
     },
-    priorisation: 17,
+    priorisation: 8,
   },
   'sensibilisation-risque-espionnage-industriel-r-et-d': {
     niveau1: {
