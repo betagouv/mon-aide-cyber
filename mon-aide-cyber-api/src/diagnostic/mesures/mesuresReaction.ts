@@ -39,6 +39,17 @@ export const mesuresReaction = {
     },
     priorisation: 17,
   },
+  'reaction-liste-personnes-a-contacter-recyf': {
+    niveau1: {
+      titre:
+        'Imprimer la liste des personnes et leurs coordonnées à contacter en cas de cyberattaque',
+      pourquoi:
+        '../../mesures/recyf/reaction/reaction-liste-personnes-a-contacter-recyf-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/recyf/reaction/reaction-liste-personnes-a-contacter-recyf-niveau1-comment.pug',
+    },
+    priorisation: 4,
+  },
   'reaction-dispositif-gestion-crise-adapte-defini': {
     niveau1: {
       titre: 'Lister les personnes à contacter en cas de cyberattaque',

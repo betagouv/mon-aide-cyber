@@ -165,6 +165,58 @@ export const donneesReaction: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
+      identifiant: 'reaction-liste-personnes-a-contacter-recyf',
+      libelle:
+        'Avez-vous imprimé une liste des personnes à contacter en cas de crise et de leurs contacts ? (internes et externes)',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant: 'reaction-liste-personnes-a-contacter-recyf-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
+        {
+          identifiant: 'reaction-liste-personnes-a-contacter-recyf-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant: 'reaction-liste-personnes-a-contacter-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant:
+            'reaction-liste-personnes-a-contacter-recyf-oui-principales',
+          libelle:
+            'Une liste des principaux contacts de crise (responsables internes, prestataire informatique) est imprimée et accessible hors ligne.',
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant: 'reaction-liste-personnes-a-contacter-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant:
+            'reaction-liste-personnes-a-contacter-recyf-oui-complete',
+          libelle:
+            'Une liste complète des contacts internes et externes (direction, IT/prestataire, hébergeur, assureur cyber, CERT-FR, autorités, partenaires clés) est imprimée, tenue à jour et accessible sans ordinateur ni internet.',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
       identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
       libelle: 'Savez-vous comment réagir en cas de cyberattaque ?',
       poids: 3,
