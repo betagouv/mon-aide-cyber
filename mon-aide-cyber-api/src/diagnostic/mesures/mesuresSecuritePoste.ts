@@ -9,25 +9,6 @@ export const mesuresSecuritePoste = {
     },
     priorisation: 7,
   },
-  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees': {
-    niveau1: {
-      titre:
-        'Déployer systématiquement toutes les mises à jour sur les postes de travail dédiés aux systèmes industriels dès que celles-ci sont disponibles',
-      pourquoi:
-        '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau1-comment.pug',
-    },
-    niveau2: {
-      titre:
-        'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes industriels ne pouvant pas bénéficier des mises à jour',
-      pourquoi:
-        '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau2-comment.pug',
-    },
-    priorisation: 5,
-  },
   'securite-poste-antivirus-deploye-recyf': {
     niveau1: {
       titre:

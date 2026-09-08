@@ -60,69 +60,6 @@ export const donneesSecuritePoste: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant:
-        'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
-      libelle:
-        'Les mises à jour fonctionnelles et de sécurité sont-elles déployées sur les postes de travail des utilisateurs et des administrateurs des systèmes industriels ?',
-      poids: 2,
-      reponsesPossibles: [
-        {
-          identifiant:
-            'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
-        {
-          identifiant:
-            'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant:
-                  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-avec-exceptions',
-          libelle:
-            'Les mises à jour sont déployées systématiquement, il existe tout de même certaines exceptions non traitées actuellement',
-          resultat: {
-            indice: { valeur: 2 },
-            mesures: [
-              {
-                identifiant:
-                  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 3,
-        },
-        {
-          identifiant:
-            'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-systematiquement-des-que-disponibles',
-          libelle:
-            "Toutes les mises à jour sont déployées systématiquement dès que celles-ci sont disponibles et les exceptions font l'objet de mesures complémentaires",
-          resultat: { indice: { valeur: 3 } },
-          ordre: 4,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
       identifiant: 'securite-poste-antivirus-deploye-recyf',
       libelle:
         'Un antivirus et/ou EDR est-il déployé sur l’ensemble des équipements et services ?',
