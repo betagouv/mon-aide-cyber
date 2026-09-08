@@ -60,49 +60,6 @@ export const donneesSensibilisation: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'sensibilisation-risque-espionnage-industriel-r-et-d',
-      libelle:
-        "Menez-vous des actions de sensibilisation ciblant spécifiquement les collaborateurs effectuant des missions à l'étranger ?",
-      poids: 2,
-      reponsesPossibles: [
-        {
-          identifiant: 'sensibilisation-risque-espionnage-industriel-r-et-d-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
-        {
-          identifiant:
-            'sensibilisation-risque-espionnage-industriel-r-et-d-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'sensibilisation-risque-espionnage-industriel-r-et-d-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant:
-                  'sensibilisation-risque-espionnage-industriel-r-et-d',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'sensibilisation-risque-espionnage-industriel-r-et-d-oui',
-          libelle: 'Oui',
-          resultat: { indice: { valeur: 3 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
       identifiant: 'sensibilisation-personnel-utilisation-charte-recyf',
       libelle:
         'Le respect d’une charte d’utilisation des systèmes d’information est-il exigé au personnel ?',
