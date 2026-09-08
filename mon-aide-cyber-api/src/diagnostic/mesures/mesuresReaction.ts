@@ -17,62 +17,17 @@ export const mesuresReaction = {
     },
     priorisation: 32,
   },
-  'reaction-sauvegardes-donnees-realisees': {
+  'reaction-sauvegardes-donnees-realisees-recyf': {
     niveau1: {
-      titre: 'Réaliser des sauvegardes régulièrement',
+      titre:
+        'Sauvegarder régulièrement les données, vérifier et mettre à l’abri ses sauvegardes',
       pourquoi:
-        '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-niveau1-pourquoi.pug',
+        '../../mesures/recyf/reaction/reaction-sauvegardes-donnees-realisees-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-niveau1-comment.pug',
+        '../../mesures/recyf/reaction/reaction-sauvegardes-donnees-realisees-recyf-niveau1-comment.pug',
     },
-    priorisation: 6,
+    priorisation: 3,
   },
-  'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole':
-    {
-      niveau1: {
-        titre:
-          "Disposer d'une copie de sauvegarde des données critiques “hors ligne”, isolé de l'environnement bureautique",
-        pourquoi:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-niveau1-pourquoi.pug',
-        comment:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-niveau1-comment.pug',
-      },
-      priorisation: 9,
-    },
-  'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement':
-    {
-      niveau1: {
-        titre: 'Procéder à des tests de restauration des sauvegardes',
-        pourquoi:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
-        comment:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-comment.pug',
-      },
-      priorisation: 10,
-    },
-  'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole':
-    {
-      niveau1: {
-        titre:
-          "Disposer d'une copie de sauvegarde des données critiques “hors ligne”, isolé de l'environnement bureautique",
-        pourquoi:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-niveau1-pourquoi.pug',
-        comment:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-niveau1-comment.pug',
-      },
-      priorisation: 9,
-    },
-  'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement':
-    {
-      niveau1: {
-        titre: 'Procéder à des tests de restauration des sauvegardes',
-        pourquoi:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
-        comment:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-comment.pug',
-      },
-      priorisation: 10,
-    },
   'reaction-dispositif-gestion-crise-adapte-defini': {
     niveau1: {
       titre: 'Lister les personnes à contacter en cas de cyberattaque',
