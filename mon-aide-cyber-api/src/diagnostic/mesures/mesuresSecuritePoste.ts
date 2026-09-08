@@ -83,4 +83,15 @@ export const mesuresSecuritePoste = {
     },
     priorisation: 11,
   },
+  'securite-poste-systemes-cloisonnes-recyf': {
+    niveau1: {
+      titre:
+        "Cloisonner l'ensemble des systèmes d’informations maîtrisés de l’entité des systèmes non maîtrisés",
+      pourquoi:
+        '../../mesures/recyf/postes/securite-poste-systemes-cloisonnes-recyf-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/recyf/postes/securite-poste-systemes-cloisonnes-recyf-niveau1-comment.pug',
+    },
+    priorisation: 18,
+  },
 };
