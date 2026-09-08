@@ -449,5 +449,66 @@ export const donneesSecuritePoste: QuestionsThematique = {
       ],
       type: 'choixUnique',
     },
+    {
+      identifiant: 'securite-poste-si-industriel-systemes-cloisonnes-recyf',
+      libelle:
+        'Des mesures de cloisonnement spécifiques des systèmes industriels ont-elles été mise en œuvre ?',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant:
+            'securite-poste-si-industriel-systemes-cloisonnes-recyf-na',
+          libelle: 'Non applicable',
+          ordre: 0,
+        },
+        {
+          identifiant:
+            'securite-poste-si-industriel-systemes-cloisonnes-recyf-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 1,
+        },
+        {
+          identifiant:
+            'securite-poste-si-industriel-systemes-cloisonnes-recyf-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant:
+                  'securite-poste-si-industriel-systemes-cloisonnes-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant:
+            'securite-poste-si-industriel-systemes-cloisonnes-recyf-un-peu',
+          libelle: 'Oui, tous les flux réseau non nécessaires sont bloqués',
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant:
+                  'securite-poste-si-industriel-systemes-cloisonnes-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 3,
+        },
+        {
+          identifiant:
+            'securite-poste-si-industriel-systemes-cloisonnes-recyf-oui',
+          libelle:
+            'Oui, tous les flux réseau non nécessaires sont bloqués et une segmentation réseau stricte a été mise en œuvre pour isoler l’environnement industriel de l’environnement bureautique (hors besoin métier justifié)',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 4,
+        },
+      ],
+      type: 'choixUnique',
+    },
   ],
 };

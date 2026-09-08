@@ -55,6 +55,13 @@ export const transcripteurSecuritePoste: Thematique = {
         {
           identifiant: 'securite-poste-systemes-cloisonnes-recyf',
         },
+        {
+          identifiant: 'securite-poste-si-industriel-systemes-cloisonnes-recyf',
+          'info-bulles': [
+            'recyf/postes/securite-poste-si-industriel-systemes-cloisonnes-recyf.pug',
+          ],
+          perimetre: 'SYSTEME-INDUSTRIEL',
+        },
       ],
     },
     {
