@@ -94,4 +94,15 @@ export const mesuresSecuritePoste = {
     },
     priorisation: 18,
   },
+  'securite-poste-si-industriel-systemes-cloisonnes-recyf': {
+    niveau1: {
+      titre:
+        'Dans la mesure du possible et si non nécessaire, séparer le réseau industriel du réseau bureautique interne',
+      pourquoi:
+        '../../mesures/recyf/postes/securite-poste-si-industriel-systemes-cloisonnes-recyf-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/recyf/postes/securite-poste-si-industriel-systemes-cloisonnes-recyf-niveau1-comment.pug',
+    },
+    priorisation: 18,
+  },
 };
