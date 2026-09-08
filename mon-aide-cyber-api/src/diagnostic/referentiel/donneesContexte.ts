@@ -857,12 +857,6 @@ export const donneesContexte: QuestionsThematique = {
               },
               {
                 identifiantQuestion:
-                  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
-                reponseDonnee:
-                  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na',
-              },
-              {
-                identifiantQuestion:
                   'securite-poste-si-industriel-antivirus-deploye-recyf',
                 reponseDonnee:
                   'securite-poste-si-industriel-antivirus-deploye-recyf-na',
