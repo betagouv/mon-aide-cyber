@@ -103,28 +103,25 @@ export const donneesSensibilisation: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant:
-        'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
+      identifiant: 'sensibilisation-personnel-utilisation-charte-recyf',
       libelle:
-        'Le respect d’une charte d’utilisation des moyens informatiques et des outils numériques est-il exigé au personnel ?',
-      poids: 2,
+        'Le respect d’une charte d’utilisation des systèmes d’information est-il exigé au personnel ?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant:
-            'sensibilisation-collaborateurs-soumis-obligations-usages-securises-nsp',
+          identifiant: 'sensibilisation-personnel-utilisation-charte-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant:
-            'sensibilisation-collaborateurs-soumis-obligations-usages-securises-non',
+          identifiant: 'sensibilisation-personnel-utilisation-charte-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
                 identifiant:
-                  'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
+                  'sensibilisation-personnel-utilisation-charte-recyf',
                 niveau: 1,
               },
             ],
@@ -133,15 +130,16 @@ export const donneesSensibilisation: QuestionsThematique = {
         },
         {
           identifiant:
-            'sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-communiquee',
-          libelle: 'Oui, une charte est communiquée aux collaborateurs',
+            'sensibilisation-personnel-utilisation-charte-recyf-oui-charte-communiquee',
+          libelle:
+            'Une charte d’utilisation des systèmes d’information est rédigée et communiquée aux collaborateurs.',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
               {
                 identifiant:
-                  'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
-                niveau: 2,
+                  'sensibilisation-personnel-utilisation-charte-recyf',
+                niveau: 1,
               },
             ],
           },
@@ -149,9 +147,9 @@ export const donneesSensibilisation: QuestionsThematique = {
         },
         {
           identifiant:
-            'sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-signee',
+            'sensibilisation-personnel-utilisation-charte-recyf-oui-charte-signee',
           libelle:
-            'Oui, une charte est signée par chaque collaborateur et elle est annexée au règlement intérieur',
+            'Une charte opposable (signée par chaque utilisateur, annexée au contrat de travail ou au règlement intérieur), prévoyant des dispositions spécifiques pour les administrateurs, est intégrée au parcours d’arrivée et revue au moins une fois par an.',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
