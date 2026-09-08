@@ -108,6 +108,63 @@ export const donneesReaction: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
+      identifiant:
+        'reaction-restauration-sauvegardes-testees-regulierement-recyf',
+      libelle:
+        'La restauration des sauvegardes de toutes vos données critiques est-elle testée régulièrement ?',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant:
+            'reaction-restauration-sauvegardes-testees-regulierement-recyf-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
+        {
+          identifiant:
+            'reaction-restauration-sauvegardes-testees-regulierement-recyf-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant:
+                  'reaction-restauration-sauvegardes-testees-regulierement-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant:
+            'reaction-restauration-sauvegardes-testees-regulierement-recyf-oui-ponctuellement',
+          libelle:
+            'La capacité à restaurer est vérifiée ponctuellement sur les données à protéger en priorité (ex. restauration de quelques fichiers au hasard).',
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant:
+                  'reaction-restauration-sauvegardes-testees-regulierement-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant:
+            'reaction-restauration-sauvegardes-testees-regulierement-recyf-oui-une-fois-par-an',
+          libelle:
+            'La restauration de l’ensemble des données est testée au moins une fois par an.',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
       identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
       libelle: 'Savez-vous comment réagir en cas de cyberattaque ?',
       poids: 3,
