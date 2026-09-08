@@ -57,33 +57,23 @@ export const donneesReaction: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'reaction-sauvegardes-donnees-realisees',
+      identifiant: 'reaction-sauvegardes-donnees-realisees-recyf',
       libelle: 'Des sauvegardes régulières des données sont-elles réalisées ?',
-      poids: 3,
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'reaction-sauvegardes-donnees-realisees-nsp',
+          identifiant: 'reaction-sauvegardes-donnees-realisees-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'reaction-sauvegardes-donnees-realisees-non',
+          identifiant: 'reaction-sauvegardes-donnees-realisees-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'reaction-sauvegardes-donnees-realisees',
-                niveau: 1,
-              },
-              {
-                identifiant:
-                  'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
-                niveau: 1,
-              },
-              {
-                identifiant:
-                  'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
+                identifiant: 'reaction-sauvegardes-donnees-realisees-recyf',
                 niveau: 1,
               },
             ],
@@ -92,114 +82,14 @@ export const donneesReaction: QuestionsThematique = {
         },
         {
           identifiant:
-            'reaction-sauvegardes-donnees-realisees-oui-ponctuellement',
-          libelle: 'Des sauvegardes des données sont réalisées ponctuellement',
-          questions: [
-            {
-              identifiant:
-                'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
-              libelle:
-                'Existe-t-il au moins un jeu de sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne ou "hors ligne" ?',
-              poids: 3,
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-na',
-                  libelle: 'Non applicable',
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-nsp',
-                  libelle: 'Je ne sais pas',
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-non',
-                  libelle: 'Non',
-                  resultat: {
-                    indice: { valeur: 0 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-oui',
-                  libelle: 'Oui',
-                  resultat: {
-                    indice: { valeur: 3 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 3,
-                },
-              ],
-              type: 'choixUnique',
-            },
-            {
-              identifiant:
-                'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
-              libelle:
-                'Si "Oui" : La restauration des sauvegardes de toutes vos données critiques est-elle testée régulièrement ?',
-              poids: 3,
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-na',
-                  libelle: 'Non applicable',
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-nsp',
-                  libelle: 'Je ne sais pas',
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-non',
-                  libelle: 'Non',
-                  resultat: {
-                    indice: { valeur: 0 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-oui',
-                  libelle: 'Oui',
-                  resultat: { indice: { valeur: 3 } },
-                  ordre: 3,
-                },
-              ],
-              type: 'choixUnique',
-            },
-          ],
+            'reaction-sauvegardes-donnees-realisees-recyf-oui-regulierement',
+          libelle:
+            'Les données à protéger en priorité sont identifiées et sauvegardées régulièrement, avec au moins une copie hors ligne (déconnectée après la sauvegarde).',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
-                identifiant: 'reaction-sauvegardes-donnees-realisees',
+                identifiant: 'reaction-sauvegardes-donnees-realisees-recyf',
                 niveau: 1,
               },
             ],
@@ -208,103 +98,9 @@ export const donneesReaction: QuestionsThematique = {
         },
         {
           identifiant:
-            'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere',
+            'reaction-sauvegardes-donnees-realisees-recyf-oui-automatique-et-reguliere',
           libelle:
-            'Des sauvegardes des données sont réalisées de manière automatique et régulière',
-          questions: [
-            {
-              identifiant:
-                'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole',
-              libelle:
-                'Existe-t-il au moins un jeu de sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne ou "hors ligne"',
-              poids: 3,
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-na',
-                  libelle: 'Non applicable',
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-nsp',
-                  libelle: 'Je ne sais pas',
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-non',
-                  libelle: 'Non',
-                  resultat: {
-                    indice: { valeur: 0 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui',
-                  libelle: 'Oui',
-                  resultat: {
-                    indice: { valeur: 3 },
-                  },
-                  ordre: 3,
-                },
-              ],
-              type: 'choixUnique',
-            },
-            {
-              identifiant:
-                'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement',
-              libelle:
-                'La restauration des sauvegardes de toutes vos données critiques est-elle testée régulièrement ?',
-              poids: 3,
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-na',
-                  libelle: 'Non applicable',
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-nsp',
-                  libelle: 'Je ne sais pas',
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-non',
-                  libelle: 'Non',
-                  resultat: {
-                    indice: { valeur: 0 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-oui',
-                  libelle: 'Oui',
-                  resultat: { indice: { valeur: 3 } },
-                  ordre: 3,
-                },
-              ],
-              type: 'choixUnique',
-            },
-          ],
+            'L’ensemble des données font l’objet d’un processus de sauvegarde adapté et les sauvegardes sont protégées d’un incident les rendant inexploitables en cas de compromission générale du réseau interne (par exemple : le stockage hors-ligne pour répondre à un incident de type rançongiciel).',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
