@@ -810,12 +810,6 @@ export const donneesContexte: QuestionsThematique = {
                 reponseDonnee:
                   'securite-infrastructure-espace-stockage-serveurs-na',
               },
-              {
-                identifiantQuestion:
-                  'sensibilisation-risque-espionnage-industriel-r-et-d',
-                reponseDonnee:
-                  'sensibilisation-risque-espionnage-industriel-r-et-d-na',
-              },
             ],
           },
         },
