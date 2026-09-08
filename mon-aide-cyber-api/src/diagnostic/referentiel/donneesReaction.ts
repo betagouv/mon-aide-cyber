@@ -3,60 +3,6 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesReaction: QuestionsThematique = {
   questions: [
     {
-      identifiant: 'reaction-surveillance-veille-vulnerabilites-potentielles',
-      libelle:
-        'Un suivi des alertes de cybersécurité et des vulnérabilités publiées pouvant vous affecter est-il réalisé ?',
-      poids: 2,
-      reponsesPossibles: [
-        {
-          identifiant:
-            'reaction-surveillance-veille-vulnerabilites-potentielles-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant:
-            'reaction-surveillance-veille-vulnerabilites-potentielles-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant:
-                  'reaction-surveillance-veille-vulnerabilites-potentielles',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle',
-          libelle: 'Un suivi ponctuel est réalisé',
-          resultat: {
-            indice: { valeur: 1.5 },
-            mesures: [
-              {
-                identifiant:
-                  'reaction-surveillance-veille-vulnerabilites-potentielles',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'reaction-surveillance-veille-vulnerabilites-potentielles-veille-reguliere',
-          libelle: 'Une veille proactive et exhaustive est réalisée',
-          resultat: { indice: { valeur: 3 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
       identifiant: 'reaction-sauvegardes-donnees-realisees-recyf',
       libelle: 'Des sauvegardes régulières des données sont-elles réalisées ?',
       poids: 1,
@@ -312,56 +258,6 @@ export const donneesReaction: QuestionsThematique = {
             'reaction-amelioration-gestion-crise-recyf-oui-regulierement',
           libelle:
             'Un retour d’expérience formalisé est systématiquement conduit après chaque déclenchement du processus gestion de crise (crise réelle, exercice, etc.), avec identification des points d’amélioration et mise à jour des procédures, outils (mode dégradé, fiches reflexes opérationnelles, etc.). Ces actions d’amélioration font l’objet d’un suivi.',
-          resultat: { indice: { valeur: 3 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
-      libelle: 'Savez-vous comment réagir en cas de cyberattaque ?',
-      poids: 3,
-      reponsesPossibles: [
-        {
-          identifiant: 'reaction-dispositif-gestion-crise-adapte-defini-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant: 'reaction-dispositif-gestion-crise-adapte-defini-non',
-          libelle: 'Non',
-          ordre: 1,
-          resultat: {
-            mesures: [
-              {
-                identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
-                niveau: 1,
-              },
-            ],
-            indice: { valeur: 0 },
-          },
-        },
-        {
-          identifiant:
-            'reaction-dispositif-gestion-crise-adapte-defini-oui-fiche-reflexe',
-          libelle: 'Oui, nous avons formalisé une fiche réflexe dédiée',
-          resultat: {
-            mesures: [
-              {
-                identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
-                niveau: 2,
-              },
-            ],
-            indice: { valeur: 1.5 },
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'reaction-dispositif-gestion-crise-adapte-defini-oui-organisation-gestion-crise-definie',
-          libelle:
-            'Oui, une organisation de gestion de crise d’origine cyber a été définie',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
