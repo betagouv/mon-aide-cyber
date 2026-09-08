@@ -4,27 +4,27 @@ export const donneesSensibilisation: QuestionsThematique = {
   questions: [
     {
       identifiant:
-        'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
+        'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf',
       libelle:
         'Des actions de sensibilisation à la menace et aux bonnes pratiques cyber sont-elles réalisées ?',
-      poids: 3,
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant:
-            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-nsp',
+            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
           identifiant:
-            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-non',
+            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
                 identifiant:
-                  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
+                  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf',
                 niveau: 1,
               },
             ],
@@ -33,16 +33,16 @@ export const donneesSensibilisation: QuestionsThematique = {
         },
         {
           identifiant:
-            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-ponctuellement',
+            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-oui-ponctuellement',
           libelle:
-            'Oui, nous avons déjà mené des actions de sensibilisation ces dernières années',
+            'Tous les collaborateurs ont été ou sont sensibilisé au moins une fois.',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
               {
                 identifiant:
-                  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
-                niveau: 2,
+                  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf',
+                niveau: 1,
               },
             ],
           },
@@ -50,9 +50,9 @@ export const donneesSensibilisation: QuestionsThematique = {
         },
         {
           identifiant:
-            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-regulierement',
+            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-oui-regulierement',
           libelle:
-            'Oui, nous menons chaque année des actions de sensibilisation à l’attention du personnel et ciblant des populations spécifiques (ex : services supports, services métiers)',
+            'Des actions de sensibilisation sont menées régulièrement, sous plusieurs formats répartis dans l’année (messages, exercices, faux phishing), intégrées au parcours d’arrivée et adaptées aux populations sensibles (finance, direction…).',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
