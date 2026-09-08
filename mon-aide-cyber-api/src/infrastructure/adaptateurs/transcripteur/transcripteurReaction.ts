@@ -36,6 +36,14 @@ export const transcripteurReaction: Thematique = {
     {
       questions: [
         {
+          identifiant: 'reaction-sauvegardes-donnees-realisees-recyf',
+          'info-bulles': ['recyf/reaction/sauvegarde-isolee-ressources.pug'],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
           'info-bulles': ['reaction/organisation-gestion-crise.pug'],
         },
