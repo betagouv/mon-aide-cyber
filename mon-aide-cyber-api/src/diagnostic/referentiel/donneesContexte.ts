@@ -869,6 +869,12 @@ export const donneesContexte: QuestionsThematique = {
               },
               {
                 identifiantQuestion:
+                  'securite-poste-si-industriel-systemes-cloisonnes-recyf',
+                reponseDonnee:
+                  'securite-poste-si-industriel-systemes-cloisonnes-recyf-na',
+              },
+              {
+                identifiantQuestion:
                   'securite-infrastructure-si-industriel-pare-feu-deploye',
                 reponseDonnee:
                   'securite-infrastructure-si-industriel-pare-feu-deploye-na',
