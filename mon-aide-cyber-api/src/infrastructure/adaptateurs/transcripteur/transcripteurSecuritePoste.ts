@@ -53,6 +53,13 @@ export const transcripteurSecuritePoste: Thematique = {
     {
       questions: [
         {
+          identifiant: 'securite-poste-systemes-cloisonnes-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees',
           'info-bulles': [
