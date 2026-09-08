@@ -28,6 +28,17 @@ export const mesuresReaction = {
     },
     priorisation: 3,
   },
+  'reaction-restauration-sauvegardes-testees-regulierement-recyf': {
+    niveau1: {
+      titre:
+        'Tester les procédures de sauvegarde et de restauration à minima annuellement',
+      pourquoi:
+        '../../mesures/recyf/reaction/reaction-restauration-sauvegardes-testees-regulierement-recyf-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/recyf/reaction/reaction-restauration-sauvegardes-testees-regulierement-recyf-niveau1-comment.pug',
+    },
+    priorisation: 17,
+  },
   'reaction-dispositif-gestion-crise-adapte-defini': {
     niveau1: {
       titre: 'Lister les personnes à contacter en cas de cyberattaque',
