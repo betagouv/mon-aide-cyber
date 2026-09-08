@@ -61,6 +61,17 @@ export const mesuresReaction = {
     },
     priorisation: 15,
   },
+  'reaction-amelioration-gestion-crise-recyf': {
+    niveau1: {
+      titre:
+        'Réaliser un retour d’expérience après tout déclenchement de la procédure de gestion de crise',
+      pourquoi:
+        '../../mesures/recyf/reaction/reaction-amelioration-gestion-crise-recyf-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/recyf/reaction/reaction-amelioration-gestion-crise-recyf-niveau1-comment.pug',
+    },
+    priorisation: 22,
+  },
   'reaction-dispositif-gestion-crise-adapte-defini': {
     niveau1: {
       titre: 'Lister les personnes à contacter en cas de cyberattaque',

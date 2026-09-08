@@ -66,6 +66,13 @@ export const transcripteurReaction: Thematique = {
     {
       questions: [
         {
+          identifiant: 'reaction-amelioration-gestion-crise-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
           'info-bulles': ['reaction/organisation-gestion-crise.pug'],
         },

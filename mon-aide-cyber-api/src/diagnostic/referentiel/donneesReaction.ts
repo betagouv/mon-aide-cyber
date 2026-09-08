@@ -267,6 +267,58 @@ export const donneesReaction: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
+      identifiant: 'reaction-amelioration-gestion-crise-recyf',
+      libelle:
+        'Êtes-vous en mesure d’améliorer votre gestion de crise après une crise ou un exercice ?',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant: 'reaction-amelioration-gestion-crise-recyf-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
+        {
+          identifiant: 'reaction-amelioration-gestion-crise-recyf-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant: 'reaction-amelioration-gestion-crise-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant:
+            'reaction-amelioration-gestion-crise-recyf-oui-premier-exercice',
+          libelle:
+            'Un retour d’expérience est réalisé après chaque déclenchement du processus de gestion de crise (crise réelle, exercice, etc.).',
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant: 'reaction-amelioration-gestion-crise-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant:
+            'reaction-amelioration-gestion-crise-recyf-oui-regulierement',
+          libelle:
+            'Un retour d’expérience formalisé est systématiquement conduit après chaque déclenchement du processus gestion de crise (crise réelle, exercice, etc.), avec identification des points d’amélioration et mise à jour des procédures, outils (mode dégradé, fiches reflexes opérationnelles, etc.). Ces actions d’amélioration font l’objet d’un suivi.',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
       identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
       libelle: 'Savez-vous comment réagir en cas de cyberattaque ?',
       poids: 3,
