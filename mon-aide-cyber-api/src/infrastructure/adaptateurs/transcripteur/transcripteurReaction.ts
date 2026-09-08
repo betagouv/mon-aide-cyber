@@ -52,6 +52,13 @@ export const transcripteurReaction: Thematique = {
     {
       questions: [
         {
+          identifiant: 'reaction-liste-personnes-a-contacter-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
           'info-bulles': ['reaction/organisation-gestion-crise.pug'],
         },
