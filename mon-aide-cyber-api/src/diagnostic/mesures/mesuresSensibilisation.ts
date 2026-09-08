@@ -21,22 +21,15 @@ export const mesuresSensibilisation = {
     },
     priorisation: 18,
   },
-  'sensibilisation-collaborateurs-soumis-obligations-usages-securises': {
+  'sensibilisation-personnel-utilisation-charte-recyf': {
     niveau1: {
-      titre: 'Établir une charte informatique',
-      pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau1-comment.pug',
-    },
-    niveau2: {
       titre:
-        "S'assurer que la charte informatique est annexée au contrat de travail et est signée par les salariés",
+        'Formaliser une charte opposable des règles d’utilisation sécurisée des systèmes d’information',
       pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau2-pourquoi.pug',
+        '../../mesures/recyf/sensibilisation/sensibilisation-personnel-utilisation-charte-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau2-comment.pug',
+        '../../mesures/recyf/sensibilisation/sensibilisation-personnel-utilisation-charte-recyf-niveau1-comment.pug',
     },
-    priorisation: 30,
+    priorisation: 21,
   },
 };
