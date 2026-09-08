@@ -796,22 +796,6 @@ export const donneesContexte: QuestionsThematique = {
           identifiant: 'contexte-activites-recherche-et-developpement-non',
           libelle: 'Non',
           ordre: 1,
-          regle: {
-            reponses: [
-              {
-                identifiantQuestion:
-                  'securite-infrastructure-acces-wifi-securises',
-                reponseDonnee:
-                  'securite-infrastructure-acces-wifi-securises-na',
-              },
-              {
-                identifiantQuestion:
-                  'securite-infrastructure-espace-stockage-serveurs',
-                reponseDonnee:
-                  'securite-infrastructure-espace-stockage-serveurs-na',
-              },
-            ],
-          },
         },
         {
           identifiant: 'contexte-activites-recherche-et-developpement-oui',
@@ -860,12 +844,6 @@ export const donneesContexte: QuestionsThematique = {
                   'securite-poste-si-industriel-systemes-cloisonnes-recyf',
                 reponseDonnee:
                   'securite-poste-si-industriel-systemes-cloisonnes-recyf-na',
-              },
-              {
-                identifiantQuestion:
-                  'securite-infrastructure-si-industriel-pare-feu-deploye',
-                reponseDonnee:
-                  'securite-infrastructure-si-industriel-pare-feu-deploye-na',
               },
             ],
           },
