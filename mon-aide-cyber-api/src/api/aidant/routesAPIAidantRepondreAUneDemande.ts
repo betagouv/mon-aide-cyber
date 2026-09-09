@@ -84,7 +84,7 @@ export const routesAPIAidantRepondreAUneDemande = (
       suite: NextFunction
     ) => {
       const token = requete.query['token'] as string;
-      let tokenEnClair: TonkenAttributionDemandeAide | undefined = undefined;
+      let tokenEnClair: TonkenAttributionDemandeAide | undefined;
       try {
         tokenEnClair =
           tokenAttributionDemandeAide(serviceDeChiffrement).dechiffre(token);

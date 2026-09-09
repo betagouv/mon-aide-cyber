@@ -80,7 +80,7 @@ export const reducteurPreferences = (
         enCoursDeChargement: false,
       };
     case TypeActionPreferences.PREFERENCES_COCHE: {
-      let preferencesAGarder: string[] = [];
+      let preferencesAGarder: string[];
 
       const clef = typePreferenceParActionCible[action.cible];
 

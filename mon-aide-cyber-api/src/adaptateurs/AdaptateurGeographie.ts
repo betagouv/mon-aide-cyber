@@ -33,7 +33,7 @@ class AdaptateurGeographieGeoAPI implements AdaptateurGeographie {
         headers: { Accept: 'application/json' },
       });
       return { nom: reponse[0]?.nom };
-    } catch (erreur) {
+    } catch (_erreur) {
       return undefined;
     }
   }
