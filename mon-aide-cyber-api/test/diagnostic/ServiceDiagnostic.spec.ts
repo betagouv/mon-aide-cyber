@@ -71,8 +71,8 @@ describe('Le service de diagnostic', () => {
       expect(
         referentielDiagnostic.questions.map((q) => q.reponseDonnee)
       ).toMatchObject([
-        { reponseUnique: null, reponsesMultiples: new Set() },
-        { reponseUnique: null, reponsesMultiples: new Set() },
+        { reponseUnique: null, reponsesMultiples: [] },
+        { reponseUnique: null, reponsesMultiples: [] },
       ]);
       expect(
         referentielDiagnostic.questions[1].reponsesPossibles[1]
