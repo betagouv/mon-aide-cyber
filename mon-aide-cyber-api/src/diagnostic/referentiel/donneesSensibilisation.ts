@@ -4,27 +4,27 @@ export const donneesSensibilisation: QuestionsThematique = {
   questions: [
     {
       identifiant:
-        'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
+        'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf',
       libelle:
         'Des actions de sensibilisation à la menace et aux bonnes pratiques cyber sont-elles réalisées ?',
-      poids: 3,
+      poids: 1,
       reponsesPossibles: [
         {
           identifiant:
-            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-nsp',
+            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
           identifiant:
-            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-non',
+            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
                 identifiant:
-                  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
+                  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf',
                 niveau: 1,
               },
             ],
@@ -33,16 +33,16 @@ export const donneesSensibilisation: QuestionsThematique = {
         },
         {
           identifiant:
-            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-ponctuellement',
+            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-oui-ponctuellement',
           libelle:
-            'Oui, nous avons déjà mené des actions de sensibilisation ces dernières années',
+            'Tous les collaborateurs ont été ou sont sensibilisé au moins une fois.',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
               {
                 identifiant:
-                  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
-                niveau: 2,
+                  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf',
+                niveau: 1,
               },
             ],
           },
@@ -50,9 +50,9 @@ export const donneesSensibilisation: QuestionsThematique = {
         },
         {
           identifiant:
-            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-oui-regulierement',
+            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-oui-regulierement',
           libelle:
-            'Oui, nous menons chaque année des actions de sensibilisation à l’attention du personnel et ciblant des populations spécifiques (ex : services supports, services métiers)',
+            'Des actions de sensibilisation sont menées régulièrement, sous plusieurs formats répartis dans l’année (messages, exercices, faux phishing), intégrées au parcours d’arrivée et adaptées aux populations sensibles (finance, direction…).',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
@@ -60,71 +60,25 @@ export const donneesSensibilisation: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'sensibilisation-risque-espionnage-industriel-r-et-d',
+      identifiant: 'sensibilisation-personnel-utilisation-charte-recyf',
       libelle:
-        "Menez-vous des actions de sensibilisation ciblant spécifiquement les collaborateurs effectuant des missions à l'étranger ?",
-      poids: 2,
+        'Le respect d’une charte d’utilisation des systèmes d’information est-il exigé au personnel ?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'sensibilisation-risque-espionnage-industriel-r-et-d-na',
-          libelle: 'Non applicable',
+          identifiant: 'sensibilisation-personnel-utilisation-charte-recyf-nsp',
+          libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant:
-            'sensibilisation-risque-espionnage-industriel-r-et-d-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'sensibilisation-risque-espionnage-industriel-r-et-d-non',
+          identifiant: 'sensibilisation-personnel-utilisation-charte-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
                 identifiant:
-                  'sensibilisation-risque-espionnage-industriel-r-et-d',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'sensibilisation-risque-espionnage-industriel-r-et-d-oui',
-          libelle: 'Oui',
-          resultat: { indice: { valeur: 3 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant:
-        'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
-      libelle:
-        'Le respect d’une charte d’utilisation des moyens informatiques et des outils numériques est-il exigé au personnel ?',
-      poids: 2,
-      reponsesPossibles: [
-        {
-          identifiant:
-            'sensibilisation-collaborateurs-soumis-obligations-usages-securises-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant:
-            'sensibilisation-collaborateurs-soumis-obligations-usages-securises-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant:
-                  'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
+                  'sensibilisation-personnel-utilisation-charte-recyf',
                 niveau: 1,
               },
             ],
@@ -133,15 +87,16 @@ export const donneesSensibilisation: QuestionsThematique = {
         },
         {
           identifiant:
-            'sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-communiquee',
-          libelle: 'Oui, une charte est communiquée aux collaborateurs',
+            'sensibilisation-personnel-utilisation-charte-recyf-oui-charte-communiquee',
+          libelle:
+            'Une charte d’utilisation des systèmes d’information est rédigée et communiquée aux collaborateurs.',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
               {
                 identifiant:
-                  'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
-                niveau: 2,
+                  'sensibilisation-personnel-utilisation-charte-recyf',
+                niveau: 1,
               },
             ],
           },
@@ -149,9 +104,9 @@ export const donneesSensibilisation: QuestionsThematique = {
         },
         {
           identifiant:
-            'sensibilisation-collaborateurs-soumis-obligations-usages-securises-oui-charte-signee',
+            'sensibilisation-personnel-utilisation-charte-recyf-oui-charte-signee',
           libelle:
-            'Oui, une charte est signée par chaque collaborateur et elle est annexée au règlement intérieur',
+            'Une charte opposable (signée par chaque utilisateur, annexée au contrat de travail ou au règlement intérieur), prévoyant des dispositions spécifiques pour les administrateurs, est intégrée au parcours d’arrivée et revue au moins une fois par an.',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },

@@ -14,6 +14,21 @@ export const transcripteurSensibilisation: Thematique = {
       questions: [
         {
           identifiant:
+            'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'sensibilisation-personnel-utilisation-charte-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant:
             'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques',
           'info-bulles': ['sensibilisation/actions-sensibilisation.pug'],
         },

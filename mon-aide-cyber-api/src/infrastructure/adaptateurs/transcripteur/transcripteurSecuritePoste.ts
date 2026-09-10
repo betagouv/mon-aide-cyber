@@ -14,6 +14,60 @@ export const transcripteurSecuritePoste: Thematique = {
       questions: [
         {
           identifiant:
+            'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'securite-poste-antivirus-deploye-recyf',
+          'info-bulles': ['recyf/postes/windows-defender.pug'],
+        },
+        {
+          identifiant: 'securite-poste-si-industriel-antivirus-deploye-recyf',
+          perimetre: 'SYSTEME-INDUSTRIEL',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'securite-poste-mdp-par-defaut-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        { identifiant: 'securite-poste-correctifs-securite-annuaire-recyf' },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'securite-poste-filtre-flux-recyf',
+          'info-bulles': ['recyf/postes/securite-poste-filtre-flux-recyf.pug'],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'securite-poste-systemes-cloisonnes-recyf',
+        },
+        {
+          identifiant: 'securite-poste-si-industriel-systemes-cloisonnes-recyf',
+          'info-bulles': [
+            'recyf/postes/securite-poste-si-industriel-systemes-cloisonnes-recyf.pug',
+          ],
+          perimetre: 'SYSTEME-INDUSTRIEL',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees',
           'info-bulles': [
             'postes/maj-fonctionnelles-installees.pug',

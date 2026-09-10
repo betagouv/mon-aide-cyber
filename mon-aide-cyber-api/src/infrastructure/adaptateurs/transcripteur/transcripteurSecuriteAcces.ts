@@ -13,6 +13,56 @@ export const transcripteurSecuriteAcces: Thematique = {
     {
       questions: [
         {
+          identifiant: 'acces-comptes-privileges-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf',
+          'info-bulles': [
+            'recyf/acces/acces-postes-droits-utilisateurs-restreints.pug',
+          ],
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'acces-teletravail-acces-distants-recyf',
+          'info-bulles': [
+            'recyf/acces/teletravail-acces-distants-mfa.pug',
+            'recyf/acces/teletravail-acces-distants-precisions.pug',
+          ],
+        },
+        {
+          identifiant: 'acces-si-industriel-teletravail-acces-distants-recyf',
+          'info-bulles': [
+            'recyf/acces/teletravail-acces-distants-mfa.pug',
+            'recyf/acces/teletravail-acces-distants-precisions.pug',
+          ],
+          perimetre: 'SYSTEME-INDUSTRIEL',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
+          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
+        },
+      ],
+    },
+    {
+      questions: [
+        {
           identifiant: 'acces-outil-gestion-des-comptes',
           'info-bulles': [
             'acces/gestion-comptes-entites-publiques.pug',
@@ -47,6 +97,7 @@ export const transcripteurSecuriteAcces: Thematique = {
         },
       ],
     },
+
     {
       questions: [
         {
@@ -55,6 +106,7 @@ export const transcripteurSecuriteAcces: Thematique = {
         },
       ],
     },
+
     {
       questions: [
         {
