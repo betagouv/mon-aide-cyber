@@ -14,6 +14,7 @@ type Resultat = {
 type ReponsePossible = {
   identifiant: string;
   libelle: string;
+  detail?: string;
   ordre: number;
   questions?: QuestionATiroir[];
   resultat?: Resultat;

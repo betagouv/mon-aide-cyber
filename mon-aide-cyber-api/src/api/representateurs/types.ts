@@ -19,6 +19,7 @@ export type RepresentationDiagnostic = {
 export type RepresentationReponsePossible = {
   identifiant: string;
   libelle: string;
+  detail?: string;
   ordre: number;
   questions?: RepresentationQuestion[];
 };

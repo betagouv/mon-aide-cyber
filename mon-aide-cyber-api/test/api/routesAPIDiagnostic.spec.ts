@@ -101,6 +101,39 @@ describe('Le serveur MAC sur les routes /api/diagnostic', () => {
       );
     });
 
+    it('Retourne le référentiel du diagnostic avec le détail d’une réponse', async () => {
+      connecteUtilisateur(crypto.randomUUID());
+      const diagnostic = unDiagnostic()
+        .avecUnReferentiel(
+          unReferentiel()
+            .ajouteUneQuestionAuContexte(
+              uneQuestion()
+                .avecReponsesPossibles([
+                  uneReponsePossible()
+                    .avecLibelle('Le libellé')
+                    .avecDetail('Le détail')
+                    .construis(),
+                ])
+                .construis()
+            )
+            .construis()
+        )
+        .construis();
+      await testeurMAC.entrepots.diagnostic().persiste(diagnostic);
+
+      const reponse = await executeRequete(
+        donneesServeur.app,
+        'GET',
+        `/api/diagnostic/${diagnostic.identifiant}`
+      );
+
+      const diagnosticRecu: RepresentationDiagnostic = await reponse.json();
+      expect(
+        diagnosticRecu.referentiel['contexte'].groupes[0].questions[0]
+          .reponsesPossibles[0].detail
+      ).toStrictEqual('Le détail');
+    });
+
     it("Renvoie une erreur HTTP 404 diagnostic non trouvé si le diagnostic n'existe pas", async () => {
       connecteUtilisateur(crypto.randomUUID());
 

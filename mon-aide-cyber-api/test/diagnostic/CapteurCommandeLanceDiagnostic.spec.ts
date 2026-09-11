@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
   uneQuestion,
+  uneReponsePossible,
   unReferentiel,
 } from '../constructeurs/constructeurReferentiel';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
@@ -63,6 +64,38 @@ describe('Capteur pour lancer un diagnostic', () => {
         reponseDonnee: { reponseUnique: null, reponsesMultiples: [] },
       },
     ]);
+  });
+
+  it('copie le référentiel disponible contenant le détail d’une réponse possible', async () => {
+    const referentiel = unReferentiel()
+      .ajouteUneQuestionAuContexte(
+        uneQuestion()
+          .avecReponsesPossibles([
+            uneReponsePossible().avecDetail('Le détail').construis(),
+          ])
+          .construis()
+      )
+      .construis();
+    adaptateurReferentiel.ajoute(referentiel);
+
+    const diagnostic = await new CapteurCommandeLanceDiagnostic(
+      entrepots,
+      new BusEvenementDeTest(),
+      adaptateurReferentiel,
+      adaptateurMesures
+    ).execute({
+      type: 'CommandeLanceDiagnostic',
+      identifiantAidant: crypto.randomUUID(),
+      emailEntite: 'betagouv@beta.gouv.fr',
+    });
+
+    const diagnosticRetourne = await entrepots
+      .diagnostic()
+      .lis(diagnostic.identifiant);
+    expect(
+      diagnosticRetourne.referentiel['contexte'].questions[0]
+        .reponsesPossibles[0].detail
+    ).toStrictEqual('Le détail');
   });
 
   it('les dates de création et modification sont initialisées', async () => {
