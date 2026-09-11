@@ -247,6 +247,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
     indice: Indice;
   };
   private regleDeGestion: RegleDeGestionAjouteReponse | undefined = undefined;
+  private detail?: string;
 
   ajouteUneQuestionATiroir(
     question: QuestionATiroir
@@ -261,6 +262,11 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
   avecLibelle(libelle: string): ConstructeurReponsePossible {
     this.libelle = libelle;
     this.identifiant = aseptise(libelle);
+    return this;
+  }
+
+  avecDetail(detail: string): ConstructeurReponsePossible {
+    this.detail = detail;
     return this;
   }
 
@@ -309,6 +315,7 @@ class ConstructeurReponsePossible implements Constructeur<ReponsePossible> {
       }),
       ...(this.questions && { questions: this.questions }),
       ...(this.regleDeGestion !== undefined && { regle: this.regleDeGestion }),
+      ...(this.detail !== undefined && { detail: this.detail }),
     };
   }
 }
