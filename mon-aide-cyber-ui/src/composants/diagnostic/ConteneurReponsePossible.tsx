@@ -159,6 +159,9 @@ export const ConteneurReponsePossible = ({
           })}
         </div>
       ))}
+      {reponse.detail && (
+        <div className="fr-highlight fr-text--sm">{reponse.detail}</div>
+      )}
     </ComposantReponsePossible>
   );
 };

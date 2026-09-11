@@ -76,6 +76,10 @@
     background-color: rgba(#fdc82e, 0.1);
   }
 
+  .fr-highlight {
+    background-image: linear-gradient(0deg, var(--couleurs-mac-violet-fonce), var(--couleurs-mac-violet-fonce));
+  }
+
   @media screen and (max-width: 768px) {
 
     .contexte {

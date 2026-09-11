@@ -28,6 +28,7 @@ export type QuestionATiroir = Omit<Question, 'reponseDonnee'>;
 export type ReponsePossible = {
   identifiant: string;
   libelle: string;
+  detail?: string;
   ordre: number;
   questions?: QuestionATiroir[];
 };
