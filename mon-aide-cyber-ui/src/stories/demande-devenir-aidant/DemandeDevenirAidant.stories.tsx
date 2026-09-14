@@ -39,7 +39,7 @@ export const DemandeDevenirAidantStory: Story = {
           name: '',
         })
       ).toBeInTheDocument();
-      expect(canvas.getByRole('checkbox')).toBeInTheDocument();
+      expect(canvas.getAllByRole('checkbox')).toHaveLength(2);
       expect(canvas.getByRole('button', { name: /envoyer/i })).toBeDisabled();
     });
 
@@ -89,7 +89,7 @@ export const DemandeDevenirAidantStory: Story = {
     });
 
     await step('Valide les CGU', async () => {
-      await userEvent.dblClick(canvas.getByRole('checkbox'));
+      await userEvent.dblClick(canvas.getAllByRole('checkbox')[0]);
 
       await expect(
         canvas.queryByText('Veuillez valider les CGU.')
@@ -121,7 +121,7 @@ export const DemandeDevenirAidantStory: Story = {
         canvas.getByRole('button', { name: '33 - Gironde' })
       );
 
-      await userEvent.click(canvas.getByRole('checkbox'));
+      await userEvent.click(canvas.getAllByRole('checkbox')[0]);
       expect(canvas.getByRole('button', { name: /envoyer/i })).toBeEnabled();
     });
   },
