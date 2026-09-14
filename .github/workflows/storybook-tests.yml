@@ -19,12 +19,12 @@ jobs:
           version: 10.34.5
       - name: Installe les dépendances
         run: pnpm install --frozen-lockfile
-#      - name: Installe Playwright
-#        run: ./node_modules/.bin/playwright install chromium --with-deps
-#      - name: Construis Storybook
-#        run: pnpm run -F mon-aide-cyber-ui build:storybook --quiet
-#      - name: Démarre Storybook et execute les tests
-#        run: |
-#          ./node_modules/.bin/concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
-#            "./node_modules/.bin/http-server ./mon-aide-cyber-ui/storybook-static --port 6006 --silent" \
-#            "./node_modules/.bin/wait-on tcp:6006 && npm run test:storybook -w mon-aide-cyber-ui"
+      - name: Installe Playwright
+        run: ./mon-aide-cyber-ui/node_modules/.bin/playwright install chromium --with-deps
+      - name: Construis Storybook
+        run: pnpm run -F mon-aide-cyber-ui build:storybook --quiet
+      - name: Démarre Storybook et execute les tests
+        run: |
+          ./mon-aide-cyber-ui/node_modules/.bin/concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+            "./mon-aide-cyber-ui/node_modules/.bin/http-server ./mon-aide-cyber-ui/storybook-static --port 6006 --silent" \
+            "./mon-aide-cyber-ui/node_modules/.bin/wait-on tcp:6006 && pnpm --dir mon-aide-cyber-ui run test:storybook"
