@@ -31,7 +31,7 @@
   "devDependencies": {
     "@eslint/compat": "^2.0.0",
     "@storybook/addon-links": "^10.0.0",
-    "@storybook/react-vite": "^9.1.5",
+    "@storybook/react-vite": "^10.0.0",
     "@storybook/test-runner": "^0.24.0",
     "@swc/cli": "^0.8.0",
     "@swc/core": "^1.13.5",
