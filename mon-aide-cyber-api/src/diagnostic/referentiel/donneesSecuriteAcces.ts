@@ -3,42 +3,50 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesSecuriteAcces: QuestionsThematique = {
   questions: [
     {
-      identifiant: 'acces-outil-gestion-des-comptes',
+      identifiant: 'acces-comptes-privileges-recyf',
       libelle:
-        "Un outil de gestion des comptes et des politiques de sécurité centralisé (ex : Active Directory, Samba-AD, Entra ID, scripts d'administration automatisés, etc.) est-il mis en œuvre ?",
-      poids: 0.5,
+        'Les comptes à privilèges (ex. administrateurs, comptes de service) inactifs et/ou non nécessaires sont-ils désactivés?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'acces-outil-gestion-des-comptes-na',
-          libelle: 'Non applicable',
+          identifiant: 'acces-comptes-privileges-recyf-nsp',
+          libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'acces-outil-gestion-des-comptes-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant: 'acces-outil-gestion-des-comptes-non',
+          identifiant: 'acces-comptes-privileges-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'acces-outil-gestion-des-comptes',
+                identifiant: 'acces-comptes-privileges-recyf',
                 niveau: 1,
               },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant: 'acces-comptes-privileges-recyf-un-peu',
+          libelle:
+            "Les comptes à privilèges sont désactivés au fil de l'eau sans délais clairs de désactivation.",
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              { identifiant: 'acces-comptes-privileges-recyf', niveau: 1 },
             ],
           },
           ordre: 2,
         },
         {
-          identifiant: 'acces-outil-gestion-des-comptes-oui',
-          libelle: 'Oui',
+          identifiant: 'acces-comptes-privileges-recyf-oui',
+          libelle:
+            'Des délais clairs de désactivation des comptes comptes à privilèges inactifs ou non nécessaires sont formalisés, appliqués et tracés.',
           resultat: {
             indice: { valeur: 3 },
             mesures: [
-              { identifiant: 'acces-outil-gestion-des-comptes', niveau: 2 },
+              { identifiant: 'acces-comptes-privileges-recyf', niveau: 1 },
             ],
           },
           ordre: 3,
@@ -47,84 +55,30 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-liste-compte-utilisateurs',
+      identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf',
       libelle:
-        'La liste des comptes utilisateurs (prestataires inclus) est-elle maintenue à jour ?',
+        'Les droits des utilisateurs sont-ils restreints sur les postes de travail ?',
       poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'acces-liste-compte-utilisateurs-na',
+          identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant: 'acces-liste-compte-utilisateurs-nsp',
+          identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant: 'acces-liste-compte-utilisateurs-non',
+          identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'acces-liste-compte-utilisateurs',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant: 'acces-liste-compte-utilisateurs-revue-reguliere',
-          libelle:
-            'Les comptes des utilisateurs et leurs accès sont régulièrement revus (ex : liste du personnel vs liste des comptes)',
-          resultat: {
-            indice: { valeur: 2 },
-            mesures: [
-              {
-                identifiant: 'acces-liste-compte-utilisateurs',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 3,
-        },
-        {
-          identifiant: 'acces-liste-compte-utilisateurs-revue-en-continu',
-          libelle:
-            "La liste des comptes des utilisateurs est mise à jour en continu dans le cadre d'un processus de désactivation systématique des comptes inactifs. Une revue annuelle est également réalisée",
-          resultat: { indice: { valeur: 3 } },
-          ordre: 4,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant: 'acces-droits-acces-utilisateurs-limites',
-      libelle:
-        'Les droits des utilisateurs sont-ils limités à leurs besoins métiers ?',
-      poids: 1,
-      reponsesPossibles: [
-        {
-          identifiant: 'acces-droits-acces-utilisateurs-limites-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
-        {
-          identifiant: 'acces-droits-acces-utilisateurs-limites-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant: 'acces-droits-acces-utilisateurs-limites-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant: 'acces-droits-acces-utilisateurs-limites',
+                identifiant:
+                  'acces-postes-droits-utilisateurs-restreints-recyf',
                 niveau: 1,
               },
             ],
@@ -133,15 +87,16 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-droits-acces-utilisateurs-limites-restrictions-ponctuelles',
+            'acces-postes-droits-utilisateurs-restreints-recyf-un-peu',
           libelle:
-            'Des restrictions d’accès à certaines données sont ponctuellement mises en place',
+            "Sur les postes de travail, les utilisateurs travaillent avec un compte standard, sans droits d'administration locale. Les postes faisant exception (logiciel métier exigeant des droits élevés, poste de développement) sont identifiés.",
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
-                identifiant: 'acces-droits-acces-utilisateurs-limites',
-                niveau: 2,
+                identifiant:
+                  'acces-postes-droits-utilisateurs-restreints-recyf',
+                niveau: 1,
               },
             ],
           },
@@ -149,9 +104,9 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-droits-acces-utilisateurs-limites-restrictions-limitees',
+            'acces-postes-droits-utilisateurs-restreints-recyf-limites',
           libelle:
-            'L’accès des utilisateurs aux données, aux systèmes et aux applications sont limités aux seuls accès nécessaires à leur activité',
+            "Aucun utilisateur ne dispose de droits d'administration locale sur son poste, sur l'ensemble du parc ; les exceptions sont documentées, justifiées et revues au moins une fois par an. Les processus automatiques installés sur les postes (sauvegarde, supervision, télédistribution, antivirus) ne fonctionnent qu'avec les droits nécessaires à leur fonction.",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -159,24 +114,24 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-utilisateurs-administrateurs-poste',
-      libelle: 'Les utilisateurs sont-ils administrateurs de leur poste ?',
-      poids: 3,
+      identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
+      libelle:
+        "Les administrateurs disposent-ils de compte dédiés aux tâches d'administration et sont-ils les seuls à pouvoir les utiliser?",
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'acces-utilisateurs-administrateurs-poste-nsp',
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'acces-utilisateurs-administrateurs-poste-oui',
-          libelle:
-            'Oui, les comptes d’accès des utilisateurs disposent des privilèges d’administration du poste de travail',
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf-non',
+          libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'acces-utilisateurs-administrateurs-poste',
+                identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
                 niveau: 1,
               },
             ],
@@ -184,15 +139,14 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 1,
         },
         {
-          identifiant:
-            'acces-utilisateurs-administrateurs-poste-suppression-privilege-en-cours',
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf-un-peu',
           libelle:
-            'La suppression de ce privilège est en cours de traitement, plusieurs utilisateurs sont toujours administrateurs de leur poste',
+            "Chaque administrateur dispose d'un compte d'administration distinct de son compte utilisateur courant. Ces comptes ne sont utilisés ni pour la messagerie, ni pour la navigation Internet, ni pour la bureautique.",
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
-                identifiant: 'acces-utilisateurs-administrateurs-poste',
+                identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
                 niveau: 1,
               },
             ],
@@ -200,9 +154,9 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant:
-            'acces-utilisateurs-administrateurs-poste-non-exceptions-justifiees',
-          libelle: 'Non, et les rares exceptions sont justifiées',
+          identifiant: 'acces-utilisateurs-administrateurs-poste-recyf-oui',
+          libelle:
+            "Les comptes utilisateurs et d'administration sont dissociés sur l'ensemble des équipements, y compris les outils et services en ligne. Les comptes d'administration sont dédiés à l'administration, et seules les personnes autorisées en disposent.",
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
@@ -210,245 +164,29 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-mesures-securite-robustesse-mdp',
-      libelle:
-        'Des exigences de complexité sont-elles imposées sur les mots de passe de session des utilisateurs ?',
-      poids: 1,
-      reponsesPossibles: [
-        {
-          identifiant: 'acces-mesures-securite-robustesse-mdp-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant: 'acces-mesures-securite-robustesse-mdp-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant: 'acces-mesures-securite-robustesse-mdp',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'acces-mesures-securite-robustesse-mdp-contraintes-par-defaut',
-          libelle:
-            "Des contraintes en matière de sécurité des mots de passe sont exigées par défaut pour l'accès des utilisateurs à leur compte",
-          resultat: { indice: { valeur: 3 } },
-          ordre: 2,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant: 'acces-administrateurs-informatiques-suivie-et-limitee',
-      libelle:
-        'La liste des comptes des administrateurs informatiques (prestataires inclus) est-elle suivie et limitée au strict nécessaire ?',
-      poids: 1,
-      reponsesPossibles: [
-        {
-          identifiant:
-            'acces-administrateurs-informatiques-suivie-et-limitee-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant:
-            'acces-administrateurs-informatiques-suivie-et-limitee-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant:
-                  'acces-administrateurs-informatiques-suivie-et-limitee',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'acces-administrateurs-informatiques-suivie-et-limitee-revue-reguliere',
-          libelle:
-            'Les comptes des administrateurs sont régulièrement revus (ex : liste du personnel vs liste des comptes)',
-          resultat: {
-            indice: { valeur: 2 },
-            mesures: [
-              {
-                identifiant:
-                  'acces-administrateurs-informatiques-suivie-et-limitee',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'acces-administrateurs-informatiques-suivie-et-limitee-revue-continue',
-          libelle:
-            "La liste des comptes des administrateurs est mise à jour en continu dans le cadre d'un processus de désactivation systématique des comptes inactifs. Une revue annuelle est également réalisée",
-          resultat: { indice: { valeur: 3 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant: 'acces-utilisation-comptes-administrateurs-droits-limitee',
-      libelle:
-        "L'utilisation des comptes administrateurs est-elle bien limitée aux tâches d'administration ?",
-      poids: 1,
-      reponsesPossibles: [
-        {
-          identifiant:
-            'acces-utilisation-comptes-administrateurs-droits-limitee-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant:
-            'acces-utilisation-comptes-administrateurs-droits-limitee-non',
-          libelle:
-            'Non, des utilisateurs disposent de privilèges d’administration sans restriction particulière',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant:
-                  'acces-utilisation-comptes-administrateurs-droits-limitee',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'acces-utilisation-comptes-administrateurs-droits-quelques-restrictions',
-          libelle:
-            "La mise à disposition des comptes d'administration fait l'objet de quelques restrictions",
-          resultat: {
-            indice: { valeur: 2 },
-            mesures: [
-              {
-                identifiant:
-                  'acces-utilisation-comptes-administrateurs-droits-limitee',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'acces-utilisation-comptes-administrateurs-droits-justifies',
-          libelle:
-            'Tous les comptes administration sont justifiés, et dédiés aux seules tâches d’administration',
-          resultat: { indice: { valeur: 3 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant:
-        'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
-      libelle:
-        "L'accès des utilisateurs aux ressources et données les plus sensibles fait-il l’objet de mesures de sécurité additionnelles ?",
-      poids: 1,
-      reponsesPossibles: [
-        {
-          identifiant:
-            'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-na',
-          libelle: 'Non applicable',
-          ordre: 0,
-        },
-        {
-          identifiant:
-            'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant:
-                  'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees',
-          libelle:
-            "Oui, des mesures renforçant l'accès à ces données ont été mises en œuvre",
-          resultat: {
-            indice: { valeur: 2 },
-            mesures: [
-              {
-                identifiant:
-                  'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 3,
-        },
-        {
-          identifiant:
-            'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-oui-mesures-authentification-renforcees-et-donnees-chiffrees',
-          libelle:
-            "Oui, des mesures renforçant l'accès à ces données ont été mises en œuvre et les données sont chiffrées",
-          resultat: { indice: { valeur: 3 } },
-          ordre: 4,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant: 'acces-teletravail-acces-distants-mesures-particulieres',
+      identifiant: 'acces-teletravail-acces-distants-recyf',
       libelle:
         'Le télétravail et les accès distants (cloud inclus) sont-ils protégés par une authentification multifacteur ?',
-      poids: 2,
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-na',
+          identifiant: 'acces-teletravail-acces-distants-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-nsp',
+          identifiant: 'acces-teletravail-acces-distants-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-non',
+          identifiant: 'acces-teletravail-acces-distants-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant:
-                  'acces-teletravail-acces-distants-mesures-particulieres',
+                identifiant: 'acces-teletravail-acces-distants-recyf',
                 niveau: 1,
               },
             ],
@@ -456,16 +194,14 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 2,
         },
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-mfa',
+          identifiant: 'acces-teletravail-acces-distants-recyf-mfa',
           libelle:
-            'Certaines connexions à distance sont protégées par une authentification multifacteur',
+            "Un mécanisme d'authentification multifacteur est activé sur les principaux accès exposés sur Internet (ex. SaaS fournis par un tiers, ou SI internes exposés sur Internet).",
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
-                identifiant:
-                  'acces-teletravail-acces-distants-mesures-particulieres',
+                identifiant: 'acces-teletravail-acces-distants-recyf',
                 niveau: 1,
               },
             ],
@@ -473,10 +209,9 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           ordre: 3,
         },
         {
-          identifiant:
-            'acces-teletravail-acces-distants-mesures-particulieres-vpn',
+          identifiant: 'acces-teletravail-acces-distants-recyf-vpn',
           libelle:
-            'Toutes les connexions à distance sont protégées par une authentification multifacteur',
+            "Un mécanisme d'authentification multifacteur (basé sur le facteur de connaissance ainsi que sur un second facteur) est activé sur l'ensemble des accès distants (dont la messagerie, les services exposés, le télétravail, la télémaintenance ainsi que les accès VPN) pour tous les utilisateurs.",
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -484,34 +219,33 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant:
-        'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+      identifiant: 'acces-si-industriel-teletravail-acces-distants-recyf',
       libelle:
         'Les accès distants aux systèmes industriels sont-ils protégés par une authentification multifacteur ?',
       poids: 1,
       reponsesPossibles: [
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-na',
+            'acces-si-industriel-teletravail-acces-distants-recyf-na',
           libelle: 'Non applicable',
           ordre: 0,
         },
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-nsp',
+            'acces-si-industriel-teletravail-acces-distants-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 1,
         },
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-non',
+            'acces-si-industriel-teletravail-acces-distants-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
                 identifiant:
-                  'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+                  'acces-si-industriel-teletravail-acces-distants-recyf',
                 niveau: 1,
               },
             ],
@@ -520,7 +254,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-mfa',
+            'acces-si-industriel-teletravail-acces-distants-recyf-mfa',
           libelle:
             'Certaines connexions à distance sont protégées par une authentification multifacteur',
           resultat: {
@@ -528,7 +262,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             mesures: [
               {
                 identifiant:
-                  'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+                  'acces-si-industriel-teletravail-acces-distants-recyf',
                 niveau: 1,
               },
             ],
@@ -537,7 +271,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-vpn',
+            'acces-si-industriel-teletravail-acces-distants-recyf-vpn',
           libelle:
             'Toutes les connexions à distance sont protégées par une authentification multifacteur',
           resultat: { indice: { valeur: 3 } },
@@ -547,24 +281,40 @@ export const donneesSecuriteAcces: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'acces-administrateurs-si-mesures-specifiques',
+      identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
       libelle:
-        'Les accès des administrateurs font-ils l’objet de mesures de sécurité renforcées ?',
-      poids: 2,
+        'Des exigences de complexité sont-elles imposées sur les mots de passe de session des utilisateurs ?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'acces-administrateurs-si-mesures-specifiques-nsp',
+          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf-nsp',
           libelle: 'Je ne sais pas',
-          ordre: 1,
+          ordre: 0,
         },
         {
-          identifiant: 'acces-administrateurs-si-mesures-specifiques-non',
+          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'acces-administrateurs-si-mesures-specifiques',
+                identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant: 'acces-mesures-securite-robustesse-mdp-recyf-un-peu',
+          libelle:
+            'Les comptes des utilisateurs sur des systèmes d’information important et/ou sensibles (ex. messagerie) et les comptes des administrateurs sont protégés par des mots de passe composés a minima de 12 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux ou ou repose sur un token physique déverrouillé par un code PIN. ' +
+            'Les comptes des administrateurs sont protégés par des mots de passe composés a minima de 15 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux ou repose sur un token physique déverrouillé par un code PIN.',
+          resultat: {
+            indice: { valeur: 1.5 },
+            mesures: [
+              {
+                identifiant: 'acces-mesures-securite-robustesse-mdp-recyf',
                 niveau: 1,
               },
             ],
@@ -573,27 +323,11 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         },
         {
           identifiant:
-            'acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees',
+            'acces-mesures-securite-robustesse-mdp-recyf-respect-contraintes',
           libelle:
-            "Oui, des mesures renforçant l'authentification ont été mises en œuvre",
-          resultat: {
-            indice: { valeur: 1.5 },
-            mesures: [
-              {
-                identifiant: 'acces-administrateurs-si-mesures-specifiques',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 3,
-        },
-        {
-          identifiant:
-            'acces-administrateurs-si-mesures-specifiques-oui-mesures-authentification-renforcees-postes-dedies-administration',
-          libelle:
-            "Oui, des mesures renforçant l'authentification ont été mises en œuvre et des postes dédiés à l'administration sont utilisés",
+            'L’ensemble des comptes respectent les contraintes de complexité, de robustesse et de rotation de mots de passe définies dans le guide ANSSI « Authentification multifacteur et mots de passe » (https://messervices.cyber.gouv.fr/documents-guides/anssi-guide-authentification_multifacteur_et_mots_de_passe.pdf) selon la sensibilité des ressources accessibles.',
           resultat: { indice: { valeur: 3 } },
-          ordre: 4,
+          ordre: 3,
         },
       ],
       type: 'choixUnique',

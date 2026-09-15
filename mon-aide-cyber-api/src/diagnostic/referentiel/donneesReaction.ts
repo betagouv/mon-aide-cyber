@@ -3,87 +3,23 @@ import { QuestionsThematique } from '../Referentiel';
 export const donneesReaction: QuestionsThematique = {
   questions: [
     {
-      identifiant: 'reaction-surveillance-veille-vulnerabilites-potentielles',
-      libelle:
-        'Un suivi des alertes de cybersécurité et des vulnérabilités publiées pouvant vous affecter est-il réalisé ?',
-      poids: 2,
-      reponsesPossibles: [
-        {
-          identifiant:
-            'reaction-surveillance-veille-vulnerabilites-potentielles-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant:
-            'reaction-surveillance-veille-vulnerabilites-potentielles-non',
-          libelle: 'Non',
-          resultat: {
-            indice: { valeur: 0 },
-            mesures: [
-              {
-                identifiant:
-                  'reaction-surveillance-veille-vulnerabilites-potentielles',
-                niveau: 1,
-              },
-            ],
-          },
-          ordre: 1,
-        },
-        {
-          identifiant:
-            'reaction-surveillance-veille-vulnerabilites-potentielles-veille-ponctuelle',
-          libelle: 'Un suivi ponctuel est réalisé',
-          resultat: {
-            indice: { valeur: 1.5 },
-            mesures: [
-              {
-                identifiant:
-                  'reaction-surveillance-veille-vulnerabilites-potentielles',
-                niveau: 2,
-              },
-            ],
-          },
-          ordre: 2,
-        },
-        {
-          identifiant:
-            'reaction-surveillance-veille-vulnerabilites-potentielles-veille-reguliere',
-          libelle: 'Une veille proactive et exhaustive est réalisée',
-          resultat: { indice: { valeur: 3 } },
-          ordre: 3,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
-      identifiant: 'reaction-sauvegardes-donnees-realisees',
+      identifiant: 'reaction-sauvegardes-donnees-realisees-recyf',
       libelle: 'Des sauvegardes régulières des données sont-elles réalisées ?',
-      poids: 3,
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'reaction-sauvegardes-donnees-realisees-nsp',
+          identifiant: 'reaction-sauvegardes-donnees-realisees-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'reaction-sauvegardes-donnees-realisees-non',
+          identifiant: 'reaction-sauvegardes-donnees-realisees-recyf-non',
           libelle: 'Non',
           resultat: {
             indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'reaction-sauvegardes-donnees-realisees',
-                niveau: 1,
-              },
-              {
-                identifiant:
-                  'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
-                niveau: 1,
-              },
-              {
-                identifiant:
-                  'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
+                identifiant: 'reaction-sauvegardes-donnees-realisees-recyf',
                 niveau: 1,
               },
             ],
@@ -92,114 +28,14 @@ export const donneesReaction: QuestionsThematique = {
         },
         {
           identifiant:
-            'reaction-sauvegardes-donnees-realisees-oui-ponctuellement',
-          libelle: 'Des sauvegardes des données sont réalisées ponctuellement',
-          questions: [
-            {
-              identifiant:
-                'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
-              libelle:
-                'Existe-t-il au moins un jeu de sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne ou "hors ligne" ?',
-              poids: 3,
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-na',
-                  libelle: 'Non applicable',
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-nsp',
-                  libelle: 'Je ne sais pas',
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-non',
-                  libelle: 'Non',
-                  resultat: {
-                    indice: { valeur: 0 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-oui',
-                  libelle: 'Oui',
-                  resultat: {
-                    indice: { valeur: 3 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 3,
-                },
-              ],
-              type: 'choixUnique',
-            },
-            {
-              identifiant:
-                'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
-              libelle:
-                'Si "Oui" : La restauration des sauvegardes de toutes vos données critiques est-elle testée régulièrement ?',
-              poids: 3,
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-na',
-                  libelle: 'Non applicable',
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-nsp',
-                  libelle: 'Je ne sais pas',
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-non',
-                  libelle: 'Non',
-                  resultat: {
-                    indice: { valeur: 0 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-oui',
-                  libelle: 'Oui',
-                  resultat: { indice: { valeur: 3 } },
-                  ordre: 3,
-                },
-              ],
-              type: 'choixUnique',
-            },
-          ],
+            'reaction-sauvegardes-donnees-realisees-recyf-oui-regulierement',
+          libelle:
+            'Les données à protéger en priorité sont identifiées et sauvegardées régulièrement, avec au moins une copie hors ligne (déconnectée après la sauvegarde).',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
               {
-                identifiant: 'reaction-sauvegardes-donnees-realisees',
+                identifiant: 'reaction-sauvegardes-donnees-realisees-recyf',
                 niveau: 1,
               },
             ],
@@ -208,103 +44,9 @@ export const donneesReaction: QuestionsThematique = {
         },
         {
           identifiant:
-            'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere',
+            'reaction-sauvegardes-donnees-realisees-recyf-oui-automatique-et-reguliere',
           libelle:
-            'Des sauvegardes des données sont réalisées de manière automatique et régulière',
-          questions: [
-            {
-              identifiant:
-                'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole',
-              libelle:
-                'Existe-t-il au moins un jeu de sauvegarde des données critiques stockées dans un environnement isolé du réseau bureautique interne ou "hors ligne"',
-              poids: 3,
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-na',
-                  libelle: 'Non applicable',
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-nsp',
-                  libelle: 'Je ne sais pas',
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-non',
-                  libelle: 'Non',
-                  resultat: {
-                    indice: { valeur: 0 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-oui',
-                  libelle: 'Oui',
-                  resultat: {
-                    indice: { valeur: 3 },
-                  },
-                  ordre: 3,
-                },
-              ],
-              type: 'choixUnique',
-            },
-            {
-              identifiant:
-                'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement',
-              libelle:
-                'La restauration des sauvegardes de toutes vos données critiques est-elle testée régulièrement ?',
-              poids: 3,
-              reponsesPossibles: [
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-na',
-                  libelle: 'Non applicable',
-                  ordre: 0,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-nsp',
-                  libelle: 'Je ne sais pas',
-                  ordre: 1,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-non',
-                  libelle: 'Non',
-                  resultat: {
-                    indice: { valeur: 0 },
-                    mesures: [
-                      {
-                        identifiant:
-                          'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement',
-                        niveau: 1,
-                      },
-                    ],
-                  },
-                  ordre: 2,
-                },
-                {
-                  identifiant:
-                    'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-oui',
-                  libelle: 'Oui',
-                  resultat: { indice: { valeur: 3 } },
-                  ordre: 3,
-                },
-              ],
-              type: 'choixUnique',
-            },
-          ],
+            'L’ensemble des données font l’objet d’un processus de sauvegarde adapté et les sauvegardes sont protégées d’un incident les rendant inexploitables en cas de compromission générale du réseau interne (par exemple : le stockage hors-ligne pour répondre à un incident de type rançongiciel).',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
@@ -312,49 +54,210 @@ export const donneesReaction: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
-      libelle: 'Savez-vous comment réagir en cas de cyberattaque ?',
-      poids: 3,
+      identifiant:
+        'reaction-restauration-sauvegardes-testees-regulierement-recyf',
+      libelle:
+        'La restauration des sauvegardes de toutes vos données critiques est-elle testée régulièrement ?',
+      poids: 1,
       reponsesPossibles: [
         {
-          identifiant: 'reaction-dispositif-gestion-crise-adapte-defini-nsp',
+          identifiant:
+            'reaction-restauration-sauvegardes-testees-regulierement-recyf-nsp',
           libelle: 'Je ne sais pas',
           ordre: 0,
         },
         {
-          identifiant: 'reaction-dispositif-gestion-crise-adapte-defini-non',
+          identifiant:
+            'reaction-restauration-sauvegardes-testees-regulierement-recyf-non',
           libelle: 'Non',
-          ordre: 1,
           resultat: {
+            indice: { valeur: 0 },
             mesures: [
               {
-                identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
+                identifiant:
+                  'reaction-restauration-sauvegardes-testees-regulierement-recyf',
                 niveau: 1,
               },
             ],
-            indice: { valeur: 0 },
           },
+          ordre: 1,
         },
         {
           identifiant:
-            'reaction-dispositif-gestion-crise-adapte-defini-oui-fiche-reflexe',
-          libelle: 'Oui, nous avons formalisé une fiche réflexe dédiée',
+            'reaction-restauration-sauvegardes-testees-regulierement-recyf-oui-ponctuellement',
+          libelle:
+            'La capacité à restaurer est vérifiée ponctuellement sur les données à protéger en priorité (ex. restauration de quelques fichiers au hasard).',
           resultat: {
+            indice: { valeur: 1 },
             mesures: [
               {
-                identifiant: 'reaction-dispositif-gestion-crise-adapte-defini',
-                niveau: 2,
+                identifiant:
+                  'reaction-restauration-sauvegardes-testees-regulierement-recyf',
+                niveau: 1,
               },
             ],
-            indice: { valeur: 1.5 },
           },
           ordre: 2,
         },
         {
           identifiant:
-            'reaction-dispositif-gestion-crise-adapte-defini-oui-organisation-gestion-crise-definie',
+            'reaction-restauration-sauvegardes-testees-regulierement-recyf-oui-une-fois-par-an',
           libelle:
-            'Oui, une organisation de gestion de crise d’origine cyber a été définie',
+            'La restauration de l’ensemble des données est testée au moins une fois par an.',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
+      identifiant: 'reaction-liste-personnes-a-contacter-recyf',
+      libelle:
+        'Avez-vous imprimé une liste des personnes à contacter en cas de crise et de leurs contacts ? (internes et externes)',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant: 'reaction-liste-personnes-a-contacter-recyf-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
+        {
+          identifiant: 'reaction-liste-personnes-a-contacter-recyf-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant: 'reaction-liste-personnes-a-contacter-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant:
+            'reaction-liste-personnes-a-contacter-recyf-oui-principales',
+          libelle:
+            'Une liste des principaux contacts de crise (responsables internes, prestataire informatique) est imprimée et accessible hors ligne.',
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant: 'reaction-liste-personnes-a-contacter-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant:
+            'reaction-liste-personnes-a-contacter-recyf-oui-complete',
+          libelle:
+            'Une liste complète des contacts internes et externes (direction, IT/prestataire, hébergeur, assureur cyber, CERT-FR, autorités, partenaires clés) est imprimée, tenue à jour et accessible sans ordinateur ni internet.',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
+      identifiant: 'reaction-bons-reflexes-recyf',
+      libelle:
+        'Êtes-vous entrainé aux bons reflexes pour réagir en cas de cyberattaque ?',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant: 'reaction-bons-reflexes-recyf-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
+        {
+          identifiant: 'reaction-bons-reflexes-recyf-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant: 'reaction-bons-reflexes-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant: 'reaction-bons-reflexes-recyf-oui-premier-exercice',
+          libelle:
+            "Un premier exercice de crise sur table a été réalisé à partir d'un scénario prêt à l'emploi.",
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant: 'reaction-bons-reflexes-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant: 'reaction-bons-reflexes-recyf-oui-regulierement',
+          libelle:
+            'Des exercices de crise cyber sont organisés régulièrement, associant les personnes-clés (direction, IT/prestataire, communication, métier).',
+          resultat: { indice: { valeur: 3 } },
+          ordre: 3,
+        },
+      ],
+      type: 'choixUnique',
+    },
+    {
+      identifiant: 'reaction-amelioration-gestion-crise-recyf',
+      libelle:
+        'Êtes-vous en mesure d’améliorer votre gestion de crise après une crise ou un exercice ?',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant: 'reaction-amelioration-gestion-crise-recyf-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 0,
+        },
+        {
+          identifiant: 'reaction-amelioration-gestion-crise-recyf-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant: 'reaction-amelioration-gestion-crise-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 1,
+        },
+        {
+          identifiant:
+            'reaction-amelioration-gestion-crise-recyf-oui-premier-exercice',
+          libelle:
+            'Un retour d’expérience est réalisé après chaque déclenchement du processus de gestion de crise (crise réelle, exercice, etc.).',
+          resultat: {
+            indice: { valeur: 1 },
+            mesures: [
+              {
+                identifiant: 'reaction-amelioration-gestion-crise-recyf',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant:
+            'reaction-amelioration-gestion-crise-recyf-oui-regulierement',
+          libelle:
+            'Un retour d’expérience formalisé est systématiquement conduit après chaque déclenchement du processus gestion de crise (crise réelle, exercice, etc.), avec identification des points d’amélioration et mise à jour des procédures, outils (mode dégradé, fiches reflexes opérationnelles, etc.). Ces actions d’amélioration font l’objet d’un suivi.',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },

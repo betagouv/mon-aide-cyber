@@ -1,116 +1,89 @@
 export const mesuresSecuritePoste = {
-  'securite-poste-maj-fonctionnelles-et-securite-deployees': {
+  'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf': {
     niveau1: {
-      titre:
-        'Déployer systématiquement toutes les mises à jour sur les postes de travail dès que celles-ci sont disponibles',
+      titre: 'Maintenir à jour les logiciels',
       pourquoi:
-        '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes ne pouvant pas bénéficier des mises à jour',
-      pourquoi:
-        '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-maj-fonctionnelles-et-securite-deployees-niveau2-comment.pug',
-    },
-    priorisation: 5,
+    priorisation: 7,
   },
-  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees': {
-    niveau1: {
-      titre:
-        'Déployer systématiquement toutes les mises à jour sur les postes de travail dédiés aux systèmes industriels dès que celles-ci sont disponibles',
-      pourquoi:
-        '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau1-comment.pug',
-    },
-    niveau2: {
-      titre:
-        'Mettre en œuvre des mesures de sécurité supplémentaires sur les systèmes industriels ne pouvant pas bénéficier des mises à jour',
-      pourquoi:
-        '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-niveau2-comment.pug',
-    },
-    priorisation: 5,
-  },
-  'securite-poste-antivirus-deploye': {
+  'securite-poste-antivirus-deploye-recyf': {
     niveau1: {
       titre:
         'Installer de manière systématique un antivirus sur les postes de travail',
       pourquoi:
-        '../../mesures/postes/securite-poste-antivirus-deploye-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-antivirus-deploye-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-antivirus-deploye-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-antivirus-deploye-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre: "Traiter systématiquement les alertes générées par l'antivirus",
-      pourquoi:
-        '../../mesures/postes/securite-poste-antivirus-deploye-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-antivirus-deploye-niveau2-comment.pug',
-    },
-    priorisation: 4,
+    priorisation: 5,
   },
-  'securite-poste-si-industriel-antivirus-deploye': {
+  'securite-poste-si-industriel-antivirus-deploye-recyf': {
     niveau1: {
       titre:
         'Installer de manière systématique un antivirus sur les postes de travail des systèmes industriels, vérifier régulièrement leur bon fonctionnement et leurs mises à jour',
       pourquoi:
-        '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-si-industriel-antivirus-deploye-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-si-industriel-antivirus-deploye-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre:
-        "Traiter systématiquement les alertes générées par l'antivirus des postes de travail des systèmes industriels",
-      pourquoi:
-        '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-si-industriel-antivirus-deploye-niveau2-comment.pug',
-    },
-    priorisation: 4,
+    priorisation: 5,
   },
-  'securite-poste-pare-feu-local-active': {
+  'securite-poste-mdp-par-defaut-recyf': {
     niveau1: {
       titre:
-        'Activer systématiquement le pare-feu local sur les postes de travail',
+        'Modifiez les mots de passe par défaut des équipements et logiciels avant de les utiliser',
       pourquoi:
-        '../../mesures/postes/securite-poste-pare-feu-local-active-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-mdp-par-defaut-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-pare-feu-local-active-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-mdp-par-defaut-recyf-niveau1-comment.pug',
     },
-    priorisation: 27,
+    priorisation: 2,
   },
-  'securite-poste-outils-complementaires-securisation': {
+  'securite-poste-correctifs-securite-annuaire-recyf': {
     niveau1: {
       titre:
-        'Mettre en œuvre une solution de type EDR (Endpoint Detection & Response)',
+        'Appliquer sans retard injustifié les correctifs sur les annuaires',
       pourquoi:
-        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-correctifs-securite-annuaire-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-correctifs-securite-annuaire-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre: "Traiter systématiquement les alertes générées par l'EDR",
-      pourquoi:
-        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/postes/securite-poste-outils-complementaires-securisation-niveau2-comment.pug',
-    },
-    priorisation: 25,
+    priorisation: 13,
   },
-  'securite-poste-r-et-d-disques-chiffres': {
+  'securite-poste-filtre-flux-recyf': {
     niveau1: {
-      titre: 'Chiffrer les disques durs des matériels nomades',
+      titre:
+        'Utilisez un pare-feu pour bloquer les connexions suspectes avec internet',
       pourquoi:
-        '../../mesures/postes/securite-poste-r-et-d-disques-chiffres-niveau1-pourquoi.pug',
+        '../../mesures/recyf/postes/securite-poste-filtre-flux-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/postes/securite-poste-r-et-d-disques-chiffres-niveau1-comment.pug',
+        '../../mesures/recyf/postes/securite-poste-filtre-flux-recyf-niveau1-comment.pug',
     },
-    priorisation: 26,
+    priorisation: 11,
+  },
+  'securite-poste-systemes-cloisonnes-recyf': {
+    niveau1: {
+      titre:
+        "Cloisonner l'ensemble des systèmes d’informations maîtrisés de l’entité des systèmes non maîtrisés",
+      pourquoi:
+        '../../mesures/recyf/postes/securite-poste-systemes-cloisonnes-recyf-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/recyf/postes/securite-poste-systemes-cloisonnes-recyf-niveau1-comment.pug',
+    },
+    priorisation: 18,
+  },
+  'securite-poste-si-industriel-systemes-cloisonnes-recyf': {
+    niveau1: {
+      titre:
+        'Dans la mesure du possible et si non nécessaire, séparer le réseau industriel du réseau bureautique interne',
+      pourquoi:
+        '../../mesures/recyf/postes/securite-poste-si-industriel-systemes-cloisonnes-recyf-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/recyf/postes/securite-poste-si-industriel-systemes-cloisonnes-recyf-niveau1-comment.pug',
+    },
+    priorisation: 18,
   },
 };
