@@ -189,7 +189,7 @@ importers:
     dependencies:
       '@gouvfr/dsfr':
         specifier: ^1.11.0
-        version: 1.15.2
+        version: 1.15.3
       '@tanstack/query-core':
         specifier: ^5.90.15
         version: 5.102.8
@@ -892,8 +892,8 @@ packages:
   '@fast-csv/parse@4.3.6':
     resolution: {integrity: sha512-uRsLYksqpbDmWaSmzvJcuApSEe38+6NQZBUsuAyMZKqHxH0g1wcJgsKUvN3WC8tewaqFjBMMGrkHmC+T7k8LvA==}
 
-  '@gouvfr/dsfr@1.15.2':
-    resolution: {integrity: sha512-IrV/a/eV6KE06Az8Ky3wN2h0INka+ntk5UWuJg/T+ST7/tMUvIWC8fZi9azx+2YsqMFGgAkocIHxeVbPoLHAUQ==}
+  '@gouvfr/dsfr@1.15.3':
+    resolution: {integrity: sha512-R9AALZc1LfZjtytWZMOaUIOHWTkllBZ/sZlsL8TpKZVgF3qUKXt/uNYh+L1D1Fh4p92ZqWxbtNcebsigBZe5pQ==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
 
   '@hapi/address@5.1.1':
@@ -5388,8 +5388,8 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-is@19.2.8:
-    resolution: {integrity: sha512-s5un28nYxKJw5gvUHyW5PCC28CvBqLu9r3cWgzHT4Vo/5fqqkFcdRYsGcKf50WMPpjjFZS5d76fn3YCo2njKwQ==}
+  react-is@19.3.0:
+    resolution: {integrity: sha512-UpMYezM4v5/18F28aC66AEsjXIgE02kyEMH6yLdgLXu/UTfa1Ntwck/nNLrbqJsEXW7gPb0coNO9FQse9WTovA==}
 
   react-refresh@0.18.0:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
@@ -6929,7 +6929,7 @@ snapshots:
       lodash.isundefined: 3.0.1
       lodash.uniq: 4.5.0
 
-  '@gouvfr/dsfr@1.15.2': {}
+  '@gouvfr/dsfr@1.15.3': {}
 
   '@hapi/address@5.1.1':
     dependencies:
@@ -11783,7 +11783,7 @@ snapshots:
   pretty-format@30.5.1:
     dependencies:
       '@jest/react-is-18': react-is@18.3.1
-      '@jest/react-is-19': react-is@19.2.8
+      '@jest/react-is-19': react-is@19.3.0
       '@jest/schemas': 30.5.0
       ansi-styles: 5.2.0
 
@@ -12007,7 +12007,7 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-is@19.2.8: {}
+  react-is@19.3.0: {}
 
   react-refresh@0.18.0: {}
 
