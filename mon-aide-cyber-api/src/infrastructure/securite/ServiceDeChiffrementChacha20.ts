@@ -12,16 +12,16 @@ const decoupeLaChaineChiffree = (chaineChiffree: string) => {
 export class ServiceDeChiffrementChacha20 implements ServiceDeChiffrement {
   encoding: BufferEncoding = 'hex';
   constructor(
-    private readonly iv: Buffer = crypto.randomBytes(12),
     private readonly donneesAdditionnelles = crypto.randomBytes(16),
     private readonly clefSecrete = process.env.CLEF_SECRETE_CHIFFREMENT || ''
   ) {}
 
   chiffre(chaine: string): string {
+    const iv = crypto.randomBytes(12);
     const chiffrement = crypto.createCipheriv(
       'chacha20-poly1305',
       this.clefSecrete,
-      this.iv,
+      iv,
       {
         authTagLength: 16,
       }
@@ -37,7 +37,7 @@ export class ServiceDeChiffrementChacha20 implements ServiceDeChiffrement {
     const tag = chiffrement.getAuthTag();
 
     return (
-      this.iv.toString(this.encoding) +
+      iv.toString(this.encoding) +
       this.donneesAdditionnelles.toString(this.encoding) +
       donneesChiffrees.toString(this.encoding) +
       tag.toString(this.encoding)
