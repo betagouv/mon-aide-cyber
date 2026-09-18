@@ -10,11 +10,6 @@ export type Utilisateur = Aggregat & {
 };
 
 export interface EntrepotUtilisateur extends EntrepotEcriture<Utilisateur> {
-  rechercheParIdentifiantConnexionEtMotDePasse(
-    identifiantConnexion: string,
-    motDePasse: string
-  ): Promise<Utilisateur>;
-
   rechercheParIdentifiantDeConnexion(
     identifiantDeConnexion: string
   ): Promise<Utilisateur>;

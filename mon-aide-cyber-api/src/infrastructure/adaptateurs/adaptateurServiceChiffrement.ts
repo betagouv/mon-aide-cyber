@@ -2,6 +2,14 @@ import { ServiceDeChiffrementChacha20 } from '../securite/ServiceDeChiffrementCh
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 
 class ServiceDechiffrementClair implements ServiceDeChiffrement {
+  async compare(hash: string, motDePasse: string): Promise<boolean> {
+    return hash.replace(' - chiffree', '') === motDePasse;
+  }
+
+  async hache(chaine: string): Promise<string> {
+    return `${chaine} - chiffree`;
+  }
+
   chiffre(chaine: string): string {
     return chaine;
   }

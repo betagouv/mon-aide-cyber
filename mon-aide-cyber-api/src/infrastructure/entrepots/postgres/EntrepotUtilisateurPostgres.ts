@@ -44,27 +44,6 @@ export class EntrepotUtilisateurPostgres
         return this.deDTOAEntite(ligne!);
       });
   }
-  rechercheParIdentifiantConnexionEtMotDePasse(
-    identifiantConnexion: string,
-    motDePasse: string
-  ): Promise<Utilisateur> {
-    return this.knex
-      .from(`${this.nomTable()}`)
-      .then((utilisateurs: UtilisateurDTO[]) =>
-        utilisateurs.find(
-          (a) =>
-            this.chiffrement.dechiffre(a.donnees.identifiantConnexion) ===
-              identifiantConnexion &&
-            this.chiffrement.dechiffre(a.donnees.motDePasse) === motDePasse
-        )
-      )
-      .then((ligne) => {
-        if (!ligne) {
-          return Promise.reject(new AggregatNonTrouve(this.typeAggregat()));
-        }
-        return this.deDTOAEntite(ligne);
-      });
-  }
 
   typeAggregat(): string {
     return 'utilisateur';
@@ -85,7 +64,7 @@ export class EntrepotUtilisateurPostgres
         identifiantConnexion: this.chiffrement.chiffre(
           entite.identifiantConnexion
         ),
-        motDePasse: this.chiffrement.chiffre(entite.motDePasse),
+        motDePasse: entite.motDePasse,
         nomPrenom: this.chiffrement.chiffre(entite.nomPrenom),
         ...(entite.dateSignatureCGU && {
           dateSignatureCGU: entite.dateSignatureCGU.toISOString(),

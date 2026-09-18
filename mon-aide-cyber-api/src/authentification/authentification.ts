@@ -5,25 +5,36 @@ import {
   ErreurAuthentification,
   UtilisateurAuthentifie,
 } from './Utilisateur';
+import { ServiceDeChiffrement } from '../securite/ServiceDeChiffrement';
 
-export const authentifie = (
+export const authentifie = async (
   entrepotUtilisateur: EntrepotUtilisateur,
+  serviceDeChiffrement: ServiceDeChiffrement,
   gestionnaireDeJeton: GestionnaireDeJeton,
   identifiant: string,
   motDePasse: string
 ): Promise<UtilisateurAuthentifie> => {
   return entrepotUtilisateur
-    .rechercheParIdentifiantConnexionEtMotDePasse(identifiant, motDePasse)
-    .then((utilisateur) => ({
-      identifiant: utilisateur.identifiant,
-      nomPrenom: utilisateur.nomPrenom,
-      ...(utilisateur.dateSignatureCGU && {
-        dateSignatureCGU: utilisateur.dateSignatureCGU,
-      }),
-      jeton: gestionnaireDeJeton.genereJeton({
+    .rechercheParIdentifiantDeConnexion(identifiant)
+    .then(async (utilisateur) => {
+      const motDePasseVerifie = await serviceDeChiffrement.compare(
+        utilisateur.motDePasse,
+        motDePasse
+      );
+      if (!motDePasseVerifie) {
+        throw new Error('Identifiants incorrects');
+      }
+      return {
         identifiant: utilisateur.identifiant,
-      }),
-    }))
+        nomPrenom: utilisateur.nomPrenom,
+        ...(utilisateur.dateSignatureCGU && {
+          dateSignatureCGU: utilisateur.dateSignatureCGU,
+        }),
+        jeton: gestionnaireDeJeton.genereJeton({
+          identifiant: utilisateur.identifiant,
+        }),
+      };
+    })
     .catch((erreur) => {
       return Promise.reject(
         ErreurMAC.cree(
