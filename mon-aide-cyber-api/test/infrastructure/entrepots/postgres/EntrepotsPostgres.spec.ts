@@ -1505,7 +1505,6 @@ describe('Tous les entreprôts Postgres', () => {
       const serviceDeChiffrement = new FauxServiceDeChiffrement(
         new Map([
           [utilisateur.identifiantConnexion, 'aaa'],
-          [utilisateur.motDePasse, 'bbb'],
           [utilisateur.nomPrenom, 'ccc'],
         ])
       );
@@ -1520,46 +1519,6 @@ describe('Tous les entreprôts Postgres', () => {
       );
       expect(utilisateurRecu).toStrictEqual<Utilisateur>({
         ...utilisateur,
-        motDePasse: 'bbb',
-      });
-    });
-
-    describe('Recherche par identifiant et mot de passe', () => {
-      it("L'utilisateur est trouvé", async () => {
-        const utilisateur = unUtilisateur().construis();
-        const serviceDeChiffrement = new FauxServiceDeChiffrement(
-          new Map([
-            [utilisateur.identifiantConnexion, 'aaa'],
-            [utilisateur.motDePasse, 'bbb'],
-            [utilisateur.nomPrenom, 'ccc'],
-          ])
-        );
-        const entrepotUtilisateurPostgres = new EntrepotUtilisateurPostgres(
-          serviceDeChiffrement
-        );
-        await entrepotUtilisateurPostgres.persiste(utilisateur);
-
-        const utilisateurRecu =
-          await entrepotUtilisateurPostgres.rechercheParIdentifiantConnexionEtMotDePasse(
-            utilisateur.identifiantConnexion,
-            utilisateur.motDePasse
-          );
-
-        expect(utilisateurRecu).toStrictEqual<Utilisateur>({
-          ...utilisateur,
-          motDePasse: 'bbb',
-        });
-      });
-
-      it("l'utilisateur n'est pas trouvé", async () => {
-        await expect(() =>
-          new EntrepotUtilisateurPostgres(
-            new FauxServiceDeChiffrement(new Map())
-          ).rechercheParIdentifiantConnexionEtMotDePasse(
-            'identifiant-inconnu',
-            'mdp'
-          )
-        ).rejects.toThrow(new AggregatNonTrouve('utilisateur'));
       });
     });
 
@@ -1569,7 +1528,6 @@ describe('Tous les entreprôts Postgres', () => {
         const serviceDeChiffrement = new FauxServiceDeChiffrement(
           new Map([
             [utilisateur.identifiantConnexion, 'aaa'],
-            [utilisateur.motDePasse, 'bbb'],
             [utilisateur.nomPrenom, 'ccc'],
           ])
         );
@@ -1585,7 +1543,6 @@ describe('Tous les entreprôts Postgres', () => {
 
         expect(utilisateurRecu).toStrictEqual<Utilisateur>({
           ...utilisateur,
-          motDePasse: 'bbb',
         });
       });
 

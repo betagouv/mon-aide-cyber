@@ -33,6 +33,7 @@ export const routesAPIAuthentification = (
     entrepots,
     gestionnaireDeJeton,
     adaptateurDeGestionDeCookies: gestionnaireDeCookies,
+    serviceDeChiffrement,
   } = configuration;
 
   routes.post(
@@ -49,6 +50,7 @@ export const routesAPIAuthentification = (
         requete.body;
       authentifie(
         entrepots.utilisateurs(),
+        serviceDeChiffrement,
         gestionnaireDeJeton,
         identifiant,
         motDePasse

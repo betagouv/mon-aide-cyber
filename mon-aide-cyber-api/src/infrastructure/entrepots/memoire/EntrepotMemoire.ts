@@ -346,21 +346,6 @@ export class EntrepotUtilisateurMemoire
   extends EntrepotMemoire<Utilisateur>
   implements EntrepotUtilisateur
 {
-  async rechercheParIdentifiantConnexionEtMotDePasse(
-    identifiantConnexion: string,
-    motDePasse: string
-  ): Promise<Utilisateur> {
-    const utilisateurTrouve = Array.from(this.entites.values()).find(
-      (utilisateur) =>
-        utilisateur.identifiantConnexion === identifiantConnexion &&
-        utilisateur.motDePasse === motDePasse
-    );
-    if (!utilisateurTrouve) {
-      throw new AggregatNonTrouve('utilisateur');
-    }
-    return Promise.resolve(utilisateurTrouve);
-  }
-
   async rechercheParIdentifiantDeConnexion(
     identifiantDeConnexion: string
   ): Promise<Utilisateur> {

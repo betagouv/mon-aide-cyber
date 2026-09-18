@@ -1,5 +1,6 @@
 import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 
 const decoupeLaChaineChiffree = (chaineChiffree: string) => {
   return {
@@ -10,11 +11,21 @@ const decoupeLaChaineChiffree = (chaineChiffree: string) => {
   };
 };
 export class ServiceDeChiffrementChacha20 implements ServiceDeChiffrement {
+  private readonly NOMBRE_DE_PASSE = 10;
   encoding: BufferEncoding = 'hex';
+
   constructor(
     private readonly donneesAdditionnelles = crypto.randomBytes(16),
     private readonly clefSecrete = process.env.CLEF_SECRETE_CHIFFREMENT || ''
   ) {}
+
+  async compare(hash: string, motDePasse: string): Promise<boolean> {
+    return bcrypt.compare(motDePasse, hash);
+  }
+
+  async hache(chaine: string): Promise<string> {
+    return bcrypt.hash(chaine, this.NOMBRE_DE_PASSE);
+  }
 
   chiffre(chaine: string): string {
     const iv = crypto.randomBytes(12);
