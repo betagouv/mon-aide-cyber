@@ -2,6 +2,8 @@ import { ServiceDeChiffrement } from '../../../src/securite/ServiceDeChiffrement
 
 export class ServiceDeChiffrementClair implements ServiceDeChiffrement {
   private _dechiffreAEteAppele = false;
+  private hacheAppele = false;
+
   chiffre(chaine: string): string {
     return chaine;
   }
@@ -18,6 +20,11 @@ export class ServiceDeChiffrementClair implements ServiceDeChiffrement {
   }
 
   async hache(chaine: string): Promise<string> {
+    this.hacheAppele = true;
     return `${chaine} claire`;
+  }
+
+  aEteHache() {
+    return this.hacheAppele;
   }
 }

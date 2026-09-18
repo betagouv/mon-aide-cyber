@@ -32,9 +32,11 @@ const validateurDeMotDePasse = (
       const aidant = await entrepots
         .utilisateurs()
         .lis(req.identifiantUtilisateurCourant);
-      if (
-        adaptateurServiceChiffrement().dechiffre(aidant.motDePasse) !== value
-      ) {
+      const motDePasseValide = await adaptateurServiceChiffrement().compare(
+        aidant.motDePasse,
+        value
+      );
+      if (!motDePasseValide) {
         throw new Error(messageValidateurs.correspondAuMotDePasseUtilisateur);
       }
       return true;
