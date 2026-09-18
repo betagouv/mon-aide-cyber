@@ -24,7 +24,7 @@ export class ServiceDeChiffrementChacha20 implements ServiceDeChiffrement {
   }
 
   async hache(chaine: string): Promise<string> {
-    return bcrypt.hash(chaine, this.NOMBRE_DE_PASSE);
+    return await bcrypt.hash(chaine, this.NOMBRE_DE_PASSE);
   }
 
   chiffre(chaine: string): string {

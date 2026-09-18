@@ -45,6 +45,7 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
     adaptateurDeVerificationDeSession: session,
     adaptateurDeVerificationDeCGU: cgu,
     busEvenement,
+    serviceDeChiffrement,
   } = configuration;
 
   routes.get(
@@ -195,7 +196,9 @@ export const routesAPIProfil = (configuration: ConfigurationServeur) => {
           .utilisateurs()
           .lis(requete.identifiantUtilisateurCourant!);
         const changementnMotDePasse = requete.body;
-        utilisateur.motDePasse = changementnMotDePasse.motDePasse;
+        utilisateur.motDePasse = await serviceDeChiffrement.hache(
+          changementnMotDePasse.motDePasse
+        );
         return entrepots
           .utilisateurs()
           .persiste(utilisateur)

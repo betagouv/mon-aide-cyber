@@ -18,6 +18,7 @@ import {
   Aidant,
   TypeAffichageAnnuaire,
 } from '../../../src/espace-aidant/Aidant';
+import { ServiceDeChiffrementClair } from '../../infrastructure/securite/ServiceDeChiffrementClair';
 
 describe('le serveur MAC sur les routes /api/profil', () => {
   const testeurMAC = testeurIntegration();
@@ -517,6 +518,8 @@ describe('le serveur MAC sur les routes /api/profil', () => {
 
   describe('Quand une requête POST est reçue sur /modifier-mot-de-passe', () => {
     it('modifie le mot de passe', async () => {
+      const serviceDeChiffrement =
+        testeurMAC.serviceDeChiffrement as ServiceDeChiffrementClair;
       const { utilisateur } = await unCompteAidantRelieAUnCompteUtilisateur({
         entrepotUtilisateur: testeurMAC.entrepots.utilisateurs(),
         entrepotAidant: testeurMAC.entrepots.aidants(),
@@ -526,8 +529,8 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       testeurMAC.adaptateurDeVerificationDeSession.utilisateurConnecte(
         utilisateur.identifiant
       );
-
       const nouveauMotDePasse = 'EgLw5R0ItVRxkl%#>cPd';
+
       const reponse = await executeRequete(
         donneesServeur.app,
         'POST',
@@ -540,10 +543,13 @@ describe('le serveur MAC sur les routes /api/profil', () => {
       );
 
       expect(reponse.statusCode).toBe(204);
+      expect(serviceDeChiffrement.aEteHache()).toBe(true);
       const utilisateurRecupere = await testeurMAC.entrepots
         .utilisateurs()
         .lis(utilisateur.identifiant);
-      expect(utilisateurRecupere.motDePasse).toBe(nouveauMotDePasse);
+      expect(utilisateurRecupere.motDePasse).toBe(
+        `${nouveauMotDePasse} claire`
+      );
     });
 
     it('vérifie que les CGU ont été signées', async () => {
