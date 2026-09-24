@@ -1,49 +1,24 @@
 export const mesuresSensibilisation = {
-  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques': {
+  'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf': {
     niveau1: {
-      titre: 'Mettre en œuvre des bonnes pratiques de sensibilisation',
-      pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau1-comment.pug',
-    },
-    niveau2: {
       titre:
-        'En complément des pratiques déjà en œuvre, mettre en place des actions de sensibilisation additionnelles',
+        'Sensibiliser les équipes aux risques et bonnes pratiques de cybersécurité',
       pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau2-pourquoi.pug',
+        '../../mesures/recyf/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-niveau2-comment.pug',
+        '../../mesures/recyf/sensibilisation/sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-niveau1-comment.pug',
     },
-    priorisation: 17,
+    priorisation: 8,
   },
-  'sensibilisation-risque-espionnage-industriel-r-et-d': {
+  'sensibilisation-personnel-utilisation-charte-recyf': {
     niveau1: {
       titre:
-        'Mener des actions de sensibilisation ciblée auprès du personnel effectuant des déplacements',
+        'Formaliser une charte opposable des règles d’utilisation sécurisée des systèmes d’information',
       pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-pourquoi.pug',
+        '../../mesures/recyf/sensibilisation/sensibilisation-personnel-utilisation-charte-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/sensibilisation/sensibilisation-risque-espionnage-industriel-r-et-d-niveau1-comment.pug',
+        '../../mesures/recyf/sensibilisation/sensibilisation-personnel-utilisation-charte-recyf-niveau1-comment.pug',
     },
-    priorisation: 18,
-  },
-  'sensibilisation-collaborateurs-soumis-obligations-usages-securises': {
-    niveau1: {
-      titre: 'Établir une charte informatique',
-      pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau1-pourquoi.pug',
-      comment:
-        '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau1-comment.pug',
-    },
-    niveau2: {
-      titre:
-        "S'assurer que la charte informatique est annexée au contrat de travail et est signée par les salariés",
-      pourquoi:
-        '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/sensibilisation/sensibilisation-collaborateurs-soumis-obligations-usages-securises-niveau2-comment.pug',
-    },
-    priorisation: 30,
+    priorisation: 21,
   },
 };

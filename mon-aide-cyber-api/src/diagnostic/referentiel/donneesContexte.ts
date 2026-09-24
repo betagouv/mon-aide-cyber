@@ -754,12 +754,8 @@ export const donneesContexte: QuestionsThematique = {
           regle: {
             reponses: [
               {
-                identifiantQuestion: 'acces-outil-gestion-des-comptes',
-                reponseDonnee: 'acces-outil-gestion-des-comptes-na',
-              },
-              {
                 identifiantQuestion:
-                  'sensibilisation-collaborateurs-soumis-obligations-usages-securises',
+                  'sensibilisation-personnel-utilisation-charte-recyf',
                 reponseDonnee: '',
               },
             ],
@@ -786,70 +782,6 @@ export const donneesContexte: QuestionsThematique = {
       type: 'choixUnique',
     },
     {
-      identifiant: 'contexte-activites-recherche-et-developpement',
-      libelle:
-        'Estimez-vous que votre entité, du fait de ses activités, puisse faire l’objet d’espionnage industriel ou de vol de données ciblé ?',
-      poids: 0,
-      reponsesPossibles: [
-        {
-          identifiant: 'contexte-activites-recherche-et-developpement-nsp',
-          libelle: 'Je ne sais pas',
-          ordre: 0,
-        },
-        {
-          identifiant: 'contexte-activites-recherche-et-developpement-non',
-          libelle: 'Non',
-          ordre: 1,
-          regle: {
-            reponses: [
-              {
-                identifiantQuestion: 'acces-liste-compte-utilisateurs',
-                reponseDonnee: 'acces-liste-compte-utilisateurs-na',
-              },
-              {
-                identifiantQuestion: 'acces-droits-acces-utilisateurs-limites',
-                reponseDonnee: 'acces-droits-acces-utilisateurs-limites-na',
-              },
-              {
-                identifiantQuestion:
-                  'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles',
-                reponseDonnee:
-                  'acces-utilisateurs-donnees-sensibles-mesures-securite-additionnelles-na',
-              },
-              {
-                identifiantQuestion: 'securite-poste-r-et-d-disques-chiffres',
-                reponseDonnee: 'securite-poste-r-et-d-disques-chiffres-na',
-              },
-              {
-                identifiantQuestion:
-                  'securite-infrastructure-acces-wifi-securises',
-                reponseDonnee:
-                  'securite-infrastructure-acces-wifi-securises-na',
-              },
-              {
-                identifiantQuestion:
-                  'securite-infrastructure-espace-stockage-serveurs',
-                reponseDonnee:
-                  'securite-infrastructure-espace-stockage-serveurs-na',
-              },
-              {
-                identifiantQuestion:
-                  'sensibilisation-risque-espionnage-industriel-r-et-d',
-                reponseDonnee:
-                  'sensibilisation-risque-espionnage-industriel-r-et-d-na',
-              },
-            ],
-          },
-        },
-        {
-          identifiant: 'contexte-activites-recherche-et-developpement-oui',
-          libelle: 'Oui',
-          ordre: 2,
-        },
-      ],
-      type: 'choixUnique',
-    },
-    {
       identifiant: 'contexte-opere-systemes-information-industriels',
       libelle: 'Votre entité opère-t-elle des systèmes industriels ?',
       poids: 0,
@@ -866,32 +798,28 @@ export const donneesContexte: QuestionsThematique = {
           regle: {
             reponses: [
               {
-                identifiantQuestion: 'gouvernance-schema-si-industriel-a-jour',
-                reponseDonnee: 'gouvernance-schema-si-industriel-a-jour-na',
+                identifiantQuestion:
+                  'gouvernance-schema-si-industriel-a-jour-recyf',
+                reponseDonnee:
+                  'gouvernance-schema-si-industriel-a-jour-recyf-na',
               },
               {
                 identifiantQuestion:
-                  'acces-si-industriel-teletravail-acces-distants-mesures-particulieres',
+                  'acces-si-industriel-teletravail-acces-distants-recyf',
                 reponseDonnee:
-                  'acces-si-industriel-teletravail-acces-distants-mesures-particulieres-na',
+                  'acces-si-industriel-teletravail-acces-distants-recyf-na',
               },
               {
                 identifiantQuestion:
-                  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees',
+                  'securite-poste-si-industriel-antivirus-deploye-recyf',
                 reponseDonnee:
-                  'securite-poste-si-industriel-maj-fonctionnelles-et-securite-deployees-na',
+                  'securite-poste-si-industriel-antivirus-deploye-recyf-na',
               },
               {
                 identifiantQuestion:
-                  'securite-poste-si-industriel-antivirus-deploye',
+                  'securite-poste-si-industriel-systemes-cloisonnes-recyf',
                 reponseDonnee:
-                  'securite-poste-si-industriel-antivirus-deploye-na',
-              },
-              {
-                identifiantQuestion:
-                  'securite-infrastructure-si-industriel-pare-feu-deploye',
-                reponseDonnee:
-                  'securite-infrastructure-si-industriel-pare-feu-deploye-na',
+                  'securite-poste-si-industriel-systemes-cloisonnes-recyf-na',
               },
             ],
           },

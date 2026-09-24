@@ -1,92 +1,56 @@
 export const mesuresReaction = {
-  'reaction-surveillance-veille-vulnerabilites-potentielles': {
+  'reaction-sauvegardes-donnees-realisees-recyf': {
     niveau1: {
       titre:
-        "S’abonner aux alertes de sécurité publiées par le centre gouvernemental de veille, d'alerte et de réponses aux cyberattaques",
+        'Sauvegarder régulièrement les données, vérifier et mettre à l’abri ses sauvegardes',
       pourquoi:
-        '../../mesures/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau1-pourquoi.pug',
+        '../../mesures/recyf/reaction/reaction-sauvegardes-donnees-realisees-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau1-comment.pug',
+        '../../mesures/recyf/reaction/reaction-sauvegardes-donnees-realisees-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre: 'Réaliser une veille proactive des vulnérabilités informatiques',
-      pourquoi:
-        '../../mesures/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau2-pourquoi.pug',
-      comment:
-        '../../mesures/reaction/reaction-surveillance-veille-vulnerabilites-potentielles-niveau2-comment.pug',
-    },
-    priorisation: 32,
+    priorisation: 3,
   },
-  'reaction-sauvegardes-donnees-realisees': {
+  'reaction-restauration-sauvegardes-testees-regulierement-recyf': {
     niveau1: {
-      titre: 'Réaliser des sauvegardes régulièrement',
+      titre:
+        'Tester les procédures de sauvegarde et de restauration à minima annuellement',
       pourquoi:
-        '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-niveau1-pourquoi.pug',
+        '../../mesures/recyf/reaction/reaction-restauration-sauvegardes-testees-regulierement-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-niveau1-comment.pug',
+        '../../mesures/recyf/reaction/reaction-restauration-sauvegardes-testees-regulierement-recyf-niveau1-comment.pug',
     },
-    priorisation: 6,
+    priorisation: 17,
   },
-  'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole':
-    {
-      niveau1: {
-        titre:
-          "Disposer d'une copie de sauvegarde des données critiques “hors ligne”, isolé de l'environnement bureautique",
-        pourquoi:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-niveau1-pourquoi.pug',
-        comment:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-environnement-isole-niveau1-comment.pug',
-      },
-      priorisation: 9,
-    },
-  'reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement':
-    {
-      niveau1: {
-        titre: 'Procéder à des tests de restauration des sauvegardes',
-        pourquoi:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
-        comment:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-ponctuellement-tiroir-sauvegarde-testee-regulierement-niveau1-comment.pug',
-      },
-      priorisation: 10,
-    },
-  'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole':
-    {
-      niveau1: {
-        titre:
-          "Disposer d'une copie de sauvegarde des données critiques “hors ligne”, isolé de l'environnement bureautique",
-        pourquoi:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-niveau1-pourquoi.pug',
-        comment:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-environnement-isole-niveau1-comment.pug',
-      },
-      priorisation: 9,
-    },
-  'reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement':
-    {
-      niveau1: {
-        titre: 'Procéder à des tests de restauration des sauvegardes',
-        pourquoi:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-pourquoi.pug',
-        comment:
-          '../../mesures/reaction/reaction-sauvegardes-donnees-realisees-oui-automatique-et-reguliere-tiroir-sauvegarde-testee-regulierement-niveau1-comment.pug',
-      },
-      priorisation: 10,
-    },
-  'reaction-dispositif-gestion-crise-adapte-defini': {
+  'reaction-liste-personnes-a-contacter-recyf': {
     niveau1: {
-      titre: 'Lister les personnes à contacter en cas de cyberattaque',
+      titre:
+        'Imprimer la liste des personnes et leurs coordonnées à contacter en cas de cyberattaque',
       pourquoi:
-        '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau1-pourquoi.pug',
+        '../../mesures/recyf/reaction/reaction-liste-personnes-a-contacter-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau1-comment.pug',
+        '../../mesures/recyf/reaction/reaction-liste-personnes-a-contacter-recyf-niveau1-comment.pug',
     },
-    niveau2: {
-      titre: "Définir un dispositif de gestion de crise d'origine cyber",
+    priorisation: 4,
+  },
+  'reaction-bons-reflexes-recyf': {
+    niveau1: {
+      titre:
+        'S’entraîner pour adopter les bons réflexes en cas de cyberattaque',
       pourquoi:
-        '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau2-pourquoi.pug',
+        '../../mesures/recyf/reaction/reaction-bons-reflexes-recyf-niveau1-pourquoi.pug',
       comment:
-        '../../mesures/reaction/reaction-dispositif-gestion-crise-adapte-defini-niveau2-comment.pug',
+        '../../mesures/recyf/reaction/reaction-bons-reflexes-recyf-niveau1-comment.pug',
+    },
+    priorisation: 15,
+  },
+  'reaction-amelioration-gestion-crise-recyf': {
+    niveau1: {
+      titre:
+        'Réaliser un retour d’expérience après tout déclenchement de la procédure de gestion de crise',
+      pourquoi:
+        '../../mesures/recyf/reaction/reaction-amelioration-gestion-crise-recyf-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/recyf/reaction/reaction-amelioration-gestion-crise-recyf-niveau1-comment.pug',
     },
     priorisation: 22,
   },
