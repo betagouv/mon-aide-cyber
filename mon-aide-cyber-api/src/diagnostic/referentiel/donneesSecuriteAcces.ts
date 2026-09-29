@@ -211,7 +211,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: 'acces-teletravail-acces-distants-recyf-vpn',
           libelle:
-            "Un mécanisme d'authentification multifacteur (basé sur le facteur de connaissance ainsi que sur un second facteur) est activé sur l'ensemble des accès distants (dont la messagerie, les services exposés, le télétravail, la télémaintenance ainsi que les accès VPN) pour tous les utilisateurs.",
+            'Un mécanisme d’authentification multifacteur (basé sur le facteur de connaissance ainsi que sur un second facteur) est activé sur l’ensemble des accès distants (dont les services exposés, le télétravail, la télémaintenance ainsi que les accès VPN) pour tous les utilisateurs.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
