@@ -1,15 +1,18 @@
 div
     |
     h5 Contrats des prestataires
-    div
-        | Cette question suppose que l’entité ait des contrats avec ses prestataires et sait lesquels ont accès à son
-        | système d’information, sinon, nous vous invitons à cocher « Non, aucune exigence ne figure dans nos contrats de
-        | prestation ».
-        br
-        | Exemples d’exigences pouvant être intégrées dans un contrat :
-        ul
-            li changement des mots de passe par défaut ;
-            li sécurisation des accès distants ;
-            li délai de déploiement des mises à jour critiques ;
-            li signalement en cas de cyberattaque ;
-            li contractualisation d'un plan d'assurance sécurité (PAS).
+    | Cette question suppose que l’entité ait des contrats avec ses prestataires et sait lesquels ont accès à son système
+    | d’information, sinon, nous vous invitons à cocher
+    b “Non, aucune exigence ne figure dans nos contrats de prestation.”
+    br
+    | Cette question s'applique également pour les prestataires disposant d’accès informatiques sur les systèmes industriels.
+    br
+    | Les éléments principaux de cette annexe sécurité ou de ces clauses sont :
+    ul
+        li les exigences de sécurité à respecter(alignées sur la PSSI de l'entité) ;
+        li l'obligation de notification d'incidents sous délai(ex. 24 h) ;
+        li le droit d'audit du commanditaire (interne ou par un prestataire) ;
+        li la réversibilité : restitution des données dans un format ouvert;
+        li le maintien à niveau de la sécurité dans la durée;
+        li la conformité aux obligations légales(RGPD, NIS2 le cas échéant) ;
+        li les pénalités en cas de non - respect.
