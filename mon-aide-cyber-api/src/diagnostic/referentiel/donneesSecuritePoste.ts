@@ -379,7 +379,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant: 'securite-poste-systemes-cloisonnes-recyf-oui',
           libelle:
-            'Les systèmes maîtrisés sont cloisonnés (VLAN, machines virtuelles ou volumes distincts) vis-à-vis des SI tiers ; le cloisonnement est documenté.',
+            'Tous les flux et les ports réseaux non strictement nécessaires sont fermés. Les systèmes maîtrisés sont cloisonnés (VLAN, machines virtuelles ou volumes distincts) vis-à-vis des SI tiers ; le cloisonnement est documenté.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
