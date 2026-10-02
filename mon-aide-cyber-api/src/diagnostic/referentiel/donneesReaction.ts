@@ -57,7 +57,7 @@ export const donneesReaction: QuestionsThematique = {
       identifiant:
         'reaction-restauration-sauvegardes-testees-regulierement-recyf',
       libelle:
-        'La restauration des sauvegardes de toutes vos données critiques est-elle testée régulièrement ?',
+        'La restauration des sauvegardes de vos données est-elle testée régulièrement ?',
       poids: 1,
       reponsesPossibles: [
         {
