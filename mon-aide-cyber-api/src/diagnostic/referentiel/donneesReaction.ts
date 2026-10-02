@@ -155,7 +155,7 @@ export const donneesReaction: QuestionsThematique = {
           identifiant:
             'reaction-liste-personnes-a-contacter-recyf-oui-complete',
           libelle:
-            'Une liste complète des contacts internes et externes (direction, IT/prestataire, hébergeur, assureur cyber, CERT-FR, autorités, partenaires clés) est imprimée, tenue à jour et accessible sans ordinateur ni internet.',
+            'Une liste complète des contacts internes et externes (ex. direction, IT/prestataire, hébergeur, assureur cyber, CERT-FR, autorités, partenaires clés) est imprimée, tenue à jour et accessible sans ordinateur ni internet.',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
