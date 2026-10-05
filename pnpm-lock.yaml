@@ -59,7 +59,7 @@ importers:
         version: 8.69.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
       vitest:
         specifier: ^4.0.0
-        version: 4.1.11(@types/node@26.4.1)(@vitest/coverage-v8@3.2.7)(@vitest/ui@3.2.7(vitest@4.1.11))(happy-dom@20.14.0)(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0))
+        version: 4.1.11(@types/node@26.4.1)(@vitest/coverage-v8@3.2.7)(@vitest/ui@3.2.7)(happy-dom@20.14.0)(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0))
 
   mon-aide-cyber-api:
     dependencies:
@@ -206,8 +206,8 @@ importers:
         specifier: ^5.1.1
         version: 5.2.0(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0))
       dompurify:
-        specifier: ^3.4.13
-        version: 3.4.15
+        specifier: ^3.4.16
+        version: 3.4.16
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -3304,8 +3304,8 @@ packages:
   domhandler@2.4.2:
     resolution: {integrity: sha512-JiK04h0Ht5u/80fdLMCEmV4zkNh2BcoMFBmZ/91WtYZ8qVXSKjiw7fXMgFPnHcSZgOo3XdinHvmnDUeMf5R4wA==}
 
-  dompurify@3.4.15:
-    resolution: {integrity: sha512-EUBjM+B+lkDE41iE82DDSCfkoPGfXx8IxFxPMjNzm/Uk4xDet77rTN9wqlxlVg71kK7XGuUMv6wUxJUwwv+Xyw==}
+  dompurify@3.4.16:
+    resolution: {integrity: sha512-sqo+pNp3qRhCIpbgRi1y8Tgk27Bo2Ry7w0dC1NBeNTdZChWjz9Xb/KOoZbRP/R6pQZ80Qw8YhXw13hWWBbMRnQ==}
 
   domutils@1.7.0:
     resolution: {integrity: sha512-Lgd2XcJ/NjEw+7tFvfKxOzCYKZsdct5lczQ2ZaQY8Djz7pfAD3Gbp8ySJWtreII/vDlMVmxwa6pHmdxIYgttDg==}
@@ -8441,7 +8441,7 @@ snapshots:
       std-env: 3.10.0
       test-exclude: 7.0.2
       tinyrainbow: 2.0.0
-      vitest: 4.1.11(@types/node@26.4.1)(@vitest/coverage-v8@3.2.7)(@vitest/ui@3.2.7(vitest@4.1.11))(happy-dom@20.14.0)(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0))
+      vitest: 4.1.11(@types/node@26.4.1)(@vitest/coverage-v8@3.2.7)(@vitest/ui@3.2.7)(happy-dom@20.14.0)(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0))
     transitivePeerDependencies:
       - supports-color
 
@@ -8509,7 +8509,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.17
       tinyrainbow: 2.0.0
-      vitest: 4.1.11(@types/node@26.4.1)(@vitest/coverage-v8@3.2.7)(@vitest/ui@3.2.7(vitest@4.1.11))(happy-dom@20.14.0)(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0))
+      vitest: 4.1.11(@types/node@26.4.1)(@vitest/coverage-v8@3.2.7)(@vitest/ui@3.2.7)(happy-dom@20.14.0)(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0))
 
   '@vitest/utils@3.2.4':
     dependencies:
@@ -9413,7 +9413,7 @@ snapshots:
     dependencies:
       domelementtype: 1.3.1
 
-  dompurify@3.4.15:
+  dompurify@3.4.16:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -12982,7 +12982,7 @@ snapshots:
       tsx: 4.21.0
       yaml: 2.9.0
 
-  vitest@4.1.11(@types/node@26.4.1)(@vitest/coverage-v8@3.2.7)(@vitest/ui@3.2.7(vitest@4.1.11))(happy-dom@20.14.0)(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0)):
+  vitest@4.1.11(@types/node@26.4.1)(@vitest/coverage-v8@3.2.7)(@vitest/ui@3.2.7)(happy-dom@20.14.0)(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.11
       '@vitest/mocker': 4.1.11(vite@7.3.6(@types/node@26.4.1)(jiti@2.7.0)(sass@1.104.0)(tsx@4.21.0)(yaml@2.9.0))
