@@ -46,7 +46,7 @@ export const donneesReaction: QuestionsThematique = {
           identifiant:
             'reaction-sauvegardes-donnees-realisees-recyf-oui-automatique-et-reguliere',
           libelle:
-            'L’ensemble des données font l’objet d’un processus de sauvegarde adapté et les sauvegardes sont protégées d’un incident les rendant inexploitables en cas de compromission générale du réseau interne (par exemple : le stockage hors-ligne pour répondre à un incident de type rançongiciel).',
+            'L’ensemble des données fait l’objet d’un processus de sauvegarde adapté et les sauvegardes sont protégées d’un incident les rendant inexploitables en cas de compromission générale du réseau interne (par exemple : le stockage hors-ligne pour répondre à un incident de type rançongiciel).',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
@@ -257,7 +257,7 @@ export const donneesReaction: QuestionsThematique = {
           identifiant:
             'reaction-amelioration-gestion-crise-recyf-oui-regulierement',
           libelle:
-            'Un retour d’expérience formalisé est systématiquement conduit après chaque déclenchement du processus gestion de crise (crise réelle, exercice, etc.), avec identification des points d’amélioration et mise à jour des procédures, outils (mode dégradé, fiches reflexes opérationnelles, etc.). Ces actions d’amélioration font l’objet d’un suivi.',
+            'Un retour d’expérience formalisé est systématiquement conduit après chaque déclenchement du processus de gestion de crise (crise réelle, exercice, etc.), avec identification des points d’amélioration et mise à jour des procédures et outils (mode dégradé, fiches reflexes opérationnelles, etc.). Ces actions d’amélioration font l’objet d’un suivi.',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
