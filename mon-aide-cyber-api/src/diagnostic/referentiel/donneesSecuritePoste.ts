@@ -35,7 +35,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-systematiquement-un-peu',
           libelle:
-            'Les équipements de sécurité (ex. pare-feux), les postes de travail et serveurs exposés à internet sont mis à jour mensuellement.',
+            'Les équipements de sécurité (ex. pare-feux), les postes de travail et serveurs exposés à internet sont mis à jour dès que possible en cas de publication ou identification d’une vulnérabilité critique.',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -52,7 +52,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-maj-fonctionnelles-et-securite-deployees-recyf-systematiquement-des-que-disponibles',
           libelle:
-            "Les mises à jour sont déployées dès que possible sur l'ensemble des équipements de sécurité (ex. pare-feux), les postes de travail et serveurs exposés à internet.",
+            'Tous les correctifs et mises à jour sont déployés dès que possible sur l’ensemble des équipements de sécurité (ex. pare-feux), les postes de travail et serveurs exposés à internet.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -89,7 +89,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-antivirus-deploye-recyf-oui-alertes-hebdomadaires',
           libelle:
-            "Une protection antivirus ou/et un EDR est active et à jour sur l'ensemble des postes de travail. Les alertes générées par ces outils sont traitées de façon hebdomadaire.",
+            'Une protection antivirus ou/et un EDR est active et à jour sur l’ensemble des postes de travail. Les alertes générées par ces outils sont traitées à minima de façon hebdomadaire.',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -116,7 +116,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-si-industriel-antivirus-deploye-recyf',
       libelle:
-        'Un antivirus à jour est-il déployé sur chaque poste de travail des systèmes industriels ?',
+        'Un antivirus et/ou EDR est-il déployé sur l’ensemble des équipements et services des systèmes industriels ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -150,7 +150,8 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant:
             'securite-poste-si-industriel-antivirus-deploye-recyf-oui-alertes-pas-toujours-traitees',
-          libelle: 'Oui, mais ses alertes ne sont pas toujours traitées.',
+          libelle:
+            'Une protection antivirus ou/et un EDR est active et à jour sur l’ensemble des postes de travail utilisés au sein des systèmes industriels. Les alertes générées par ces outils sont traitées à minima de façon hebdomadaire.',
           resultat: {
             indice: { valeur: 2 },
             mesures: [
@@ -166,7 +167,8 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant:
             'securite-poste-si-industriel-antivirus-deploye-recyf-oui-alertes-toujours-traitees',
-          libelle: 'Oui et ses alertes sont systématiquement traitées.',
+          libelle:
+            'Une protection antivirus ou/et un EDR est active et à jour sur l’ensemble des équipements et services des systèmes industriels. Les alertes générées par ces outils sont traitées à minima quotidiennement (en interne ou par un sous-traitant).',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -176,7 +178,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     {
       identifiant: 'securite-poste-mdp-par-defaut-recyf',
       libelle:
-        'Modifiez-vous systématiquement les mots de passe et autre secrets par défaut des équipements et logiciels ?',
+        'Modifiez-vous systématiquement les mots de passe et autres secrets par défaut des équipements et logiciels ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -253,7 +255,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-correctifs-securite-annuaire-recyf-mensuel',
           libelle:
-            'Les correctifs de sécurité de l’annuaire sont appliqués mensuellement.',
+            'Les correctifs de sécurité critiques de l’annuaire sont appliqués dès que possible en cas de publication ou identification d’une vulnérabilité critique.',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -269,7 +271,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant: 'securite-poste-correctifs-securite-annuaire-recyf-oui',
           libelle:
-            'Les correctifs sont appliqués en priorité et sans délai sur l’annuaire, via un processus défini (veille, test, sauvegarde préalable, déploiement, vérification) et tracé. ' +
+            'Tous les correctifs sont appliqués en priorité et sans délai sur l’annuaire, via un processus défini (veille, test, sauvegarde préalable, déploiement, vérification) et tracé. ' +
             '(Cette réponse est aussi valable si aucun annuaire n’est utilisé par votre entité.)',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
@@ -309,7 +311,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant: 'securite-poste-filtre-flux-recyf-un-peu',
           libelle:
-            'Le pare-feu local est activé sur les postes de travail et interdit les communications poste-à-poste.',
+            'Le pare-feu local est activé sur les postes de travail et interdit les communications poste-à-poste. Un filtrage des flux entre les systèmes de l’entité (ex. SI bureautiques) et l’extérieur (ex. internet) est en place.',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -324,7 +326,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant: 'securite-poste-filtre-flux-recyf-oui',
           libelle:
-            '"Le pare-feu local est activé sur les postes de travail et interdit les communications poste-à-poste.' +
+            'Le pare-feu local est activé sur les postes de travail et interdit les communications poste-à-poste. ' +
             'Un (ou plusieurs) pare-feux dédiés filtrent les flux entre les systèmes de l’entité (ex. SI bureautiques) et l’extérieur (ex. internet), n’autorisant que les connexions nécessaires, avec journalisation des flux.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
@@ -364,7 +366,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant: 'securite-poste-systemes-cloisonnes-recyf-un-peu',
           libelle:
-            'Tous les flux et les ports réseaux non strictement nécessaires sont fermés.',
+            'Tous les flux et ports réseaux non strictement nécessaires sont fermés.',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -388,8 +390,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
     },
     {
       identifiant: 'securite-poste-si-industriel-systemes-cloisonnes-recyf',
-      libelle:
-        'Des mesures de cloisonnement spécifiques des systèmes industriels ont-elles été mise en œuvre ?',
+      libelle: 'Les systèmes industriels sont-ils cloisonnés de l’extérieur ?',
       poids: 1,
       reponsesPossibles: [
         {
@@ -423,7 +424,8 @@ export const donneesSecuritePoste: QuestionsThematique = {
         {
           identifiant:
             'securite-poste-si-industriel-systemes-cloisonnes-recyf-un-peu',
-          libelle: 'Oui, tous les flux réseau non nécessaires sont bloqués',
+          libelle:
+            'Tous les flux et ports réseaux non strictement nécessaires sont fermés.',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -440,7 +442,7 @@ export const donneesSecuritePoste: QuestionsThematique = {
           identifiant:
             'securite-poste-si-industriel-systemes-cloisonnes-recyf-oui',
           libelle:
-            'Oui, tous les flux réseau non nécessaires sont bloqués et une segmentation réseau stricte a été mise en œuvre pour isoler l’environnement industriel de l’environnement bureautique (hors besoin métier justifié)',
+            'Tous les flux réseau non nécessaires sont bloqués et une segmentation réseau stricte a été mise en œuvre pour isoler l’environnement industriel de l’environnement bureautique et des SI tiers (hors besoin métier justifié).',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
