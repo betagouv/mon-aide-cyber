@@ -10,7 +10,7 @@ export const donneesContexte: QuestionsThematique = {
         {
           identifiant: 'contexte-nature-entite-entite-publique',
           libelle:
-            'Entité publique (ex : collectivité, administration, syndicats mixte, GIP etc.)',
+            'Organisation publique (ex : collectivité, administration, syndicats mixte, GIP etc.)',
           ordre: 0,
         },
         {
@@ -20,7 +20,7 @@ export const donneesContexte: QuestionsThematique = {
         },
         {
           identifiant: 'contexte-nature-entite-association',
-          libelle: 'Association (ex : association loi 1901)',
+          libelle: 'Association, fédération (ex : association loi 1901)',
           ordre: 2,
         },
         {
@@ -131,7 +131,7 @@ export const donneesContexte: QuestionsThematique = {
         },
         {
           identifiant: 'contexte-secteur-activite-médico-sociale',
-          libelle: 'Médico-sociale',
+          libelle: 'Médico-social',
           ordre: 18,
         },
         {
