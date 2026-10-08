@@ -35,7 +35,7 @@ export const donneesSensibilisation: QuestionsThematique = {
           identifiant:
             'sensibilisation-actions-sensibilisation-menace-et-bonnes-pratiques-recyf-oui-ponctuellement',
           libelle:
-            'Tous les collaborateurs ont été ou sont sensibilisé au moins une fois.',
+            'Tous les collaborateurs ont été ou sont sensibilisés au moins une fois.',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -62,7 +62,7 @@ export const donneesSensibilisation: QuestionsThematique = {
     {
       identifiant: 'sensibilisation-personnel-utilisation-charte-recyf',
       libelle:
-        'Le respect d’une charte d’utilisation des systèmes d’information est-il exigé au personnel ?',
+        'Le respect d’une charte d’utilisation des systèmes d’information est-il exigé du personnel ?',
       poids: 1,
       reponsesPossibles: [
         {
