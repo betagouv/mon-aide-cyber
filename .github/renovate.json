@@ -27,6 +27,86 @@
         "lockFileMaintenance"
       ],
       "minimumReleaseAge": "7 days"
-    }
+    },
+      {
+        "description": "@lab-anssi/ui-kit ne se met pas à jour via package.json seul : voir scripts/ui-kit/maj.sh, qui synchronise aussi UI_KIT_VERSION dans src/vues/mss.pug et pnpm-workspace.yaml",
+        "matchPackageNames": ["@lab-anssi/ui-kit"],
+        "enabled": false
+      },
+      {
+        "description": "@types/node ne doit pas dépasser la version majeure de Node définie dans .nvmrc (actuellement 24). À relever manuellement dès que .nvmrc est mis à jour vers une nouvelle version majeure.",
+        "matchPackageNames": ["@types/node"],
+        "allowedVersions": "<25.0.0"
+      },
+      {
+        "description": "L'image Docker node (Dockerfile de dev) ne doit pas dépasser la version majeure de Node définie dans .nvmrc (actuellement 24) : la contrainte \"constraints.node\" ne s'applique qu'au manager npm, pas dockerfile. À relever manuellement dès que .nvmrc est mis à jour vers une nouvelle version majeure.",
+        "matchManagers": ["dockerfile"],
+        "matchPackageNames": ["docker.io/node"],
+        "allowedVersions": "<25.0.0"
+      },
+      {
+        "description": "typescript ne doit pas dépasser la v6 : typescript-eslint (peerDependencies typescript actuel : >=4.8.4 <6.1.0) ne supporte pas encore TS 7, ce qui fait échouer le lint en CI. À relever manuellement dès que typescript-eslint supporte TS 7.",
+        "matchPackageNames": ["typescript"],
+        "allowedVersions": "<7.0.0"
+      },
+      {
+        "description": "pnpm ne doit pas dépasser la v11 : Clever Cloud ne gère pas encore pnpm v12. À relever manuellement dès que Clever Cloud supporte pnpm v12.",
+        "matchPackageNames": ["pnpm"],
+        "allowedVersions": "<12.0.0"
+      },
+      {
+        "description": "postgres ne doit pas dépasser la version majeure utilisée en production (actuellement 14, cf. docker-compose.yml). À relever manuellement lors d'une montée de version PostgreSQL planifiée.",
+        "matchPackageNames": ["docker.io/postgres"],
+        "matchDatasources": ["docker"],
+        "allowedVersions": "<15.0.0"
+      },
+      {
+        "description": "lockFileMaintenance",
+        "matchUpdateTypes": [
+          "pin",
+          "digest",
+          "patch",
+          "minor",
+          "major",
+          "lockFileMaintenance"
+        ],
+        "minimumReleaseAge": "7 days"
+      },
+      {
+        "description": "Regroupe les montées de version patch npm dans une seule PR",
+        "matchManagers": ["npm"],
+        "matchUpdateTypes": ["patch"],
+        "groupName": "npm - mises à jour patch"
+      },
+      {
+        "description": "Regroupe les montées de version mineure npm dans une seule PR",
+        "matchManagers": ["npm"],
+        "matchUpdateTypes": ["minor"],
+        "groupName": "npm - mises à jour mineures"
+      },
+      {
+        "description": "Regroupe les montées de version patch des GitHub Actions dans une seule PR",
+        "matchManagers": ["github-actions"],
+        "matchUpdateTypes": ["patch"],
+        "groupName": "github-actions - mises à jour patch"
+      },
+      {
+        "description": "Regroupe les montées de version mineure des GitHub Actions dans une seule PR",
+        "matchManagers": ["github-actions"],
+        "matchUpdateTypes": ["minor"],
+        "groupName": "github-actions - mises à jour mineures"
+      },
+      {
+        "description": "Regroupe les montées de version patch Docker (docker-compose + Dockerfile) dans une seule PR",
+        "matchManagers": ["docker-compose", "dockerfile"],
+        "matchUpdateTypes": ["patch"],
+        "groupName": "docker - mises à jour patch"
+      },
+      {
+        "description": "Regroupe les montées de version mineure Docker (docker-compose + Dockerfile) dans une seule PR",
+        "matchManagers": ["docker-compose", "dockerfile"],
+        "matchUpdateTypes": ["minor"],
+        "groupName": "docker - mises à jour mineures"
+      }
   ]
 }
