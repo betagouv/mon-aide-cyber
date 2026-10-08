@@ -110,7 +110,7 @@ export const donneesGouvernance: QuestionsThematique = {
     {
       identifiant: 'gouvernance-schema-si-industriel-a-jour-recyf',
       libelle:
-        "Existe-t-il un plan et un inventaire des systèmes d'informations industriels de l'entité ?",
+        "Existe-t-il un plan des systèmes d'informations industriels de l'entité ?",
       poids: 1,
       type: 'choixUnique',
       reponsesPossibles: [
@@ -158,7 +158,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant:
             'gouvernance-schema-si-industriel-a-jour-recyf-oui-detaille',
           libelle:
-            'Il existe un plan détaillé, incluant la liste détaillée des composants du système d’information et la liste exhaustive des interconnexions vers l’extérieur',
+            'Un schéma complet est formalisé incluant la liste détaillée des composants du système d’information et la liste exhaustive des interconnexions vers l’extérieur',
           resultat: {
             indice: { valeur: 3 },
           },
@@ -213,7 +213,7 @@ export const donneesGouvernance: QuestionsThematique = {
           libelle:
             'Une personne est désignée pour effectuer cette veille et est abonnée aux bulletins du CERT-FR et des ' +
             'principaux éditeurs. Chaque alerte est croisée avec la cartographie des systèmes pour en identifier l’impact ' +
-            'puis traitées selon la sévérité. Des traces du traitement de ces alertes sont conservées.',
+            'puis traitée selon la sévérité. Des traces du traitement de ces alertes sont conservées.',
           resultat: {
             indice: { valeur: 3 },
           },
@@ -257,7 +257,7 @@ export const donneesGouvernance: QuestionsThematique = {
           identifiant:
             'gouvernance-exigence-cyber-securite-presta-recyf-oui-formalisee',
           libelle:
-            'Une annexe sécurité ou des clause sont incluse dans le contrat des prestataires critiques ' +
+            'Une annexe sécurité ou des clauses sont incluses dans le contrat des prestataires critiques ' +
             '(intervenant sur les activités à protéger en priorité de l’entité ou sur des fonctions critiques ex. hébergeur, exploitant)',
           resultat: {
             indice: { valeur: 2 },
@@ -275,7 +275,7 @@ export const donneesGouvernance: QuestionsThematique = {
             'gouvernance-exigence-cyber-securite-presta-recyf-oui-fixee',
           libelle:
             'Une annexe sécurité ou des clauses sont incluses dans l’ensemble des contrats de prestation ' +
-            'comprenant pénalités, conformités, obligations, maintient à niveau de sécurité',
+            'et couvre a minima les éléments principaux.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
