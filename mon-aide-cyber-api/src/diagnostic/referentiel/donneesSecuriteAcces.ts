@@ -42,7 +42,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: 'acces-comptes-privileges-recyf-oui',
           libelle:
-            'Des délais clairs de désactivation des comptes comptes à privilèges inactifs ou non nécessaires sont formalisés, appliqués et tracés.',
+            'Des délais clairs de désactivation des comptes à privilèges inactifs ou non nécessaires sont formalisés, appliqués et tracés.',
           resultat: {
             indice: { valeur: 3 },
             mesures: [
@@ -57,7 +57,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-postes-droits-utilisateurs-restreints-recyf',
       libelle:
-        'Les droits des utilisateurs sont-ils restreints sur les postes de travail ?',
+        "Les utilisateurs sont-ils privés des droits d'administrateur sur leur poste ?",
       poids: 1,
       reponsesPossibles: [
         {
@@ -116,7 +116,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
     {
       identifiant: 'acces-utilisateurs-administrateurs-poste-recyf',
       libelle:
-        "Les administrateurs disposent-ils de compte dédiés aux tâches d'administration et sont-ils les seuls à pouvoir les utiliser ?",
+        "Les administrateurs disposent-ils de comptes dédiés aux tâches d'administration et sont-ils les seuls à pouvoir les utiliser ?",
       poids: 1,
       reponsesPossibles: [
         {
@@ -211,7 +211,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: 'acces-teletravail-acces-distants-recyf-vpn',
           libelle:
-            'Un mécanisme d’authentification multifacteur (basé sur le facteur de connaissance ainsi que sur un second facteur) est activé sur l’ensemble des accès distants (dont les services exposés, le télétravail, la télémaintenance ainsi que les accès VPN) pour tous les utilisateurs.',
+            'Un mécanisme d’authentification multifacteur (basé sur le facteur de connaissance ainsi que sur un second facteur) est activé sur l’ensemble des accès distants (dont la messagerie, les services exposés, le télétravail, la télémaintenance ainsi que les accès VPN) pour tous les utilisateurs.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -256,7 +256,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-recyf-mfa',
           libelle:
-            'Certaines connexions à distance sont protégées par une authentification multifacteur',
+            'Un mécanisme d’authentification multifacteur est activé sur les principaux accès aux systèmes industriels exposés sur Internet.',
           resultat: {
             indice: { valeur: 1 },
             mesures: [
@@ -273,7 +273,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-si-industriel-teletravail-acces-distants-recyf-vpn',
           libelle:
-            'Toutes les connexions à distance sont protégées par une authentification multifacteur',
+            'Un mécanisme d’authentification multifacteur (basé sur le facteur de connaissance ainsi que sur un second facteur) est activé sur l’ensemble des accès distants aux systèmes industriels.',
           resultat: { indice: { valeur: 3 } },
           ordre: 4,
         },
@@ -308,8 +308,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
         {
           identifiant: 'acces-mesures-securite-robustesse-mdp-recyf-un-peu',
           libelle:
-            'Les comptes des utilisateurs sur des systèmes d’information important et/ou sensibles (ex. messagerie) et les comptes des administrateurs sont protégés par des mots de passe composés a minima de 12 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux ou ou repose sur un token physique déverrouillé par un code PIN. ' +
-            'Les comptes des administrateurs sont protégés par des mots de passe composés a minima de 15 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux ou repose sur un token physique déverrouillé par un code PIN.',
+            'Les comptes des utilisateurs sur des systèmes d’information à protéger en priorité sont protégés par des mots de passe composés a minima de 12 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux ou reposent sur un token physique déverrouillé par un code PIN. Les comptes des administrateurs sont protégés par des mots de passe composés a minima de 15 caractères incluant minuscules, majuscules, chiffres et caractères spéciaux ou reposent sur un token physique déverrouillé par un code PIN.',
           resultat: {
             indice: { valeur: 1.5 },
             mesures: [
@@ -325,7 +324,7 @@ export const donneesSecuriteAcces: QuestionsThematique = {
           identifiant:
             'acces-mesures-securite-robustesse-mdp-recyf-respect-contraintes',
           libelle:
-            'L’ensemble des comptes respectent les contraintes de complexité, de robustesse et de rotation de mots de passe définies dans le guide ANSSI « Authentification multifacteur et mots de passe » (https://messervices.cyber.gouv.fr/documents-guides/anssi-guide-authentification_multifacteur_et_mots_de_passe.pdf) selon la sensibilité des ressources accessibles.',
+            'L’ensemble des comptes respecte les contraintes de complexité, de robustesse et de rotation de mots de passe définies dans le guide ANSSI « Authentification multifacteur et mots de passe » (https://messervices.cyber.gouv.fr/documents-guides/anssi-guide-authentification_multifacteur_et_mots_de_passe.pdf) selon la sensibilité des ressources accessibles.',
           resultat: { indice: { valeur: 3 } },
           ordre: 3,
         },
