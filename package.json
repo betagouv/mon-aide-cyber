@@ -41,7 +41,7 @@
       "cross-spawn": "^7.0.6",
       "axios": "^1.15.0",
       "minimatch": "^10.2.3",
-      "basic-ftp": "^5.2.0",
+      "basic-ftp": "^6.2.1",
       "rollup": "^4.59.0",
       "immutable": "^5.1.5"
     }
