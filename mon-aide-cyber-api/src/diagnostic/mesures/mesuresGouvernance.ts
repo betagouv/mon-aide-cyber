@@ -50,6 +50,28 @@ export const mesuresGouvernance = {
     },
     priorisation: 20,
   },
+  'gouvernance-connaissance-rgpd-1': {
+    niveau1: {
+      titre:
+        'Établir votre registre des activités de traitement de données personnelles et le tenir à jour',
+      pourquoi:
+        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-comment.pug',
+    },
+    priorisation: 23,
+  },
+  'gouvernance-connaissance-rgpd-2': {
+    niveau1: {
+      titre:
+        'Fournir des informations aux personnes concernées sur l’utilisation de leurs données personnelles et mettre en oeuvre les modalités permettant aux personnes d’exercer leurs droits',
+      pourquoi:
+        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-pourquoi.pug',
+      comment:
+        '../../mesures/gouvernance/gouvernance-connaissance-rgpd-niveau1-comment.pug',
+    },
+    priorisation: 24,
+  },
   'gouvernance-exigence-cyber-securite-presta-recyf': {
     niveau1: {
       titre: 'Fixer les engagements des prestataires en matière de sécurité',
