@@ -65,7 +65,7 @@ importers:
     dependencies:
       '@lab-anssi/lib':
         specifier: ^2.0.0
-        version: 2.2.1(express@5.2.1)
+        version: 2.3.0(express@5.2.1)
       '@sentry/node':
         specifier: ^7.77.0
         version: 7.120.4
@@ -1085,8 +1085,8 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@lab-anssi/lib@2.2.1':
-    resolution: {integrity: sha512-EofCilxzkzCZIHhHD0d+/pcGaCD4hhS/b2+w9k4PfZSZ1pXgVd5pFIzlRN54lroe0nng/iCp56Eucqo5m9AUkQ==}
+  '@lab-anssi/lib@2.3.0':
+    resolution: {integrity: sha512-lQRoiaXyHvTyZaYWwa8UwYJGjD10sFgWc+sNGBWk+4tO0B7djFQcPTnuOeR4wJztiN9bpDDpCEhtmfd2MRhgRw==}
     peerDependencies:
       express: ~5.2.1
 
@@ -3555,12 +3555,6 @@ packages:
     resolution: {integrity: sha512-Q6+ufo30/gLk7DTe3HEPTkx1LGNyWAt8I5wN8w3W4OIhhzoyNokBp5U4SSjFFcyVZ4USYvMeFNs49v4gBV9U/A==}
     engines: {node: '>=8.9.0'}
 
-  express-rate-limit@7.5.1:
-    resolution: {integrity: sha512-7iN8iPMDzOMHPUYllBEsQdWVB6fPDMPqwjBaFrgr4Jgr/+okjvzAy+UHlYYL/Vs0OsOrMkwS6PJDkFlJwoxUnw==}
-    engines: {node: '>= 16'}
-    peerDependencies:
-      express: '>= 4.11'
-
   express-rate-limit@8.7.1:
     resolution: {integrity: sha512-2FXbqkygil3mZiXzEtM0IjE/UBmBNot0J1GEVrJT4JbrvwOSoEtqtO+wHbiMQELWe1eNvHoYRg2dkjOid+6JkA==}
     engines: {node: '>= 16'}
@@ -3694,8 +3688,8 @@ packages:
       debug:
         optional: true
 
-  follow-redirects@1.16.0:
-    resolution: {integrity: sha512-y5rN/uOsadFT/JfYwhxRS5R7Qce+g3zG97+JrtFZlC9klX/W5hD7iiLzScI4nZqUS7DNUdhPgw4xI8W2LuXlUw==}
+  follow-redirects@1.16.1:
+    resolution: {integrity: sha512-FNvFGzoMLWmE6Yj9spb/zjd7yiNCHiAW9/Tg9CXrQ8wuu32HtlJOwWO11OJafl5FfY3DxTdQ0vj42zU1kvv5jg==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -7195,12 +7189,12 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@lab-anssi/lib@2.2.1(express@5.2.1)':
+  '@lab-anssi/lib@2.3.0(express@5.2.1)':
     dependencies:
       axios: 1.20.0
       express: 5.2.1
       express-ipfilter: 1.4.0
-      express-rate-limit: 7.5.1(express@5.2.1)
+      express-rate-limit: 8.7.1(express@5.2.1)
       html-entities: 2.6.0
       marked: 13.0.3
     transitivePeerDependencies:
@@ -8731,7 +8725,7 @@ snapshots:
 
   axios@1.20.0:
     dependencies:
-      follow-redirects: 1.16.0
+      follow-redirects: 1.16.1
       form-data: 4.0.6
       https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
@@ -9775,10 +9769,6 @@ snapshots:
       proxy-addr: 2.0.7
       range_check: 2.0.4
 
-  express-rate-limit@7.5.1(express@5.2.1):
-    dependencies:
-      express: 5.2.1
-
   express-rate-limit@8.7.1(express@5.2.1):
     dependencies:
       debug: 4.4.3
@@ -9954,7 +9944,7 @@ snapshots:
 
   follow-redirects@1.15.11: {}
 
-  follow-redirects@1.16.0: {}
+  follow-redirects@1.16.1: {}
 
   for-each@0.3.5:
     dependencies:
