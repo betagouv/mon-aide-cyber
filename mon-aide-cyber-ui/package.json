@@ -21,7 +21,7 @@
     "@gouvfr/dsfr": "^1.11.0",
     "@tanstack/react-query": "^5.59.15",
     "@tanstack/query-core": "^5.90.15",
-    "@vitejs/plugin-react": "^5.1.1",
+    "@vitejs/plugin-react": "^6.0.0",
     "dompurify": "^3.4.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
