@@ -46,7 +46,7 @@ export const mesuresSecuriteAcces = {
   'acces-teletravail-acces-distants-recyf': {
     niveau1: {
       titre:
-        'Mettre en place pour tous les accès distants des mécanismes de double authentification à minima',
+        "Mettre en oeuvre un mécanisme d'authentification multifacteur pour les accès à distance aux systèmes d'information",
       pourquoi:
         '../../mesures/recyf/acces/acces-teletravail-acces-distants-recyf-niveau1-pourquoi.pug',
       comment:
