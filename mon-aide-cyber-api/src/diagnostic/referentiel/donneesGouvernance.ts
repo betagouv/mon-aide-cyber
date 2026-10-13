@@ -222,6 +222,104 @@ export const donneesGouvernance: QuestionsThematique = {
       ],
     },
     {
+      identifiant: 'gouvernance-connaissance-rgpd-1',
+      libelle:
+        'Avez-vous listé les types de données personnelles traitées au sein de votre entité ?',
+      type: 'choixUnique',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-1-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 1,
+        },
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-1-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant: 'gouvernance-connaissance-rgpd-1',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-1-oui-liste-données',
+          libelle:
+            'La liste des données personnelles traitées au sein de votre entité est formalisée',
+          ordre: 3,
+          resultat: {
+            indice: { valeur: 2 },
+            mesures: [
+              { identifiant: 'gouvernance-connaissance-rgpd-1', niveau: 1 },
+            ],
+          },
+        },
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-1-oui-registre',
+          libelle:
+            'Le registre des activités de traitement de données personnelles est formalisé et tenu à jour',
+          ordre: 4,
+          resultat: {
+            indice: { valeur: 3 },
+          },
+        },
+      ],
+    },
+    {
+      identifiant: 'gouvernance-connaissance-rgpd-2',
+      libelle:
+        "Informez-vous les personnes concernées sur l'utilisation de leurs données personnelles et leurs droits ? ",
+      type: 'choixUnique',
+      poids: 1,
+      reponsesPossibles: [
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-2-nsp',
+          libelle: 'Je ne sais pas',
+          ordre: 1,
+        },
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-2-non',
+          libelle: 'Non',
+          resultat: {
+            indice: { valeur: 0 },
+            mesures: [
+              {
+                identifiant: 'gouvernance-connaissance-rgpd-2',
+                niveau: 1,
+              },
+            ],
+          },
+          ordre: 2,
+        },
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-2-oui-liste-données',
+          libelle:
+            "Oui, j'informe les personnes concernées sur l’utilisation de leurs données personnelles",
+          ordre: 3,
+          resultat: {
+            indice: { valeur: 2 },
+            mesures: [
+              { identifiant: 'gouvernance-connaissance-rgpd-2', niveau: 1 },
+            ],
+          },
+        },
+        {
+          identifiant: 'gouvernance-connaissance-rgpd-2-oui-registre',
+          libelle:
+            'Oui, j’informe les personnes concernées et j’ai mis en place les moyens nécessaires leur permettant d’exercer leurs droits (ex : accès, rectification, opposition, suppression)',
+          ordre: 4,
+          resultat: {
+            indice: { valeur: 3 },
+          },
+        },
+      ],
+    },
+    {
       identifiant: 'gouvernance-exigence-cyber-securite-presta-recyf',
       libelle:
         'Des exigences de cybersécurité sont-elles intégrées aux contrats des prestataires disposant d’accès informatiques ?',
