@@ -299,7 +299,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-connaissance-rgpd-2-oui-liste-données',
           libelle:
-            "Oui, j'informe les personnes concernées sur l’utilisation de leurs données personnelles",
+            'Les personnes concernées sont informées sur l’utilisation de leurs données personnelles',
           ordre: 3,
           resultat: {
             indice: { valeur: 2 },
@@ -311,7 +311,7 @@ export const donneesGouvernance: QuestionsThematique = {
         {
           identifiant: 'gouvernance-connaissance-rgpd-2-oui-registre',
           libelle:
-            'Oui, j’informe les personnes concernées et j’ai mis en place les moyens nécessaires leur permettant d’exercer leurs droits (ex : accès, rectification, opposition, suppression)',
+            'Les modalités permettant aux personnes d’exercer leurs droits sont en place',
           ordre: 4,
           resultat: {
             indice: { valeur: 3 },
