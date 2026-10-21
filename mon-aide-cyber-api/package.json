@@ -45,7 +45,7 @@
     "@types/lusca": "^1.7.4",
     "@types/bcrypt": "^6.0.0",
     "bcrypt": "^6.0.0",
-    "commander": "^11.1.0",
+    "commander": "^15.0.0",
     "cookies": "^0.9.0",
     "cookie-session": "^2.1.1",
     "date-fns": "^3.2.0",
