@@ -21,3 +21,5 @@ minimumReleaseAgeExclude:
   - qs@6.15.2 || 6.16.0
   # Renovate security update: basic-ftp@6.2.1
   - basic-ftp@6.2.1
+  # Renovate security update: storybook@10.6.2
+  - storybook@10.6.2
