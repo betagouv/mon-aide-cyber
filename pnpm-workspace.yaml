@@ -23,3 +23,5 @@ minimumReleaseAgeExclude:
   - basic-ftp@6.2.1
   # Renovate security update: storybook@10.6.2
   - storybook@10.6.2
+  # Renovate security update: @vitest/ui@5.0.5
+  - "@vitest/ui@5.0.5"
