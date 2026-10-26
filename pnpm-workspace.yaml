@@ -24,3 +24,5 @@ minimumReleaseAgeExclude:
   # Renovate security update: storybook@10.6.2
   - storybook@10.6.2
   - "@lab-anssi/lib"
+  # Renovate security update: happy-dom@21.0.4
+  - happy-dom@21.0.4
