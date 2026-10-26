@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-ui
+      args:
+        NODE_VERSION: "${NODE_VERSION:?NODE_VERSION non definie (utilise make up, ou exporte-la depuis .nvmrc)}"
     volumes:
       - ./mon-aide-cyber-ui:/usr/src/app/mon-aide-cyber-ui
       - /usr/src/app/node_modules
@@ -33,6 +35,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-api
+      args:
+        NODE_VERSION: "${NODE_VERSION:?NODE_VERSION non definie (utilise make up, ou exporte-la depuis .nvmrc)}"
     ports:
       - 8081:8081
     volumes:
@@ -59,12 +63,13 @@ services:
       - api
 
   migration-test:
-    image: docker.io/node:24
     environment:
       - URL_SERVEUR_BASE_DONNEES=postgres://postgres@mon-aide-cyber-bd-test
     build:
       context: .
       dockerfile: Dockerfile-api
+      args:
+        NODE_VERSION: "${NODE_VERSION:?NODE_VERSION non definie (utilise make up, ou exporte-la depuis .nvmrc)}"
     command: 'pnpm -F mon-aide-cyber-api run test:migre-bdd'
     depends_on:
       - db-test

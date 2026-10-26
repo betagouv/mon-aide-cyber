@@ -8,7 +8,7 @@ concrète de renforcement de leur cybersécurité.
 ## Configuration de l'environnement de développement
 
 Il est nécessaire en prérequis d'avoir installé [Git](https://git-scm.com/),
-[Docker](https://www.docker.com/) et [Node.js v18](https://nodejs.org/en/).
+[Docker](https://www.docker.com/) et [Node.js v22.23.4](https://nodejs.org/en/).
 
 Commencer par récupérer les sources du projet et aller dans le répertoire créé.
 
@@ -36,13 +36,7 @@ Demander aux collègues pour les valeurs à associer aux variables.
 Lancer Docker et exécuter docker-compose pour lancer l'application.
 
 ```shell
- docker-compose up
-```
-
-Optionnellement, forcer le build si nécessaire.
-
-```shell
- docker-compose up --build --force-recreate --no-deps
+ ./scripts/start.sh up
 ```
 
 ## Lancement de la suite de tests automatisés
