@@ -80,6 +80,6 @@
     "eslint": "^10.0.0",
     "light-my-request": "^6.0.0",
     "lodash.clonedeep": "^4.5.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.0"
   }
 }
