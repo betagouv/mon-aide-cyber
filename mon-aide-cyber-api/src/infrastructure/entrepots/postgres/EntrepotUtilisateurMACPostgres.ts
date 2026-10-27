@@ -8,6 +8,7 @@ import { estSiretGendarmerie } from '../../../espace-aidant/Aidant';
 import { AggregatNonTrouve } from '../../../domaine/Aggregat';
 import { FournisseurHorloge } from '../../horloge/FournisseurHorloge';
 import { ServiceDeChiffrement } from '../../../securite/ServiceDeChiffrement';
+import { Knex } from 'knex';
 
 type UtilisateurMACDTO = DTO & {
   type: 'AIDANT' | 'UTILISATEUR_INSCRIT';
@@ -67,7 +68,9 @@ export class EntrepotUtilisateurMACPostgres
     return this.rechercheParCritere(`WHERE id = ?`, identifiant);
   }
 
-  private rechercheParCritere<T>(critere: string, parametre: Parametre<T>) {
+  private rechercheParCritere<
+    T extends Knex.Value | Knex.QueryBuilder<object, unknown>,
+  >(critere: string, parametre: Parametre<T>) {
     return this.knex
       .raw(
         `
