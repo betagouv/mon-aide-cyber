@@ -3,7 +3,7 @@ import { Thematique } from '../../../api/representateurs/types';
 export const transcripteurSecuritePoste: Thematique = {
   description:
     "Prévenir les accès non autorisés, l'exécution de virus par des logiciels malveillants ou le contrôle à distance, particulièrement via Internet, est crucial. Les risques d'intrusion dans les systèmes informatiques sont significatifs, et les postes de travail représentent l'un des principaux vecteurs d'attaque potentiels.",
-  libelle: 'Sécurité des postes',
+  libelle: 'Sécurité des postes et infrastructures',
   styles: {
     navigation: 'navigation-securite-poste',
   },
