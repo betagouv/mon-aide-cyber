@@ -1,3 +1,4 @@
+import { fabriqueGestionnaireErreurs } from '../adaptateurs/fabriqueGestionnaireErreurs';
 import { BusCommande, CapteurCommande, Commande } from '../../domaine/commande';
 import { Entrepots } from '../../domaine/Entrepots';
 import { BusEvenement } from '../../domaine/BusEvenement';
@@ -199,7 +200,8 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.entrepots,
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,
-          adaptateurServiceChiffrement()
+          adaptateurServiceChiffrement(),
+          fabriqueGestionnaireErreurs()
         ),
     },
   ],

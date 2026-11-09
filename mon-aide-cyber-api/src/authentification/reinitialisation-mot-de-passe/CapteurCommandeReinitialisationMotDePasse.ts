@@ -8,6 +8,7 @@ import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorl
 import { sommeDeControle } from '../sommeDeControle';
 import crypto from 'crypto';
 import { adaptateurUUID } from '../../infrastructure/adaptateurs/adaptateurUUID';
+import { AdaptateurGestionnaireErreurs } from '../../adaptateurs/AdaptateurGestionnaireErreurs';
 
 export type CommandeReinitialisationMotDePasse = Commande & {
   type: 'CommandeReinitialisationMotDePasse';
@@ -22,7 +23,8 @@ export class CapteurCommandeReinitialisationMotDePasse implements CapteurCommand
     private readonly entrepots: Entrepots,
     private readonly busEvenement: BusEvenement,
     private readonly adapteurEnvoiMail: AdaptateurEnvoiMail,
-    private readonly serviceDeChiffrement: ServiceDeChiffrement
+    private readonly serviceDeChiffrement: ServiceDeChiffrement,
+    private readonly gestionnaireErreurs: AdaptateurGestionnaireErreurs
   ) {}
 
   async execute(commande: CommandeReinitialisationMotDePasse): Promise<void> {
@@ -56,7 +58,8 @@ export class CapteurCommandeReinitialisationMotDePasse implements CapteurCommand
           identifiant: utilisateur.identifiant,
         })
       );
-    } catch (_erreur) {
+    } catch (erreur) {
+      this.gestionnaireErreurs.consignateur().consigne(erreur as Error);
       await this.busEvenement.publie<ReinitialisationMotDePasseDemandee>(
         this.genereEvenement({ statut: 'ERREUR', email: commande.email })
       );
