@@ -14,6 +14,8 @@ import { sommeDeControle } from '../../../src/authentification/sommeDeControle';
 import { ServiceDeChiffrementClair } from '../../infrastructure/securite/ServiceDeChiffrementClair';
 import { adaptateurUUID } from '../../../src/infrastructure/adaptateurs/adaptateurUUID';
 import crypto from 'crypto';
+import { AdaptateurGestionnaireErreursMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
+import { AggregatNonTrouve } from '../../../src/domaine/Aggregat';
 
 describe('Capteur de commande de réinitialisation du mot de passe', () => {
   let entrepots = new EntrepotsMemoire();
@@ -50,7 +52,8 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
             'aaa',
           ],
         ])
-      )
+      ),
+      new AdaptateurGestionnaireErreursMemoire()
     ).execute({
       type: 'CommandeReinitialisationMotDePasse',
       email: utilisateur.identifiantConnexion,
@@ -88,7 +91,8 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
             'aaa',
           ],
         ])
-      )
+      ),
+      new AdaptateurGestionnaireErreursMemoire()
     ).execute({
       type: 'CommandeReinitialisationMotDePasse',
       email: utilisateur.identifiantConnexion,
@@ -114,7 +118,8 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
       entrepots,
       busEvenement,
       adaptateurEnvoiMail,
-      new ServiceDeChiffrementClair()
+      new ServiceDeChiffrementClair(),
+      new AdaptateurGestionnaireErreursMemoire()
     ).execute({
       type: 'CommandeReinitialisationMotDePasse',
       email: 'jean.dupont@email.com',
@@ -130,5 +135,24 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
       corps: { statut: 'ERREUR', email: 'jean.dupont@email.com' },
       identifiant: uuid,
     });
+  });
+
+  it('Consigne l’erreur survenue lors de la réinitialisation', async () => {
+    const gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire();
+
+    await new CapteurCommandeReinitialisationMotDePasse(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      new ServiceDeChiffrementClair(),
+      gestionnaireErreurs
+    ).execute({
+      type: 'CommandeReinitialisationMotDePasse',
+      email: 'jean.dupont@email.com',
+    });
+
+    expect(gestionnaireErreurs.consignateur().tous()).toStrictEqual([
+      new AggregatNonTrouve('utilisateur'),
+    ]);
   });
 });
