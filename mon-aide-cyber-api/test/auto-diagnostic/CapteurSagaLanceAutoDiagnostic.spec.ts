@@ -1,3 +1,4 @@
+import { AdaptateurGestionnaireErreursMemoire } from '../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { EntrepotsMemoire } from '../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
 import {
@@ -39,7 +40,8 @@ describe('Capteur pour lancer un Auto-Diagnostic', () => {
       busEvenement,
       adaptateurEnvoiMail,
       unConstructeurDeServices(entrepots.aidants()),
-      unAdaptateurRechercheEntreprise().construis()
+      unAdaptateurRechercheEntreprise().construis(),
+      new AdaptateurGestionnaireErreursMemoire()
     );
     const referentiel = unReferentiel().construis();
     adaptateurReferentiel.ajoute(referentiel);

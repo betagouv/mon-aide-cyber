@@ -1,3 +1,4 @@
+import { AdaptateurGestionnaireErreursMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { describe, expect, it } from 'vitest';
 import { BusCommandeMAC } from '../../../src/infrastructure/bus/BusCommandeMAC';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
@@ -15,7 +16,8 @@ describe('Bus de commande MAC', () => {
         new BusEvenementDeTest(),
         new AdaptateurEnvoiMailMemoire(),
         unConstructeurDeServices(entrepots.aidants()),
-        unAdaptateurRechercheEntreprise().construis()
+        unAdaptateurRechercheEntreprise().construis(),
+        new AdaptateurGestionnaireErreursMemoire()
       ).publie({ type: 'CommandeInexistante' })
     ).toThrowError("Impossible d'exécuter la demande 'CommandeInexistante'");
   });

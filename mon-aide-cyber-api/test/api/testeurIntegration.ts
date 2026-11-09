@@ -100,6 +100,7 @@ class TesteurIntegrationMAC {
         },
       },
       adaptateurDeRechercheEntreprise,
+      gestionnaireErreurs,
       adaptateurRelations
     )
   ) {}
@@ -120,6 +121,7 @@ class TesteurIntegrationMAC {
         },
       },
       this.adaptateurDeRechercheEntreprise,
+      this.gestionnaireErreurs,
       this.adaptateurRelations
     );
     this.serveurDeTest = serveur.creeServeur({
