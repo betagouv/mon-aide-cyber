@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { CapteurCommande, Commande } from '../../domaine/commande';
 import { Entrepots } from '../../domaine/Entrepots';
 import { BusEvenement, Evenement } from '../../domaine/BusEvenement';
@@ -6,7 +7,6 @@ import { ServiceDeChiffrement } from '../../securite/ServiceDeChiffrement';
 import { adaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement';
 import { FournisseurHorloge } from '../../infrastructure/horloge/FournisseurHorloge';
 import { sommeDeControle } from '../sommeDeControle';
-import crypto from 'crypto';
 import { adaptateurUUID } from '../../infrastructure/adaptateurs/adaptateurUUID';
 import { AdaptateurGestionnaireErreurs } from '../../adaptateurs/AdaptateurGestionnaireErreurs';
 
@@ -60,14 +60,11 @@ export class CapteurCommandeReinitialisationMotDePasse implements CapteurCommand
       );
     } catch (erreur) {
       this.gestionnaireErreurs.consignateur().consigne(erreur as Error);
-      await this.busEvenement.publie<ReinitialisationMotDePasseDemandee>(
-        this.genereEvenement({ statut: 'ERREUR', email: commande.email })
-      );
     }
   }
 
   private genereEvenement(
-    corps: EvenementEnSucces | EvenementEnErreur
+    corps: EvenementEnSucces
   ): ReinitialisationMotDePasseDemandee {
     return {
       corps: { ...corps },
@@ -85,9 +82,4 @@ type EvenementReinitialisationMotDePasseDemandee = {
 type EvenementEnSucces = EvenementReinitialisationMotDePasseDemandee & {
   identifiant: crypto.UUID;
 };
-type EvenementEnErreur = EvenementReinitialisationMotDePasseDemandee & {
-  email: string;
-};
-export type ReinitialisationMotDePasseDemandee = Evenement<
-  EvenementEnSucces | EvenementEnErreur
->;
+export type ReinitialisationMotDePasseDemandee = Evenement<EvenementEnSucces>;

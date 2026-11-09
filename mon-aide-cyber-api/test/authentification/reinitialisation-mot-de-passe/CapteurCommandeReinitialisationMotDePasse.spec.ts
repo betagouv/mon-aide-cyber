@@ -110,33 +110,6 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
     });
   });
 
-  it('Publie l’événement REINITIALISATION_MOT_DE_PASSE_DEMANDEE même en cas d’erreur', async () => {
-    const uuid = crypto.randomUUID();
-    adaptateurUUID.genereUUID = () => uuid;
-
-    await new CapteurCommandeReinitialisationMotDePasse(
-      entrepots,
-      busEvenement,
-      adaptateurEnvoiMail,
-      new ServiceDeChiffrementClair(),
-      new AdaptateurGestionnaireErreursMemoire()
-    ).execute({
-      type: 'CommandeReinitialisationMotDePasse',
-      email: 'jean.dupont@email.com',
-    });
-
-    expect(
-      busEvenement.consommateursTestes.get(
-        'REINITIALISATION_MOT_DE_PASSE_DEMANDEE'
-      )?.[0].evenementConsomme
-    ).toStrictEqual<ReinitialisationMotDePasseDemandee>({
-      type: 'REINITIALISATION_MOT_DE_PASSE_DEMANDEE',
-      date: FournisseurHorloge.maintenant(),
-      corps: { statut: 'ERREUR', email: 'jean.dupont@email.com' },
-      identifiant: uuid,
-    });
-  });
-
   it('Consigne l’erreur survenue lors de la réinitialisation', async () => {
     const gestionnaireErreurs = new AdaptateurGestionnaireErreursMemoire();
 
