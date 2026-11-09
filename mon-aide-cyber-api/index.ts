@@ -51,6 +51,8 @@ const unAdaptateurRechercheEntreprise = adaptateurRechercheEntreprise(
 
 const repertoireDeContacts = adaptateurRepertoireDeContacts();
 
+const gestionnaireErreurs = fabriqueGestionnaireErreurs();
+
 const serveurMAC = serveur.creeServeur({
   adaptateurRelations: adaptateurRelations,
   adaptateursRestitution: {
@@ -73,10 +75,11 @@ const serveurMAC = serveur.creeServeur({
       },
     },
     unAdaptateurRechercheEntreprise,
+    gestionnaireErreurs,
     adaptateurRelations
   ),
   busEvenement: busEvenementMAC,
-  gestionnaireErreurs: fabriqueGestionnaireErreurs(),
+  gestionnaireErreurs,
   gestionnaireDeJeton: gestionnaireDeJeton,
   adaptateurDeGestionDeCookies: new AdaptateurDeGestionDeCookiesMAC(),
   adaptateurAseptisation: new AdaptateurAseptisationMAC(),

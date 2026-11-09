@@ -1,4 +1,3 @@
-import { fabriqueGestionnaireErreurs } from '../adaptateurs/fabriqueGestionnaireErreurs';
 import { BusCommande, CapteurCommande, Commande } from '../../domaine/commande';
 import { Entrepots } from '../../domaine/Entrepots';
 import { BusEvenement } from '../../domaine/BusEvenement';
@@ -34,6 +33,7 @@ import { fabriqueMiseEnRelation } from '../../gestion-demandes/aide/miseEnRelati
 import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise';
 import { CapteurCommandeAttribueDemandeAide } from '../../gestion-demandes/aide/CapteurCommandeAttribueDemandeAide';
 import { unAdaptateurGeographie } from '../../adaptateurs/AdaptateurGeographie';
+import { AdaptateurGestionnaireErreurs } from '../../adaptateurs/AdaptateurGestionnaireErreurs';
 
 export type Services = {
   aidant: ServiceAidant;
@@ -51,6 +51,7 @@ type ParametresCapteur = {
   services: Services;
   adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise;
   adaptateurRelations: AdaptateurRelations;
+  gestionnaireErreurs: AdaptateurGestionnaireErreurs;
 };
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -201,7 +202,7 @@ const capteurs: Map<string, Capteur> = new Map([
           parametres.busEvenements!,
           parametres.adaptateurEnvoiMail!,
           adaptateurServiceChiffrement(),
-          fabriqueGestionnaireErreurs()
+          parametres.gestionnaireErreurs
         ),
     },
   ],
@@ -256,6 +257,7 @@ export class BusCommandeMAC implements BusCommande {
     private readonly adaptateurEnvoiMail: AdaptateurEnvoiMail,
     private readonly services: Services,
     private readonly adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise,
+    private readonly gestionnaireErreurs: AdaptateurGestionnaireErreurs,
     private readonly adaptateurRelations: AdaptateurRelations = new AdaptateurRelationsMAC()
   ) {}
 
@@ -278,6 +280,7 @@ export class BusCommandeMAC implements BusCommande {
           },
           adaptateurRechercheEntreprise: this.adaptateurRechercheEntreprise,
           adaptateurRelations: this.adaptateurRelations,
+          gestionnaireErreurs: this.gestionnaireErreurs,
         })
         .execute(commande);
     }

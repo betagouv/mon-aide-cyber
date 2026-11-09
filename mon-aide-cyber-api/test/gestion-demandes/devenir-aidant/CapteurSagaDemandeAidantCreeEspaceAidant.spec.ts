@@ -1,3 +1,4 @@
+import { AdaptateurGestionnaireErreursMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { BusEvenementDeTest } from '../../infrastructure/bus/BusEvenementDeTest';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
@@ -39,6 +40,7 @@ describe('Capteur de saga pour créer un espace Aidant correspondant à une dema
       new AdaptateurEnvoiMailMemoire(),
       unConstructeurDeServices(entrepots.aidants()),
       unAdaptateurRechercheEntreprise().construis(),
+      new AdaptateurGestionnaireErreursMemoire(),
       new AdaptateurRelationsMAC(
         new EntrepotRelationMemoire(),
         new ServiceDeChiffrementClair()

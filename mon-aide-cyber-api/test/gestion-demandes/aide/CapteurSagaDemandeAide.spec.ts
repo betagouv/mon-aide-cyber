@@ -1,3 +1,4 @@
+import { AdaptateurGestionnaireErreursMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { adaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement';
 import { AdaptateurGeographieMemoire } from '../../../src/adaptateurs/AdaptateurGeographie';
@@ -127,7 +128,8 @@ const fabriqueCapteur = ({
         leBusEvenement,
         envoiMail,
         unConstructeurDeServices(lesEntrepots.aidants()),
-        unAdaptateurRechercheEntreprisePourUneAdministrationPublique
+        unAdaptateurRechercheEntreprisePourUneAdministrationPublique,
+        new AdaptateurGestionnaireErreursMemoire()
       ),
     leBusEvenement,
     new EntrepotUtilisateurMACMemoire({

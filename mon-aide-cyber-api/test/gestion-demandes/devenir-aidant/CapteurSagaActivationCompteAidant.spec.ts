@@ -1,3 +1,4 @@
+import { AdaptateurGestionnaireErreursMemoire } from '../../../src/infrastructure/adaptateurs/AdaptateurGestionnaireErreursMemoire';
 import { assert, beforeEach, describe, expect, it } from 'vitest';
 import { unConstructeurDeDemandeDevenirAidant } from './constructeurDeDemandeDevenirAidant';
 import { EntrepotsMemoire } from '../../../src/infrastructure/entrepots/memoire/EntrepotsMemoire';
@@ -35,7 +36,8 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
       busEvenement,
       new AdaptateurEnvoiMailMemoire(),
       unConstructeurDeServices(entrepots.aidants()),
-      unAdaptateurRechercheEntreprise().construis()
+      unAdaptateurRechercheEntreprise().construis(),
+      new AdaptateurGestionnaireErreursMemoire()
     );
     process.env.URL_MAC = 'http://localhost:8081';
   });

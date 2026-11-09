@@ -15,6 +15,7 @@ import { unServiceAidant } from '../../../espace-aidant/ServiceAidantMAC';
 import { adaptateurRechercheEntreprise } from '../../../infrastructure/adaptateurs/adaptateurRechercheEntreprise';
 import { AdaptateurDeRequeteHTTP } from '../../../infrastructure/adaptateurs/adaptateurDeRequeteHTTP';
 import { adaptateurRepertoireDeContacts } from '../../../adaptateurs/adaptateurRepertoireDeContacts';
+import { fabriqueGestionnaireErreurs } from '../../../infrastructure/adaptateurs/fabriqueGestionnaireErreurs';
 
 const command = program
   .description('Active le compte de l’Aidant et envoie un mail de confirmation')
@@ -40,7 +41,8 @@ command.action(async (...args: any[]) => {
         mesures: new AdaptateurMesures(),
       },
     },
-    adaptateurRechercheEntreprise(new AdaptateurDeRequeteHTTP())
+    adaptateurRechercheEntreprise(new AdaptateurDeRequeteHTTP()),
+    fabriqueGestionnaireErreurs()
   );
 
   try {
