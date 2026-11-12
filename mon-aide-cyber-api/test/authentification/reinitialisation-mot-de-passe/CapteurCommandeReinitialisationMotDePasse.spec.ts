@@ -67,6 +67,45 @@ describe('Capteur de commande de réinitialisation du mot de passe', () => {
     ).toBe(true);
   });
 
+  it('Envoie le mail de modification de mot de passe si l’utilisateur saisit une adresse email avec des majuscules', async () => {
+    const utilisateur = unUtilisateur()
+      .avecUnIdentifiantDeConnexion('un-email-normal@mail.com')
+      .construis();
+    await entrepots.utilisateurs().persiste(utilisateur);
+
+    await new CapteurCommandeReinitialisationMotDePasse(
+      entrepots,
+      busEvenement,
+      adaptateurEnvoiMail,
+      new FauxServiceDeChiffrement(
+        new Map([
+          [
+            Buffer.from(
+              JSON.stringify({
+                identifiant: utilisateur.identifiant,
+                date: FournisseurHorloge.maintenant(),
+                sommeDeControle: sommeDeControle(utilisateur.motDePasse),
+              }),
+              'binary'
+            ).toString('base64'),
+            'aaa',
+          ],
+        ])
+      ),
+      new AdaptateurGestionnaireErreursMemoire()
+    ).execute({
+      type: 'CommandeReinitialisationMotDePasse',
+      email: '   Un-Email-NORMAL@mail.com   ',
+    });
+
+    expect(
+      adaptateurEnvoiMail.reinitialisationMotDePasseEnvoyee(
+        utilisateur.identifiantConnexion,
+        'http://localhost:8081/utilisateur/reinitialiser-mot-de-passe?token=aaa'
+      )
+    ).toBe(true);
+  });
+
   it('Publie l’événement REINITIALISATION_MOT_DE_PASSE_DEMANDEE', async () => {
     const uuid = crypto.randomUUID();
     adaptateurUUID.genereUUID = () => uuid;
