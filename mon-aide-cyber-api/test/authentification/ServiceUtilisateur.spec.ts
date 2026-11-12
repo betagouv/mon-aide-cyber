@@ -14,6 +14,9 @@ import { ErreurMAC } from '../../src/domaine/erreurMAC';
 import { unUtilisateur } from '../constructeurs/constructeursAidantUtilisateurInscritUtilisateur';
 import { sommeDeControle } from '../../src/authentification/sommeDeControle';
 import { BusEvenementDeTest } from '../infrastructure/bus/BusEvenementDeTest';
+import { FauxServiceDeChiffrement } from '../infrastructure/securite/FauxServiceDeChiffrement';
+import { authentifie } from '../../src/authentification/authentification';
+import { FauxGestionnaireDeJeton } from '../infrastructure/authentification/FauxGestionnaireDeJeton';
 
 describe('Service utilisateur', () => {
   describe('Modification du mot de passe', () => {
@@ -30,10 +33,11 @@ describe('Service utilisateur', () => {
         add(FournisseurHorloge.maintenant(), { minutes: 21 })
       );
 
-      expect(
+      await expect(
         new ServiceUtilisateur(
           new EntrepotUtilisateurMemoire(),
-          busEvenement
+          busEvenement,
+          new FauxServiceDeChiffrement(new Map())
         ).modifieMotDePasse({
           motDePasse: 'mdp',
           confirmationMotDePasse: 'mdp',
@@ -61,10 +65,11 @@ describe('Service utilisateur', () => {
       const entrepotUtilisateur = new EntrepotUtilisateurMemoire();
       await entrepotUtilisateur.persiste(utilisateur);
 
-      expect(
+      await expect(
         new ServiceUtilisateur(
           entrepotUtilisateur,
-          busEvenement
+          busEvenement,
+          new FauxServiceDeChiffrement(new Map())
         ).modifieMotDePasse({
           motDePasse: 'mdp',
           confirmationMotDePasse: 'mdp',
@@ -93,10 +98,11 @@ describe('Service utilisateur', () => {
         add(FournisseurHorloge.maintenant(), { minutes: 21 })
       );
 
-      expect(
+      await expect(
         new ServiceUtilisateur(
           new EntrepotUtilisateurMemoire(),
-          busEvenement
+          busEvenement,
+          new FauxServiceDeChiffrement(new Map())
         ).modifieMotDePasse({
           motDePasse: 'mdp',
           confirmationMotDePasse: 'mdp',
@@ -116,6 +122,44 @@ describe('Service utilisateur', () => {
       );
     });
 
+    it('Hache le nouveau mot de passe afin que l’utilisateur puisse s’authentifier avec', async () => {
+      FournisseurHorlogeDeTest.initialise(new Date());
+      const utilisateur = unUtilisateur().construis();
+      const entrepotUtilisateur = new EntrepotUtilisateurMemoire();
+      await entrepotUtilisateur.persiste(utilisateur);
+      const serviceDeChiffrement = new FauxServiceDeChiffrement(new Map());
+
+      await new ServiceUtilisateur(
+        entrepotUtilisateur,
+        busEvenement,
+        serviceDeChiffrement
+      ).modifieMotDePasse({
+        motDePasse: 'nouveau-mdp',
+        confirmationMotDePasse: 'nouveau-mdp',
+        token: {
+          identifiant: utilisateur.identifiant,
+          date: FournisseurHorloge.maintenant(),
+          sommeDeControle: sommeDeControle(utilisateur.motDePasse),
+        },
+      });
+
+      const utilisateurModifie = await entrepotUtilisateur.lis(
+        utilisateur.identifiant
+      );
+      expect(utilisateurModifie.motDePasse).toStrictEqual('nouveau-mdp hashee');
+      expect(
+        await authentifie(
+          entrepotUtilisateur,
+          serviceDeChiffrement,
+          new FauxGestionnaireDeJeton(),
+          utilisateur.identifiantConnexion,
+          'nouveau-mdp'
+        )
+      ).toStrictEqual(
+        expect.objectContaining({ identifiant: utilisateur.identifiant })
+      );
+    });
+
     describe('Publie un événement', () => {
       it('REINITIALISATION_MOT_DE_PASSE_FAITE lorsque le mot de passe est modifié', async () => {
         const busEvenement = new BusEvenementDeTest();
@@ -126,7 +170,8 @@ describe('Service utilisateur', () => {
 
         await new ServiceUtilisateur(
           entrepotUtilisateur,
-          busEvenement
+          busEvenement,
+          new FauxServiceDeChiffrement(new Map())
         ).modifieMotDePasse({
           motDePasse: 'mdp',
           confirmationMotDePasse: 'mdp',
@@ -167,7 +212,8 @@ describe('Service utilisateur', () => {
 
           await new ServiceUtilisateur(
             entrepotUtilisateur,
-            busEvenement
+            busEvenement,
+            new FauxServiceDeChiffrement(new Map())
           ).modifieMotDePasse({
             motDePasse: 'mdp',
             confirmationMotDePasse: 'mdp',
@@ -211,7 +257,8 @@ describe('Service utilisateur', () => {
 
           await new ServiceUtilisateur(
             entrepotUtilisateur,
-            busEvenement
+            busEvenement,
+            new FauxServiceDeChiffrement(new Map())
           ).modifieMotDePasse({
             motDePasse: 'mdp',
             confirmationMotDePasse: 'mdp',

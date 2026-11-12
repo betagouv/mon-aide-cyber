@@ -537,7 +537,7 @@ describe('Le serveur MAC sur les routes /api/utilisateur', () => {
       expect(
         (await testeurMAC.entrepots.utilisateurs().lis(utilisateur.identifiant))
           .motDePasse
-      ).toStrictEqual('n0uv3eaU-M0D3passe');
+      ).toStrictEqual('n0uv3eaU-M0D3passe claire');
     });
 
     it('Retourne une erreur', async () => {

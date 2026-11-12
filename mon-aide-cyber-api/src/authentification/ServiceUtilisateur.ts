@@ -6,6 +6,7 @@ import { sommeDeControle } from './sommeDeControle';
 import { BusEvenement, Evenement } from '../domaine/BusEvenement';
 import crypto, { UUID } from 'crypto';
 import { adaptateurUUID } from '../infrastructure/adaptateurs/adaptateurUUID';
+import { ServiceDeChiffrement } from '../securite/ServiceDeChiffrement';
 
 type Token = {
   identifiant: string;
@@ -26,7 +27,8 @@ const VINGT_MINUTES = 20;
 export class ServiceUtilisateur {
   constructor(
     private readonly entrepotUtilisateur: EntrepotUtilisateur,
-    private readonly busEvenement: BusEvenement
+    private readonly busEvenement: BusEvenement,
+    private readonly serviceDeChiffrement: ServiceDeChiffrement
   ) {}
 
   modifieMotDePasse(
@@ -44,7 +46,7 @@ export class ServiceUtilisateur {
     }
     return this.entrepotUtilisateur
       .lis(modificationMotDePasse.token.identifiant)
-      .then((utilisateur) => {
+      .then(async (utilisateur) => {
         if (
           sommeDeControle(utilisateur.motDePasse) !==
           modificationMotDePasse.token.sommeDeControle
@@ -54,7 +56,9 @@ export class ServiceUtilisateur {
             'REINITIALISATION_DEJA_FAITE'
           );
         }
-        utilisateur.motDePasse = modificationMotDePasse.motDePasse;
+        utilisateur.motDePasse = await this.serviceDeChiffrement.hache(
+          modificationMotDePasse.motDePasse
+        );
         return this.entrepotUtilisateur.persiste(utilisateur);
       })
       .then(() =>
