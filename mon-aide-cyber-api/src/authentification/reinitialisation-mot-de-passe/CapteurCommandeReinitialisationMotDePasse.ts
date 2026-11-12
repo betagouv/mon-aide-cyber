@@ -31,7 +31,9 @@ export class CapteurCommandeReinitialisationMotDePasse implements CapteurCommand
     try {
       const utilisateur = await this.entrepots
         .utilisateurs()
-        .rechercheParIdentifiantDeConnexion(commande.email);
+        .rechercheParIdentifiantDeConnexion(
+          commande.email.toLowerCase().trim()
+        );
 
       const partieChiffree = this.serviceDeChiffrement.chiffre(
         Buffer.from(
