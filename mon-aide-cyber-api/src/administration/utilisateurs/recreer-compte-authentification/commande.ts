@@ -3,6 +3,7 @@ import { EntrepotsMAC } from '../../../infrastructure/entrepots/postgres/Entrepo
 import { Utilisateur } from '../../../authentification/Utilisateur';
 import { UtilisateurMAC } from '../../../recherche-utilisateurs-mac/rechercheUtilisateursMAC';
 import { EntrepotRelationPostgres } from '../../../relation/infrastructure/EntrepotRelationPostgres';
+import { adaptateurServiceChiffrement } from '../../../infrastructure/adaptateurs/adaptateurServiceChiffrement';
 
 const l = console.log;
 
@@ -112,7 +113,8 @@ program
         identifiant: profilUtilisateur.identifiant,
         identifiantConnexion: profilUtilisateur.email,
         nomPrenom: profilUtilisateur.nomPrenom,
-        motDePasse: nouveauMotDePasse,
+        motDePasse:
+          await adaptateurServiceChiffrement().hache(nouveauMotDePasse),
         ...(profilUtilisateur.dateValidationCGU && {
           dateSignatureCGU: profilUtilisateur.dateValidationCGU,
         }),

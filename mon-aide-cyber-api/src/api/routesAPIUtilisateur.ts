@@ -261,7 +261,11 @@ export const routesAPIUtilisateur = (configuration: ConfigurationServeur) => {
         });
       }
       const corpsRequete = requete.body;
-      return new ServiceUtilisateur(entrepots.utilisateurs(), busEvenement)
+      return new ServiceUtilisateur(
+        entrepots.utilisateurs(),
+        busEvenement,
+        serviceDeChiffrement
+      )
         .modifieMotDePasse({
           motDePasse: corpsRequete.motDePasse,
           confirmationMotDePasse: corpsRequete.confirmationMotDePasse,
