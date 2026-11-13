@@ -45,9 +45,6 @@ export const donneesSecuriteAcces: QuestionsThematique = {
             'Des délais clairs de désactivation des comptes à privilèges inactifs ou non nécessaires sont formalisés, appliqués et tracés.',
           resultat: {
             indice: { valeur: 3 },
-            mesures: [
-              { identifiant: 'acces-comptes-privileges-recyf', niveau: 1 },
-            ],
           },
           ordre: 3,
         },
