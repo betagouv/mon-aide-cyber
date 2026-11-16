@@ -1,6 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "onboarding": true,
   "enabledManagers": [
     "docker-compose",
     "dockerfile",
@@ -13,26 +12,7 @@
   "commitMessagePrefix": "[RENOVATE]",
   "prHourlyLimit": 10,
   "prConcurrentLimit": 2,
-  "platform": "github",
-  "repositories": ["betagouv/mon-aide-cyber"],
   "packageRules": [
-    {
-      "description": "lockFileMaintenance",
-      "matchUpdateTypes": [
-        "pin",
-        "digest",
-        "patch",
-        "minor",
-        "major",
-        "lockFileMaintenance"
-      ],
-      "minimumReleaseAge": "7 days"
-    },
-      {
-        "description": "@lab-anssi/ui-kit ne se met pas à jour via package.json seul : voir scripts/ui-kit/maj.sh, qui synchronise aussi UI_KIT_VERSION dans src/vues/mss.pug et pnpm-workspace.yaml",
-        "matchPackageNames": ["@lab-anssi/ui-kit"],
-        "enabled": false
-      },
       {
         "description": "@types/node ne doit pas dépasser la version majeure de Node définie dans .nvmrc (actuellement 24). À relever manuellement dès que .nvmrc est mis à jour vers une nouvelle version majeure.",
         "matchPackageNames": ["@types/node"],
