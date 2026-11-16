@@ -1,9 +1,12 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { enCadence } from '../../../src/infrastructure/adaptateurs/enCadence';
 
 const assertDuree = (fin: number, debut: number) => {
-  expect(Math.ceil(Number(fin - debut))).toBeGreaterThanOrEqual(10 * 4);
+  expect(fin - debut).toBeGreaterThanOrEqual(10 * 4);
 };
+
+const fonctionQuiPrend5Ms = () =>
+  new Promise<void>((resolve) => setTimeout(resolve, 5));
 
 describe('En cadence', () => {
   it('Exécute la fonction', async () => {
@@ -20,7 +23,7 @@ describe('En cadence', () => {
   it('respecte l’intervale en millisecondes', async () => {
     const debut = performance.now();
 
-    const cadencee = await enCadence(10, async () => {});
+    const cadencee = await enCadence(10, fonctionQuiPrend5Ms);
     await cadencee();
     await cadencee();
     await cadencee();
@@ -34,7 +37,7 @@ describe('En cadence', () => {
   it('Peut fonctionner avec un Promise.all()', async () => {
     const debut = performance.now();
 
-    const cadencee = await enCadence(10, async () => {});
+    const cadencee = await enCadence(10, fonctionQuiPrend5Ms);
     await Promise.all([
       cadencee(),
       cadencee(),
@@ -51,11 +54,9 @@ describe('En cadence', () => {
     let compteur = 0;
     const debut = performance.now();
 
-    const cadencee = await enCadence(10, (nombre: number) => {
-      return new Promise((resolve) => {
-        compteur += nombre;
-        resolve();
-      });
+    const cadencee = await enCadence(10, async (nombre: number) => {
+      compteur += nombre;
+      await fonctionQuiPrend5Ms();
     });
     await Promise.all([
       cadencee(2),
