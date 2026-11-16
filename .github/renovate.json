@@ -10,6 +10,11 @@
   "dependencyDashboard": true,
   "useBaseBranchConfig": "merge",
   "commitMessagePrefix": "[RENOVATE]",
+  "schedule": ["* * * * 2"],
+  "timezone": "Europe/Paris",
+  "constraints": {
+    "node": "22.x"
+  },
   "prHourlyLimit": 10,
   "prConcurrentLimit": 2,
   "packageRules": [
