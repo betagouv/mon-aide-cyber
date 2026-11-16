@@ -17,13 +17,13 @@ services:
 
   db:
     container_name: mon-aide-cyber-bd
-    image: docker.io/postgres:14
+    image: docker.io/postgres:18
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - 5433:5432
     volumes:
-      - ./bdd-mac/:/var/lib/postgresql/data
+      - donnees-mac:/var/lib/postgresql
       - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
     networks:
       - reseau-mon-aide-cyber
@@ -51,13 +51,13 @@ services:
 
   db-test:
     container_name: mon-aide-cyber-bd-test
-    image: docker.io/postgres:14
+    image: docker.io/postgres:18
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - 5434:5432
     volumes:
-      - /var/lib/postgresql/data
+      - /var/lib/postgresql
       - ./mon-aide-cyber-api/test/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
     depends_on:
       - api
@@ -73,6 +73,9 @@ services:
     command: 'pnpm -F mon-aide-cyber-api run test:migre-bdd'
     depends_on:
       - db-test
+
+volumes:
+  donnees-mac:
 
 networks:
   reseau-mon-aide-cyber:
