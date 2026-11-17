@@ -65,7 +65,7 @@ describe('Adaptateur De Relation MAC', () => {
     );
     const identifiantDemande = crypto.randomUUID();
 
-    expect(
+    await expect(
       adaptateurRelationsMAC.demandeAttribuee(identifiantDemande)
     ).rejects.toThrow(
       `La demande '${identifiantDemande}' n’est pas attribuée.`
@@ -133,7 +133,7 @@ describe('Adaptateur De Relation MAC', () => {
       new EntrepotRelationMemoire()
     );
 
-    expect(
+    await expect(
       adaptateurRelationsMAC.diagnosticDeLAide(identifiantDiagnostic)
     ).rejects.toThrow(
       `Le diagnostic '${identifiantDiagnostic}' n’est relié à aucune entité Aidée.`
