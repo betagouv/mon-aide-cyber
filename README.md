@@ -8,7 +8,7 @@ concrète de renforcement de leur cybersécurité.
 ## Configuration de l'environnement de développement
 
 Il est nécessaire en prérequis d'avoir installé [Git](https://git-scm.com/),
-[Docker](https://www.docker.com/) et [Node.js v22.23.4](https://nodejs.org/en/).
+[Docker](https://www.docker.com/) et [Node.js v26.13.1](https://nodejs.org/en/).
 
 Commencer par récupérer les sources du projet et aller dans le répertoire créé.
 
