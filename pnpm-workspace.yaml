@@ -30,3 +30,5 @@ minimumReleaseAgeExclude:
   - zod@4.6.6
   # Renovate security update: @vitest/ui@5.0.5
   - "@vitest/ui@5.0.5"
+  # Renovate security update: minimatch@11.0.9
+  - minimatch@11.0.9
