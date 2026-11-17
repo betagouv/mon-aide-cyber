@@ -1,5 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["group:monorepos", "group:react"],
   "enabledManagers": [
     "docker-compose",
     "dockerfile",
