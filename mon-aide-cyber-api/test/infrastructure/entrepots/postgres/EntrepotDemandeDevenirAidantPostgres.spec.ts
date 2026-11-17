@@ -73,7 +73,7 @@ describe('Entrepot Demande Devenir Aidant', () => {
       ])
     );
 
-    expect(() =>
+    await expect(() =>
       new EntrepotDemandeDevenirAidantPostgres(serviceDeChiffrement).lis(
         demandeDevenirAidantDTO.id
       )

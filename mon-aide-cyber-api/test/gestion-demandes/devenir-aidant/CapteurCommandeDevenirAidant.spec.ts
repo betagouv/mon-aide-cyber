@@ -244,7 +244,7 @@ describe('Capteur de commande demande devenir aidant', () => {
       adaptateurEnvoiMail.genereErreur();
       const entrepots = new EntrepotsMemoire();
 
-      expect(
+      await expect(
         new CapteurCommandeDevenirAidant(
           entrepots,
           new BusEvenementDeTest(),

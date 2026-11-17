@@ -303,7 +303,7 @@ describe('Capteur de saga pour activer le compte Aidant', () => {
     const adaptateurEnvoiMail = new AdaptateurEnvoiMailMemoire();
     adaptateurEnvoiMail.genereErreur();
 
-    expect(
+    await expect(
       new CapteurSagaActivationCompteAidant(
         entrepots,
         busEvenement,

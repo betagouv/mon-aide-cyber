@@ -732,7 +732,7 @@ describe('Tous les entreprôts Postgres', () => {
           new ServiceDeChiffrementClair()
         ).rechercheParEmail('jean.dupont@utilisateur-inscrit.com');
 
-        expect(aidantTrouve).rejects.toStrictEqual(
+        await expect(aidantTrouve).rejects.toStrictEqual(
           new AggregatNonTrouve('aidant')
         );
       });
@@ -761,7 +761,7 @@ describe('Tous les entreprôts Postgres', () => {
           new ServiceDeChiffrementClair()
         ).lis(id);
 
-        expect(aidantTrouve).rejects.toStrictEqual(
+        await expect(aidantTrouve).rejects.toStrictEqual(
           new AggregatNonTrouve('aidant')
         );
       });
@@ -1686,7 +1686,7 @@ describe('Tous les entreprôts Postgres', () => {
       });
 
       it("Renvoie une erreur AggregatNonTrouvé si l'utilisateur n'existe pas", async () => {
-        expect(
+        await expect(
           entrepotUtilisateurMACPostgres.rechercheParIdentifiant(
             crypto.randomUUID()
           )
@@ -1790,7 +1790,7 @@ describe('Tous les entreprôts Postgres', () => {
       });
 
       it("Renvoie une erreur AggregatNonTrouvé si l'utilisateur n'existe pas", async () => {
-        expect(
+        await expect(
           entrepotUtilisateurMACPostgres.rechercheParMail(
             'utilisateur-inconnu@email.com'
           )
@@ -1965,7 +1965,7 @@ describe('Tous les entreprôts Postgres', () => {
           new ServiceDeChiffrementClair()
         ).lis(id);
 
-        expect(utilisateurInscritTrouve).rejects.toStrictEqual(
+        await expect(utilisateurInscritTrouve).rejects.toStrictEqual(
           new AggregatNonTrouve('utilisateur inscrit')
         );
       });

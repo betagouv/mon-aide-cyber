@@ -41,7 +41,7 @@ describe('Entrepôt relation rattrapage Postgres', () => {
   it('Renvoie une erreur si la relation n’existe pas', async () => {
     const entrepotRelation = new EntrepotRelationRattrapagePostgres();
 
-    expect(() =>
+    await expect(() =>
       entrepotRelation.parIdentifiant(crypto.randomUUID())
     ).rejects.toThrow("Le relation demandé n'existe pas.");
   });
