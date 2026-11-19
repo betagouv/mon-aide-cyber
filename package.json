@@ -44,7 +44,8 @@
       "basic-ftp": "^6.2.1",
       "rollup": "^4.59.0",
       "immutable": "^5.1.5",
-      "body-parser@>=2.0.0 <2.4.0": "^2.4.0"
+      "body-parser@>=2.0.0 <2.4.0": "^2.4.0",
+      "proxy-addr@<2.0.8": "^2.0.8"
     }
   },
   "devDependencies": {
