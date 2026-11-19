@@ -3,7 +3,7 @@ import { AdaptateurGestionnaireErreurs } from '../../adaptateurs/AdaptateurGesti
 import { sentry } from '../../adaptateurs/adaptateurEnvironnement';
 import { ConsignateurErreurs } from '../../adaptateurs/ConsignateurErreurs';
 import { ConsignateurErreursSentry } from './ConsignateurErreursSentry';
-import { ErrorRequestHandler, Express, RequestHandler } from 'express';
+import { ErrorRequestHandler } from 'express';
 
 export class AdaptateurGestionnaireErreursSentry implements AdaptateurGestionnaireErreurs {
   private readonly _consignateur;
@@ -11,30 +11,23 @@ export class AdaptateurGestionnaireErreursSentry implements AdaptateurGestionnai
     this._consignateur = new ConsignateurErreursSentry();
   }
 
-  initialise(applicationExpress: Express): void {
+  initialise(): void {
     Sentry.init({
       dsn: sentry().dsn() || '',
       environment: sentry().environnement() || '',
-      integrations: [
-        new Sentry.Integrations.Express({ app: applicationExpress }),
-        new Sentry.Integrations.Postgres(),
-        ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
-      ],
       tracesSampleRate: sentry().tracesSampleRate(),
+      maxValueLength: 50_000,
     });
-
-    applicationExpress.use(Sentry.Handlers.requestHandler());
-    applicationExpress.use(Sentry.Handlers.tracingHandler());
   }
+
   consignateur(): ConsignateurErreurs {
     return this._consignateur;
   }
 
   controleurErreurs(): ErrorRequestHandler {
-    return Sentry.Handlers.errorHandler();
-  }
-
-  controleurRequete(): RequestHandler {
-    return Sentry.Handlers.requestHandler();
+    return (erreur, _requete, _reponse, suite) => {
+      Sentry.captureException(erreur);
+      suite(erreur);
+    };
   }
 }

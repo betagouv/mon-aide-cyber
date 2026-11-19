@@ -1,11 +1,9 @@
 import { ConsignateurErreurs } from './ConsignateurErreurs';
-import { ErrorRequestHandler, Express, RequestHandler } from 'express';
+import { ErrorRequestHandler } from 'express';
 
 export interface AdaptateurGestionnaireErreurs {
-  initialise(applicationExpress: Express): void;
+  initialise(): void;
   consignateur(): ConsignateurErreurs;
-
-  controleurRequete(): RequestHandler;
 
   controleurErreurs(): ErrorRequestHandler;
 }
