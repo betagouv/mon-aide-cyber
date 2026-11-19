@@ -1,22 +1,15 @@
+import * as client from 'openid-client';
 import { adaptateurEnvironnement } from '../adaptateurEnvironnement';
 import { Request } from 'express';
-import { BaseClient, generators, Issuer } from 'openid-client';
 
 const configurationOidc = adaptateurEnvironnement.proConnect();
 
-const recupereConfiguration = async (): Promise<BaseClient> => {
-  const agentConnect = await Issuer.discover(
-    configurationOidc.urlBase().toString()
-  );
-  return new agentConnect.Client({
-    client_id: configurationOidc.clientId(),
+const recupereConfiguration = async (): Promise<client.Configuration> =>
+  client.discovery(configurationOidc.urlBase(), configurationOidc.clientId(), {
     client_secret: configurationOidc.clientSecret(),
-    redirect_uris: [configurationOidc.urlRedirectionApresAuthentification()],
-    response_types: ['code'],
     id_token_signed_response_alg: 'RS256',
     userinfo_signed_response_alg: 'RS256',
   });
-};
 
 export type DemandeAutorisation = {
   url: URL;
@@ -24,20 +17,17 @@ export type DemandeAutorisation = {
   state: string;
 };
 const genereDemandeAutorisation = async (): Promise<DemandeAutorisation> => {
-  const client = await recupereConfiguration();
-  const nonce = generators.nonce(32);
-  const state = generators.state(32);
-  const url = client.authorizationUrl({
+  const configuration = await recupereConfiguration();
+  const nonce = client.randomNonce();
+  const state = client.randomState();
+  const url = client.buildAuthorizationUrl(configuration, {
+    redirect_uri: configurationOidc.urlRedirectionApresAuthentification(),
     scope: 'openid email given_name usual_name siret',
     nonce,
     state,
   });
 
-  return {
-    url: new URL(url),
-    nonce,
-    state,
-  };
+  return { url, nonce, state };
 };
 
 export type DemandeDeconnexion = {
@@ -48,19 +38,16 @@ export type DemandeDeconnexion = {
 const genereDemandeDeconnexion = async (
   idToken: string
 ): Promise<DemandeDeconnexion> => {
-  const state = generators.state(32);
-  const client = await recupereConfiguration();
-  const url = client.endSessionUrl({
+  const state = client.randomState();
+  const configuration = await recupereConfiguration();
+  const url = client.buildEndSessionUrl(configuration, {
     post_logout_redirect_uri:
       configurationOidc.urlRedirectionApresDeconnexion(),
     id_token_hint: idToken,
     state,
   });
 
-  return {
-    url: new URL(url),
-    state,
-  };
+  return { url, state };
 };
 
 export type Jeton = {
@@ -71,14 +58,17 @@ const recupereJeton = async (
   requete: Request,
   cookie: { nonce: string; state: string }
 ): Promise<Jeton> => {
-  const client = await recupereConfiguration();
-  const params = client.callbackParams(requete);
+  const configuration = await recupereConfiguration();
+  const urlCourante = new URL(
+    requete.originalUrl,
+    configurationOidc.urlRedirectionApresAuthentification()
+  );
   const { nonce, state } = cookie;
 
-  const token = await client.callback(
-    configurationOidc.urlRedirectionApresAuthentification(),
-    params,
-    { nonce, state }
+  const token = await client.authorizationCodeGrant(
+    configuration,
+    urlCourante,
+    { expectedNonce: nonce, expectedState: state }
   );
 
   return {
@@ -97,13 +87,17 @@ export type InformationsUtilisateur = {
 const recupereInformationsUtilisateur = async (
   accessToken: string
 ): Promise<InformationsUtilisateur> => {
-  const client = await recupereConfiguration();
+  const configuration = await recupereConfiguration();
   const {
     given_name: prenom,
     usual_name: nom,
     email,
     siret,
-  } = await client.userinfo(accessToken);
+  } = await client.fetchUserInfo(
+    configuration,
+    accessToken,
+    client.skipSubjectCheck
+  );
   return { prenom, nom, email, siret } as InformationsUtilisateur;
 };
 
