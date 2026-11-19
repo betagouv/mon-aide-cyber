@@ -83,7 +83,7 @@ export type ConfigurationServeur = {
 const creeApp = (config: ConfigurationServeur) => {
   const app = express();
 
-  config.gestionnaireErreurs.initialise(app);
+  config.gestionnaireErreurs.initialise();
   app.set('trust proxy', adaptateurEnvironnement.reseauTrustProxy());
 
   const ipAutorisees = adaptateurEnvironnement.ipAutorisees();
@@ -102,8 +102,6 @@ const creeApp = (config: ConfigurationServeur) => {
 
   if (config.avecProtectionCsrf)
     app.use(csrf({ blocklist: ENDPOINTS_SANS_CSRF }));
-
-  app.use(config.gestionnaireErreurs.controleurRequete());
 
   app.use(config.redirigeVersUrlBase);
 
