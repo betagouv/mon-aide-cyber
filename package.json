@@ -32,7 +32,7 @@
     "format:corrige": "prettier --config=./.prettierrc.json -w mon-aide-cyber-api mon-aide-cyber-ui"
   },
   "dependencies": {
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.0",
     "vite": "^7.3.5"
   },
   "pnpm": {
